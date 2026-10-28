@@ -35,7 +35,7 @@ jobs:
       - name: Install toolset
         run: |
           sudo apt-get update
-          sudo apt-get install pkg-config python3-dev
+          sudo apt-get install pkg-config python3-dev libcairo2-dev
       - uses: actions/cache@v5
         with:
           path: ./venv/

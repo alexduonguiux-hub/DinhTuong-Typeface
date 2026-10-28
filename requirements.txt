@@ -1,2 +1,2 @@
 # Google Fonts build (make build: gftools builder + fontmake from sources/ufo)
-gftools[qa]
+gftools
