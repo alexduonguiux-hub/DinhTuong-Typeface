@@ -564,9 +564,10 @@ class LF(A.LC):
         G.append(('hline', ym, 'spine'))
         if os.environ.get('S_SPINE', 'g2') == 'g2':
             # R11b (28/10 22:50 'phần uốn lượn ở giữa chữ s và S chưa mượt'): the same smooth spine as the caps S
-            spine, y_up, y_lo = CV.s_spine(W, T, ov, sx, sy, sm, ti, G)
+            fw = (self.v - self.v_reg) / (round(0.93 * CV.W8['bold']['V']) - self.v_reg)
+            spine, y_up, y_lo = CV.s_spine(W, T, ov, sx, sy, sm, ti, G, k=CV.spine_k(fw))
             up.append(('sub', rect(-1, ym - 1, W / 2, y_up)))
-            lo.append(('sub', rect(W / 2, y_lo, W + 1, ym + sm + 1)))
+            lo.append(('sub', rect(W / 2 - 4, y_lo, W + 1, ym + sm + 1)))   # covers the W/2-3 sliver of the ring top
             return self.G('s', W, 34, 34, [('group', up), ('group', lo), ('add', spine)], G)
         return self.G('s', W, 34, 34, [('group', up), ('group', lo)], G)
 

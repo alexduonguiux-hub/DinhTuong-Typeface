@@ -144,7 +144,16 @@ def _cpts(c, n):
     return out
 
 
-def s_spine(W, T, ov, sx, sy, sm, ti, G=None):
+def spine_k(f):
+    """R11c (28/10 23:59 'sau khi bold lên thì nét hơi phình ra, không đều nét nữa'): the spine's weight follows the
+    references, not 'heaviest stroke': measured spine / side stroke Inter Liberation DejaVu Carlito Poppins 0.89-1.03,
+    median 0.96 Regular -> 0.93 Bold (a heavier weight lightens its spine a touch). Construction value (perpendicular
+    at the middle / the ring's side stroke) = 0.94 Regular -> 0.88 Bold, linear in the weight (f = 0 .. 1), which
+    measures 0.96 / 0.93 on the built outline (R11b forced 1.04: measured 1.06 / 1.10, a bulge in Bold)."""
+    return float(os.environ.get('SPINE_K0', 0.94)) - float(os.environ.get('SPINE_KB', 0.06)) * f
+
+
+def s_spine(W, T, ov, sx, sy, sm, ti, G=None, k=None):
     """R11b: the S spine between two cubic edges, each G2 (equal tangent AND curvature) with the rings it joins:
     the top edge leaves the upper counter at its left extreme and lands on the lower outer ring th_o above its right
     extreme; the bottom edge leaves the upper outer ring th_o below its left extreme and lands on the lower counter's
@@ -155,12 +164,13 @@ def s_spine(W, T, ov, sx, sy, sm, ti, G=None):
         A, B = _cpts(top, 240), _cpts(bot, 240)
         m = B[120]
         return min(math.hypot(x - m[0], y - m[1]) for x, y in A)
+    K = SPINE_K if k is None else k
     lo_t, hi_t = 0.0, 0.9
-    if width(lo_t) >= SPINE_K * sx:
+    if width(lo_t) >= K * sx:
         hi_t = lo_t
     for _ in range(36):
         mid = (lo_t + hi_t) / 2
-        if width(mid) < SPINE_K * sx:
+        if width(mid) < K * sx:
             lo_t = mid
         else:
             hi_t = mid
@@ -914,9 +924,12 @@ class Build:
             # cubic from the upper ring's left extreme to the lower ring's right extreme, vertical tangents at both
             # ends, the handle at the counter end G2 (curvature = the ellipse's rx/ry^2 there), the handle at the
             # outer end lengthened by f so the spine stays the heaviest stroke (perpendicular = SPINE_K x the side).
-            spine, y_up, y_lo = s_spine(W, T, ov, sx, sy, sm, ti, G)
+            fw = self.dV / (W8['bold']['V'] - W8['regular']['V'])
+            spine, y_up, y_lo = s_spine(W, T, ov, sx, sy, sm, ti, G, k=spine_k(fw))
             up.append(('sub', rect(-1, ym - 1, W / 2, y_up)))           # the upper ring's lower-left part, below the join
-            lo.append(('sub', rect(W / 2, y_lo, W + 1, ym + sm + 1)))   # the lower ring's upper-right part, above the join
+            lo.append(('sub', rect(W / 2 - 4, y_lo, W + 1, ym + sm + 1)))   # the lower ring's upper-right part, above the join
+            # (from W/2 - 4: the left terminal's cut stops at W/2 - 3, which left a 3-unit sliver of the ring's top
+            #  standing out of the now diagonal spine -- a nick in Bold)
             return [('group', up), ('group', lo), ('add', spine)], tu, tl
         return [('group', up), ('group', lo)], tu, tl
 

@@ -1098,6 +1098,7 @@ feature kern {
     pos k nine 5;
     pos k A 30;
     pos k M 5;
+    pos k S -5;
     pos k X 35;
     pos k Z 5;
     pos k u 5;
@@ -1129,6 +1130,10 @@ feature kern {
     pos k Hbar 20;
     pos k itilde -5;
     pos k ibreve -5;
+    pos k Sacute -5;
+    pos k Scircumflex -5;
+    pos k Scedilla -5;
+    pos k Scaron -5;
     pos k tcaron 40;
     pos k utilde 5;
     pos k umacron 5;
@@ -1142,6 +1147,7 @@ feature kern {
     pos k Zdotaccent 5;
     pos k Zcaron 5;
     pos k uhorn 5;
+    pos k uni0218 -5;
     pos k uni021B 40;
     pos k wgrave 50;
     pos k wacute 50;
@@ -6091,6 +6097,7 @@ feature kern {
     pos three five 20;
     pos three question -30;
     pos [three] @kR_J -25;
+    pos [three] @kR_S -10;
     pos four one 20;
     pos four three 20;
     pos four five 20;
@@ -6308,7 +6315,7 @@ feature kern {
     pos @kL_B [P] -25;
     pos @kL_B [Q] -35;
     pos @kL_B @kR_R -25;
-    pos @kL_B @kR_S -55;
+    pos @kL_B @kR_S -60;
     pos @kL_B @kR_T -60;
     pos @kL_B @kR_U -35;
     pos @kL_B [V] -70;
@@ -6521,7 +6528,7 @@ feature kern {
     pos @kL_I @kR_J -55;
     pos @kL_I @kR_O -25;
     pos @kL_I [Q] -25;
-    pos @kL_I @kR_S -40;
+    pos @kL_I @kR_S -45;
     pos @kL_I @kR_T -35;
     pos @kL_I @kR_U -20;
     pos @kL_I [V] -20;
@@ -6660,7 +6667,7 @@ feature kern {
     pos M question 15;
     pos [M] @kR_G -20;
     pos [M] @kR_J -40;
-    pos [M] @kR_S -30;
+    pos [M] @kR_S -25;
     pos [M] @kR_T -20;
     pos [M] @kR_Z -35;
     pos @kL_N @kR_A -20;
@@ -6809,8 +6816,10 @@ feature kern {
     pos @kL_S [two] -20;
     pos @kL_S [four] -15;
     pos @kL_S [six] -25;
+    pos @kL_S [seven] -10;
     pos @kL_S [eight] -15;
-    pos @kL_S [colon] -30;
+    pos @kL_S [nine] -10;
+    pos @kL_S [colon] -35;
     pos @kL_S [semicolon] -30;
     pos @kL_S [question] -30;
     pos @kL_S @kR_A -55;
@@ -6821,7 +6830,7 @@ feature kern {
     pos @kL_S [F] -20;
     pos @kL_S @kR_G -40;
     pos @kL_S @kR_H -20;
-    pos @kL_S @kR_I -40;
+    pos @kL_S @kR_I -45;
     pos @kL_S @kR_J -40;
     pos @kL_S @kR_K -35;
     pos @kL_S @kR_L -20;
@@ -6857,14 +6866,14 @@ feature kern {
     pos @kL_S [p] -25;
     pos @kL_S @kR_r -25;
     pos @kL_S @kR_s -20;
-    pos @kL_S [t] -35;
+    pos @kL_S [t] -40;
     pos @kL_S @kR_u -35;
     pos @kL_S [v] -35;
-    pos @kL_S @kR_w -35;
+    pos @kL_S @kR_w -40;
     pos @kL_S [x] -35;
     pos @kL_S @kR_y -35;
     pos @kL_S @kR_z -30;
-    pos @kL_S [braceright] -30;
+    pos @kL_S [braceright] -35;
     pos @kL_S [quoteright] -35;
     pos @kL_S [quotedblright] -35;
     pos @kL_S [ellipsis] -30;
@@ -7043,7 +7052,7 @@ feature kern {
     pos @kL_W [p] -45;
     pos @kL_W [q] -45;
     pos @kL_W @kR_r -45;
-    pos @kL_W @kR_s -45;
+    pos @kL_W @kR_s -40;
     pos @kL_W [t] -25;
     pos @kL_W @kR_u -45;
     pos @kL_W @kR_z -40;
@@ -7269,6 +7278,7 @@ feature kern {
     pos @kL_i [four] -15;
     pos @kL_i [question] 15;
     pos @kL_i @kR_J -15;
+    pos @kL_i @kR_S -10;
     pos @kL_i [bracketright] 25;
     pos @kL_j [question] 15;
     pos @kL_j [bracketright] 30;
@@ -7281,6 +7291,7 @@ feature kern {
     pos k question 5;
     pos [k] @kR_G -10;
     pos [k] @kR_J -20;
+    pos [k] @kR_S -10;
     pos [k] @kR_W -15;
     pos k bracketright -30;
     pos [k] @kR_c -15;
@@ -7300,6 +7311,7 @@ feature kern {
     pos @kL_l [four] -15;
     pos @kL_l [question] 15;
     pos @kL_l @kR_J -15;
+    pos @kL_l @kR_S -10;
     pos @kL_l [bracketright] 20;
     pos m question 15;
     pos [m] @kR_J -15;
@@ -7600,7 +7612,7 @@ feature kern {
     pos @kL_Uhorn [M] 20;
     pos @kL_Uhorn @kR_O -25;
     pos @kL_Uhorn [Q] -25;
-    pos @kL_Uhorn @kR_S -40;
+    pos @kL_Uhorn @kR_S -45;
     pos @kL_Uhorn @kR_T 35;
     pos @kL_Uhorn [V] 40;
     pos @kL_Uhorn @kR_W 40;
