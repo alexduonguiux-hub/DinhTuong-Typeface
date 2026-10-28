@@ -8,7 +8,15 @@ Dinh Tuong is a display typeface drawn from the cast-steel stencil lettering of 
 - Character set: GF Latin Core + GF Latin Vietnamese (Vietnamese, English, French, Spanish, Polish, Czech, Slovak, Hungarian, Romanian, Turkish, Latvian, Lithuanian, Maltese, German and more)
 - Tabular figures (`tnum`)
 
-Tiếng Việt: Dinh Tuong là kiểu chữ trưng bày dựng theo chữ khuôn thép đúc trên biển hiệu, biển cổng Sài Gòn thập niên 1960. Mỗi glyph dựng theo luật, chỉ bằng thước và compa. Dấu tiếng Việt cắt từ cùng một tấm thép với chữ, không gắn thêm.
+## Tiếng Việt
+
+Dinh Tuong là kiểu chữ trưng bày dựng theo chữ khuôn thép đúc trên biển hiệu, biển cổng Sài Gòn thập niên 1960. Mỗi glyph dựng theo luật, chỉ bằng thước và compa. Dấu tiếng Việt cắt từ cùng một tấm thép với chữ, không gắn thêm.
+
+- 3 độ đậm: Regular, Medium, Bold
+- Bảng chữ: GF Latin Core + GF Latin Vietnamese (tiếng Việt, Anh, Pháp, Tây Ban Nha, Ba Lan, Séc, Slovak, Hungary, Romania, Thổ Nhĩ Kỳ, Latvia, Litva, Malta, Đức…)
+- Số đều bề ngang (`tnum`)
+- Dựng font: `make build` (mã nguồn là các bộ sinh chữ Python trong `sources/`)
+- Giấy phép: SIL Open Font License 1.1
 
 ## Building
 
