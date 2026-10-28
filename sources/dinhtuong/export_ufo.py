@@ -63,7 +63,7 @@ info.openTypeOS2VendorID = os2.achVendID
 info.openTypeOS2TypoAscender, info.openTypeOS2TypoDescender, info.openTypeOS2TypoLineGap = os2.sTypoAscender, os2.sTypoDescender, os2.sTypoLineGap
 info.openTypeOS2WinAscent, info.openTypeOS2WinDescent = os2.usWinAscent, os2.usWinDescent
 info.openTypeHheaAscender, info.openTypeHheaDescender, info.openTypeHheaLineGap = hh.ascent, hh.descent, hh.lineGap
-info.openTypeOS2Selection = [7] if os2.fsSelection & (1 << 7) else []
+info.openTypeOS2Selection = [b for b in (7, 8) if os2.fsSelection & (1 << b)]
 info.postscriptFontName = nm(6)
 w.writeInfo(info)
 

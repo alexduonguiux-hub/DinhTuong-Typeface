@@ -67,7 +67,7 @@ def fix(path, style, out):
     sel = os2.fsSelection & ~((1 << 0) | (1 << 5) | (1 << 6))
     sel |= (1 << 5) if style == 'Bold' else (1 << 6)
     sel |= (1 << 7)                                  # USE_TYPO_METRICS
-    os2.fsSelection = sel
+    os2.fsSelection = sel | (1 << 8)          # WWS: the family is weight / width / slope only (fontspector fsselection_wws)
     f['head'].macStyle = 1 if style == 'Bold' else 0
     if 'CFF ' in f:
         cff = f['CFF '].cff
