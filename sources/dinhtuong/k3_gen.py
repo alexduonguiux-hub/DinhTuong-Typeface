@@ -90,6 +90,7 @@ def main():
     PREV = json.load(open(f'k3_{W8}.json')) if os.path.exists(f'k3_{W8}.json') and os.environ.get('K3_FRESH') != '1' else {}
     out = {'pairs': dict(PREV.get('pairs', {})), 'exceptions': dict(PREV.get('exceptions', {})), 'sides': {}}   # cumulative
     need = {}                                               # pair -> (s units, k0, d, lo, hi)
+    FORCED = set()                                          # K3c: pairs opened for their closest ink gap
     for a in BASE:
         for b in BASE:
             if kind(a) == 'p' and kind(b) == 'p':
@@ -110,6 +111,19 @@ def main():
                 s = (lo - d) * fo.xh                      # open to the tightest reference
             elif d > hi + TOL:
                 s = -min((d - hi) * fo.xh, max(0.0, g0 - FLOOR))   # close to the loosest reference, ink floor wins
+            if os.environ.get('K3C', '1') == '1' and kind(a) == 'l' and kind(b) == 'l':   # lowercase runs only (caps / figures keep K3 / K3b)
+                # K3c (28/10 20:10 'kerning eg hơi gần'): the mean white can match the references while the two letters
+                # nearly touch at one point (round sides spaced tight by S1c, e's tail at its extreme): the closest ink
+                # gap (/ x-height) is never below the tightest reference's
+                # measured against each font's OWN norm pair (nn / HH / Hn / 00), so the house's tight-but-not-touching
+                # colour (S1c) is kept and only pairs that close in at one point (round + round) are opened
+                nm = norm(a, b)
+                gn = fo.gap(nm[0], nm[1], fo.k(nm[0], nm[1]))
+                gr = [r.gap(a, b, r.k(a, b)) / r.gap(nm[0], nm[1], r.k(nm[0], nm[1])) for r in refs]
+                gmin = min(gr); gours = g0 / gn
+                if gours < gmin - 0.01:
+                    s = max(s, (gmin - gours) * gn)
+                    FORCED.add(a + b)
             need[a + b] = (s, k0, d, lo, hi)
     # S1f: when MOST pairs on one side of a glyph need the same correction, it is that side's spacing, not kerning:
     # the side moves by the median correction over all its letter / figure partners (zeros included).
@@ -134,7 +148,7 @@ def main():
         a, b = pr[0], pr[1]
         res = s - sideR.get(a, 0) - sideL.get(b, 0)
         dd = d + (sideR.get(a, 0) + sideL.get(b, 0)) / fo.xh
-        if lo - TOL <= dd <= hi + TOL and abs(res) < 10:
+        if pr not in FORCED and lo - TOL <= dd <= hi + TOL and abs(res) < 10:
             continue
         if abs(res) < 5:
             continue

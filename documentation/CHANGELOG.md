@@ -11,6 +11,8 @@
 - Dutch: J́ and j́ (íj́ ÍJ́) through ccmp.
 - Vertical metrics 1050 / −350 (line 1.40): the capitals sit centred in the line box, so text centres in UI containers; Vietnamese stacks stay inside the line.
 - Bar ends lying on the baseline or the cap height no longer flare past it (T E F L Z 7 5 are exactly 700 tall, like H I).
+- Lowercase joints: the arch of n m r h u leaves the stem through a deeper cut (0.14 x-height), so the shoulder thins into the joint.
+- Kerning: lowercase pairs never close in at one point tighter than the references (eg, eo, ru …).
 - Kerning: every pair checked (about 135,000 per weight) and kept inside the envelope of Inter, Liberation, DejaVu, Carlito and Poppins (figure pairs never looser than their median, e.g. 96); no pair closer than an ink gap of 26 units.
 
 ## 0.973

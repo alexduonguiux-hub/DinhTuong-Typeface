@@ -138,6 +138,22 @@ class LF(A.LC):
             return ('add', fstem2(x0, y0, x1, y1, self.fl, tl=top, tr=False, bl=bot, br=bot))
         return ('add', fstem(x0, y0, x1, y1, self.fl, top=top, bot=bot))
 
+    def arch_jt(self, r, tl, tt):
+        """F10c (28/10 20:19 'làm phần cắt chỗ giao nhau rõ ràng hơn (sâu hơn) vì nó làm điểm nối cảm giác dày hơn'):
+        the arch's outer curve meets the stem's edge D = 0.14 x-height under the stem top in every weight (Inter /
+        Liberation / DejaVu / Carlito / Poppins 0.09-0.18, median 0.14; F10 alone gave 0.06): the outer curve's
+        offset jt is solved for that depth (never less than F10's). Counter and legs are untouched."""
+        jt = self.jt
+        D = float(os.environ.get('F10C', 0.14)) * XH
+        if D > 0:
+            ry = r / CX
+            cy = XH + OV - (ry + tt)
+            ryo = ry + tt
+            u = (XH - D - cy) / ryo
+            sq = math.sqrt(max(0.0, 1 - u * u))
+            jt = max(jt, 2 * (sq * (r + tl) - r) / (1 + sq))
+        return jt
+
     # F3 ----------------------------------------------------------------------------------------
     def arch(self, xs, r, tl, tt=None):
         """counter circle radius r touching the stem edge xs; outer = r + tl (sides) / r + tt (top).
@@ -148,6 +164,7 @@ class LF(A.LC):
         cy = XH + OV - (ry + tt)
         jt = self.jt                              # F10: the OUTER curve leaves the stem jt later, so the
         # shoulder thins as it joins the stem (no notch: the counter is untouched, the leg keeps its weight)
+        jt = self.arch_jt(r, tl, tt)
         ring = ('group', [('add', ell(cx + jt / 2, cy, r + tl - jt / 2, ry + tt)), ('sub', ell(cx, cy, r, ry)),
                           ('sub', rect(-3000, -3000, 6000, cy))])
         leg = ('add', fstem(cx + r, 0, cx + r + tl, cy + 1, self.fl, top=False))
@@ -193,7 +210,7 @@ class LF(A.LC):
             #  'd' = keep the reach, the counter's top-right quarter is STRETCHED (R5d, like c) until it meets the
             #        cut at ARM_ANG; the outer quarter stretched x R_LO so the arm keeps its face.
             r_, ry_ = self.r, self.r / CX
-            jt, tl, tt = self.jt, self.t, self.h
+            jt, tl, tt = self.arch_jt(self.r, self.t, self.h), self.t, self.h
             ang = float(os.environ.get('R_ANG', CV.ARM_ANG))
             def qd(x0, y0, a, b, k=CV.KC):       # upper-right quarter of ell(): (x0+a, y0) -> (x0, y0+b)
                 return [('M', x0, y0), ('L', x0 + a, y0), ('C', x0 + a, y0 + k * b, x0 + k * a, y0 + b, x0, y0 + b), ('Z',)]

@@ -32,11 +32,11 @@
       <point x="521" y="120" type="curve" smooth="yes"/>
       <point x="521" y="315" type="line" smooth="yes"/>
       <point x="521" y="441"/>
-      <point x="429" y="542"/>
-      <point x="311" y="542" type="curve" smooth="yes"/>
-      <point x="263" y="542"/>
-      <point x="219" y="525"/>
-      <point x="184" y="496" type="curve"/>
+      <point x="438" y="542"/>
+      <point x="332" y="542" type="curve" smooth="yes"/>
+      <point x="271" y="542"/>
+      <point x="218" y="509"/>
+      <point x="184" y="457" type="curve"/>
       <point x="184" y="530" type="line"/>
       <point x="44" y="530" type="line"/>
       <point x="51" y="488"/>
