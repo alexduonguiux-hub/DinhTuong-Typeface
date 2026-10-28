@@ -66,8 +66,26 @@ jobs:
       - name: Check with fontspector
         run: make test
         continue-on-error: true
+      - name: Summarise fontspector (annotations)
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import re, os
+          p = 'out/fontspector/fontspector-report.md'
+          if not os.path.exists(p):
+              print('::warning::no fontspector report'); raise SystemExit
+          rows = []
+          for line in open(p, encoding='utf-8'):
+              if re.search(r'\b(FAIL|ERROR)\b', line):
+                  t = re.sub(r'<[^>]+>', ' ', line); t = re.sub(r'\s+', ' ', t).strip()
+                  if t and t not in rows: rows.append(t[:300])
+          for i in range(0, min(len(rows), 90), 10):
+              print('::error title=fontspector %d::' % (i // 10 + 1) + ' || '.join(rows[i:i + 10]))
+          print('::notice title=fontspector::%d FAIL/ERROR lines' % len(rows))
+          PY
       - name: Generate proofs
         run: make proof
+        continue-on-error: true
       - name: Set up test result site
         run: cp scripts/index.html out/index.html
       - name: Collect deployment assets
