@@ -9,7 +9,7 @@
 - Capitals re-proportioned for optical balance, measured as ratios against Inter, Liberation, DejaVu, Carlito and Poppins while keeping the narrow upright-ellipse O C G Q: U = H + 1.5 %, D = 0.977 O, B = 0.95 R, P = 0.96 B, K = 1.02 H; T and Z keep their ratio to H in the heavier weights; the 3 is wider (0.95 of the 8).
 - The macron is the house mark strip cut to 0.6 of its length, so Ā ā Ē ē Ī ī Ū ū no longer read like À à (the Vietnamese grave is the full-length strip lying).
 - Dutch: J́ and j́ (íj́ ÍJ́) through ccmp.
-- Kerning: every pair checked (about 135,000 per weight) and kept inside the envelope of Inter, Liberation, DejaVu, Carlito and Poppins; no pair closer than an ink gap of 26 units.
+- Kerning: every pair checked (about 135,000 per weight) and kept inside the envelope of Inter, Liberation, DejaVu, Carlito and Poppins (figure pairs never looser than their median, e.g. 96); no pair closer than an ink gap of 26 units.
 
 ## 0.973
 - Lowercase r ends in a vertical cut (50° inner corner, like c); g keeps Regular's tail curve in every weight; capital G with one vertical cut and a stretched round; I i l spacing; z diagonal weight.

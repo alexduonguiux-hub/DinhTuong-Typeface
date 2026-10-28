@@ -99,6 +99,11 @@ def main():
             if d is None or not rv:
                 continue
             lo, hi = min(rv), max(rv)
+            if kind(a) == 'f' and kind(b) == 'f' and os.environ.get('K3B', '1') == '1':
+                # K3b (28/10 19:15 'kerning số 96 hơi xa'): figures are set in runs (years, prices), and the 6 / 9 with
+                # one straight diagonal leave open triangles the envelope's loosest font (Carlito) hides -> a figure pair
+                # is never looser than the reference MEDIAN (it may still be as tight as the tightest)
+                hi = min(hi, float(np.median(rv)))
             k0 = fo.k(a, b); g0 = fo.gap(a, b, k0)
             s = 0.0
             if d < lo - TOL:

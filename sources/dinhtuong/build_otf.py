@@ -26,7 +26,12 @@ FAM_WIN_DESC = 250                   # usWinDescent (v0.96: raised for ỵ, whos
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'out')
 
 
+SEQ_NAMES = {'J\u0301': 'Jacute', 'j\u0301': 'jacute'}   # unencoded glyphs reached through ccmp (Dutch ÍJ́ íj́)
+
+
 def gname(ch):
+    if ch in SEQ_NAMES:
+        return SEQ_NAMES[ch]
     if ch.endswith('.tf'):
         return gname(ch[0]) + '.tf'
     u = ord(ch)
@@ -178,6 +183,11 @@ def features(G, names, kern_file):
             subs.append((len(seq), ' '.join(names[x] for x in seq), names[ch]))
             if pre == 'i' and 'ı' in names:                         # dotless forms too
                 subs.append((len(seq), ' '.join([names['ı']] + [names[x] for x in seq[1:]]), names[ch]))
+    for ch in G:                                                     # base + marks with no code point (J́ j́)
+        if ch in SEQ_NAMES:
+            subs.append((len(ch), ' '.join(names[x] for x in ch), names[ch]))
+            if ch[0] == 'j' and 'ȷ' in names:
+                subs.append((len(ch), ' '.join([names['ȷ']] + [names[x] for x in ch[1:]]), names[ch]))
     subs.sort(key=lambda s: -s[0])
     L.append('feature tnum {')
     for d in '0123456789':

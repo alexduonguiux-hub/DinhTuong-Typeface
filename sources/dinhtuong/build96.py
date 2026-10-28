@@ -102,6 +102,28 @@ LO['ȷ'] = LF.BASE['ȷ']
 EXTRA = EXTRA + CORE_FC + 'ąęįųďľťģłħȷ'
 
 G = dict(CAPS); G.update(LO)
+
+
+def seq_acute(seq, base, ref, ref_base, y_probe):
+    """R8p (fontspector shape_languages, Dutch 'ÍJ́ íj́'): J́ / j́ = the J / dotless j with the house acute of Í / í, its
+    axis moved from the I / ı stem centre onto the J / j stem centre (measured on the ink at y_probe)."""
+    import latin_core_c as LC
+    bg, rg = G[base], G[ref]
+    acute = [o for nm, o in rg.parts if nm == 'acute'][0]
+    rb = G[ref_base]
+    c_ref = (LC.ink_x_at(rb.ops, y_probe, 'l') + LC.ink_x_at(rb.ops, y_probe, 'r')) / 2
+    c_j = (LC.ink_x_at(bg.ops, y_probe, 'l') + LC.ink_x_at(bg.ops, y_probe, 'r')) / 2
+    o = GL.shift_ops(acute, c_j - c_ref, 0)
+    g = Glyph(seq, bg.body, bg.lsb, bg.rsb, None)
+    g.ops = list(bg.ops) + o; g.parts = [('base', list(bg.ops)), ('acute', o)]
+    b = __import__('latin_core_c').bounds(o)
+    if b[0] < -bg.lsb + 20:
+        g.lsb = -b[0] + 20
+    G[seq] = g
+
+
+seq_acute('J\u0301', 'J', 'Í', 'I', GL.CAP - 20)
+seq_acute('j\u0301', 'ȷ', 'í', 'ı', LF.lcm.XH - 20)
 for lo in list(FM.CASE_ALIAS):
     if lo in G:
         del FM.CASE_ALIAS[lo]

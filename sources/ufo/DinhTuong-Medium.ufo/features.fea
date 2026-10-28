@@ -347,6 +347,9 @@ feature ccmp {
     sub l uni030C by lcaron;
     sub t uni030C by tcaron;
     sub g uni0327 by uni0123;
+    sub J acutecomb by Jacute;
+    sub j acutecomb by jacute;
+    sub uni0237 acutecomb by jacute;
   } VN_COMPOSE;
 } ccmp;
 

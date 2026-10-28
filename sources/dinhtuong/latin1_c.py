@@ -79,7 +79,13 @@ def mk_caron(upper=False):
 
 
 def mk_macron(upper=False):
-    return [('add', fbar(-150, 0, 150, __import__('marks_flat').MH, f=fl - 2, left=True, right=True))]   # R8b: a horizontal = MH
+    # R8q (28/10 'dấu ngang ngắn' — the house huyền is the 300-long strip LYING (R8d), so a 300 macron read as À):
+    # the macron is the SAME strip (thickness T, flared free ends) cut to 0.6 of its length (180), in every weight
+    import os, marks_flat as MF
+    if os.environ.get('MACRON_SHORT', '1') == '1':
+        L = 0.6 * MF.STRIP_L
+        return [('add', fbar(-L / 2, 0, L / 2, MF._st(), f=fl - 2, left=True, right=True))]
+    return [('add', fbar(-150, 0, 150, MF.MH, f=fl - 2, left=True, right=True))]   # R8b: a horizontal = MH
 
 
 def mk_cedilla():

@@ -37,8 +37,6 @@
       <integer>15</integer>
       <key>igrave</key>
       <integer>10</integer>
-      <key>imacron</key>
-      <integer>10</integer>
       <key>itilde</key>
       <integer>-5</integer>
       <key>jcircumflex</key>
@@ -376,8 +374,6 @@
       <integer>15</integer>
       <key>igrave</key>
       <integer>10</integer>
-      <key>imacron</key>
-      <integer>10</integer>
       <key>itilde</key>
       <integer>-5</integer>
       <key>jcircumflex</key>
@@ -401,8 +397,6 @@
       <integer>15</integer>
       <key>igrave</key>
       <integer>20</integer>
-      <key>imacron</key>
-      <integer>10</integer>
       <key>itilde</key>
       <integer>-5</integer>
       <key>jcircumflex</key>
@@ -423,8 +417,6 @@
       <key>idieresis</key>
       <integer>15</integer>
       <key>igrave</key>
-      <integer>10</integer>
-      <key>imacron</key>
       <integer>10</integer>
       <key>itilde</key>
       <integer>-5</integer>
@@ -449,8 +441,6 @@
       <integer>15</integer>
       <key>igrave</key>
       <integer>10</integer>
-      <key>imacron</key>
-      <integer>10</integer>
       <key>itilde</key>
       <integer>-5</integer>
       <key>jcircumflex</key>
@@ -474,8 +464,6 @@
       <integer>15</integer>
       <key>igrave</key>
       <integer>10</integer>
-      <key>imacron</key>
-      <integer>10</integer>
       <key>itilde</key>
       <integer>-5</integer>
       <key>jcircumflex</key>
@@ -493,8 +481,6 @@
       <integer>0</integer>
       <key>Igrave</key>
       <integer>-10</integer>
-      <key>Imacron</key>
-      <integer>-10</integer>
       <key>Lslash</key>
       <integer>5</integer>
       <key>ibreve</key>
@@ -504,8 +490,6 @@
       <key>idieresis</key>
       <integer>15</integer>
       <key>igrave</key>
-      <integer>10</integer>
-      <key>imacron</key>
       <integer>10</integer>
       <key>itilde</key>
       <integer>-5</integer>
@@ -529,8 +513,6 @@
       <key>idieresis</key>
       <integer>15</integer>
       <key>igrave</key>
-      <integer>10</integer>
-      <key>imacron</key>
       <integer>10</integer>
       <key>itilde</key>
       <integer>-5</integer>
@@ -557,8 +539,6 @@
       <integer>15</integer>
       <key>igrave</key>
       <integer>20</integer>
-      <key>imacron</key>
-      <integer>10</integer>
       <key>itilde</key>
       <integer>-5</integer>
       <key>jcircumflex</key>
@@ -570,8 +550,6 @@
     <dict>
       <key>Hbar</key>
       <integer>5</integer>
-      <key>Idieresis</key>
-      <integer>-10</integer>
       <key>Lslash</key>
       <integer>5</integer>
       <key>ibreve</key>
@@ -581,8 +559,6 @@
       <key>idieresis</key>
       <integer>15</integer>
       <key>igrave</key>
-      <integer>10</integer>
-      <key>imacron</key>
       <integer>10</integer>
       <key>itilde</key>
       <integer>-5</integer>
@@ -624,8 +600,6 @@
       <key>idieresis</key>
       <integer>15</integer>
       <key>igrave</key>
-      <integer>10</integer>
-      <key>imacron</key>
       <integer>10</integer>
       <key>itilde</key>
       <integer>-5</integer>
@@ -733,8 +707,6 @@
       <integer>20</integer>
       <key>igrave</key>
       <integer>20</integer>
-      <key>imacron</key>
-      <integer>20</integer>
       <key>itilde</key>
       <integer>-15</integer>
       <key>jcircumflex</key>
@@ -830,8 +802,6 @@
       <integer>5</integer>
       <key>igrave</key>
       <integer>5</integer>
-      <key>imacron</key>
-      <integer>5</integer>
       <key>jcircumflex</key>
       <integer>10</integer>
       <key>uni1EC9</key>
@@ -874,8 +844,6 @@
       <key>icircumflex</key>
       <integer>5</integer>
       <key>igrave</key>
-      <integer>5</integer>
-      <key>imacron</key>
       <integer>5</integer>
       <key>jcircumflex</key>
       <integer>10</integer>
@@ -920,8 +888,6 @@
       <integer>5</integer>
       <key>igrave</key>
       <integer>5</integer>
-      <key>imacron</key>
-      <integer>5</integer>
       <key>jcircumflex</key>
       <integer>10</integer>
       <key>uni1EC9</key>
@@ -964,8 +930,6 @@
       <key>icircumflex</key>
       <integer>5</integer>
       <key>igrave</key>
-      <integer>5</integer>
-      <key>imacron</key>
       <integer>5</integer>
       <key>jcircumflex</key>
       <integer>10</integer>
@@ -1045,8 +1009,6 @@
       <integer>10</integer>
       <key>igrave</key>
       <integer>15</integer>
-      <key>imacron</key>
-      <integer>15</integer>
       <key>jcircumflex</key>
       <integer>25</integer>
       <key>t</key>
@@ -1118,8 +1080,6 @@
       <integer>70</integer>
       <key>Igrave</key>
       <integer>50</integer>
-      <key>Imacron</key>
-      <integer>50</integer>
       <key>Itilde</key>
       <integer>20</integer>
       <key>iacute</key>
@@ -1135,8 +1095,6 @@
       <integer>35</integer>
       <key>Igrave</key>
       <integer>45</integer>
-      <key>Imacron</key>
-      <integer>55</integer>
       <key>backslash</key>
       <integer>15</integer>
       <key>braceright</key>
@@ -1163,7 +1121,7 @@
       <key>Igrave</key>
       <integer>85</integer>
       <key>Imacron</key>
-      <integer>85</integer>
+      <integer>25</integer>
       <key>Itilde</key>
       <integer>55</integer>
       <key>backslash</key>
@@ -1200,8 +1158,6 @@
       <integer>85</integer>
       <key>Igrave</key>
       <integer>65</integer>
-      <key>Imacron</key>
-      <integer>65</integer>
       <key>backslash</key>
       <integer>30</integer>
       <key>braceright</key>
@@ -1213,28 +1169,12 @@
     </dict>
     <key>Imacron</key>
     <dict>
-      <key>Ibreve</key>
-      <integer>50</integer>
-      <key>Icircumflex</key>
-      <integer>55</integer>
       <key>Idieresis</key>
-      <integer>85</integer>
-      <key>Igrave</key>
-      <integer>65</integer>
-      <key>Imacron</key>
-      <integer>65</integer>
-      <key>Itilde</key>
-      <integer>30</integer>
-      <key>backslash</key>
-      <integer>30</integer>
-      <key>braceright</key>
       <integer>25</integer>
-      <key>bracketright</key>
-      <integer>30</integer>
       <key>iacute</key>
       <integer>-5</integer>
       <key>parenright</key>
-      <integer>45</integer>
+      <integer>10</integer>
       <key>uni1EC9</key>
       <integer>-10</integer>
     </dict>
@@ -1277,8 +1217,6 @@
       <integer>20</integer>
       <key>Idieresis</key>
       <integer>55</integer>
-      <key>Imacron</key>
-      <integer>30</integer>
       <key>parenright</key>
       <integer>10</integer>
     </dict>
@@ -1294,8 +1232,6 @@
       <integer>0</integer>
       <key>igrave</key>
       <integer>0</integer>
-      <key>imacron</key>
-      <integer>0</integer>
       <key>jcircumflex</key>
       <integer>0</integer>
       <key>uni1EC9</key>
@@ -1309,8 +1245,6 @@
       <integer>-15</integer>
       <key>Igrave</key>
       <integer>-5</integer>
-      <key>Imacron</key>
-      <integer>10</integer>
       <key>iacute</key>
       <integer>-25</integer>
       <key>ibreve</key>
@@ -1320,8 +1254,6 @@
       <key>idieresis</key>
       <integer>0</integer>
       <key>igrave</key>
-      <integer>0</integer>
-      <key>imacron</key>
       <integer>0</integer>
       <key>jcircumflex</key>
       <integer>0</integer>
@@ -1779,8 +1711,6 @@
       <integer>0</integer>
       <key>igrave</key>
       <integer>0</integer>
-      <key>imacron</key>
-      <integer>0</integer>
       <key>itilde</key>
       <integer>-5</integer>
       <key>jcircumflex</key>
@@ -1853,8 +1783,6 @@
       <integer>45</integer>
       <key>Igrave</key>
       <integer>20</integer>
-      <key>Imacron</key>
-      <integer>20</integer>
       <key>Itilde</key>
       <integer>-10</integer>
       <key>V</key>
@@ -1889,8 +1817,6 @@
       <integer>5</integer>
       <key>igrave</key>
       <integer>5</integer>
-      <key>imacron</key>
-      <integer>5</integer>
       <key>uni1EC9</key>
       <integer>-5</integer>
       <key>uni1EF4</key>
@@ -1919,8 +1845,6 @@
       <integer>10</integer>
       <key>Idieresis</key>
       <integer>10</integer>
-      <key>Imacron</key>
-      <integer>20</integer>
       <key>V</key>
       <integer>-35</integer>
       <key>W</key>
@@ -2015,8 +1939,6 @@
       <integer>-35</integer>
       <key>igrave</key>
       <integer>-15</integer>
-      <key>imacron</key>
-      <integer>-5</integer>
       <key>jcircumflex</key>
       <integer>0</integer>
       <key>k</key>
@@ -2313,8 +2235,6 @@
       <integer>20</integer>
       <key>igrave</key>
       <integer>30</integer>
-      <key>imacron</key>
-      <integer>20</integer>
       <key>itilde</key>
       <integer>-5</integer>
       <key>jcircumflex</key>
@@ -2384,8 +2304,6 @@
       <integer>20</integer>
       <key>igrave</key>
       <integer>30</integer>
-      <key>imacron</key>
-      <integer>20</integer>
       <key>itilde</key>
       <integer>-5</integer>
       <key>jcircumflex</key>
@@ -2499,7 +2417,7 @@
       <key>Igrave</key>
       <integer>65</integer>
       <key>Imacron</key>
-      <integer>65</integer>
+      <integer>10</integer>
       <key>Iogonek</key>
       <integer>10</integer>
       <key>Itilde</key>
@@ -2559,8 +2477,6 @@
       <key>idieresis</key>
       <integer>55</integer>
       <key>igrave</key>
-      <integer>50</integer>
-      <key>imacron</key>
       <integer>50</integer>
       <key>itilde</key>
       <integer>20</integer>
@@ -2700,8 +2616,6 @@
       <integer>20</integer>
       <key>igrave</key>
       <integer>25</integer>
-      <key>imacron</key>
-      <integer>15</integer>
       <key>itilde</key>
       <integer>-5</integer>
       <key>jcircumflex</key>
@@ -2841,8 +2755,6 @@
       <integer>20</integer>
       <key>igrave</key>
       <integer>25</integer>
-      <key>imacron</key>
-      <integer>20</integer>
       <key>itilde</key>
       <integer>-5</integer>
       <key>jcircumflex</key>
@@ -2896,8 +2808,6 @@
       <integer>-20</integer>
       <key>idieresis</key>
       <integer>20</integer>
-      <key>imacron</key>
-      <integer>20</integer>
       <key>jcircumflex</key>
       <integer>-5</integer>
       <key>rcaron</key>
@@ -2949,8 +2859,6 @@
       <integer>20</integer>
       <key>igrave</key>
       <integer>25</integer>
-      <key>imacron</key>
-      <integer>20</integer>
       <key>itilde</key>
       <integer>-5</integer>
       <key>jcircumflex</key>
@@ -3014,8 +2922,6 @@
       <integer>20</integer>
       <key>igrave</key>
       <integer>25</integer>
-      <key>imacron</key>
-      <integer>20</integer>
       <key>itilde</key>
       <integer>-5</integer>
       <key>jcircumflex</key>
@@ -3069,8 +2975,6 @@
       <integer>-20</integer>
       <key>idieresis</key>
       <integer>20</integer>
-      <key>imacron</key>
-      <integer>20</integer>
       <key>jcircumflex</key>
       <integer>-5</integer>
       <key>rcaron</key>
@@ -3114,8 +3018,6 @@
       <integer>15</integer>
       <key>igrave</key>
       <integer>10</integer>
-      <key>imacron</key>
-      <integer>5</integer>
       <key>nine</key>
       <integer>-25</integer>
       <key>oslash</key>
@@ -3219,8 +3121,6 @@
       <integer>15</integer>
       <key>igrave</key>
       <integer>20</integer>
-      <key>imacron</key>
-      <integer>10</integer>
       <key>rcaron</key>
       <integer>-55</integer>
       <key>uni021A</key>
@@ -3252,8 +3152,6 @@
       <integer>15</integer>
       <key>igrave</key>
       <integer>20</integer>
-      <key>imacron</key>
-      <integer>10</integer>
       <key>rcaron</key>
       <integer>-55</integer>
       <key>uni021A</key>
@@ -3287,8 +3185,6 @@
       <integer>15</integer>
       <key>igrave</key>
       <integer>20</integer>
-      <key>imacron</key>
-      <integer>10</integer>
       <key>rcaron</key>
       <integer>-55</integer>
       <key>uni021A</key>
@@ -3324,8 +3220,6 @@
       <integer>15</integer>
       <key>igrave</key>
       <integer>20</integer>
-      <key>imacron</key>
-      <integer>10</integer>
       <key>rcaron</key>
       <integer>-55</integer>
       <key>uni021A</key>
@@ -3355,8 +3249,6 @@
       <integer>25</integer>
       <key>idieresis</key>
       <integer>15</integer>
-      <key>imacron</key>
-      <integer>10</integer>
       <key>rcaron</key>
       <integer>-55</integer>
       <key>uni021A</key>
@@ -3377,8 +3269,6 @@
       <key>idieresis</key>
       <integer>10</integer>
       <key>igrave</key>
-      <integer>5</integer>
-      <key>imacron</key>
       <integer>5</integer>
       <key>itilde</key>
       <integer>-25</integer>
@@ -3405,8 +3295,6 @@
       <integer>10</integer>
       <key>igrave</key>
       <integer>0</integer>
-      <key>imacron</key>
-      <integer>5</integer>
       <key>itilde</key>
       <integer>-20</integer>
       <key>jcircumflex</key>
@@ -3429,8 +3317,6 @@
       <key>idieresis</key>
       <integer>10</integer>
       <key>igrave</key>
-      <integer>5</integer>
-      <key>imacron</key>
       <integer>5</integer>
       <key>itilde</key>
       <integer>-25</integer>
@@ -3456,8 +3342,6 @@
       <key>idieresis</key>
       <integer>10</integer>
       <key>igrave</key>
-      <integer>5</integer>
-      <key>imacron</key>
       <integer>5</integer>
       <key>itilde</key>
       <integer>-25</integer>
@@ -3807,8 +3691,6 @@
       <integer>45</integer>
       <key>Igrave</key>
       <integer>25</integer>
-      <key>Imacron</key>
-      <integer>25</integer>
       <key>Itilde</key>
       <integer>-5</integer>
       <key>Oslash</key>
@@ -3825,8 +3707,6 @@
       <integer>15</integer>
       <key>igrave</key>
       <integer>25</integer>
-      <key>imacron</key>
-      <integer>15</integer>
       <key>itilde</key>
       <integer>-10</integer>
       <key>j</key>
@@ -3912,8 +3792,6 @@
       <integer>50</integer>
       <key>Igrave</key>
       <integer>30</integer>
-      <key>Imacron</key>
-      <integer>30</integer>
       <key>Oslash</key>
       <integer>-10</integer>
       <key>Q</key>
@@ -3950,8 +3828,6 @@
       <integer>20</integer>
       <key>igrave</key>
       <integer>25</integer>
-      <key>imacron</key>
-      <integer>15</integer>
       <key>nine</key>
       <integer>-30</integer>
       <key>oslash</key>
@@ -4053,8 +3929,6 @@
       <integer>10</integer>
       <key>igrave</key>
       <integer>5</integer>
-      <key>imacron</key>
-      <integer>5</integer>
     </dict>
     <key>dcroat</key>
     <dict>
@@ -4079,8 +3953,6 @@
       <key>idieresis</key>
       <integer>10</integer>
       <key>igrave</key>
-      <integer>5</integer>
-      <key>imacron</key>
       <integer>5</integer>
       <key>jcircumflex</key>
       <integer>15</integer>
@@ -4262,8 +4134,6 @@
     <dict>
       <key>Hbar</key>
       <integer>5</integer>
-      <key>Imacron</key>
-      <integer>20</integer>
       <key>V</key>
       <integer>5</integer>
       <key>W</key>
@@ -4302,8 +4172,6 @@
       <integer>20</integer>
       <key>igrave</key>
       <integer>20</integer>
-      <key>imacron</key>
-      <integer>15</integer>
       <key>jcircumflex</key>
       <integer>10</integer>
       <key>nine</key>
@@ -4784,8 +4652,6 @@
       <integer>30</integer>
       <key>igrave</key>
       <integer>25</integer>
-      <key>imacron</key>
-      <integer>30</integer>
       <key>itilde</key>
       <integer>0</integer>
       <key>j</key>
@@ -5039,8 +4905,6 @@
       <integer>30</integer>
       <key>igrave</key>
       <integer>20</integer>
-      <key>imacron</key>
-      <integer>35</integer>
       <key>itilde</key>
       <integer>-10</integer>
       <key>j</key>
@@ -5274,8 +5138,6 @@
       <integer>50</integer>
       <key>igrave</key>
       <integer>45</integer>
-      <key>imacron</key>
-      <integer>45</integer>
       <key>itilde</key>
       <integer>15</integer>
       <key>jcircumflex</key>
@@ -5363,8 +5225,6 @@
       <integer>45</integer>
       <key>igrave</key>
       <integer>50</integer>
-      <key>imacron</key>
-      <integer>40</integer>
       <key>jcircumflex</key>
       <integer>35</integer>
       <key>m</key>
@@ -5428,81 +5288,6 @@
       <key>z</key>
       <integer>-10</integer>
     </dict>
-    <key>imacron</key>
-    <dict>
-      <key>Hbar</key>
-      <integer>15</integer>
-      <key>T</key>
-      <integer>15</integer>
-      <key>Tcaron</key>
-      <integer>15</integer>
-      <key>V</key>
-      <integer>15</integer>
-      <key>W</key>
-      <integer>15</integer>
-      <key>Wacute</key>
-      <integer>15</integer>
-      <key>Wcircumflex</key>
-      <integer>15</integer>
-      <key>Wdieresis</key>
-      <integer>15</integer>
-      <key>Wgrave</key>
-      <integer>15</integer>
-      <key>X</key>
-      <integer>5</integer>
-      <key>Y</key>
-      <integer>10</integer>
-      <key>Yacute</key>
-      <integer>10</integer>
-      <key>Ycircumflex</key>
-      <integer>10</integer>
-      <key>Ydieresis</key>
-      <integer>10</integer>
-      <key>Ygrave</key>
-      <integer>10</integer>
-      <key>Z</key>
-      <integer>5</integer>
-      <key>Zacute</key>
-      <integer>5</integer>
-      <key>Zcaron</key>
-      <integer>5</integer>
-      <key>Zdotaccent</key>
-      <integer>5</integer>
-      <key>braceright</key>
-      <integer>10</integer>
-      <key>hbar</key>
-      <integer>10</integer>
-      <key>ibreve</key>
-      <integer>30</integer>
-      <key>icircumflex</key>
-      <integer>35</integer>
-      <key>idieresis</key>
-      <integer>45</integer>
-      <key>igrave</key>
-      <integer>40</integer>
-      <key>imacron</key>
-      <integer>40</integer>
-      <key>itilde</key>
-      <integer>10</integer>
-      <key>jcircumflex</key>
-      <integer>50</integer>
-      <key>one</key>
-      <integer>20</integer>
-      <key>percent</key>
-      <integer>10</integer>
-      <key>seven</key>
-      <integer>10</integer>
-      <key>uni00B9</key>
-      <integer>5</integer>
-      <key>uni021A</key>
-      <integer>15</integer>
-      <key>uni1EF4</key>
-      <integer>10</integer>
-      <key>uni1EF6</key>
-      <integer>10</integer>
-      <key>uni1EF8</key>
-      <integer>10</integer>
-    </dict>
     <key>iogonek</key>
     <dict>
       <key>j</key>
@@ -5562,8 +5347,6 @@
       <integer>-5</integer>
       <key>idieresis</key>
       <integer>15</integer>
-      <key>imacron</key>
-      <integer>10</integer>
       <key>j</key>
       <integer>-5</integer>
       <key>l</key>
@@ -5660,8 +5443,6 @@
       <integer>10</integer>
       <key>igrave</key>
       <integer>35</integer>
-      <key>imacron</key>
-      <integer>50</integer>
       <key>jcircumflex</key>
       <integer>55</integer>
       <key>one</key>
@@ -5995,8 +5776,6 @@
       <integer>10</integer>
       <key>igrave</key>
       <integer>5</integer>
-      <key>imacron</key>
-      <integer>5</integer>
     </dict>
     <key>m</key>
     <dict>
@@ -6084,8 +5863,6 @@
       <integer>15</integer>
       <key>comma</key>
       <integer>-10</integer>
-      <key>eight</key>
-      <integer>15</integer>
       <key>ellipsis</key>
       <integer>-25</integer>
       <key>exclam</key>
@@ -6094,14 +5871,10 @@
       <integer>20</integer>
       <key>five</key>
       <integer>40</integer>
-      <key>four</key>
-      <integer>15</integer>
-      <key>imacron</key>
-      <integer>5</integer>
       <key>m</key>
       <integer>15</integer>
       <key>nine</key>
-      <integer>15</integer>
+      <integer>-5</integer>
       <key>one</key>
       <integer>15</integer>
       <key>p</key>
@@ -6153,7 +5926,7 @@
       <key>seven</key>
       <integer>15</integer>
       <key>six</key>
-      <integer>15</integer>
+      <integer>-15</integer>
       <key>slash</key>
       <integer>-20</integer>
       <key>t</key>
@@ -6196,8 +5969,6 @@
       <integer>20</integer>
       <key>ygrave</key>
       <integer>20</integer>
-      <key>zero</key>
-      <integer>15</integer>
     </dict>
     <key>ntilde</key>
     <dict>
@@ -6329,8 +6100,6 @@
       <integer>20</integer>
       <key>igrave</key>
       <integer>15</integer>
-      <key>imacron</key>
-      <integer>15</integer>
       <key>jcircumflex</key>
       <integer>25</integer>
       <key>tcaron</key>
@@ -6395,8 +6164,6 @@
       <integer>-5</integer>
       <key>igrave</key>
       <integer>-5</integer>
-      <key>imacron</key>
-      <integer>35</integer>
       <key>itilde</key>
       <integer>-5</integer>
       <key>seven</key>
@@ -6486,8 +6253,6 @@
       <integer>20</integer>
       <key>Igrave</key>
       <integer>30</integer>
-      <key>Imacron</key>
-      <integer>45</integer>
       <key>Q</key>
       <integer>-20</integer>
       <key>V</key>
@@ -9224,8 +8989,6 @@
       <integer>30</integer>
       <key>igrave</key>
       <integer>10</integer>
-      <key>imacron</key>
-      <integer>20</integer>
       <key>itilde</key>
       <integer>5</integer>
       <key>numbersign</key>
@@ -9379,8 +9142,6 @@
       <integer>15</integer>
       <key>igrave</key>
       <integer>10</integer>
-      <key>imacron</key>
-      <integer>10</integer>
       <key>jcircumflex</key>
       <integer>15</integer>
       <key>parenright</key>
@@ -9428,10 +9189,16 @@
       <integer>-15</integer>
       <key>comma</key>
       <integer>-35</integer>
+      <key>eight</key>
+      <integer>-10</integer>
       <key>five</key>
       <integer>25</integer>
+      <key>four</key>
+      <integer>-10</integer>
       <key>hyphen</key>
       <integer>-25</integer>
+      <key>nine</key>
+      <integer>-30</integer>
       <key>one</key>
       <integer>15</integer>
       <key>parenright</key>
@@ -9496,12 +9263,16 @@
       <integer>-20</integer>
       <key>semicolon</key>
       <integer>-15</integer>
+      <key>six</key>
+      <integer>-20</integer>
       <key>slash</key>
       <integer>-40</integer>
       <key>three</key>
       <integer>30</integer>
       <key>uni0122</key>
       <integer>-30</integer>
+      <key>zero</key>
+      <integer>-15</integer>
     </dict>
     <key>slash</key>
     <dict>
@@ -9510,8 +9281,6 @@
       <key>Idieresis</key>
       <integer>45</integer>
       <key>Igrave</key>
-      <integer>30</integer>
-      <key>Imacron</key>
       <integer>30</integer>
       <key>Q</key>
       <integer>-30</integer>
@@ -9639,8 +9408,6 @@
     </dict>
     <key>tcaron</key>
     <dict>
-      <key>imacron</key>
-      <integer>5</integer>
       <key>jcircumflex</key>
       <integer>5</integer>
       <key>uni1EF5</key>
@@ -9979,8 +9746,6 @@
       <integer>60</integer>
       <key>igrave</key>
       <integer>65</integer>
-      <key>imacron</key>
-      <integer>65</integer>
       <key>itilde</key>
       <integer>30</integer>
       <key>j</key>
@@ -10182,8 +9947,6 @@
     <dict>
       <key>igrave</key>
       <integer>5</integer>
-      <key>imacron</key>
-      <integer>5</integer>
       <key>jcircumflex</key>
       <integer>10</integer>
     </dict>
@@ -10231,8 +9994,6 @@
       <key>icircumflex</key>
       <integer>5</integer>
       <key>igrave</key>
-      <integer>5</integer>
-      <key>imacron</key>
       <integer>5</integer>
       <key>jcircumflex</key>
       <integer>10</integer>
@@ -10751,8 +10512,6 @@
       <integer>20</integer>
       <key>igrave</key>
       <integer>30</integer>
-      <key>imacron</key>
-      <integer>20</integer>
       <key>itilde</key>
       <integer>-5</integer>
       <key>jcircumflex</key>
@@ -10990,8 +10749,6 @@
       <integer>-10</integer>
       <key>Idieresis</key>
       <integer>20</integer>
-      <key>Imacron</key>
-      <integer>-10</integer>
       <key>Oslash</key>
       <integer>-35</integer>
       <key>ibreve</key>
@@ -11009,8 +10766,6 @@
       <integer>30</integer>
       <key>Idieresis</key>
       <integer>15</integer>
-      <key>Imacron</key>
-      <integer>40</integer>
       <key>M</key>
       <integer>5</integer>
       <key>T</key>
@@ -11053,8 +10808,6 @@
       <integer>-5</integer>
       <key>idieresis</key>
       <integer>35</integer>
-      <key>imacron</key>
-      <integer>30</integer>
       <key>j</key>
       <integer>0</integer>
       <key>parenright</key>
@@ -11218,8 +10971,6 @@
       <integer>15</integer>
       <key>igrave</key>
       <integer>0</integer>
-      <key>imacron</key>
-      <integer>10</integer>
       <key>itilde</key>
       <integer>-5</integer>
       <key>j</key>
@@ -11250,8 +11001,6 @@
       <integer>15</integer>
       <key>igrave</key>
       <integer>0</integer>
-      <key>imacron</key>
-      <integer>10</integer>
       <key>itilde</key>
       <integer>-5</integer>
       <key>jcircumflex</key>
@@ -11282,8 +11031,6 @@
       <integer>15</integer>
       <key>igrave</key>
       <integer>0</integer>
-      <key>imacron</key>
-      <integer>10</integer>
       <key>itilde</key>
       <integer>-5</integer>
       <key>jcircumflex</key>
@@ -11312,8 +11059,6 @@
       <integer>15</integer>
       <key>igrave</key>
       <integer>0</integer>
-      <key>imacron</key>
-      <integer>10</integer>
       <key>itilde</key>
       <integer>-5</integer>
       <key>jcircumflex</key>
@@ -11342,8 +11087,6 @@
       <integer>15</integer>
       <key>igrave</key>
       <integer>0</integer>
-      <key>imacron</key>
-      <integer>10</integer>
       <key>itilde</key>
       <integer>-5</integer>
       <key>jcircumflex</key>
@@ -11377,7 +11120,7 @@
       <key>Igrave</key>
       <integer>0</integer>
       <key>Imacron</key>
-      <integer>85</integer>
+      <integer>15</integer>
       <key>Itilde</key>
       <integer>0</integer>
       <key>Lslash</key>
@@ -11390,8 +11133,6 @@
       <integer>15</integer>
       <key>igrave</key>
       <integer>0</integer>
-      <key>imacron</key>
-      <integer>10</integer>
       <key>itilde</key>
       <integer>-5</integer>
       <key>jcircumflex</key>
@@ -11437,8 +11178,6 @@
       <integer>35</integer>
       <key>Idieresis</key>
       <integer>20</integer>
-      <key>Imacron</key>
-      <integer>45</integer>
       <key>K</key>
       <integer>5</integer>
       <key>L</key>
@@ -11521,8 +11260,6 @@
       <integer>-5</integer>
       <key>idieresis</key>
       <integer>40</integer>
-      <key>imacron</key>
-      <integer>35</integer>
       <key>j</key>
       <integer>5</integer>
       <key>k</key>
@@ -11552,8 +11289,6 @@
       <integer>15</integer>
       <key>igrave</key>
       <integer>0</integer>
-      <key>imacron</key>
-      <integer>10</integer>
       <key>itilde</key>
       <integer>-5</integer>
       <key>jcircumflex</key>
@@ -11582,8 +11317,6 @@
       <integer>15</integer>
       <key>igrave</key>
       <integer>0</integer>
-      <key>imacron</key>
-      <integer>10</integer>
       <key>itilde</key>
       <integer>-5</integer>
       <key>j</key>
@@ -11606,8 +11339,6 @@
       <integer>10</integer>
       <key>Idieresis</key>
       <integer>40</integer>
-      <key>Imacron</key>
-      <integer>20</integer>
     </dict>
     <key>uni1EC9</key>
     <dict>
@@ -11814,8 +11545,6 @@
       <integer>20</integer>
       <key>Igrave</key>
       <integer>-5</integer>
-      <key>Imacron</key>
-      <integer>0</integer>
       <key>Itilde</key>
       <integer>-25</integer>
       <key>ibreve</key>
@@ -11829,8 +11558,6 @@
       <integer>30</integer>
       <key>Idieresis</key>
       <integer>15</integer>
-      <key>Imacron</key>
-      <integer>40</integer>
       <key>M</key>
       <integer>5</integer>
       <key>T</key>
@@ -11873,8 +11600,6 @@
       <integer>-5</integer>
       <key>idieresis</key>
       <integer>35</integer>
-      <key>imacron</key>
-      <integer>30</integer>
       <key>j</key>
       <integer>5</integer>
       <key>parenright</key>
@@ -11922,8 +11647,6 @@
       <integer>45</integer>
       <key>Igrave</key>
       <integer>0</integer>
-      <key>Imacron</key>
-      <integer>20</integer>
       <key>Itilde</key>
       <integer>-10</integer>
       <key>V</key>
@@ -11946,8 +11669,6 @@
       <integer>0</integer>
       <key>idieresis</key>
       <integer>5</integer>
-      <key>imacron</key>
-      <integer>5</integer>
     </dict>
     <key>uni1EDB</key>
     <dict>
@@ -11955,8 +11676,6 @@
       <integer>15</integer>
       <key>idieresis</key>
       <integer>20</integer>
-      <key>imacron</key>
-      <integer>15</integer>
       <key>jcircumflex</key>
       <integer>25</integer>
       <key>tcaron</key>
@@ -11978,8 +11697,6 @@
       <integer>45</integer>
       <key>Igrave</key>
       <integer>0</integer>
-      <key>Imacron</key>
-      <integer>20</integer>
       <key>Itilde</key>
       <integer>-10</integer>
       <key>V</key>
@@ -12002,8 +11719,6 @@
       <integer>0</integer>
       <key>idieresis</key>
       <integer>5</integer>
-      <key>imacron</key>
-      <integer>5</integer>
     </dict>
     <key>uni1EDD</key>
     <dict>
@@ -12011,8 +11726,6 @@
       <integer>15</integer>
       <key>idieresis</key>
       <integer>20</integer>
-      <key>imacron</key>
-      <integer>15</integer>
       <key>jcircumflex</key>
       <integer>25</integer>
       <key>tcaron</key>
@@ -12034,8 +11747,6 @@
       <integer>45</integer>
       <key>Igrave</key>
       <integer>0</integer>
-      <key>Imacron</key>
-      <integer>20</integer>
       <key>Itilde</key>
       <integer>-10</integer>
       <key>V</key>
@@ -12058,8 +11769,6 @@
       <integer>0</integer>
       <key>idieresis</key>
       <integer>5</integer>
-      <key>imacron</key>
-      <integer>5</integer>
     </dict>
     <key>uni1EDF</key>
     <dict>
@@ -12067,8 +11776,6 @@
       <integer>15</integer>
       <key>idieresis</key>
       <integer>20</integer>
-      <key>imacron</key>
-      <integer>15</integer>
       <key>jcircumflex</key>
       <integer>25</integer>
       <key>tcaron</key>
@@ -12090,8 +11797,6 @@
       <integer>45</integer>
       <key>Igrave</key>
       <integer>0</integer>
-      <key>Imacron</key>
-      <integer>20</integer>
       <key>Itilde</key>
       <integer>-10</integer>
       <key>V</key>
@@ -12114,8 +11819,6 @@
       <integer>0</integer>
       <key>idieresis</key>
       <integer>5</integer>
-      <key>imacron</key>
-      <integer>5</integer>
     </dict>
     <key>uni1EE1</key>
     <dict>
@@ -12123,8 +11826,6 @@
       <integer>15</integer>
       <key>idieresis</key>
       <integer>20</integer>
-      <key>imacron</key>
-      <integer>15</integer>
       <key>jcircumflex</key>
       <integer>25</integer>
       <key>tcaron</key>
@@ -12146,8 +11847,6 @@
       <integer>45</integer>
       <key>Igrave</key>
       <integer>0</integer>
-      <key>Imacron</key>
-      <integer>20</integer>
       <key>Itilde</key>
       <integer>-10</integer>
       <key>V</key>
@@ -12170,8 +11869,6 @@
       <integer>0</integer>
       <key>idieresis</key>
       <integer>5</integer>
-      <key>imacron</key>
-      <integer>5</integer>
     </dict>
     <key>uni1EE3</key>
     <dict>
@@ -12179,8 +11876,6 @@
       <integer>15</integer>
       <key>idieresis</key>
       <integer>20</integer>
-      <key>imacron</key>
-      <integer>15</integer>
       <key>jcircumflex</key>
       <integer>25</integer>
       <key>tcaron</key>
@@ -12229,7 +11924,7 @@
       <key>Idotaccent</key>
       <integer>10</integer>
       <key>Imacron</key>
-      <integer>65</integer>
+      <integer>10</integer>
       <key>Iogonek</key>
       <integer>10</integer>
       <key>M</key>
@@ -12274,8 +11969,6 @@
       <integer>45</integer>
       <key>idieresis</key>
       <integer>55</integer>
-      <key>imacron</key>
-      <integer>50</integer>
       <key>j</key>
       <integer>5</integer>
       <key>jcircumflex</key>
@@ -12455,8 +12148,6 @@
       <integer>55</integer>
       <key>idieresis</key>
       <integer>60</integer>
-      <key>imacron</key>
-      <integer>65</integer>
       <key>j</key>
       <integer>15</integer>
       <key>jcircumflex</key>
@@ -12559,7 +12250,7 @@
       <key>Idotaccent</key>
       <integer>10</integer>
       <key>Imacron</key>
-      <integer>65</integer>
+      <integer>10</integer>
       <key>Iogonek</key>
       <integer>10</integer>
       <key>M</key>
@@ -12604,8 +12295,6 @@
       <integer>45</integer>
       <key>idieresis</key>
       <integer>55</integer>
-      <key>imacron</key>
-      <integer>50</integer>
       <key>j</key>
       <integer>5</integer>
       <key>jcircumflex</key>
@@ -12785,8 +12474,6 @@
       <integer>55</integer>
       <key>idieresis</key>
       <integer>60</integer>
-      <key>imacron</key>
-      <integer>65</integer>
       <key>j</key>
       <integer>15</integer>
       <key>jcircumflex</key>
@@ -12889,7 +12576,7 @@
       <key>Idotaccent</key>
       <integer>10</integer>
       <key>Imacron</key>
-      <integer>65</integer>
+      <integer>10</integer>
       <key>Iogonek</key>
       <integer>10</integer>
       <key>M</key>
@@ -12934,8 +12621,6 @@
       <integer>45</integer>
       <key>idieresis</key>
       <integer>55</integer>
-      <key>imacron</key>
-      <integer>50</integer>
       <key>j</key>
       <integer>5</integer>
       <key>jcircumflex</key>
@@ -13115,8 +12800,6 @@
       <integer>55</integer>
       <key>idieresis</key>
       <integer>60</integer>
-      <key>imacron</key>
-      <integer>65</integer>
       <key>j</key>
       <integer>15</integer>
       <key>jcircumflex</key>
@@ -13219,7 +12902,7 @@
       <key>Idotaccent</key>
       <integer>10</integer>
       <key>Imacron</key>
-      <integer>65</integer>
+      <integer>10</integer>
       <key>Iogonek</key>
       <integer>10</integer>
       <key>M</key>
@@ -13264,8 +12947,6 @@
       <integer>45</integer>
       <key>idieresis</key>
       <integer>55</integer>
-      <key>imacron</key>
-      <integer>50</integer>
       <key>j</key>
       <integer>5</integer>
       <key>jcircumflex</key>
@@ -13445,8 +13126,6 @@
       <integer>55</integer>
       <key>idieresis</key>
       <integer>60</integer>
-      <key>imacron</key>
-      <integer>65</integer>
       <key>j</key>
       <integer>15</integer>
       <key>jcircumflex</key>
@@ -13549,7 +13228,7 @@
       <key>Idotaccent</key>
       <integer>10</integer>
       <key>Imacron</key>
-      <integer>65</integer>
+      <integer>10</integer>
       <key>Iogonek</key>
       <integer>10</integer>
       <key>M</key>
@@ -13594,8 +13273,6 @@
       <integer>45</integer>
       <key>idieresis</key>
       <integer>55</integer>
-      <key>imacron</key>
-      <integer>50</integer>
       <key>j</key>
       <integer>5</integer>
       <key>jcircumflex</key>
@@ -13775,8 +13452,6 @@
       <integer>55</integer>
       <key>idieresis</key>
       <integer>60</integer>
-      <key>imacron</key>
-      <integer>65</integer>
       <key>j</key>
       <integer>15</integer>
       <key>jcircumflex</key>
@@ -13886,8 +13561,6 @@
       <integer>25</integer>
       <key>idieresis</key>
       <integer>15</integer>
-      <key>imacron</key>
-      <integer>10</integer>
       <key>rcaron</key>
       <integer>-55</integer>
       <key>uni021A</key>
@@ -13966,8 +13639,6 @@
       <integer>25</integer>
       <key>idieresis</key>
       <integer>15</integer>
-      <key>imacron</key>
-      <integer>10</integer>
       <key>rcaron</key>
       <integer>-55</integer>
       <key>uni021A</key>
@@ -14046,8 +13717,6 @@
       <integer>25</integer>
       <key>idieresis</key>
       <integer>15</integer>
-      <key>imacron</key>
-      <integer>10</integer>
       <key>rcaron</key>
       <integer>-55</integer>
       <key>uni021A</key>
@@ -15176,6 +14845,8 @@
       <integer>-20</integer>
       <key>five</key>
       <integer>20</integer>
+      <key>nine</key>
+      <integer>-15</integer>
       <key>period</key>
       <integer>-15</integer>
       <key>public.kern2.A</key>
@@ -15198,6 +14869,8 @@
       <integer>-10</integer>
       <key>question</key>
       <integer>-55</integer>
+      <key>six</key>
+      <integer>-10</integer>
       <key>slash</key>
       <integer>-20</integer>
       <key>three</key>
