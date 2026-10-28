@@ -18,7 +18,7 @@ FAMILY = 'DINHTUONG60s'           # display family name (renamed from Đìzai-Sa
 FAMILY_ASCII = 'DINHTUONG60s'     # CFF strings must stay ASCII
 PSFAM = 'DINHTUONG60s'            # PostScript / file name
 VERSION = '0.950'
-FAM_ASC, FAM_DESC = 1050, -250      # v0.95b: line spacing (typo + hhea) — the single sắc strip reaches 1050
+FAM_ASC, FAM_DESC = 1050, -350      # V2 (28/10 19:47 "baseline thấp, khó canh giữa khi làm UI"): caps centred in the line box (top gap 1050-700 = bottom 350, like Inter / Liberation / Poppins); line 1.40; was -250 (caps sat 50 low)
 FAM_WIN = 1140                       # v0.95c: usWinAscent covers the tallest stack (Bold Ẳ 1135) so Windows never clips
 DESCRIPTION = ('DINHTUONG60s — chữ khuôn thép đúc của biển hiệu, biển cổng thập niên 1960. Chỉ chữ hoa '
                '(gõ chữ thường ra chữ hoa). Hỗ trợ tiếng Việt đầy đủ, dấu vẽ cùng nét với chữ.')

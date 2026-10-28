@@ -1260,17 +1260,21 @@ def fstem(x0, y0, x1, y1, f=FL, top=True, bot=True):
 
 
 def fbar(x0, y0, x1, y1, f=FL, left=False, right=True):
-    """horizontal bar flaring vertically at its free end(s)."""
+    """R4 bar flaring at its free end(s). F11c (28/10 19:51 'kiểm tra lại chiều cao chữ hoa': T's flared bar rose 9 above I):
+    a bar edge lying ON a guideline (baseline 0 / cap height) never flares past it -- only the edge away from the line
+    flares, by the one R4c amount (the caps follow the lowercase F11)."""
     import flare_spec as _FS                     # R4c: one flare everywhere
     f = _FS.amt(f); L = _FS.length(x1 - x0)
     fr, fl_ = (f if right else 0), (f if left else 0)
-    return [('M', x0, y0 - fl_), ('C', x0 + L * 0.35, y0 - fl_ * 0.15, x0 + L * 0.7, y0, x0 + L, y0),
-            ('L', x1 - L, y0),
-            ('C', x1 - L * 0.7, y0, x1 - L * 0.35, y0 - fr * 0.15, x1, y0 - fr),
-            ('L', x1, y1 + fr),
-            ('C', x1 - L * 0.35, y1 + fr * 0.15, x1 - L * 0.7, y1, x1 - L, y1),
-            ('L', x0 + L, y1),
-            ('C', x0 + L * 0.7, y1, x0 + L * 0.35, y1 + fl_ * 0.15, x0, y1 + fl_), ('Z',)]
+    on = __import__('os').environ.get('F11C', '1') == '1'
+    hi = not (on and abs(y1 - CAP) < 1.5)
+    lo = not (on and abs(y0) < 1.5)
+    rlo, rhi = (fr if lo else 0), (fr if hi else 0)
+    llo, lhi = (fl_ if lo else 0), (fl_ if hi else 0)
+    return [('M', x0, y0 - llo), ('C', x0 + L * 0.35, y0 - llo * 0.15, x0 + L * 0.7, y0, x0 + L, y0),
+            ('L', x1 - L, y0), ('C', x1 - L * 0.7, y0, x1 - L * 0.35, y0 - rlo * 0.15, x1, y0 - rlo),
+            ('L', x1, y1 + rhi), ('C', x1 - L * 0.35, y1 + rhi * 0.15, x1 - L * 0.7, y1, x1 - L, y1),
+            ('L', x0 + L, y1), ('C', x0 + L * 0.7, y1, x0 + L * 0.35, y1 + lhi * 0.15, x0, y1 + lhi), ('Z',)]
 
 
 def circle(cx, cy, r):

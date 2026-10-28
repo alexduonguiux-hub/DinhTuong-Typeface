@@ -614,7 +614,7 @@
       <key>p</key>
       <integer>30</integer>
       <key>parenright</key>
-      <integer>80</integer>
+      <integer>75</integer>
       <key>semicolon</key>
       <integer>50</integer>
       <key>slash</key>
@@ -752,7 +752,7 @@
       <key>public.kern2.j</key>
       <integer>-20</integer>
       <key>public.kern2.l</key>
-      <integer>-35</integer>
+      <integer>-40</integer>
       <key>public.kern2.n</key>
       <integer>-35</integer>
       <key>public.kern2.o</key>
@@ -1404,7 +1404,7 @@
       <key>lslash</key>
       <integer>-20</integer>
       <key>oslash</key>
-      <integer>-5</integer>
+      <integer>-10</integer>
       <key>uni1EA0</key>
       <integer>5</integer>
       <key>uni1EA2</key>
@@ -1459,7 +1459,7 @@
       <key>lslash</key>
       <integer>-20</integer>
       <key>oslash</key>
-      <integer>-5</integer>
+      <integer>-10</integer>
     </dict>
     <key>Lcaron</key>
     <dict>
@@ -1513,10 +1513,12 @@
       <integer>-80</integer>
       <key>Ygrave</key>
       <integer>-80</integer>
+      <key>bracketright</key>
+      <integer>-70</integer>
       <key>lslash</key>
       <integer>-20</integer>
       <key>oslash</key>
-      <integer>-5</integer>
+      <integer>-10</integer>
       <key>uni021A</key>
       <integer>-60</integer>
       <key>uni1EA0</key>
@@ -1591,7 +1593,7 @@
       <key>lslash</key>
       <integer>-20</integer>
       <key>oslash</key>
-      <integer>-5</integer>
+      <integer>-10</integer>
       <key>uni1EA0</key>
       <integer>5</integer>
       <key>uni1EA2</key>
@@ -1715,8 +1717,6 @@
       <integer>-5</integer>
       <key>jcircumflex</key>
       <integer>5</integer>
-      <key>oslash</key>
-      <integer>-10</integer>
       <key>uni1EC9</key>
       <integer>-5</integer>
     </dict>
@@ -3275,7 +3275,7 @@
       <key>jcircumflex</key>
       <integer>10</integer>
       <key>oslash</key>
-      <integer>-15</integer>
+      <integer>-20</integer>
       <key>uni1EC9</key>
       <integer>-25</integer>
       <key>x</key>
@@ -3300,7 +3300,7 @@
       <key>jcircumflex</key>
       <integer>10</integer>
       <key>oslash</key>
-      <integer>-15</integer>
+      <integer>-20</integer>
       <key>x</key>
       <integer>5</integer>
     </dict>
@@ -3323,7 +3323,7 @@
       <key>jcircumflex</key>
       <integer>10</integer>
       <key>oslash</key>
-      <integer>-15</integer>
+      <integer>-20</integer>
       <key>uni1EC9</key>
       <integer>-25</integer>
       <key>x</key>
@@ -3348,7 +3348,7 @@
       <key>jcircumflex</key>
       <integer>10</integer>
       <key>oslash</key>
-      <integer>-15</integer>
+      <integer>-20</integer>
       <key>uni1EC9</key>
       <integer>-25</integer>
       <key>x</key>
@@ -7037,7 +7037,9 @@
       <key>b</key>
       <integer>-25</integer>
       <key>braceright</key>
-      <integer>-40</integer>
+      <integer>-45</integer>
+      <key>bracketright</key>
+      <integer>-80</integer>
       <key>ellipsis</key>
       <integer>20</integer>
       <key>exclam</key>
@@ -9468,8 +9470,6 @@
     </dict>
     <key>two</key>
     <dict>
-      <key>bracketright</key>
-      <integer>25</integer>
       <key>five</key>
       <integer>35</integer>
       <key>parenright</key>
@@ -10409,7 +10409,7 @@
       <key>lslash</key>
       <integer>-20</integer>
       <key>oslash</key>
-      <integer>-5</integer>
+      <integer>-10</integer>
       <key>uni1EA0</key>
       <integer>5</integer>
       <key>uni1EA2</key>
@@ -10769,9 +10769,9 @@
       <key>M</key>
       <integer>5</integer>
       <key>T</key>
-      <integer>20</integer>
+      <integer>15</integer>
       <key>Tcaron</key>
-      <integer>20</integer>
+      <integer>15</integer>
       <key>V</key>
       <integer>30</integer>
       <key>W</key>
@@ -10813,9 +10813,9 @@
       <key>parenright</key>
       <integer>30</integer>
       <key>seven</key>
-      <integer>15</integer>
+      <integer>10</integer>
       <key>uni021A</key>
-      <integer>20</integer>
+      <integer>15</integer>
     </dict>
     <key>uni1EAA</key>
     <dict>
@@ -11193,9 +11193,9 @@
       <key>Rcaron</key>
       <integer>5</integer>
       <key>T</key>
-      <integer>25</integer>
+      <integer>20</integer>
       <key>Tcaron</key>
-      <integer>25</integer>
+      <integer>20</integer>
       <key>U</key>
       <integer>5</integer>
       <key>Ubreve</key>
@@ -11267,13 +11267,13 @@
       <key>parenright</key>
       <integer>30</integer>
       <key>seven</key>
-      <integer>20</integer>
+      <integer>15</integer>
       <key>uni0136</key>
       <integer>5</integer>
       <key>uni013B</key>
       <integer>5</integer>
       <key>uni021A</key>
-      <integer>25</integer>
+      <integer>20</integer>
     </dict>
     <key>uni1EC4</key>
     <dict>
@@ -11561,9 +11561,9 @@
       <key>M</key>
       <integer>5</integer>
       <key>T</key>
-      <integer>20</integer>
+      <integer>15</integer>
       <key>Tcaron</key>
-      <integer>20</integer>
+      <integer>15</integer>
       <key>V</key>
       <integer>30</integer>
       <key>W</key>
@@ -11605,9 +11605,9 @@
       <key>parenright</key>
       <integer>25</integer>
       <key>seven</key>
-      <integer>15</integer>
+      <integer>10</integer>
       <key>uni021A</key>
-      <integer>20</integer>
+      <integer>15</integer>
     </dict>
     <key>uni1ED6</key>
     <dict>

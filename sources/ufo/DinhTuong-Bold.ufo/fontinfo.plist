@@ -15,7 +15,7 @@
     <key>openTypeHheaAscender</key>
     <integer>1050</integer>
     <key>openTypeHheaDescender</key>
-    <integer>-250</integer>
+    <integer>-350</integer>
     <key>openTypeHheaLineGap</key>
     <integer>0</integer>
     <key>openTypeNameDescription</key>
@@ -42,7 +42,7 @@
     <key>openTypeOS2TypoAscender</key>
     <integer>1050</integer>
     <key>openTypeOS2TypoDescender</key>
-    <integer>-250</integer>
+    <integer>-350</integer>
     <key>openTypeOS2TypoLineGap</key>
     <integer>0</integer>
     <key>openTypeOS2VendorID</key>
@@ -52,7 +52,7 @@
     <key>openTypeOS2WinAscent</key>
     <integer>1140</integer>
     <key>openTypeOS2WinDescent</key>
-    <integer>330</integer>
+    <integer>350</integer>
     <key>postscriptFontName</key>
     <string>DinhTuong-Bold</string>
     <key>styleMapFamilyName</key>

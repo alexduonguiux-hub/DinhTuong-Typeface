@@ -84,7 +84,8 @@ def mk_macron(upper=False):
     import os, marks_flat as MF
     if os.environ.get('MACRON_SHORT', '1') == '1':
         L = 0.6 * MF.STRIP_L
-        return [('add', fbar(-L / 2, 0, L / 2, MF._st(), f=fl - 2, left=True, right=True))]
+        # drawn off the guidelines (F11c only stops a bar flaring past a baseline / cap line; a mark flares both ways)
+        return shift_ops([('add', fbar(-L / 2, 100, L / 2, 100 + MF._st(), f=fl - 2, left=True, right=True))], 0, -100)
     return [('add', fbar(-150, 0, 150, MF.MH, f=fl - 2, left=True, right=True))]   # R8b: a horizontal = MH
 
 

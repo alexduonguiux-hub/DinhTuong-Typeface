@@ -27,10 +27,7 @@
       <point x="358" y="600"/>
       <point x="400" y="599"/>
       <point x="442" y="593" type="curve"/>
-      <point x="442" y="707" type="line"/>
-      <point x="400" y="701"/>
-      <point x="358" y="700"/>
-      <point x="322" y="700" type="curve" smooth="yes"/>
+      <point x="442" y="700" type="line"/>
       <point x="43" y="700" type="line"/>
       <point x="49" y="658"/>
       <point x="50" y="616"/>
