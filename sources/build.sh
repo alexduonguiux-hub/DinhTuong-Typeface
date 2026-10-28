@@ -3,7 +3,7 @@
 # The generators in sources/dinhtuong/ draw every glyph from its construction rules and compile the fonts;
 # gf_release.py writes the Google Fonts names / metadata; export_ufo.py writes the UFO copies to sources/ufo/.
 set -e
-VERSION=${VERSION:-0.980}
+VERSION=${VERSION:-1.000}
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 cd "$ROOT/sources/dinhtuong"
 for w in regular medium bold; do LC_OPT=f A2_WEIGHT=$w python3 lcsym.py; done
