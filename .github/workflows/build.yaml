@@ -149,6 +149,8 @@ jobs:
         continue-on-error: true
       - name: Copy OFL.txt to release directory
         run: cp OFL.txt ${{ env.ZIP_NAME }}/OFL.txt
+      - name: Copy README (English + Vietnamese) and CHANGELOG to release directory
+        run: cp README.md documentation/CHANGELOG.md ${{ env.ZIP_NAME }}/
       - name: Remove proof/test outputs from release
         run: rm -rf ${{ env.ZIP_NAME }}/out
       - name: Set release file name
@@ -160,7 +162,11 @@ jobs:
         id: create_release
         run: |
           if ! gh release view ${{ github.ref_name }}; then
-          git show -s --format=%B ${{ github.ref_name }} | tail -n +4 | gh release create ${{ github.ref_name }} -t ${{ github.ref_name }} -F -
+          # release notes: this version's section of documentation/CHANGELOG.md (tag v1.000 -> "## 1.000")
+          V="${{ github.ref_name }}"; V="${V#v}"
+          awk -v v="$V" '/^## /{p = (index($0, "## " v) == 1); if (p) next} p' documentation/CHANGELOG.md > notes.md
+          [ -s notes.md ] || git show -s --format=%B ${{ github.ref_name }} | tail -n +4 > notes.md
+          gh release create ${{ github.ref_name }} -t "Dinh Tuong ${{ github.ref_name }}" -F notes.md
           fi
       - name: Populate release
         run: |
