@@ -91,10 +91,14 @@ for pair, v in K['exceptions'].items():
     if gname(a) and gname(b):
         kerning[(gname(a), gname(b))] = int(round(v))
 w.writeGroups(groups)
-w.writeKerning(kerning)
-
 src = open(fea).read()
-src = re.sub(r'feature kern \{.*?\} kern;\s*', '', src, flags=re.S)
+if os.environ.get('UFO_KERN_PLIST') == '1':
+    # editing copy: class kerning in kerning.plist, the kern feature dropped from features.fea
+    w.writeKerning(kerning)
+    src = re.sub(r'feature kern \{.*?\} kern;\s*', '', src, flags=re.S)
+# default (the UFO is the Google Fonts build source, fontmake): features.fea keeps the house kern feature EXACTLY as
+# the generators compiled it (class kerning + K3 / S3b collision exceptions); kerning.plist stays empty so ufo2ft
+# does not write a second kern feature. groups.plist keeps the classes for editors.
 w.writeFeatures(src)
 w.writeLib({'public.glyphOrder': f.getGlyphOrder()})
 w.close()

@@ -3,7 +3,9 @@ help:
 	@echo "# Build targets for Dinh Tuong"
 	@echo "###"
 	@echo
-	@echo "  make build:  Builds the fonts and places them in the fonts/ directory"
+	@echo "  make build:    Builds the fonts from sources/ufo with gftools builder (fontmake) into fonts/"
+	@echo "  make generate: Regenerates sources/ufo from the rule-based generators (sources/dinhtuong)"
+	@echo "  make compare:  Checks the fontmake build against the generators' reference binaries"
 	@echo "  make test:   Tests the fonts with fontspector (Google Fonts profile)"
 	@echo "  make proof:  Creates HTML proof documents in out/proof"
 	@echo
@@ -17,8 +19,14 @@ venv/touchfile: requirements.txt
 	. venv/bin/activate; pip install -Ur requirements.txt
 	touch venv/touchfile
 
-build.stamp: venv sources/build.sh $(wildcard sources/dinhtuong/*.py) $(wildcard sources/dinhtuong/*.json)
-	. venv/bin/activate; sh sources/build.sh && touch build.stamp
+build.stamp: venv sources/config.yaml $(shell find sources/ufo -type f)
+	rm -rf fonts; . venv/bin/activate; gftools builder sources/config.yaml && touch build.stamp
+
+generate: venv
+	. venv/bin/activate; sh sources/generate.sh
+
+compare: build.stamp
+	. venv/bin/activate; python3 scripts/compare_build.py sources/reference/fonts fonts
 
 test: build.stamp
 	which fontspector || (echo "fontspector not found. Please install it with 'cargo binstall fontspector'." && exit 1)

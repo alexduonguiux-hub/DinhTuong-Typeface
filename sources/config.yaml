@@ -1,0 +1,15 @@
+# Google Fonts build (gftools builder -> fontmake). The UFOs are the build sources; they are written by the rule-based
+# generators in sources/dinhtuong/ (`make generate`), which draw every glyph from its construction rules.
+sources:
+  - ufo/DinhTuong-Regular.ufo
+  - ufo/DinhTuong-Medium.ufo
+  - ufo/DinhTuong-Bold.ufo
+familyName: "Dinh Tuong"
+buildVariable: false
+buildStatic: true
+buildOTF: true
+buildTTF: true
+buildWebfont: false
+autohintTTF: false
+checkCompatibility: false
+outputDir: "../fonts"

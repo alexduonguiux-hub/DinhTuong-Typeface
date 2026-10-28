@@ -63,6 +63,8 @@ jobs:
 
       - name: Build font
         run: make build
+      - name: Compare with the generators' reference binaries
+        run: make compare
       - name: Check with fontspector
         run: make test
         continue-on-error: true

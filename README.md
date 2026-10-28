@@ -20,12 +20,19 @@ Dinh Tuong là kiểu chữ trưng bày dựng theo chữ khuôn thép đúc tr�
 
 ## Building
 
-The sources are the rule-based Python generators in `sources/`. They draw every glyph from its construction rules and write the font binaries.
+The fonts are built from the UFO sources in `sources/ufo` with [gftools builder](https://github.com/googlefonts/gftools) (fontmake), configured in `sources/config.yaml`:
 
 ```sh
-make build        # = sh sources/build.sh  ->  fonts/otf, fonts/ttf (and sources/ufo for inspection)
+make build        # fonts/ttf, fonts/otf from sources/ufo (gftools builder + fontmake)
+make compare      # the build must match the generators' reference binaries (sources/reference/fonts)
 make test         # fontspector, Google Fonts profile (needs fontspector)
 make proof        # HTML proofs (needs diffenator3)
+```
+
+The UFOs themselves are written by the rule-based Python generators in `sources/dinhtuong/`, which draw every glyph from its construction rules (ruler and compass only), space and kern it, and compile reference binaries:
+
+```sh
+make generate     # = sh sources/generate.sh -> sources/ufo + sources/reference/fonts
 ```
 
 Requirements are pinned in `requirements.txt` (Python 3.11 or later).
@@ -42,6 +49,6 @@ This Font Software is licensed under the SIL Open Font License, Version 1.1. Thi
 
 This font repository follows the [Google Fonts project template](https://github.com/googlefonts/googlefonts-project-template):
 
-- `sources/`: the generators and the build script
+- `sources/`: UFO build sources, gftools builder config, the rule-based generators and their reference binaries
 - `fonts/`: the font binaries, one folder per format
 - `documentation/`: specimen, article and changelog
