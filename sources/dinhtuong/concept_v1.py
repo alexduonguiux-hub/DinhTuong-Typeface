@@ -87,6 +87,92 @@ def ell(cx, cy, rx, ry, k=KC):
             ('C', cx - rx, cy + k * ry, cx - k * rx, cy + ry, cx, cy + ry), ('Z',)]
 
 
+SPINE_K = float(os.environ.get('SPINE_K', 1.04))   # R11b: spine (perpendicular) = 1.04 x the side stroke
+
+
+def _ell_pt(cx, cy, rx, ry, t):
+    """point, unit tangent (direction of increasing t) and curvature of an ellipse at parameter angle t."""
+    p = (cx + rx * math.cos(t), cy + ry * math.sin(t))
+    dx, dy = -rx * math.sin(t), ry * math.cos(t)
+    n = math.hypot(dx, dy)
+    k = rx * ry / ((rx * rx * math.sin(t) ** 2 + ry * ry * math.cos(t) ** 2) ** 1.5)
+    return p, (dx / n, dy / n), k
+
+
+def _g2_cubic(P0, d0, k0, P3, d3, k3):
+    """cubic from P0 (leaving along d0) to P3 (arriving along d3) whose end curvatures equal k0 / k3 (G2 joins)."""
+    cr = lambda a, b: a[0] * b[1] - a[1] * b[0]
+
+    def F(a, b):
+        P1 = (P0[0] + a * d0[0], P0[1] + a * d0[1]); P2 = (P3[0] - b * d3[0], P3[1] - b * d3[1])
+        u = (P2[0] - P1[0], P2[1] - P1[1])
+        return ((2 / 3) * abs(cr(d0, u)) / (a * a) - k0, (2 / 3) * abs(cr(u, d3)) / (b * b) - k3), P1, P2
+    L = math.hypot(P3[0] - P0[0], P3[1] - P0[1])
+    a = b = 0.4 * L
+    for _ in range(80):                                     # Newton, numeric Jacobian
+        (f1, f2), _, _ = F(a, b)
+        if abs(f1) + abs(f2) < 1e-10:
+            break
+        h = 1e-4 * L
+        (g1, g2), _, _ = F(a + h, b); (e1, e2), _, _ = F(a, b + h)
+        j11, j21, j12, j22 = (g1 - f1) / h, (g2 - f2) / h, (e1 - f1) / h, (e2 - f2) / h
+        det = j11 * j22 - j12 * j21
+        da, db = (f1 * j22 - f2 * j12) / det, (j11 * f2 - j21 * f1) / det
+        a, b = max(0.05 * L, a - da), max(0.05 * L, b - db)
+    _, P1, P2 = F(a, b)
+    return [P0, P1, P2, P3]
+
+
+def s_spine_geom(W, T, ov, sx, sy, sm, ti, th_o):
+    ym = (T - sm) / 2 + 8
+    U = (W / 2, (ym + T + ov) / 2, (W - ti) / 2, (T + ov - ym) / 2)                                # upper outer
+    Uc = (W / 2, ((T + ov - sy) + (ym + sm)) / 2, (W - ti) / 2 - sx, ((T + ov - sy) - (ym + sm)) / 2)  # upper counter
+    Lo = (W / 2, (-ov + ym + sm) / 2, W / 2, (ym + sm + ov) / 2)                                    # lower outer
+    Lc = (W / 2, (ym + (-ov + sy)) / 2, W / 2 - sx, (ym - (-ov + sy)) / 2)                          # lower counter
+    P0, d0, k0 = _ell_pt(*Uc, math.pi)                      # upper counter, left extreme, travelling down
+    P3, d3, k3 = _ell_pt(*Lo, th_o); d3 = (-d3[0], -d3[1])  # lower outer, th_o above its right extreme
+    Q0, e0, q0 = _ell_pt(*U, math.pi + th_o)                # upper outer, th_o below its left extreme
+    Q3, e3, q3 = _ell_pt(*Lc, 0.0); e3 = (-e3[0], -e3[1])   # lower counter, right extreme
+    return _g2_cubic(P0, d0, k0, P3, d3, k3), _g2_cubic(Q0, e0, q0, Q3, e3, q3)
+
+
+def _cpts(c, n):
+    out = []
+    for i in range(n + 1):
+        t = i / n; m = 1 - t
+        out.append(tuple(m ** 3 * c[0][j] + 3 * m * m * t * c[1][j] + 3 * m * t * t * c[2][j] + t ** 3 * c[3][j] for j in (0, 1)))
+    return out
+
+
+def s_spine(W, T, ov, sx, sy, sm, ti, G=None):
+    """R11b: the S spine between two cubic edges, each G2 (equal tangent AND curvature) with the rings it joins:
+    the top edge leaves the upper counter at its left extreme and lands on the lower outer ring th_o above its right
+    extreme; the bottom edge leaves the upper outer ring th_o below its left extreme and lands on the lower counter's
+    right extreme. th_o is solved so the spine (perpendicular, at its middle) = SPINE_K x the side stroke.
+    Returns (spine polygon path, y where the upper ring is cut, y where the lower ring is cut)."""
+    def width(th):
+        top, bot = s_spine_geom(W, T, ov, sx, sy, sm, ti, th)
+        A, B = _cpts(top, 240), _cpts(bot, 240)
+        m = B[120]
+        return min(math.hypot(x - m[0], y - m[1]) for x, y in A)
+    lo_t, hi_t = 0.0, 0.9
+    if width(lo_t) >= SPINE_K * sx:
+        hi_t = lo_t
+    for _ in range(36):
+        mid = (lo_t + hi_t) / 2
+        if width(mid) < SPINE_K * sx:
+            lo_t = mid
+        else:
+            hi_t = mid
+    top, bot = s_spine_geom(W, T, ov, sx, sy, sm, ti, hi_t)
+    if G is not None:
+        G += [('pt', p[0], p[1], 'join') for p in (top[0], top[3], bot[0], bot[3])]
+    # the two edges as true cubics (no polyline): top edge forward, bottom edge reversed
+    path = [('M',) + tuple(top[0]), ('C',) + tuple(top[1]) + tuple(top[2]) + tuple(top[3]),
+            ('L',) + tuple(bot[3]), ('C',) + tuple(bot[2]) + tuple(bot[1]) + tuple(bot[0]), ('Z',)]
+    return path, bot[0][1], top[3][1]
+
+
 def ebox(x0, y0, x1, y1):
     """true ellipse in a box (R3b: a ring wider than tall is an OVAL, never a flat-topped stadium)."""
     return ell((x0 + x1) / 2, (y0 + y1) / 2, (x1 - x0) / 2, (y1 - y0) / 2)
@@ -821,6 +907,17 @@ class Build:
               ('sub', rect(-1, -ov - 1, tl['xt'], tl['cy'])),
               ('sub', rect(-1, tl['tip'], W / 2 - 3, ym + sm + 1))]
         G.append(('hline', ym, 'spine'))
+        if os.environ.get('S_SPINE', 'g2') == 'g2':
+            # R11b (28/10 22:50 'phần uốn lượn ở giữa chữ s và S chưa mượt, vẫn còn cảm giác có lỗi gợn'): the two
+            # stacked rings met at the spine with HORIZONTAL tangents and a curvature jump (counter r -> outer R): a
+            # ripple at the centre. The spine is now ONE curve per edge with a true inflection (no flat): each edge is a
+            # cubic from the upper ring's left extreme to the lower ring's right extreme, vertical tangents at both
+            # ends, the handle at the counter end G2 (curvature = the ellipse's rx/ry^2 there), the handle at the
+            # outer end lengthened by f so the spine stays the heaviest stroke (perpendicular = SPINE_K x the side).
+            spine, y_up, y_lo = s_spine(W, T, ov, sx, sy, sm, ti, G)
+            up.append(('sub', rect(-1, ym - 1, W / 2, y_up)))           # the upper ring's lower-left part, below the join
+            lo.append(('sub', rect(W / 2, y_lo, W + 1, ym + sm + 1)))   # the lower ring's upper-right part, above the join
+            return [('group', up), ('group', lo), ('add', spine)], tu, tl
         return [('group', up), ('group', lo)], tu, tl
 
     def g_s(self):

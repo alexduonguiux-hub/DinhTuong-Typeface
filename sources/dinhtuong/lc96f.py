@@ -562,6 +562,12 @@ class LF(A.LC):
               ('sub', rect(-1, -ov - 1, tl['xt'], tl['cy'])),
               ('sub', rect(-1, tl['tip'], W / 2 - 3, ym + sm + 1))]
         G.append(('hline', ym, 'spine'))
+        if os.environ.get('S_SPINE', 'g2') == 'g2':
+            # R11b (28/10 22:50 'phần uốn lượn ở giữa chữ s và S chưa mượt'): the same smooth spine as the caps S
+            spine, y_up, y_lo = CV.s_spine(W, T, ov, sx, sy, sm, ti, G)
+            up.append(('sub', rect(-1, ym - 1, W / 2, y_up)))
+            lo.append(('sub', rect(W / 2, y_lo, W + 1, ym + sm + 1)))
+            return self.G('s', W, 34, 34, [('group', up), ('group', lo), ('add', spine)], G)
         return self.G('s', W, 34, 34, [('group', up), ('group', lo)], G)
 
     def g_s_ray(self):

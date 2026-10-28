@@ -6178,6 +6178,7 @@ feature kern {
     pos eight question -30;
     pos [eight] @kR_I -10;
     pos [eight] @kR_J -30;
+    pos [eight] @kR_S -10;
     pos nine exclam -10;
     pos nine quotedbl 10;
     pos nine ampersand 10;
@@ -6541,7 +6542,7 @@ feature kern {
     pos @kL_J @kR_J -70;
     pos @kL_J @kR_O -35;
     pos @kL_J [Q] -35;
-    pos @kL_J @kR_S -45;
+    pos @kL_J @kR_S -50;
     pos @kL_J @kR_T -25;
     pos @kL_J @kR_U -25;
     pos @kL_J @kR_Y -10;
@@ -6830,7 +6831,7 @@ feature kern {
     pos @kL_S [P] -20;
     pos @kL_S [Q] -35;
     pos @kL_S @kR_R -20;
-    pos @kL_S @kR_S -65;
+    pos @kL_S @kR_S -70;
     pos @kL_S @kR_T -70;
     pos @kL_S @kR_U -45;
     pos @kL_S [V] -65;
@@ -6858,7 +6859,7 @@ feature kern {
     pos @kL_S @kR_s -20;
     pos @kL_S [t] -35;
     pos @kL_S @kR_u -35;
-    pos @kL_S [v] -30;
+    pos @kL_S [v] -35;
     pos @kL_S @kR_w -35;
     pos @kL_S [x] -35;
     pos @kL_S @kR_y -35;
@@ -7537,7 +7538,7 @@ feature kern {
     pos [exclamdown] @kR_l -20;
     pos [exclamdown] @kR_o -25;
     pos exclamdown q -20;
-    pos [exclamdown] @kR_s -25;
+    pos [exclamdown] @kR_s -30;
     pos exclamdown t -20;
     pos [exclamdown] @kR_u -20;
     pos exclamdown v -35;
@@ -7632,7 +7633,7 @@ feature kern {
     pos quoteleft nine -20;
     pos [quoteleft] @kR_A -35;
     pos [quoteleft] @kR_J -45;
-    pos [quoteleft] @kR_S -30;
+    pos [quoteleft] @kR_S -35;
     pos [quoteleft] @kR_T 25;
     pos quoteleft v -30;
     pos [quoteleft] @kR_w -20;
@@ -7645,7 +7646,7 @@ feature kern {
     pos quotedblleft nine -20;
     pos [quotedblleft] @kR_A -35;
     pos [quotedblleft] @kR_J -45;
-    pos [quotedblleft] @kR_S -30;
+    pos [quotedblleft] @kR_S -35;
     pos [quotedblleft] @kR_T 25;
     pos quotedblleft v -30;
     pos [quotedblleft] @kR_w -20;

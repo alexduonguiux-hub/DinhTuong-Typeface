@@ -13,6 +13,7 @@
 - Bar ends lying on the baseline or the cap height no longer flare past it (T E F L Z 7 5 are exactly 700 tall, like H I).
 - Lowercase joints: the arch of n m r h u leaves the stem through a deeper cut (0.14 x-height), so the shoulder thins into the joint.
 - Kerning: lowercase pairs never close in at one point tighter than the references (eg, eo, ru …).
+- S and s: each spine edge is one curve with a true inflection, joined to the bowls with matching tangent and curvature (no ripple at the centre).
 - Kerning: every pair checked (about 135,000 per weight) and kept inside the envelope of Inter, Liberation, DejaVu, Carlito and Poppins (figure pairs never looser than their median, e.g. 96); no pair closer than an ink gap of 26 units.
 
 ## 0.973

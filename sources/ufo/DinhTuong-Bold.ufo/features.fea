@@ -6549,7 +6549,7 @@ feature kern {
     pos @kL_N @kR_J -45;
     pos @kL_N @kR_O -20;
     pos @kL_N [Q] -20;
-    pos @kL_N @kR_S -30;
+    pos @kL_N @kR_S -20;
     pos @kL_N @kR_W -10;
     pos @kL_N @kR_Z -30;
     pos @kL_O [parenright] 15;
@@ -6702,6 +6702,7 @@ feature kern {
     pos @kL_S [two] -15;
     pos @kL_S [four] -10;
     pos @kL_S [six] -20;
+    pos @kL_S [eight] -10;
     pos @kL_S [colon] -30;
     pos @kL_S [semicolon] -30;
     pos @kL_S [question] -35;
@@ -6749,7 +6750,7 @@ feature kern {
     pos @kL_S [v] -25;
     pos @kL_S @kR_w -30;
     pos @kL_S [x] -30;
-    pos @kL_S @kR_y -25;
+    pos @kL_S @kR_y -30;
     pos @kL_S @kR_z -10;
     pos @kL_S [braceright] -30;
     pos @kL_S [quoteright] -35;
@@ -7349,7 +7350,7 @@ feature kern {
     pos @kL_u @kR_J -15;
     pos @kL_u [V] -15;
     pos @kL_u @kR_W -15;
-    pos @kL_u [v] 0;
+    pos @kL_u [v] 10;
     pos @kL_u [x] 5;
     pos v parenright 30;
     pos v comma -30;
