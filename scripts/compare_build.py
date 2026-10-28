@@ -104,5 +104,7 @@ for style in ('Regular', 'Medium', 'Bold'):
           + ('IDENTICAL' if not errs else f'{len(errs)} differences'))
     for e in errs[:40]:
         print('   ', e)
+    if os.environ.get('GITHUB_ACTIONS'):                     # visible as annotations on the run
+        print(f'::{"error" if errs else "notice"} title=compare {style}::' + ('IDENTICAL to the reference' if not errs else ' || '.join(errs[:25])))
     bad += bool(errs)
 sys.exit(1 if bad else 0)
