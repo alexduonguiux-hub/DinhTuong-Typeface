@@ -16,14 +16,15 @@ venv: venv/touchfile
 
 venv/touchfile: requirements.txt
 	test -d venv || python3 -m venv venv
-	. venv/bin/activate; pip install -Ur requirements.txt
+	. venv/bin/activate; pip install -Ur requirements.txt > venv-install.log 2>&1 || (python3 scripts/ci_log.py venv-install.log pip; exit 1)
 	touch venv/touchfile
 
 build.stamp: venv sources/config.yaml $(shell find sources/ufo -type f)
-	rm -rf fonts; . venv/bin/activate; gftools builder sources/config.yaml && touch build.stamp
+	rm -rf fonts; . venv/bin/activate; gftools builder sources/config.yaml > build.log 2>&1 || (python3 scripts/ci_log.py build.log build; exit 1)
+	touch build.stamp
 
-generate: venv
-	. venv/bin/activate; sh sources/generate.sh
+generate:
+	pip install -r requirements-generate.txt; sh sources/generate.sh
 
 compare: build.stamp
 	. venv/bin/activate; python3 scripts/compare_build.py sources/reference/fonts fonts

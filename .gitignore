@@ -45,3 +45,7 @@ __pycache__/
 sources/dinhtuong/out/
 sources/dinhtuong/kern_*.json
 out/
+build.log
+venv-install.log
+build.stamp
+venv/

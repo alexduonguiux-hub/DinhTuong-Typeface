@@ -1,9 +1,2 @@
 # Google Fonts build (make build: gftools builder + fontmake from sources/ufo)
 gftools[qa]
-# generators (make generate: sources/generate.sh)
-fonttools==4.66.1
-numpy==2.5.3
-pillow==12.3.0
-booleanOperations==0.9.0
-pyclipper>=1.3.0
-brotli>=1.1.0
