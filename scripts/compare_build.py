@@ -2,7 +2,7 @@
 
 Usage: python3 scripts/compare_build.py <reference fonts dir> <built fonts dir>
 
-For each style (TTF): same cmap; same advance width for every character; same outline (ink area within 0.5 %,
+For each style (TTF): same cmap; same advance width for every character; same outline (ink area within 0.5 % or 300 units²,
 bounding box within 2 units -- TrueType curves are re-approximated); same kerning for every pair of encoded
 characters (flattened from the GPOS kern feature); same vertical metrics. Exit code 1 on any difference."""
 import sys, os
@@ -83,7 +83,7 @@ for style in ('Regular', 'Medium', 'Bold'):
         if r['hmtx'][gr][0] != n['hmtx'][gn][0]:
             errs.append(f'advance {chr(u)} {r["hmtx"][gr][0]} -> {n["hmtx"][gn][0]}')
         ar, br = glyph_stats(r, gr); an, bn = glyph_stats(n, gn)
-        if ar and abs(an - ar) / ar > 0.005:
+        if ar and abs(an - ar) / ar > 0.005 and abs(an - ar) > 300:   # TrueType curve re-approximation of small dots: < 300 u2
             errs.append(f'outline area {chr(u)} {ar:.0f} -> {an:.0f}')
         if (br is None) != (bn is None) or (br and max(abs(x - y) for x, y in zip(br, bn)) > 2):
             errs.append(f'bounds {chr(u)} {br} -> {bn}')
