@@ -1102,7 +1102,6 @@ feature kern {
     pos k numbersign 15;
     pos k percent 15;
     pos k two 15;
-    pos k three 5;
     pos k nine 5;
     pos k A 30;
     pos k M 5;
@@ -3156,7 +3155,6 @@ feature kern {
     pos uni0137 numbersign 15;
     pos uni0137 percent 15;
     pos uni0137 two 15;
-    pos uni0137 three 5;
     pos uni0137 nine 5;
     pos uni0137 A 30;
     pos uni0137 M 5;
@@ -6360,7 +6358,7 @@ feature kern {
     pos @kL_C [exclam] -15;
     pos @kL_C [parenright] -5;
     pos @kL_C [comma] -20;
-    pos @kL_C [slash] -45;
+    pos @kL_C [slash] -40;
     pos @kL_C [colon] -30;
     pos @kL_C [semicolon] -35;
     pos @kL_C [question] -25;
@@ -7536,7 +7534,7 @@ feature kern {
     pos @kL_z @kR_y 20;
     pos @kL_z [ellipsis] 20;
     pos braceleft one -40;
-    pos braceleft two -40;
+    pos braceleft two -35;
     pos braceleft three -30;
     pos braceleft four -35;
     pos braceleft nine -30;
@@ -7589,7 +7587,7 @@ feature kern {
     pos [exclamdown] @kR_y -35;
     pos [exclamdown] @kR_z -35;
     pos guillemotleft one -65;
-    pos guillemotleft two -40;
+    pos guillemotleft two -35;
     pos guillemotleft seven -65;
     pos [guillemotleft] @kR_A -35;
     pos [guillemotleft] @kR_S -20;
@@ -7600,7 +7598,7 @@ feature kern {
     pos [guillemotleft] @kR_Y -70;
     pos [guillemotleft] @kR_Z -45;
     pos questiondown one -60;
-    pos questiondown three -30;
+    pos questiondown three -25;
     pos questiondown four -30;
     pos questiondown seven -60;
     pos questiondown nine -30;

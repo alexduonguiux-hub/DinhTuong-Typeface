@@ -1,8 +1,5 @@
 # Changelog
 
-## 1.002 (2026-10-29)
-- Open terminals keep their full stroke to the cut in every weight (a c e s g ? C G S 2 3 5 …). In Medium and Bold, where a terminal meets its aperture limit, the arm used to thin toward the cut (Bold a: 131 → 112 units); now the outer edge curls slightly less instead, so reach, cut and aperture stay and the stroke stays even (Bold a: 132 → 132).
-
 ## 1.001 (2026-10-29)
 - Lowercase **ß**, **ð** and **þ** are drawn as true lowercase letters. Until now ß was replaced by "SS" (a `ccmp` rule left from the capitals-only edition) and ð þ were typed as the capitals Ð Þ.
   - þ = the b and the p on one stem: the p's bowl, the stem running from the descender to the ascender.

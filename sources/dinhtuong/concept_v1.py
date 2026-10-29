@@ -41,8 +41,6 @@ TAIL_ANG = float(os.environ.get('TAIL_ANG', 50))
 KC = 0.56
 G2_EPS = float(os.environ.get('G2_EPS', '0.8'))   # R5g: the blend starts this far outside the round (no coincident edges)
 ARM_PAR = os.environ.get('ARM_PAR', '1') == '1'   # R5h: the arm keeps one thickness to the cut (no taper)
-ARM_TOP = os.environ.get('ARM_TOP', '1') == '1'   # R5i: that thickness = the stroke at the round's extreme
-ARM_KEEP = os.environ.get('ARM_KEEP', '1') == '1'   # R5j: a clearance limit flattens the arm, never thins it
 G2_PRE = float(os.environ.get('G2_PRE', '25'))   # R5g: the arm leaves the round this many degrees before its extreme point
 SPINE = float(os.environ.get('SPINE', 1.10))   # R11: the S spine is the heaviest part (TypeDrawers: "esses need to be thickest in the spine")
 SWIDE = float(os.environ.get('SWIDE', 0.5))    # S/s widen with the stroke so their counters stay the same in every weight
@@ -562,41 +560,8 @@ class Build:
                 to_ = _unit(sx * A_ * math.cos(th_o), -sy * Ry_ * math.sin(th_o))
                 Jo_, _, _ = _cap_pt(cx, co_, Rx_, Ry_, sx, sy, math.radians(G2_PRE))
                 t_ = math.hypot(Jo_[0] - Ji[0], Jo_[1] - Ji[1])
-                t_top = abs((co_ + sy * Ry_) - cedge)     # the stroke at the round's extreme, where the arm starts
-                if os.environ.get('ARM_LOG'):
-                    print('ARM', self.w, side, vdir, round(t_, 1), round(t_top, 1), flush=True)
-                if ARM_TOP:
-                    # R5i (29/10 17:32 'đuôi móc chữ a sao lại giảm độ dày dần vậy?'): R5h measured the arm's thickness
-                    # 25° before the extreme, where (heavier weights: inner edge = Regular's curve moved) the two rounds are
-                    # NOT parallel — Bold arms ended 14 % thinner than the stroke they leave. The arm keeps the stroke of the
-                    # round's extreme (outer extreme to counter extreme) to the cut, in every weight.
-                    t_ = t_top
                 tip = p0_[1] - sy * t_ / max(abs(to_[0]), 0.25)
-                if ARM_KEEP and tip_limit is not None and (tip - tip_limit) * sy < 0:
-                    # R5j (29/10 17:32 'đuôi móc chữ a sao lại giảm độ dày dần'): a clearance limit (R2b, openings in Regular
-                    # units) used to raise the inner tip and THIN the arm (Bold faces lost up to 49 u). Now the arm keeps its
-                    # thickness t and the limit is met by flattening the OUTER arm (larger stretch: the end curls less), so
-                    # reach, cut and thickness stay — 'keep the reach, change the curvature, never shorten the stroke'.
-                    def _tip(Aq):
-                        thq = math.asin(min(1.0, dx / Aq))
-                        p0q = co_ + sy * Ry_ * math.cos(thq)
-                        toq = _unit(sx * Aq * math.cos(thq), -sy * Ry_ * math.sin(thq))
-                        return p0q - sy * t_ / max(abs(toq[0]), 0.25)
-                    lo_, hi_ = A_, 40 * A_
-                    if (_tip(hi_) - tip_limit) * sy >= 0:
-                        for _ in range(60):
-                            mid = (lo_ + hi_) / 2
-                            (lo_, hi_) = (lo_, mid) if (_tip(mid) - tip_limit) * sy >= 0 else (mid, hi_)
-                        A_ = arm_A = hi_
-                        th_o = math.asin(min(1.0, dx / A_))
-                        p0_ = (cx + sx * A_ * math.sin(th_o), co_ + sy * Ry_ * math.cos(th_o))
-                        to_ = _unit(sx * A_ * math.cos(th_o), -sy * Ry_ * math.sin(th_o))
-                        tip = p0_[1] - sy * t_ / max(abs(to_[0]), 0.25)
-                        if os.environ.get('ARM_LOG'):
-                            print('KEEP', self.w, side, vdir, 'stretch', round(A_ / (ARM_LO * Rx_), 3), flush=True)
                 if tip_limit is not None and (tip - tip_limit) * sy < 0:
-                    if os.environ.get('ARM_LOG'):
-                        print('LIMIT', self.w, side, vdir, 'tip', round(tip, 1), 'limit', round(tip_limit, 1), 'face lost', round(abs(tip_limit - tip), 1), flush=True)
                     tip = tip_limit                          # clearance wins (reported by QA)
                 top0 = ci if (ci - yc) * sy < 0 else yc
                 if (tip - top0) * sy < 0:
