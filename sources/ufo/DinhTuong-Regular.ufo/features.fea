@@ -16,7 +16,6 @@ feature tnum {
 } tnum;
 
 feature ccmp {
-  sub germandbls by S S;
   lookup VN_COMPOSE {
     sub A uni0306 acutecomb by uni1EAE;
     sub A uni0306 gravecomb by uni1EB0;
@@ -385,7 +384,7 @@ feature ccmp {
 @kL_j = [j jcircumflex uni0237];
 @kL_l = [l lacute uni013C lcaron lslash];
 @kL_n = [n ntilde nacute ncaron uni0146];
-@kL_o = [o ograve oacute ocircumflex otilde obreve uni1ECD uni1ECF uni1ED1 uni1ED3 uni1ED5 uni1ED7 uni1ED9 oslash odieresis ohungarumlaut];
+@kL_o = [o ograve oacute ocircumflex otilde obreve uni1ECD uni1ECF uni1ED1 uni1ED3 uni1ED5 uni1ED7 uni1ED9 oslash odieresis ohungarumlaut eth];
 @kL_r = [r racute rcaron];
 @kL_s = [s sacute scircumflex scaron scedilla uni0219];
 @kL_u = [u ugrave uacute ucircumflex utilde ubreve uni1EE5 uni1EE7 udieresis umacron uring uhungarumlaut uogonek];
@@ -394,6 +393,8 @@ feature ccmp {
 @kL_z = [z zacute zcaron zdotaccent];
 @kL_ohorn = [ohorn uni1EDB uni1EDD uni1EDF uni1EE1 uni1EE3];
 @kL_uhorn = [uhorn uni1EE9 uni1EEB uni1EED uni1EEF uni1EF1];
+@kL_p = [p thorn];
+@kL_b = [b germandbls];
 @kR_A = [A Agrave Aacute Acircumflex Atilde Adieresis Aring AE Abreve Amacron Aogonek uni1EA2 uni1EA0 uni1EAE uni1EB0 uni1EB2 uni1EB4 uni1EB6 uni1EA4 uni1EA6 uni1EA8 uni1EAA uni1EAC];
 @kR_B = [B uni1E9E];
 @kR_C = [C Ccedilla Cacute Ccircumflex Cdotaccent Ccaron];
@@ -419,18 +420,19 @@ feature ccmp {
 @kR_d = [d dcroat dcaron];
 @kR_e = [e egrave eacute ecircumflex ebreve uni1EB9 uni1EBB uni1EBD uni1EBF uni1EC1 uni1EC3 uni1EC5 uni1EC7 edieresis emacron edotaccent ecaron eogonek];
 @kR_g = [g gcircumflex gbreve gdotaccent uni0123];
-@kR_h = [h hcircumflex hbar];
+@kR_h = [h hcircumflex hbar germandbls];
 @kR_i = [i igrave iacute icircumflex itilde ibreve uni1EC9 uni1ECB idieresis imacron iogonek dotlessi];
 @kR_j = [j jcircumflex uni0237];
 @kR_l = [l lacute uni013C lcaron lslash];
 @kR_n = [n ntilde nacute ncaron uni0146];
-@kR_o = [o ograve oacute ocircumflex otilde obreve ohorn uni1ECD uni1ECF uni1ED1 uni1ED3 uni1ED5 uni1ED7 uni1ED9 uni1EDB uni1EDD uni1EDF uni1EE1 uni1EE3 oe oslash odieresis ohungarumlaut];
+@kR_o = [o ograve oacute ocircumflex otilde obreve ohorn uni1ECD uni1ECF uni1ED1 uni1ED3 uni1ED5 uni1ED7 uni1ED9 uni1EDB uni1EDD uni1EDF uni1EE1 uni1EE3 oe oslash odieresis ohungarumlaut eth];
 @kR_r = [r racute rcaron];
 @kR_s = [s sacute scircumflex scaron scedilla uni0219];
 @kR_u = [u ugrave uacute ucircumflex utilde ubreve uhorn uni1EE5 uni1EE7 uni1EE9 uni1EEB uni1EED uni1EEF uni1EF1 udieresis umacron uring uhungarumlaut uogonek];
 @kR_w = [w wcircumflex wgrave wacute wdieresis];
 @kR_y = [y yacute ycircumflex ygrave uni1EF5 uni1EF7 uni1EF9 ydieresis];
 @kR_z = [z zacute zcaron zdotaccent];
+@kR_p = [p thorn];
 feature kern {
   lookup KERN {
     pos exclam igrave 5;
@@ -477,6 +479,7 @@ feature kern {
     pos ampersand eacute 5;
     pos ampersand ecircumflex 5;
     pos ampersand edieresis 5;
+    pos ampersand eth 5;
     pos ampersand ograve 5;
     pos ampersand oacute 5;
     pos ampersand ocircumflex 5;
@@ -834,6 +837,7 @@ feature kern {
     pos T igrave 45;
     pos T icircumflex 20;
     pos T idieresis 15;
+    pos T thorn -40;
     pos T abreve -65;
     pos T ccircumflex -75;
     pos T ccaron -65;
@@ -868,6 +872,7 @@ feature kern {
     pos V igrave 25;
     pos V icircumflex 0;
     pos V idieresis 5;
+    pos V thorn -30;
     pos V hbar -20;
     pos V itilde 0;
     pos V ibreve 30;
@@ -891,6 +896,7 @@ feature kern {
     pos W igrave 30;
     pos W icircumflex 10;
     pos W idieresis 10;
+    pos W thorn -30;
     pos W hbar -15;
     pos W itilde 5;
     pos W imacron -30;
@@ -963,6 +969,7 @@ feature kern {
     pos Y igrave 20;
     pos Y icircumflex -15;
     pos Y idieresis -5;
+    pos Y thorn -30;
     pos Y abreve -65;
     pos Y ccaron -70;
     pos Y itilde 0;
@@ -1878,6 +1885,7 @@ feature kern {
     pos Yacute igrave 20;
     pos Yacute icircumflex -15;
     pos Yacute idieresis -5;
+    pos Yacute thorn -30;
     pos Yacute abreve -65;
     pos Yacute ccaron -70;
     pos Yacute itilde 0;
@@ -1985,6 +1993,7 @@ feature kern {
     pos igrave Ucircumflex 10;
     pos igrave Udieresis 10;
     pos igrave Thorn 5;
+    pos igrave germandbls 5;
     pos igrave ae -10;
     pos igrave ecircumflex -5;
     pos igrave igrave 100;
@@ -1994,6 +2003,7 @@ feature kern {
     pos igrave ocircumflex -5;
     pos igrave oslash -10;
     pos igrave ucircumflex -5;
+    pos igrave thorn 10;
     pos igrave Dcaron 10;
     pos igrave dcroat -10;
     pos igrave Emacron 10;
@@ -2493,6 +2503,7 @@ feature kern {
     pos Aogonek icircumflex -30;
     pos Aogonek oslash 0;
     pos Aogonek yacute -20;
+    pos Aogonek thorn 50;
     pos Aogonek Amacron 10;
     pos Aogonek Abreve 10;
     pos Aogonek Aogonek 10;
@@ -2634,6 +2645,7 @@ feature kern {
     pos Eogonek idieresis 5;
     pos Eogonek oslash -15;
     pos Eogonek yacute -35;
+    pos Eogonek thorn 35;
     pos Eogonek gcircumflex -10;
     pos Eogonek gbreve -10;
     pos Eogonek gdotaccent -10;
@@ -3042,6 +3054,7 @@ feature kern {
     pos Iogonek mu 10;
     pos Iogonek igrave 5;
     pos Iogonek iacute -5;
+    pos Iogonek thorn 10;
     pos Iogonek jcircumflex 115;
     pos Iogonek uni0237 115;
     pos Iogonek uni1EC9 -10;
@@ -3114,6 +3127,7 @@ feature kern {
     pos jcircumflex iacute 10;
     pos jcircumflex icircumflex 95;
     pos jcircumflex idieresis 45;
+    pos jcircumflex thorn 15;
     pos jcircumflex Dcaron 15;
     pos jcircumflex Emacron 15;
     pos jcircumflex Ebreve 15;
@@ -3556,7 +3570,7 @@ feature kern {
     pos rcaron Ucircumflex 5;
     pos rcaron Udieresis 5;
     pos rcaron Yacute 20;
-    pos rcaron germandbls 10;
+    pos rcaron germandbls 5;
     pos rcaron igrave 35;
     pos rcaron idieresis 35;
     pos rcaron yacute 65;
@@ -3701,6 +3715,7 @@ feature kern {
     pos Tcaron igrave 45;
     pos Tcaron icircumflex 20;
     pos Tcaron idieresis 15;
+    pos Tcaron thorn -40;
     pos Tcaron abreve -65;
     pos Tcaron ccircumflex -75;
     pos Tcaron ccaron -65;
@@ -3776,6 +3791,7 @@ feature kern {
     pos Wcircumflex igrave 30;
     pos Wcircumflex icircumflex 10;
     pos Wcircumflex idieresis 10;
+    pos Wcircumflex thorn -30;
     pos Wcircumflex hbar -15;
     pos Wcircumflex itilde 5;
     pos Wcircumflex imacron -30;
@@ -3827,6 +3843,7 @@ feature kern {
     pos Ycircumflex igrave 20;
     pos Ycircumflex icircumflex -15;
     pos Ycircumflex idieresis -5;
+    pos Ycircumflex thorn -30;
     pos Ycircumflex abreve -65;
     pos Ycircumflex ccaron -70;
     pos Ycircumflex itilde 0;
@@ -3883,6 +3900,7 @@ feature kern {
     pos Ydieresis igrave 20;
     pos Ydieresis icircumflex -15;
     pos Ydieresis idieresis -5;
+    pos Ydieresis thorn -30;
     pos Ydieresis abreve -65;
     pos Ydieresis ccaron -70;
     pos Ydieresis itilde 0;
@@ -4181,6 +4199,7 @@ feature kern {
     pos uni021A igrave 45;
     pos uni021A icircumflex 20;
     pos uni021A idieresis 15;
+    pos uni021A thorn -40;
     pos uni021A abreve -65;
     pos uni021A ccircumflex -75;
     pos uni021A ccaron -65;
@@ -4257,6 +4276,7 @@ feature kern {
     pos Wgrave igrave 0;
     pos Wgrave icircumflex 10;
     pos Wgrave idieresis 10;
+    pos Wgrave thorn -30;
     pos Wgrave hbar -15;
     pos Wgrave itilde 0;
     pos Wgrave imacron -30;
@@ -4286,6 +4306,7 @@ feature kern {
     pos Wacute igrave 0;
     pos Wacute icircumflex 10;
     pos Wacute idieresis 10;
+    pos Wacute thorn -30;
     pos Wacute hbar -15;
     pos Wacute itilde 0;
     pos Wacute imacron -30;
@@ -4316,6 +4337,7 @@ feature kern {
     pos Wdieresis igrave 30;
     pos Wdieresis icircumflex 10;
     pos Wdieresis idieresis 10;
+    pos Wdieresis thorn -30;
     pos Wdieresis hbar -15;
     pos Wdieresis itilde 5;
     pos Wdieresis imacron -30;
@@ -5503,6 +5525,7 @@ feature kern {
     pos Ygrave igrave 0;
     pos Ygrave icircumflex -15;
     pos Ygrave idieresis -5;
+    pos Ygrave thorn -30;
     pos Ygrave abreve -65;
     pos Ygrave ccaron -70;
     pos Ygrave itilde 0;
@@ -5540,6 +5563,7 @@ feature kern {
     pos uni1EF4 igrave 0;
     pos uni1EF4 icircumflex -15;
     pos uni1EF4 idieresis -5;
+    pos uni1EF4 thorn -30;
     pos uni1EF4 abreve -65;
     pos uni1EF4 ccaron -70;
     pos uni1EF4 itilde 0;
@@ -5579,6 +5603,7 @@ feature kern {
     pos uni1EF6 igrave 0;
     pos uni1EF6 icircumflex -15;
     pos uni1EF6 idieresis -5;
+    pos uni1EF6 thorn -30;
     pos uni1EF6 abreve -65;
     pos uni1EF6 ccaron -70;
     pos uni1EF6 itilde 0;
@@ -5618,6 +5643,7 @@ feature kern {
     pos uni1EF8 igrave 0;
     pos uni1EF8 icircumflex -15;
     pos uni1EF8 idieresis -5;
+    pos uni1EF8 thorn -30;
     pos uni1EF8 abreve -65;
     pos uni1EF8 ccaron -70;
     pos uni1EF8 itilde 0;
@@ -5898,7 +5924,7 @@ feature kern {
     pos @kL_A [m] -20;
     pos @kL_A @kR_n -20;
     pos @kL_A @kR_o -25;
-    pos @kL_A [p] -25;
+    pos @kL_A @kR_p -25;
     pos @kL_A [q] -25;
     pos @kL_A @kR_r -20;
     pos @kL_A @kR_s -25;
@@ -6047,7 +6073,7 @@ feature kern {
     pos @kL_E [m] -20;
     pos @kL_E @kR_n -20;
     pos @kL_E @kR_o -30;
-    pos @kL_E [p] -20;
+    pos @kL_E @kR_p -20;
     pos @kL_E [q] -30;
     pos @kL_E @kR_r -20;
     pos @kL_E @kR_s -45;
@@ -6101,7 +6127,7 @@ feature kern {
     pos F m -45;
     pos [F] @kR_n -45;
     pos [F] @kR_o -55;
-    pos F p -45;
+    pos [F] @kR_p -45;
     pos F q -55;
     pos [F] @kR_r -90;
     pos [F] @kR_s -40;
@@ -6210,7 +6236,7 @@ feature kern {
     pos @kL_K [m] -20;
     pos @kL_K @kR_n -20;
     pos @kL_K @kR_o -65;
-    pos @kL_K [p] -25;
+    pos @kL_K @kR_p -25;
     pos @kL_K [q] -65;
     pos @kL_K @kR_r -20;
     pos @kL_K @kR_s -60;
@@ -6273,7 +6299,7 @@ feature kern {
     pos @kL_L [m] -35;
     pos @kL_L @kR_n -35;
     pos @kL_L @kR_o -50;
-    pos @kL_L [p] -40;
+    pos @kL_L @kR_p -40;
     pos @kL_L [q] -50;
     pos @kL_L @kR_r -35;
     pos @kL_L @kR_s -50;
@@ -6374,7 +6400,7 @@ feature kern {
     pos P m -40;
     pos [P] @kR_n -40;
     pos [P] @kR_o -55;
-    pos P p -40;
+    pos [P] @kR_p -40;
     pos P q -55;
     pos [P] @kR_r -40;
     pos [P] @kR_s -25;
@@ -6484,7 +6510,7 @@ feature kern {
     pos @kL_S [m] -30;
     pos @kL_S @kR_n -30;
     pos @kL_S @kR_o -25;
-    pos @kL_S [p] -30;
+    pos @kL_S @kR_p -30;
     pos @kL_S [q] -20;
     pos @kL_S @kR_r -30;
     pos @kL_S @kR_s -40;
@@ -6547,7 +6573,7 @@ feature kern {
     pos @kL_T [m] -95;
     pos @kL_T @kR_n -95;
     pos @kL_T @kR_o -90;
-    pos @kL_T [p] -95;
+    pos @kL_T @kR_p -95;
     pos @kL_T [q] -90;
     pos @kL_T @kR_r -95;
     pos @kL_T @kR_s -75;
@@ -6622,7 +6648,7 @@ feature kern {
     pos V m -35;
     pos [V] @kR_n -40;
     pos [V] @kR_o -50;
-    pos V p -35;
+    pos [V] @kR_p -35;
     pos V q -55;
     pos [V] @kR_r -55;
     pos [V] @kR_s -45;
@@ -6679,7 +6705,7 @@ feature kern {
     pos @kL_W [m] -40;
     pos @kL_W @kR_n -40;
     pos @kL_W @kR_o -40;
-    pos @kL_W [p] -40;
+    pos @kL_W @kR_p -40;
     pos @kL_W [q] -40;
     pos @kL_W @kR_r -40;
     pos @kL_W @kR_s -35;
@@ -6728,7 +6754,7 @@ feature kern {
     pos X m -20;
     pos [X] @kR_n -20;
     pos [X] @kR_o -55;
-    pos X p -25;
+    pos [X] @kR_p -25;
     pos X q -55;
     pos [X] @kR_r -20;
     pos [X] @kR_s -45;
@@ -6786,7 +6812,7 @@ feature kern {
     pos @kL_Y [m] -85;
     pos @kL_Y @kR_n -85;
     pos @kL_Y @kR_o -80;
-    pos @kL_Y [p] -85;
+    pos @kL_Y @kR_p -85;
     pos @kL_Y [q] -80;
     pos @kL_Y @kR_r -85;
     pos @kL_Y @kR_s -65;
@@ -6842,7 +6868,7 @@ feature kern {
     pos @kL_Z [m] -45;
     pos @kL_Z @kR_n -45;
     pos @kL_Z @kR_o -45;
-    pos @kL_Z [p] -35;
+    pos @kL_Z @kR_p -35;
     pos @kL_Z [q] -45;
     pos @kL_Z @kR_r -45;
     pos @kL_Z @kR_s -45;
@@ -6872,7 +6898,7 @@ feature kern {
     pos [bracketleft] @kR_j 100;
     pos bracketleft k 30;
     pos [bracketleft] @kR_l 25;
-    pos bracketleft p 25;
+    pos [bracketleft] @kR_p 25;
     pos bracketleft v -25;
     pos bracketleft x -25;
     pos [bracketleft] @kR_y -25;
@@ -6881,18 +6907,18 @@ feature kern {
     pos @kL_a [question] -20;
     pos @kL_a @kR_J -20;
     pos @kL_a @kR_S -10;
-    pos b seven -15;
-    pos b question -25;
-    pos [b] @kR_J -20;
-    pos [b] @kR_S -10;
-    pos [b] @kR_c 5;
-    pos [b] @kR_d 5;
-    pos [b] @kR_e 5;
-    pos [b] @kR_g 5;
-    pos [b] @kR_o 5;
-    pos b q 5;
-    pos b guillemotright 20;
-    pos b guilsinglright 20;
+    pos @kL_b [seven] -15;
+    pos @kL_b [question] -25;
+    pos @kL_b @kR_J -20;
+    pos @kL_b @kR_S -10;
+    pos @kL_b @kR_c 5;
+    pos @kL_b @kR_d 5;
+    pos @kL_b @kR_e 5;
+    pos @kL_b @kR_g 5;
+    pos @kL_b @kR_o 5;
+    pos @kL_b [q] 5;
+    pos @kL_b [guillemotright] 20;
+    pos @kL_b [guilsinglright] 20;
     pos @kL_c [exclam] -5;
     pos @kL_c [parenright] -20;
     pos @kL_c [question] -20;
@@ -6988,18 +7014,18 @@ feature kern {
     pos @kL_o @kR_S -10;
     pos @kL_o @kR_d 5;
     pos @kL_o [q] 5;
-    pos p seven -15;
-    pos p question -25;
-    pos [p] @kR_J -20;
-    pos [p] @kR_S -10;
-    pos [p] @kR_c 5;
-    pos [p] @kR_d 5;
-    pos [p] @kR_e 5;
-    pos [p] @kR_g 5;
-    pos [p] @kR_o 5;
-    pos p q 5;
-    pos p guillemotright 20;
-    pos p guilsinglright 20;
+    pos @kL_p [seven] -15;
+    pos @kL_p [question] -25;
+    pos @kL_p @kR_J -20;
+    pos @kL_p @kR_S -10;
+    pos @kL_p @kR_c 5;
+    pos @kL_p @kR_d 5;
+    pos @kL_p @kR_e 5;
+    pos @kL_p @kR_g 5;
+    pos @kL_p @kR_o 5;
+    pos @kL_p [q] 5;
+    pos @kL_p [guillemotright] 20;
+    pos @kL_p [guilsinglright] 20;
     pos q question -15;
     pos [q] @kR_J -15;
     pos [q] @kR_S -10;
@@ -7027,7 +7053,7 @@ feature kern {
     pos @kL_r [m] 15;
     pos @kL_r @kR_n 15;
     pos @kL_r @kR_o 5;
-    pos @kL_r [p] 25;
+    pos @kL_r @kR_p 25;
     pos @kL_r [q] 5;
     pos @kL_r @kR_r 15;
     pos @kL_r @kR_s 40;
@@ -7126,7 +7152,7 @@ feature kern {
     pos x m 10;
     pos [x] @kR_n 10;
     pos [x] @kR_o -15;
-    pos x p 10;
+    pos [x] @kR_p 10;
     pos x q -15;
     pos [x] @kR_r 10;
     pos x t 35;
@@ -7267,7 +7293,7 @@ feature kern {
     pos @kL_uhorn @kR_j 15;
     pos @kL_uhorn [m] 15;
     pos @kL_uhorn @kR_n 15;
-    pos @kL_uhorn [p] 15;
+    pos @kL_uhorn @kR_p 15;
     pos @kL_uhorn @kR_r 15;
     pos @kL_uhorn [t] 40;
     pos @kL_uhorn @kR_u 20;

@@ -6,7 +6,8 @@
 * Latin-1 / Ext-A lowercase that the Vietnamese composer does not cover (ä ë ï ö ü ÿ å ç š ž, ı) are composed by the
   SAME rule: the capital's own mark (diaeresis, ring, caron, cedilla), moved to the lowercase base:
   centred on the base, top marks lowered by XH − CAP (the caps mark zone moved to the x-height, F12).
-* æ œ ø ð þ have no lowercase drawing yet: they stay typed as their capital (cmap alias, as in v0.95); ß -> SS.
+* æ œ ø (lcfont F14) and þ ð ß (lc_extra R17-R19, v1.001) are true lowercase; nothing is typed as its capital any more,
+  and the caps-only ccmp ß -> S S is gone.
 * Kerning = out/lc96/kern_lc96f_<w>.json; the new letters join their base letter's class, then the S3 collision
   guard (ink gap >= 26 after kerning) is re-run for every pair that contains one of them.
 """
@@ -101,6 +102,20 @@ for c in 'ąęįųďľťģłħ':
 LO['ȷ'] = LF.BASE['ȷ']
 EXTRA = EXTRA + CORE_FC + 'ąęįųďľťģłħȷ'
 
+# R17-R19 (v1.001, 29/10 'ß -> SS'): þ ð ß drawn from the lowercase modules (lc_extra), sides from the tuned base
+# letters (þ = p's, ð = o's, ß = h's left / b's right), free ends flared like every lowercase letter (R4b)
+import lc_extra as LX
+import flare
+LX_SIDES = {'þ': ('p', 'p'), 'ð': ('o', 'o'), 'ß': ('h', 'b')}
+for ch, fn in (('þ', LX.g_thorn), ('ð', LX.g_eth), ('ß', LX.g_germandbls)):
+    gd = fn(LF.B)
+    sl, sr = LX_SIDES[ch]
+    g = Glyph('lc_uni%04X' % ord(ch), gd['body'], LF.BASE[sl].lsb, LF.BASE[sr].rsb, ord(ch))
+    g.ops = list(gd['ops'])
+    if os.environ.get('FLARE_ALL', '1') == '1':
+        flare.apply(g, (0, LF.lcm.XH, LF.lcm.ASC, LF.lcm.DESC), LF.B.fl)
+    LO[ch] = g
+FM.CASE_MULTI.clear()                    # R19: ß is its own letter: no ccmp ß -> S S
 G = dict(CAPS); G.update(LO)
 
 
@@ -140,6 +155,16 @@ for c, b in NEWK.items():
                 K[side][cls].append(c)
         elif b in K[side]:
             K[side][b].append(c)
+
+
+for c, (sl, sr) in LX_SIDES.items():    # R17-R19: each side kerns with the base letter whose side it copies
+    NEWK[c] = sl
+    for side, fn, b in (('classesL', kern_style.kclassL, sr), ('classesR', kern_style.kclass, sl)):
+        cls = fn(b)
+        tgt = cls if cls in K[side] else b
+        K[side].setdefault(tgt, [b])                 # a base letter without a class gets one (b p): its pairs keep their key
+        if c not in K[side][tgt]:
+            K[side][tgt].append(c)
 
 
 def cls_of(side, ch):

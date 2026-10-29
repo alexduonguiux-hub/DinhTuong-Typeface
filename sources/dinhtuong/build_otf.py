@@ -195,8 +195,8 @@ def features(G, names, kern_file):
     L.append('} tnum;')
     L.append('')
     L.append('feature ccmp {')
-    for ch, seq in FM.CASE_MULTI.items():
-        if ch in names:
+    for ch, seq in FM.CASE_MULTI.items():                         # ß -> SS: caps-only font only (R19: the
+        if ch in names:                                              # lowercase edition clears CASE_MULTI)
             L.append(f'  sub {names[ch]} by {" ".join(names[c] for c in seq)};')
     L.append('  lookup VN_COMPOSE {')
     for _, src, dst in subs:

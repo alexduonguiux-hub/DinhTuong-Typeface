@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.001 (2026-10-29)
+- Lowercase **ß**, **ð** and **þ** are drawn as true lowercase letters. Until now ß was replaced by "SS" (a `ccmp` rule left from the capitals-only edition) and ð þ were typed as the capitals Ð Þ.
+  - þ = the b and the p on one stem: the p's bowl, the stem running from the descender to the ascender.
+  - ð = the o with the straight diagonal of the 6 and 9 (tangent to the ring, 12° off vertical, level cut on the ascender) and the bar of đ / ħ.
+  - ß = a stem with two stacked elliptic rings (like s and 3): the upper ring springs from the stem and ends near it with a vertical cut (the e's aperture), the lower ring ends in the house tail, clear of the stem's foot.
+- The `ccmp` rule ß → SS is removed. Kerning: þ kerns like p, ð like o, ß like h on the left and b on the right; every pair keeps at least 26 units of ink gap.
+
 ## 1.000 (2026-10-28) — first Google Fonts release
 - Family renamed **Dinh Tuong** (was DINHTUONG / DINHTUONG60s). Files `DinhTuong-Regular / -Medium / -Bold`.
 - Licensed under the SIL Open Font License 1.1.

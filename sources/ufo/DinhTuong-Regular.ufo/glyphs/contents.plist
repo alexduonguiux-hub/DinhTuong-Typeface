@@ -378,6 +378,8 @@
     <string>eogonek.glif</string>
     <key>equal</key>
     <string>equal.glif</string>
+    <key>eth</key>
+    <string>eth.glif</string>
     <key>exclam</key>
     <string>exclam.glif</string>
     <key>exclamdown</key>
@@ -612,6 +614,8 @@
     <string>t.glif</string>
     <key>tcaron</key>
     <string>tcaron.glif</string>
+    <key>thorn</key>
+    <string>thorn.glif</string>
     <key>three</key>
     <string>three.glif</string>
     <key>three.tf</key>

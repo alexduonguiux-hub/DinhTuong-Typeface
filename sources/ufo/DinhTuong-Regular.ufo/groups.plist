@@ -251,6 +251,11 @@
       <string>amacron</string>
       <string>aogonek</string>
     </array>
+    <key>public.kern1.b</key>
+    <array>
+      <string>b</string>
+      <string>germandbls</string>
+    </array>
     <key>public.kern1.c</key>
     <array>
       <string>c</string>
@@ -358,6 +363,7 @@
       <string>oslash</string>
       <string>odieresis</string>
       <string>ohungarumlaut</string>
+      <string>eth</string>
     </array>
     <key>public.kern1.ohorn</key>
     <array>
@@ -367,6 +373,11 @@
       <string>uni1EDF</string>
       <string>uni1EE1</string>
       <string>uni1EE3</string>
+    </array>
+    <key>public.kern1.p</key>
+    <array>
+      <string>p</string>
+      <string>thorn</string>
     </array>
     <key>public.kern1.r</key>
     <array>
@@ -727,6 +738,7 @@
       <string>h</string>
       <string>hcircumflex</string>
       <string>hbar</string>
+      <string>germandbls</string>
     </array>
     <key>public.kern2.i</key>
     <array>
@@ -790,6 +802,12 @@
       <string>oslash</string>
       <string>odieresis</string>
       <string>ohungarumlaut</string>
+      <string>eth</string>
+    </array>
+    <key>public.kern2.p</key>
+    <array>
+      <string>p</string>
+      <string>thorn</string>
     </array>
     <key>public.kern2.r</key>
     <array>
