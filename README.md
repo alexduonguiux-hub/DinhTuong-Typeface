@@ -18,6 +18,10 @@ Dinh Tuong là kiểu chữ trưng bày dựng theo chữ khuôn thép đúc tr�
 - Dựng font: `make build` (mã nguồn là các bộ sinh chữ Python trong `sources/`)
 - Giấy phép: SIL Open Font License 1.1
 
+## Fonts
+
+Ready-to-use binaries are in `fonts/ttf` and `fonts/otf` (also attached to every [release](https://github.com/alexduonguiux-hub/DinhTuong-Typeface/releases)). They are rebuilt by `make build`; CI checks that the fontmake build is identical to the generators' reference binaries in `sources/reference/fonts`.
+
 ## Building
 
 The fonts are built from the UFO sources in `sources/ufo` with [gftools builder](https://github.com/googlefonts/gftools) (fontmake), configured in `sources/config.yaml`:
