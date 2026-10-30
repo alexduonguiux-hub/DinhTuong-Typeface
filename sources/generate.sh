@@ -18,6 +18,10 @@ for s in Regular Medium Bold; do
   python3 export_ufo.py "$ROOT/sources/reference/fonts/otf/DinhTuong-$s.otf" "$ROOT/sources/out/kern_v096_$w.json" \
     "$ROOT/sources/out/DINHTUONG60s-$s.fea" "$ROOT/sources/ufo/DinhTuong-$s.ufo"
 done
+# VF4-S (vf-concept-v1): the S / s spine put back as the exact R11b curves, tangent to the rings (no boolean kinks)
+python3 spine_data.py spine_data.json
+python3 s_spine_fix.py spine_data.json "$ROOT/sources/ufo/DinhTuong-Regular.ufo" "$ROOT/sources/ufo/DinhTuong-Medium.ufo" \
+  "$ROOT/sources/ufo/DinhTuong-Bold.ufo"
 # VF3 (vf-concept-v1): point-compatible masters for the variable font; exact, outlines unchanged
 python3 vf_compat.py "$ROOT/sources/ufo/DinhTuong-Regular.ufo" "$ROOT/sources/ufo/DinhTuong-Medium.ufo" \
   "$ROOT/sources/ufo/DinhTuong-Bold.ufo"
