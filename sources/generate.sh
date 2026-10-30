@@ -18,4 +18,7 @@ for s in Regular Medium Bold; do
   python3 export_ufo.py "$ROOT/sources/reference/fonts/otf/DinhTuong-$s.otf" "$ROOT/sources/out/kern_v096_$w.json" \
     "$ROOT/sources/out/DINHTUONG60s-$s.fea" "$ROOT/sources/ufo/DinhTuong-$s.ufo"
 done
+# VF3 (vf-concept-v1): point-compatible masters for the variable font; exact, outlines unchanged
+python3 vf_compat.py "$ROOT/sources/ufo/DinhTuong-Regular.ufo" "$ROOT/sources/ufo/DinhTuong-Medium.ufo" \
+  "$ROOT/sources/ufo/DinhTuong-Bold.ufo"
 echo "UFO sources: $ROOT/sources/ufo  (reference binaries: $ROOT/sources/reference/fonts)"
