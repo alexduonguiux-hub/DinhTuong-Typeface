@@ -145,7 +145,8 @@ def compose(ch, gaps=None):
             g.ops += ops; g.parts.append(('cedilla', ops))
         elif m in GL.TONES or m == GL.CIRC:
             name = GL.TONES.get(m, 'circumflex')
-            ops = shift_ops(GL.mark_ops(name, upper), cx, zone)
+            yc = GL.CIRC_FOOT(bg.ops, cx, zone, ('X', base, round(cx, 1))) if m == GL.CIRC else 0.0   # R8k
+            ops = shift_ops(GL.mark_ops(name, upper), cx, zone + yc)
             g.ops += ops; g.parts.append((name, ops))
     return g
 

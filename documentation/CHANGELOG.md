@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.002 (2026-10-31)
+- New **acute** (dấu sắc), after the designer's sample. It is the grave strip (huyền) sheared up to the right: both ends cut vertically, the same vertical thickness as every mark, rising 27°, 195 units wide. Huyền stays level and sắc now leans, so the two read apart at any size.
+  - Alone (Á É Í Ó Ú Ý Ớ Ứ, á é í ó ú ý …): it sits on the mark zone, centred on the letter.
+  - On the breve (Ắ ắ): it keeps 35 units from the breve and sits 62 units right of the axis.
+  - On the circumflex (Ấ Ế Ố ấ ế ố): it rides behind the circumflex, over its right arm. Its centre is 189 units (capitals) / 212 units (lowercase) right of the circumflex's centre, but never further right than the letter's own ink. Capitals sit on Ắ's line; lowercase keep 40 units from the circumflex.
+  - The spacing acute ´, the combining acute and the acute of Ć Ĺ Ń Ŕ Ś Ź Ẃ (and lowercase) use the same mark.
+- New **double acute** (Ő Ű ő ű ˝ and the combining mark). It follows the new acute, the same way most typefaces derive it (6 of 8 reference fonts keep the single acute's angle; the pair spans 0.55–0.68 of the O). Two parallel acute strips, each 0.75 of the acute's width, at the same 27° rise, on one foot line, with a 40-unit ink gap between them. The pair is about 0.62 of the O.
+- New **circumflex** (mũ), after the designer's sample. Two strips of the new acute meeting in a pointed apex, inside and out. Each arm rises 30°, the outer ends are cut vertically, the vertical thickness is that of every mark, and the mark is 240 units wide. It sits 40 units above its letter's ink (Â 720, Ê 739, â 563 in Bold), so each letter keeps the same gap. Hỏi beside the circumflex (Ẩ ẩ) also keeps 40 units from it.
+  - The same mark serves Ĉ Ĝ Ĥ Ĵ Ŝ Ŵ Ŷ and their lowercase, the spacing ˆ, the combining circumflex and ^.
+  - The caron (Č Ě Ň Ř Š Ž and lowercase, ˇ) is this circumflex turned over, as before.
+- New **tilde** (ngã), after the designer's sample. Its curve is balanced: the crest and trough sit at 0.29 / 0.71 of the width, the left end's lower corner on the trough line and the right end's upper corner on the crest line. The old tilde stopped at mid height and read as leaning down to the right. Each edge is three smooth curves with nodes only at its ends and extremes. Applies to Ã Ẽ Ĩ Õ Ũ Ỹ Ñ, the stacked Ẫ Ễ Ỗ, ˜, ~ and the combining tilde.
+- All marks share one stroke weight, measured square to the stroke: the sloped strips of the acute, double acute, circumflex and caron are cut T / cos(angle) thick vertically, so they read as heavy as the level grave, breve, tilde, hook and dot below (before: 0.89–0.92 T).
+- **S s** (and Ś Š Ş Ŝ Ș $ with their lowercase): the spine now joins both bowls tangentially in every weight. The boolean re-fit had left 4–18° kinks at the joins; the largest break is now 0.7–2.4°. The masters are also point-compatible, so the static fonts and the coming variable font draw the same outlines.
+- Kerning re-run for every pair with a changed letter (acute, double acute, circumflex, caron). Every Vietnamese marked-letter pair inside a Vietnamese syllable (lowercase, Capitalised, ALL CAPS) keeps at least 26 units of ink gap. The only exceptions are the Bold É / Ế + t, v, y pairs, which are as tight as E + t, v, y in 1.001.
+- Figure kerning: 6 7 and 7 6 are set as close as 6 9 and 9 6 (67: −50 / −45 / −40, 76: −40 / −35 / −35 in Regular / Medium / Bold); they were 26–32 units looser.
+- The highest point of the font drops from 1102 to 1097 (Bold Ế). Vertical metrics are unchanged.
+
 ## 1.001 (2026-10-29)
 - Lowercase **ß**, **ð** and **þ** are drawn as true lowercase letters. Until now ß was replaced by "SS" (a `ccmp` rule left from the capitals-only edition) and ð þ were typed as the capitals Ð Þ.
   - þ = the b and the p on one stem: the p's bowl, the stem running from the descender to the ascender.

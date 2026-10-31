@@ -65,8 +65,24 @@ def mk_dotabove(upper=False):
     return [('add', circle(0, d / 2, d / 2))]
 
 
+DBL_K = 0.75        # R8j-B (31/10, designer chose B): each stroke of the double acute = the R8i sắc at 0.75 of its span
+
+
 def mk_dblacute(upper=False):
-    a = GL.mark_ops('acute', upper)
+    mf = __import__('marks_flat')
+    if mf.R8I():
+        # R8j-B (1.002, measured on Inter Liberation DejaVu Barlow Work Sans Montserrat Carlito Poppins Bold: 6/8 draw the
+        # double acute at the single acute's angle (±5°), each stroke 0.7-1.0 of it, the pair 0.55-0.68 of the O): two
+        # parallel R8i strips — vertical cuts, vertical thickness T, rise ACUTE_R8I_ANG — each DBL_K of the span, side by
+        # side on the same foot line with a PERPENDICULAR ink gap MARK_GAP (40). Pair ≈ 0.62 of O (Bold).
+        t, s = mf.tv(mf.ACUTE_R8I_ANG), DBL_K * mf.ACUTE_R8I_SPAN      # R8l: T square to the strip
+        a_ = math.radians(mf.ACUTE_R8I_ANG)
+        dx = (MARK_GAP + t * math.cos(a_)) / math.sin(a_)      # horizontal offset that leaves MARK_GAP square to the strips
+        rise = s * math.tan(a_)
+        def strip(cx):
+            return [('add', __import__('geo').poly([(cx - s / 2, 0), (cx + s / 2, rise), (cx + s / 2, rise + t), (cx - s / 2, t)]))]
+        return strip(-dx / 2) + strip(dx / 2)
+    a = mf._mk_acute_r8e()
     b = bounds(a)
     w = b[2] - b[0]
     off = (w + MARK_GAP) / 2                       # R8j: two acutes, gap 40
