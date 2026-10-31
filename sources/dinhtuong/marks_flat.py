@@ -45,7 +45,28 @@ def _st():
 ACUTE_TILT = float(__import__('os').environ.get('ACUTE_TILT', '18'))   # R8e (28/10 10:5x, designer chose 18°: 'Sí' read as 'Sl' with a standing strip): degrees off vertical, top to the right
 
 
+# R8i (31/10, designer's samples 'thử lại bộ dấu sắc mới' then 'update lại độ dài và vị trí', measured on Bold: Á Ấ Ắ
+# Ú ấ): the sắc is the LYING strip of huyền sheared up to the right — both ends cut VERTICAL, vertical thickness T
+# (sample 72 u; T Bold 70.6), long edges rising ACUTE_R8I_ANG (sample v2 27.1°, v1 22.2°), horizontal span
+# ACUTE_R8I_SPAN (sample v2 194 = 0.65 x STRIP_L; v1 246), the same everywhere (caps / lowercase, lone / stacked).
+# Trial switch: ACUTE_TOPLINE=4 (glyphs_c).
+ACUTE_R8I_ANG = 27.0
+ACUTE_R8I_SPAN = round(0.65 * STRIP_L)      # 195
+
+
+def R8I():
+    return __import__('os').environ.get('ACUTE_TOPLINE', '4') in ('4', '5')
+
+
 def mk_acute(length=ACUTE_L, **_):
+    if R8I():
+        t, s = _st(), ACUTE_R8I_SPAN
+        rise = s * _m.tan(_m.radians(ACUTE_R8I_ANG))
+        return [('add', poly([(-s / 2, ACUTE_UP), (s / 2, ACUTE_UP + rise), (s / 2, ACUTE_UP + rise + t), (-s / 2, ACUTE_UP + t)]))]
+    return _mk_acute_r8e(length)
+
+
+def _mk_acute_r8e(length=ACUTE_L, **_):
     """sắc: the strip STANDING, centred on the letter (built at final size: no cap scaling). With ACUTE_TILT the
     strip leans like the legs of A / V (thickness T square to the stroke, both ends cut level, same height), its
     middle still on the letter's axis."""

@@ -66,7 +66,9 @@ def mk_dotabove(upper=False):
 
 
 def mk_dblacute(upper=False):
-    a = GL.mark_ops('acute', upper)
+    # 1.002: the double acute (Hungarian ő ű) keeps the R8e standing strips; the R8i lying sắc is Vietnamese and two of
+    # them side by side would run 550 wide. Open for the designer.
+    a = __import__('marks_flat')._mk_acute_r8e()
     b = bounds(a)
     w = b[2] - b[0]
     off = (w + MARK_GAP) / 2                       # R8j: two acutes, gap 40

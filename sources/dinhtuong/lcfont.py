@@ -110,6 +110,9 @@ def compose(ch):
             if tone == 'acute' and GL.ACUTE_BESIDE():                  # R8g: sắc beside the mũ on the mark zone (ấ = á)
                 ops = GL.mark_ops('acute', True, ACUTE_L)
                 ydy, dx = 0, GL.ACUTE_BESIDE_DX(True)
+            elif tone == 'acute' and GL.ACUTE_MODE() in ('4', '5'):    # R8i: centred over the mũ
+                ops = GL.mark_ops('acute', True)
+                ydy, dx = GL.ACUTE_CIRC_Y(False), GL.ACUTE_R8I_LC_DX            # R8i v2: lowercase 40 from the mũ, 22 left
             elif tone == 'acute' and GL.ACUTE_TOPLINE():               # R8f trial: ấ's sắc ends on ắ's line
                 ydy = GL.ACUTE_STACK_Y()
                 dx = GL.ACUTE_CIRC_DX(dx, ydy, True)                   # R8f: pulled left to 40 from the mũ

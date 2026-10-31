@@ -687,14 +687,41 @@ ACUTE_STACK_GAP = 40      # R8f (28/10, approved C + pull-left): sắc–trăng 
 
 
 def ACUTE_TOPLINE():
-    return __import__('os').environ.get('ACUTE_TOPLINE', '2') in ('1', '2', '3')
+    return __import__('os').environ.get('ACUTE_TOPLINE', '4') in ('1', '2', '3', '4', '5')
+
+
+ACUTE_R8I_GAP = 35        # R8i v2 (31/10 sample): sắc–trăng ink gap on Ắ (sample 35); Ấ shares Ắ's height (one top line, sample 865 / 865)
+ACUTE_R8I_LC_GAP = 40     # R8i v2: lowercase ấ ế ố — sắc–mũ gap (sample 41; = the R8f stack gap 40)
+ACUTE_R8I_LC_DX = -22     # R8i v2: lowercase sắc on the mũ sits 22 left of the mũ's centre (sample ấ −22; caps Ấ centred +1)
+ACUTE_R8I_BREVE_DX = 62   # R8i v2: on the trăng the sắc's centre is 62 right of the axis (sample Ắ +62)
+
+
+def ACUTE_MODE():
+    return __import__('os').environ.get('ACUTE_TOPLINE', '4')
+
+
+_CIRC_Y = {}
+
+
+def ACUTE_CIRC_Y(upper=True):
+    """R8i mode 5: the lowest height over the mark zone at which the CENTRED sắc keeps ACUTE_R8I_GAP from the mũ."""
+    if upper in _CIRC_Y: return _CIRC_Y[upper]
+    import mark_qa as MQ
+    ci = MQ.raster(mark_ops('circumflex', True))
+    lo, hi = 0.0, 400.0
+    for _ in range(16):
+        mid = (lo + hi) / 2
+        if MQ.min_dist(ci, MQ.raster(shift_ops(mark_ops('acute', True), ACUTE_R8I_LC_DX, mid))) >= ACUTE_R8I_LC_GAP: hi = mid
+        else: lo = mid
+    _CIRC_Y[upper] = hi
+    return hi
 
 
 ACUTE_SIDE_GAP = 30       # R8g (28/10 13:12, designer's ế sample): sắc BESIDE the mũ, ink gap 30 (= R8 mark–mark floor)
 
 
 def ACUTE_BESIDE():
-    return __import__('os').environ.get('ACUTE_TOPLINE', '2') == '3'
+    return __import__('os').environ.get('ACUTE_TOPLINE', '4') == '3'
 
 
 _BESIDE = {}
@@ -728,10 +755,10 @@ def ACUTE_STACK_Y():
     (compact): the lowest foot that keeps the sắc 40 (Regular units) from the trăng's ink — the tilted strip dips
     into the trăng's open cup, as Inter / FreeSans stack it. ấ ế ố then use the SAME foot height, so every stacked
     sắc ends on one line."""
-    mode = __import__('os').environ.get('ACUTE_TOPLINE', '2')
+    mode = __import__('os').environ.get('ACUTE_TOPLINE', '4')
     if mode in _STACK_Y: return _STACK_Y[mode]
     hb = MARK_HGT['breve'] * CAP_SCALE
-    if mode not in ('2', '3'):                  # R8g keeps R8f's compact sắc on the trăng (ắ)
+    if mode not in ('2', '3', '4', '5'):        # R8g keeps R8f's compact sắc on the trăng (ắ)
         _STACK_Y[mode] = hb + ACUTE_STACK_GAP; return _STACK_Y[mode]
     import mark_qa as MQ
     br = MQ.raster(mark_ops('breve', True))
@@ -741,8 +768,18 @@ def ACUTE_STACK_Y():
     lo, hi = 0.0, hb + 120.0
     for _ in range(14):
         mid = (lo + hi) / 2
-        if gap(mid) >= ACUTE_STACK_GAP: hi = mid
+        if gap(mid) >= (ACUTE_R8I_GAP if mode in ('4', '5') else ACUTE_STACK_GAP): hi = mid
         else: lo = mid
+    if mode in ('4', '5'):
+        # R8i v2 QA: Ấ and Ắ share ONE line (sample 865 / 865), but the line must also keep Ấ's centred sắc
+        # ACUTE_R8I_GAP from the mũ (Regular: the trăng-only solve left Ấ at 26 < the 30 floor). Line = the higher solve.
+        ci = MQ.raster(mark_ops('circumflex', True))
+        lo2, hi2 = 0.0, hb + 160.0
+        for _ in range(14):
+            mid = (lo2 + hi2) / 2
+            if MQ.min_dist(ci, MQ.raster(shift_ops(mark_ops('acute', True), 0, mid))) >= ACUTE_R8I_GAP: hi2 = mid
+            else: lo2 = mid
+        hi = max(hi, hi2)
     _STACK_Y[mode] = hi
     return hi
 
@@ -754,7 +791,7 @@ def ACUTE_CIRC_DX(dx0, ydy, upper=True):
     """R8f (28/10 11:13 'dời dấu sắc gần dấu ô lại … qua trái — lệch phải tạo cảm giác nó xa'): once the sắc on ấ ế ố
     is raised to the common top line, it is pulled LEFT toward the mũ until its ink is ACUTE_STACK_GAP (40, Regular
     units) from the mũ — the same gap it keeps from the trăng on ắ. Never moved right of where it hung before."""
-    if __import__('os').environ.get('ACUTE_TOPLINE', '2') != '2': return dx0
+    if __import__('os').environ.get('ACUTE_TOPLINE', '4') != '2': return dx0
     key = (round(dx0, 2), round(ydy, 2), upper)
     if key in _CIRC_DX: return _CIRC_DX[key]
     import mark_qa as MQ
@@ -776,6 +813,8 @@ def ACUTE_CIRC_DX(dx0, ydy, upper=True):
 def ACUTE_FOOT_DX():
     """R8e: half the horizontal run of the tilted sắc strip (0 when it stands)."""
     mf = __import__('marks_flat')
+    if mf.R8I():                               # R8i v2: on the trăng the sắc's centre sits 62 right of the axis (sample Ắ)
+        return ACUTE_R8I_BREVE_DX
     return mf.ACUTE_L * _m.tan(_m.radians(mf.ACUTE_TILT)) / 2
 
 
@@ -902,7 +941,7 @@ def compose(ch, gaps=None):
         g.rsb += max(0, reach - 44 * WK)        # horn tip 44k inside the advance, as before
     first = 'circumflex' if CIRC in marks else ('breve' if BREVE in marks else None)
     tone = next((TONES[m] for m in marks if m in TONES), None)
-    sshift = side_shift(tone, upper, gaps) if (first == 'circumflex' and tone in ('acute', 'hook')) else 0
+    sshift = side_shift(tone, upper, gaps) if (first == 'circumflex' and tone in ('acute', 'hook') and not (tone == 'acute' and ACUTE_MODE() in ('4', '5'))) else 0
     if first:
         ops = shift_ops(mark_ops(first, upper), cx + sshift, zone)
         g.ops += ops; g.parts.append((first, ops))
@@ -922,6 +961,9 @@ def compose(ch, gaps=None):
             if tone == 'acute' and ACUTE_BESIDE():  # R8g: sắc beside the mũ on the mark zone (ấ top = á top)
                 ops = mark_ops('acute', upper, __import__('marks_flat').ACUTE_L)
                 ydy, dx = 0, ACUTE_BESIDE_DX(upper)
+            elif tone == 'acute' and ACUTE_MODE() in ('4', '5'):   # R8i: the sắc CENTRED over the mũ (sample Ấ +1 u, ấ +3 u)
+                ops = mark_ops('acute', upper)
+                ydy, dx = (ACUTE_STACK_Y() if ACUTE_MODE() == '4' else ACUTE_CIRC_Y(upper)), 0
             elif tone == 'acute' and ACUTE_TOPLINE():  # R8f trial: the sắc on ấ ends on the same line as on ắ
                 ydy = ACUTE_STACK_Y()
                 dx = ACUTE_CIRC_DX(dx, ydy, True)   # R8f: pulled left to 40 from the mũ
