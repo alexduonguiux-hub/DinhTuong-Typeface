@@ -511,6 +511,7 @@ class Build:
         # 27/10 16:47 ('càng bold thì đuôi càng bị ngắn'): every weight uses REGULAR's arm curve, moved only so its
         # top sits on this weight's counter (the extra weight is added parallel to it): same cut, same reach,
         # same angle at the cut in every weight; the heavier weight's face is simply thicker.
+        arm_A_c = None                                     # C5b: the outer arm's stretch, when the Condensed reach is raised
         dv = (stroke or 0) * (1 - self.k)                  # how much the side stroke grew over Regular
         rx = abs(wall - cx) + dv                           # REGULAR's counter radii
         ry = (rx if cry is None else cry + dv * W8['regular']['H'] / W8['regular']['V'])
@@ -534,15 +535,34 @@ class Build:
             # stretched-cap curve is stretched further to keep it (as the R2b weight floor does).
             dxn = _WD.WID * _reach_normal(self.w).get(_tail_key(vdir, side), 0.0)
             if dxn > dx:
+                # QA 31/10: stretching the cap 'until it reaches' left the inner edge meeting the cut at 43-44 deg (S, s)
+                # instead of ARM_ANG (Normal 48-51): a sharper tip (QA 1.6 'no needle tips'). The counter arm's stretch
+                # is solved so that it meets the cut at ARM_ANG at the new reach (as R5e does for e).
                 dx = dxn
-                if dx > u * a_i:
-                    a_i = dx / u
+                kq = math.tan(math.radians(90 - ARM_ANG))
+                lo_, hi_ = dx, 40 * dx
+                for _ in range(80):
+                    mid = (lo_ + hi_) / 2
+                    q_ = kq * mid / ry
+                    (lo_, hi_) = (mid, hi_) if mid * q_ / math.sqrt(1 + q_ * q_) < dx else (lo_, mid)
+                a_i = (lo_ + hi_) / 2
+                if ring is not None:
+                    # R5h ends the inner edge PARALLEL to the outer edge at the cut, so the angle at the cut is the
+                    # OUTER arm's: its stretch (arm_A) is solved so the outer edge also runs ARM_ANG off vertical there.
+                    co_, Rx_, Ry_ = ring
+                    tq = math.tan(math.radians(ARM_ANG))
+                    ang_at = lambda A: A * A * math.sqrt(max(1e-12, 1 - (dx / A) ** 2)) / (Ry_ * dx)
+                    lo_, hi_ = dx * 1.0001, 40 * dx
+                    for _ in range(80):
+                        mid = (lo_ + hi_) / 2
+                        (lo_, hi_) = (mid, hi_) if ang_at(mid) < tq else (lo_, mid)
+                    arm_A_c = max((lo_ + hi_) / 2, ARM_LO * Rx_)
         if os.environ.get('REACH_OUT'):
             _REACH_OUT[_tail_key(vdir, side)] = dx
         elif os.environ.get('REACH_GEN') == '1':     # only the generator writes the table (once, at exit)
             _REACH[_tail_key(vdir, side)] = dx
         tip = ci + sy * ry * math.sqrt(max(0.0, 1 - (dx / a_i) ** 2))
-        arm_A = None
+        arm_A = arm_A_c
         if (face or reach) and ring is not None:
             # R5e (27/10 18:36-18:41, e: 'đuôi hơi mỏng' then 'đuôi bị ngắn, làm chữ không cân bằng'): a LONE tail under
             # a bar keeps its own approved reach (Regular units, every weight) and an optically heavier face

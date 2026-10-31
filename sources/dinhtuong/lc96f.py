@@ -28,7 +28,19 @@ Usage: A2_WEIGHT=bold python3 lc96f.py -> out/lc96/lc96f_<w>.json
 import os, json, math
 import lc96 as A
 import concept_v1 as CV
-from concept_v1 import rect, fstem, fbar, ell
+from concept_v1 import rect, fstem, fbar
+# C4b (31/10 'cần giảm cảm giác chữ bị bóp méo'): a Condensed round must not be the Normal ellipse squeezed. Measured
+# fullness (outer area / box) of o, Normal -> Condensed: Roboto 0.807 -> 0.828, Archivo 0.834 -> 0.840, Encode
+# 0.829 -> 0.834, Barlow 0.832 -> 0.887 (rounds get FULLER); ours stayed a pure ellipse, 0.789 -> 0.786, counter
+# 0.789 -> 0.777. The lowercase ring's handle k goes 0.56 (ellipse, Normal) -> 0.66 at 80 % (fullness 0.831),
+# linear in DT_WIDTH: the round's shoulders fill out as it narrows. Normal (DT_WIDTH = 1) is unchanged.
+# The boolean re-fit loses ~0.02 of fullness (k 0.66 built 0.809), so k is set by the BUILT result: 0.72 -> o 0.83.
+KC_COND = float(os.environ.get('KC_COND', '0.72'))
+_KC_C = CV.KC + (KC_COND - CV.KC) * (1.0 - __import__('width').WID) / 0.20
+
+
+def ell(cx, cy, rx, ry, k=None):
+    return CV.ell(cx, cy, rx, ry, _KC_C if k is None else k)
 
 XH, ASC, DESC = A.XH, A.ASC, A.DESC
 OV = 12
@@ -295,8 +307,8 @@ class LF(A.LC):
     def bowl(self, side, y0, y1, top=True, bot=True):
         """F5: ring + stem; side 'r' = stem on the right (a d g q)."""
         R, v = self.Rr, self.v
-        Rx = CX * R
-        ring, cy = self.ring(Rx)
+        Rx = self.bowl_rx()
+        ring, cy = self.ring(Rx, rx=Rx)
         dx = self.spur_dx()
         if side == 'r':
             cx = Rx
@@ -312,15 +324,37 @@ class LF(A.LC):
         ops = [('group', [ring[0], stem, counter])]
         return ops, W, cx, cy
 
+    def _spur_f(self, k):
+        """the ring's half-width fraction at the F5b notch height, for a ring of handle k (k = KC: the ellipse)."""
+        R = self.Rr
+        yn = max(0.0, min(1.0, (XH - SPUR_D - XH / 2) / R))
+        if abs(k - CV.KC) < 1e-9:
+            return math.sqrt(max(0.0, 1 - yn * yn))
+        lo, hi = 0.0, 1.0
+        for _ in range(60):
+            t = (lo + hi) / 2; m = 1 - t
+            (lo, hi) = (t, hi) if 3 * m * m * t * k + 3 * m * t * t + t ** 3 < yn else (lo, t)
+        t = (lo + hi) / 2; m = 1 - t
+        return m ** 3 + 3 * m * m * t + 3 * m * t * t * k
+
+    def bowl_rx(self):
+        """C4b (QA 31/10): the Condensed bowl of b d p q g is the fuller ring; its stem sits on the F5b notch of THAT
+        curve (SPUR_D = 45 u deep, as Normal; an ellipse formula left it 19-20 u, the thick joint F10c removed), and
+        the ring is narrowed so the letter keeps its Normal ink / n: Rx' = Rx (1 + f_ellipse) / (1 + f_full)."""
+        Rx = CX * self.Rr
+        W_ = __import__('width')
+        if W_.WID >= 1.0:
+            return Rx
+        # ... and the stem's share: the Condensed stem is x0.93 while the letter is x~0.81, which made every bowl
+        # letter +0.031 / +0.025 / +0.022 of n wider than Normal (QA C2b); the ring gives back that excess.
+        excess = self.v * (1 - (W_.WID + 0.01) / W_.SV)
+        return (Rx * (1 + self._spur_f(CV.KC)) - excess) / (1 + self._spur_f(_KC_C))
+
     def spur_dx(self):
         """F5b (12:26 'khu vực cắt giao chưa rõ ràng' at Medium/Bold): the bowl's outer curve meets the stem's inner
         edge exactly SPUR_D below the x-height (and above the baseline) in every weight — a clear, deliberate notch,
         never a step of a few units. Returns the stem's inner edge as an offset from the ring's centre."""
-        R = self.Rr
-        Rx = CX * R
-        cy = XH / 2
-        y = XH - SPUR_D
-        return Rx * math.sqrt(max(0.0, 1 - ((y - cy) / R) ** 2))
+        return self.bowl_rx() * self._spur_f(_KC_C)
 
     def bowl_counter(self, side, cx, cy, Rx, R, x_stem):
         """F10d (12:22 'bóp vòng khuyết'): the counter stays a WHOLE ellipse — never cut by the stem. Its far side
@@ -342,6 +376,8 @@ class LF(A.LC):
         shoulder (F7). Bowl = a smaller upright ellipse ring (0.58 x-height) springing out of the stem,
         its counter running JT into the stem (F10). Stem from the baseline (flared) into the hood."""
         v, h = self.v, self.h
+        # C4b exception (QA 31/10): the a keeps true ellipses. Its fuller Condensed bowl closed the bowl/stem notch (Normal
+        # 28 / 22 u deep in M / B) into a 25-29 deg crotch on the baseline, and its hood tail met the cut at 42 deg (Bold).
         W = self.wd(round(470 * CX0))
         r = (W - v - 0.85 * v) / 2                   # hood counter: between the hood's left side and the stem
         ry = r / CX
@@ -349,7 +385,7 @@ class LF(A.LC):
         cx = xs - r
         cy = XH + OV - (ry + h)
         jt = self.jt
-        hood = ('group', [('add', ell(cx + 0.075 * v, cy, r + 0.925 * v, ry + h)), ('sub', ell(cx, cy, r, ry)),
+        hood = ('group', [('add', CV.ell(cx + 0.075 * v, cy, r + 0.925 * v, ry + h)), ('sub', CV.ell(cx, cy, r, ry)),
                           ('sub', rect(-3000, -3000, 6000, cy)),
                           wedge(cx, cy, getattr(self, 'term_a', TERM_A), 180)])   # F7b: the hood's end on the ray at TERM_A
         if os.environ.get('AE_CUT', 'R5') == 'R5':     # F7e (27/10 18:24 'đổi đuôi chữ a, c, e như yêu cầu'): the hood's free
@@ -358,7 +394,7 @@ class LF(A.LC):
             GA = []
             ta = self.tail(GA, cx, cy + ry, cx - r, 0.85 * v, 'l', 'up', tip_limit=max(cy, yb0 + AP_S), cry=ry,
                            ring=(cy, r + 0.85 * v, ry + h))
-            hood = ('group', [('add', ell(cx + 0.075 * v, cy, r + 0.925 * v, ry + h)), ('sub', ell(cx, cy, r, ry))] +
+            hood = ('group', [('add', CV.ell(cx + 0.075 * v, cy, r + 0.925 * v, ry + h)), ('sub', CV.ell(cx, cy, r, ry))] +
                     CV.arm_ink(ta) + [('sub', rect(cx, -3000, 6000, cy)), ('sub', ta['disk']),
                               ('sub', rect(-3000, -3000, ta['xt'], 6000)), ('sub', rect(-3000, -3000, cx, ta['tip']))])
                                                                      # (small forms may turn it further: lcsym R0b)
@@ -369,8 +405,8 @@ class LF(A.LC):
         st = ('add', fstem2(xs, 0, W, cy + 1, self.fl, tl=False, tr=False, bl=False, br=True))   # F11 (13:20 QA): the foot's LEFT
         # corner sits in the bowl/stem notch — no flare into a notch (it nearly closed the notch into a pin-hole)
         cx0 = 0.95 * v                               # F10d: whole ellipse, far side full stroke, stem side touching the stem
-        bowl = ('group', [('add', ell(brx, bcy, brx, bry)), st,
-                          ('sub', ell((cx0 + xs) / 2, bcy, (xs - cx0) / 2, bry - self.kd * h))])   # P4b (13:22): a's bowl weighs h like every round (no 'dense letter' lightening)
+        bowl = ('group', [('add', CV.ell(brx, bcy, brx, bry)), st,
+                          ('sub', CV.ell((cx0 + xs) / 2, bcy, (xs - cx0) / 2, bry - self.kd * h))])   # P4b (13:22): a's bowl weighs h like every round (no 'dense letter' lightening)
         return self.G('a', W, 34, 50, [hood, bowl], locals().get('GA', []))
 
     def g_q(self):
@@ -379,12 +415,12 @@ class LF(A.LC):
 
     def g_b(self):
         ops, W, cx, cy = self.bowl('l', 0, ASC, bot=False)
-        sp = self.spur_dx() + self.v - CX * self.Rr          # how far the stem stands left of the ring
+        sp = self.spur_dx() + self.v - self.bowl_rx()          # how far the stem stands left of the ring
         return self.G('b', W, 52 + sp, 36, ops)          # the stem's edge stands sp left of the body
 
     def g_p(self):
         ops, W, cx, cy = self.bowl('l', DESC, XH, top=False)
-        sp = self.spur_dx() + self.v - CX * self.Rr
+        sp = self.spur_dx() + self.v - self.bowl_rx()
         return self.G('p', W, 52 + sp, 36, ops)
 
     # F6 -------------------------------------------------------------------------------------------
@@ -416,8 +452,8 @@ class LF(A.LC):
 
     def g_g(self):
         R, v = self.Rr, self.v
-        Rx = CX * R
-        ring, cy = self.ring(Rx)
+        Rx = self.bowl_rx()
+        ring, cy = self.ring(Rx, rx=Rx)
         xr = Rx + self.spur_dx() + v                    # F5b
         hk, yj, _ = self.hook(xr, 'dl', 0.30 * Rx)
         if os.environ.get('G_HOOK', 'curve') == 'curve':    # F6g (designer chose E, 27/10 18:30); asked 18:27 'đuôi chữ g thường cho cong thay vì thẳng':
@@ -430,7 +466,7 @@ class LF(A.LC):
             G = []
             tg = self.tail(G, Rx, cyh - ryh, Rx - rxh, v, 'l', 'down', tip_limit=-OV - AP_S, cry=ryh,
                            ring=(cyh, rxh + v, ryh + h))
-            hk = [('group', [('add', ell(Rx, cyh, rxh + v, ryh + h)), ('sub', ell(Rx, cyh, rxh, ryh)),
+            hk = [('group', [('add', CV.ell(Rx, cyh, rxh + v, ryh + h)), ('sub', CV.ell(Rx, cyh, rxh, ryh)),
                              ('sub', rect(-3000, cyh, 6000, 3000))] + CV.arm_ink(tg) +
                    [('sub', tg['disk']), ('sub', rect(-3000, -3000, tg['xt'], 3000)), ('sub', rect(-3000, tg['tip'], Rx, cyh + 1))] +
                    ([('sub', rect(-3000, -3000, 0.30 * Rx, 3000))] if os.environ.get('G_CUT', 'old') == 'old' else []))]   # cut at the old bar's end
@@ -451,10 +487,10 @@ class LF(A.LC):
                 tR = Rg.tail(GR, Rx, cyR - ryh, Rx - rxh, Rg.v, 'l', 'down', tip_limit=-OV - AP_S, cry=ryh,
                              ring=(cyR, rxh + Rg.v, ryh + Rg.h))
                 mv = lambda p: [(o[0],) + tuple(c + (dy if k % 2 else 0) for k, c in enumerate(o[1:])) for o in p]
-                hk = [('group', [('group', [('add', ell(Rx, cyh, rxh + v, ryh + h)), ('sub', rect(-3000, -3000, Rx, 3000))]),
-                                 ('group', [('add', ell(Rx, cyR, rxh + Rg.v, ryh + Rg.h)), ('sub', rect(Rx, -3000, 3000, 3000))])] +
+                hk = [('group', [('group', [('add', CV.ell(Rx, cyh, rxh + v, ryh + h)), ('sub', rect(-3000, -3000, Rx, 3000))]),
+                                 ('group', [('add', CV.ell(Rx, cyR, rxh + Rg.v, ryh + Rg.h)), ('sub', rect(Rx, -3000, 3000, 3000))])] +
                        CV.arm_ink(tR) +
-                       [('sub', ell(Rx, cyh, rxh, ryh)), ('sub', rect(-3000, cyh, 6000, 3000)), ('sub', mv(tR['disk'])),
+                       [('sub', CV.ell(Rx, cyh, rxh, ryh)), ('sub', rect(-3000, cyh, 6000, 3000)), ('sub', mv(tR['disk'])),
                         ('sub', rect(-3000, -3000, tR['xt'], 3000)), ('sub', rect(-3000, tR['tip'] + dy, Rx, cyh + 1))] +
                        ([('sub', rect(-3000, -3000, 0.30 * Rx, 3000))] if os.environ.get('G_CUT', 'old') == 'old' else []))]
                 G = [(g[0], g[1], g[2] + dy) + tuple(g[3:]) if g[0] == 'pt' else g for g in GR]   # inner points moved with the inner edge
