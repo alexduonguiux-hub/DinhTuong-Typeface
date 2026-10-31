@@ -11,6 +11,7 @@
   - The same mark serves Ĉ Ĝ Ĥ Ĵ Ŝ Ŵ Ŷ and their lowercase, the spacing ˆ, the combining circumflex and ^.
   - The caron (Č Ě Ň Ř Š Ž and lowercase, ˇ) is this circumflex turned over, as before.
 - All marks share one stroke weight, measured square to the stroke: the sloped strips of the acute, double acute, circumflex and caron are cut T / cos(angle) thick vertically, so they read as heavy as the level grave, breve, tilde, hook and dot below (before: 0.89–0.92 T).
+- **S s** (and Ś Š Ş Ŝ Ș $ with their lowercase): the spine now joins both bowls tangentially in every weight. The boolean re-fit had left 4–18° kinks at the joins; the largest break is now 0.7–2.4°. The masters are also point-compatible, so the static fonts and the coming variable font draw the same outlines.
 - Kerning re-run for every pair with a changed letter (acute, double acute, circumflex, caron). Every Vietnamese marked-letter pair inside a Vietnamese syllable (lowercase, Capitalised, ALL CAPS) keeps at least 26 units of ink gap. The only exceptions are the Bold É / Ế + t, v, y pairs, which are as tight as E + t, v, y in 1.001.
 - The highest point of the font drops from 1102 to 1097 (Bold Ế). Vertical metrics are unchanged.
 
