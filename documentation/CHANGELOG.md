@@ -15,6 +15,7 @@
 - **S s** (and Ś Š Ş Ŝ Ș $ with their lowercase): the spine now joins both bowls tangentially in every weight. The boolean re-fit had left 4–18° kinks at the joins; the largest break is now 0.7–2.4°. The masters are also point-compatible, so the static fonts and the coming variable font draw the same outlines.
 - Kerning re-run for every pair with a changed letter (acute, double acute, circumflex, caron). Every Vietnamese marked-letter pair inside a Vietnamese syllable (lowercase, Capitalised, ALL CAPS) keeps at least 26 units of ink gap. The only exceptions are the Bold É / Ế + t, v, y pairs, which are as tight as E + t, v, y in 1.001.
 - Figure kerning: 6 7 and 7 6 are set as close as 6 9 and 9 6 (67: −50 / −45 / −40, 76: −40 / −35 / −35 in Regular / Medium / Bold); they were 26–32 units looser.
+- Kerning of capitals whose diagonals meet at one point (K A, X A, A X, A A, R A, R X, K V W X Y, and V W X Y with each other, accented forms included): these were held open by the 26-unit ink floor although the white opens into a wide V right above the contact. Their feet / arm tips now overlap by 40 / 42 / 44 units (Regular / Medium / Bold); KA = −61 / −57 / −52 (was +10 / +15 / +20). Marks of accented forms keep at least 26 units from the other letter. No other pair changes.
 - The highest point of the font drops from 1102 to 1097 (Bold Ế). Vertical metrics are unchanged.
 
 ## 1.001 (2026-10-29)
