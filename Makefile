@@ -4,16 +4,17 @@ help:
 	@echo "###"
 	@echo
 	@echo "  make build:    Builds the fonts from sources/ufo with gftools builder (fontmake) into fonts/"
-	@echo "  make vf: venv
-	. venv/bin/activate; python3 scripts/make_vf_sources.py && fontmake -m "sources/vf/DinhTuong[wght].designspace" -o variable --output-path "fonts/variable/DinhTuong[wght].ttf" && python3 scripts/vf_vs_static.py
-
-generate: Regenerates sources/ufo from the rule-based generators (sources/dinhtuong)"
+	@echo "  make generate: Regenerates sources/ufo from the rule-based generators (sources/dinhtuong)"
+	@echo "  make vf:       Builds fonts/variable/DinhTuong[wght].ttf from the static masters and checks it against them"
 	@echo "  make compare:  Checks the fontmake build against the generators' reference binaries"
 	@echo "  make test:   Tests the fonts with fontspector (Google Fonts profile)"
 	@echo "  make proof:  Creates HTML proof documents in out/proof"
 	@echo
 
 build: build.stamp
+
+vf: venv
+	. venv/bin/activate; python3 scripts/make_vf_sources.py && fontmake -m "sources/vf/DinhTuong[wght].designspace" -o variable --output-path "fonts/variable/DinhTuong[wght].ttf" && python3 scripts/vf_vs_static.py
 
 venv: venv/touchfile
 
