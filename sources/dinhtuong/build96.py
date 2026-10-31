@@ -249,6 +249,9 @@ for n in NEWK:
         if gap < PAIR_MIN:
             K['exceptions'][a + b] = int(math.ceil((k + PAIR_MIN - gap) / 5.0)) * 5
             added += 1
+# R16b (31/10 'kerning số cặp 6 và 7 cần chỉnh lại cho gần hơn'): 67 / 76 measured +7…+19 looser than the median of the
+# 100 figure pairs (S1c white, profiles clamped 0.12 cap) -> kerned to the median, nearest 5, ink gap kept >= 26
+K['exceptions'].update({'67': {'regular': -20, 'medium': -20, 'bold': -15}[W8], '76': {'regular': -10, 'medium': -10, 'bold': -5}[W8]})
 kf = os.path.join(OUTD, f'kern_v096_{W8}.json')
 json.dump(K, open(kf, 'w'), ensure_ascii=False, indent=0)
 print('new letters', len(NEWK), 'collision exceptions added', added)

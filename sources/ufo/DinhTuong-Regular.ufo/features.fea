@@ -435,6 +435,8 @@ feature ccmp {
 @kR_p = [p thorn];
 feature kern {
   lookup KERN {
+    pos six seven -20;   # R16b (31/10 "kerning số cặp 6 và 7 cần chỉnh lại cho gần hơn"): 67 / 76 white = the figure-pair median
+    pos seven six -10;
     pos exclam igrave 5;
     pos numbersign f 5;
     pos numbersign t 5;
@@ -5387,7 +5389,6 @@ feature kern {
     pos six zero -20;
     pos six four -20;
     pos six six -30;
-    pos six seven -10;
     pos six eight -15;
     pos six nine -35;
     pos six colon -20;
