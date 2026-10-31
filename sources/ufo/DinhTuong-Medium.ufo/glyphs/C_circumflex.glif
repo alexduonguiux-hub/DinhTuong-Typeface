@@ -4,13 +4,12 @@
   <unicode hex="0108"/>
   <outline>
     <contour>
-      <point x="178" y="750" type="line"/>
-      <point x="277" y="750" type="line"/>
-      <point x="322" y="786" type="line"/>
-      <point x="368" y="750" type="line"/>
-      <point x="466" y="750" type="line"/>
-      <point x="343" y="846" type="line"/>
-      <point x="302" y="846" type="line"/>
+      <point x="202" y="731" type="line"/>
+      <point x="322" y="800" type="line"/>
+      <point x="442" y="731" type="line"/>
+      <point x="442" y="791" type="line"/>
+      <point x="322" y="860" type="line"/>
+      <point x="202" y="791" type="line"/>
     </contour>
     <contour>
       <point x="200" y="18" type="curve" smooth="yes"/>

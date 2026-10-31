@@ -93,6 +93,8 @@ def compose(ch):
     first = 'circumflex' if CIRC in marks else ('breve' if BREVE in marks else None)
     tone = next((TONES[m] for m in marks if m in TONES), None)
     top_h = 0
+    if first == 'circumflex':                        # R8k: the mũ (and every tone on it) sits 40 over the letter's ink
+        ZONE = ZONE + GL.CIRC_FOOT(bg.ops + h_ops, cx, ZONE, ('L', base, round(cx, 1)))
     if first:
         ops = GL.shift_ops(GL.mark_ops(first, True), cx, ZONE)
         g.ops += ops; g.parts.append((first, ops))
@@ -112,11 +114,14 @@ def compose(ch):
                 ydy, dx = 0, GL.ACUTE_BESIDE_DX(True)
             elif tone == 'acute' and GL.ACUTE_MODE() in ('4', '5'):    # R8i: centred over the mũ
                 ops = GL.mark_ops('acute', True)
-                ydy, dx = GL.ACUTE_CIRC_Y(False), GL.ACUTE_R8I_LC_DX            # R8i v2: lowercase 40 from the mũ, 22 left
+                dx = GL.ACUTE_IN_DX(GL.ACUTE_R8I_LC_DX, bg.ops, cx)        # R8k-b behind the mũ, R8k-c inside the letter
+                ydy = GL.ACUTE_CIRC_Y(False, dx)                            # 40 from the mũ
             elif tone == 'acute' and GL.ACUTE_TOPLINE():               # R8f trial: ấ's sắc ends on ắ's line
                 ydy = GL.ACUTE_STACK_Y()
                 dx = GL.ACUTE_CIRC_DX(dx, ydy, True)                   # R8f: pulled left to 40 from the mũ
             ops = GL.shift_ops(ops, cx + dx, ZONE + ydy)
+            if tone == 'hook' and MF.R8I():                            # R8k: hỏi beside the new mũ keeps 40 from it
+                ops = GL.CLEAR_UP(ops, [o for nm, o2 in g.parts if nm == 'circumflex' for o in o2], MF.CIRC_R8K_GAP)
         elif first:                                                    # caps: on trăng (and huyền / ngã on mũ) the tone rides on top
             y0 = (ZONE + GL.ACUTE_STACK_Y()) if (tone == 'acute' and first == 'breve' and GL.ACUTE_TOPLINE()) else ZONE + top_h + GAPS['stack_gap'] * SY
             if tone == 'acute':

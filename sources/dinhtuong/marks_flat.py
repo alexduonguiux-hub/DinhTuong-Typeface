@@ -177,12 +177,26 @@ def mk_tilde_v94(hgt=122, half=156, w=None, wh=None):
 # ---- v0.95c (27/10 "dấu ô / ngã mỏng so với sắc huyền — nên cùng độ dày"): EVERY mark is cut from the
 # same strip: ONE thickness T = STRIP_T * V, the same in every direction, built at its final size on the
 # capitals (no cap scaling). Each mark grows just enough to keep its counter / wave open at that thickness.
+# R8k (31/10, designer's sample 'Đổi dấu ô mới luôn', measured on Bold â Ấ): the mũ is two strips of the R8i sắc
+# meeting in a POINTED apex (outer and inner) — each arm rises CIRC_R8K_ANG (sample 29.0-29.5°, height 144 = 120 tan 30°
+# + 75), both outer ends cut VERTICAL, vertical thickness T (sample 75; T Bold 70.6), half-width CIRC_R8K_HALF (sample
+# width 238-241). It sits CIRC_R8K_GAP above its letter's ink (sample Â 41, â 40): see glyphs_c.CIRC_FOOT.
+CIRC_R8K_ANG = 30.0
+CIRC_R8K_HALF = 120.0
+CIRC_R8K_GAP = 40
+
+
 def mk_circumflex(**_):
     T = _st()
+    if R8I():
+        h = CIRC_R8K_HALF; r = h * _m.tan(_m.radians(CIRC_R8K_ANG))
+        return [('add', poly([(-h, 0), (-h, T), (0, r + T), (h, T), (h, 0), (0, r)]))]
     return mk_circumflex_v94_T(hgt=CIRC_HGT(), half=144, t=T, flat=T)
 
 
 def CIRC_HGT():
+    if R8I():
+        return CIRC_R8K_HALF * _m.tan(_m.radians(CIRC_R8K_ANG)) + _st()
     """mũ height — v0.95 review "giảm độ cao của dấu ô": max(118, 1.7T) -> max(96, 1.45T); the inner
     apex stays pointed and the counter open (Bold: 32u under the flat top)."""
     return max(96, 1.45 * _st())
