@@ -435,8 +435,6 @@ feature ccmp {
 @kR_p = [p thorn];
 feature kern {
   lookup KERN {
-    pos six seven -20;   # R16b (31/10 "kerning số cặp 6 và 7 cần chỉnh lại cho gần hơn"): 67 / 76 white = the figure-pair median
-    pos seven six -10;
     pos numbersign f 5;
     pos numbersign t 5;
     pos numbersign v 15;
@@ -548,13 +546,16 @@ feature kern {
     pos parenleft Igrave 30;
     pos parenleft Icircumflex 5;
     pos parenleft Idieresis 15;
+    pos parenleft Itilde 5;
     pos slash Igrave 40;
     pos slash Icircumflex 10;
     pos slash Idieresis 45;
     pos slash Itilde 10;
     pos slash Ibreve 5;
     pos two x 5;
+    pos six seven -45;
     pos six Lslash -20;
+    pos seven six -35;
     pos seven W -5;
     pos seven igrave 20;
     pos seven idieresis 10;
@@ -614,7 +615,6 @@ feature kern {
     pos A uni1EB4 15;
     pos A uni1EB6 15;
     pos A uni1EC9 -30;
-    pos B itilde -5;
     pos B Lslash -15;
     pos B uni1EC9 -5;
     pos C igrave 5;
@@ -652,7 +652,6 @@ feature kern {
     pos F uni1EB5 -80;
     pos F uni1EB7 -80;
     pos F uni1EC9 -40;
-    pos F uni1EE1 -40;
     pos G v 5;
     pos G w 5;
     pos G x 5;
@@ -699,7 +698,6 @@ feature kern {
     pos K Amacron 15;
     pos K Abreve 15;
     pos K Aogonek 15;
-    pos K itilde -10;
     pos K ibreve 10;
     pos K Tcaron 5;
     pos K Wcircumflex 15;
@@ -720,7 +718,6 @@ feature kern {
     pos K uni1EB4 15;
     pos K uni1EB6 15;
     pos K uni1EC9 -30;
-    pos K uni1EE1 -55;
     pos L x 15;
     pos L igrave -40;
     pos L iacute -40;
@@ -738,7 +735,6 @@ feature kern {
     pos N ibreve 0;
     pos N uni1EC9 -10;
     pos O iacute -5;
-    pos O itilde -5;
     pos O ibreve -5;
     pos O uni1EC9 -5;
     pos P f 5;
@@ -753,7 +749,7 @@ feature kern {
     pos P yacute 10;
     pos P ydieresis 10;
     pos P Hbar -5;
-    pos P itilde -40;
+    pos P itilde -30;
     pos P jcircumflex -5;
     pos P tcaron 5;
     pos P wcircumflex 10;
@@ -773,7 +769,6 @@ feature kern {
     pos Q Oslash -10;
     pos Q iacute -5;
     pos Q oslash 10;
-    pos Q itilde -5;
     pos Q ibreve -5;
     pos Q jcircumflex 90;
     pos Q uni0237 90;
@@ -820,7 +815,7 @@ feature kern {
     pos T abreve -80;
     pos T Hbar -5;
     pos T hbar -15;
-    pos T itilde 5;
+    pos T itilde 10;
     pos T ibreve 30;
     pos T jcircumflex 20;
     pos T ohungarumlaut -75;
@@ -833,7 +828,7 @@ feature kern {
     pos T uni1EB7 -80;
     pos T uni1EC9 -35;
     pos T uni1EDD -85;
-    pos T uni1EE1 -35;
+    pos T uni1EE1 -85;
     pos U igrave 5;
     pos U ibreve 0;
     pos U uni1EC9 -10;
@@ -847,7 +842,7 @@ feature kern {
     pos V idieresis 10;
     pos V thorn -25;
     pos V hbar -10;
-    pos V itilde -5;
+    pos V itilde 0;
     pos V ibreve 20;
     pos V Wcircumflex 15;
     pos V Ycircumflex 15;
@@ -856,7 +851,6 @@ feature kern {
     pos V Wacute 15;
     pos V Wdieresis 15;
     pos V uni1EC9 -30;
-    pos V uni1EE1 -40;
     pos V Ygrave 15;
     pos V uni1EF4 15;
     pos V uni1EF6 15;
@@ -880,7 +874,6 @@ feature kern {
     pos W Wacute 15;
     pos W Wdieresis 15;
     pos W uni1EC9 -30;
-    pos W uni1EE1 -35;
     pos W Ygrave 15;
     pos W uni1EF4 15;
     pos W uni1EF6 15;
@@ -902,7 +895,6 @@ feature kern {
     pos X Amacron 15;
     pos X Abreve 15;
     pos X Aogonek 15;
-    pos X itilde -10;
     pos X ibreve 15;
     pos X Wcircumflex 15;
     pos X Wgrave 15;
@@ -921,17 +913,15 @@ feature kern {
     pos X uni1EB4 15;
     pos X uni1EB6 15;
     pos X uni1EC9 -30;
-    pos X uni1EE1 -45;
     pos Y V 15;
     pos Y W 15;
     pos Y Y 15;
     pos Y Yacute 15;
-    pos Y atilde -75;
     pos Y igrave 20;
     pos Y idieresis 5;
     pos Y thorn -25;
     pos Y hbar -10;
-    pos Y itilde 0;
+    pos Y itilde -10;
     pos Y ibreve 30;
     pos Y rcaron -70;
     pos Y Wcircumflex 15;
@@ -941,7 +931,6 @@ feature kern {
     pos Y Wacute 15;
     pos Y Wdieresis 15;
     pos Y uni1EC9 -30;
-    pos Y uni1EE1 -45;
     pos Y Ygrave 15;
     pos Y uni1EF4 15;
     pos Y uni1EF6 15;
@@ -1345,7 +1334,6 @@ feature kern {
     pos t Amacron 10;
     pos t Abreve 10;
     pos t Aogonek 10;
-    pos t itilde -5;
     pos t ibreve -5;
     pos t tcaron 20;
     pos t uni021B 20;
@@ -1710,7 +1698,7 @@ feature kern {
     pos Egrave idieresis 10;
     pos Egrave oslash -20;
     pos Egrave Hbar -10;
-    pos Egrave itilde -5;
+    pos Egrave itilde 0;
     pos Egrave ibreve 10;
     pos Egrave jcircumflex 5;
     pos Egrave Lslash -10;
@@ -1721,7 +1709,7 @@ feature kern {
     pos Eacute idieresis 10;
     pos Eacute oslash -20;
     pos Eacute Hbar -10;
-    pos Eacute itilde -5;
+    pos Eacute itilde 0;
     pos Eacute ibreve 10;
     pos Eacute jcircumflex 5;
     pos Eacute Lslash -10;
@@ -1794,12 +1782,10 @@ feature kern {
     pos Ograve ibreve -5;
     pos Oacute ibreve -5;
     pos Ocircumflex iacute -5;
-    pos Ocircumflex itilde -5;
     pos Ocircumflex ibreve -5;
     pos Ocircumflex uni1EC9 -5;
     pos Otilde ibreve -5;
     pos Odieresis iacute -5;
-    pos Odieresis itilde -5;
     pos Odieresis ibreve -5;
     pos Odieresis uni1EC9 -5;
     pos Oslash T -55;
@@ -1812,7 +1798,7 @@ feature kern {
     pos Oslash Idieresis 5;
     pos Oslash Yacute -40;
     pos Oslash iacute -5;
-    pos Oslash itilde -5;
+    pos Oslash Itilde -5;
     pos Oslash ibreve -5;
     pos Oslash Tcaron -55;
     pos Oslash Wcircumflex -40;
@@ -1840,19 +1826,17 @@ feature kern {
     pos Yacute V 15;
     pos Yacute W 15;
     pos Yacute Y 15;
-    pos Yacute atilde -75;
     pos Yacute igrave 20;
     pos Yacute idieresis 5;
     pos Yacute thorn -25;
     pos Yacute hbar -10;
-    pos Yacute itilde 0;
+    pos Yacute itilde -10;
     pos Yacute ibreve 30;
     pos Yacute rcaron -70;
     pos Yacute Wcircumflex 15;
     pos Yacute Ycircumflex 15;
     pos Yacute Ydieresis 15;
     pos Yacute Wdieresis 15;
-    pos Yacute uni1EE1 -45;
     pos Thorn igrave -5;
     pos Thorn iacute -5;
     pos Thorn icircumflex -5;
@@ -2067,7 +2051,6 @@ feature kern {
     pos icircumflex mu -5;
     pos icircumflex aacute -5;
     pos icircumflex acircumflex -5;
-    pos icircumflex atilde -5;
     pos icircumflex ae -5;
     pos icircumflex egrave -5;
     pos icircumflex eacute -5;
@@ -2091,7 +2074,7 @@ feature kern {
     pos icircumflex ebreve -5;
     pos icircumflex gcircumflex -5;
     pos icircumflex gbreve -5;
-    pos icircumflex itilde 5;
+    pos icircumflex itilde 10;
     pos icircumflex ibreve 0;
     pos icircumflex jcircumflex 20;
     pos icircumflex nacute -5;
@@ -2148,7 +2131,6 @@ feature kern {
     pos icircumflex uni1EF1 -5;
     pos icircumflex uni1EF5 -5;
     pos icircumflex uni1EF7 -5;
-    pos icircumflex uni1EF9 -5;
     pos idieresis seven 15;
     pos idieresis T 20;
     pos idieresis V 10;
@@ -2164,7 +2146,7 @@ feature kern {
     pos idieresis idieresis 50;
     pos idieresis Hbar 5;
     pos idieresis hbar 10;
-    pos idieresis itilde 25;
+    pos idieresis itilde 30;
     pos idieresis ibreve 45;
     pos idieresis jcircumflex 35;
     pos idieresis Tcaron 20;
@@ -2657,7 +2639,7 @@ feature kern {
     pos Hbar idieresis 10;
     pos Hbar yacute 30;
     pos Hbar ydieresis 20;
-    pos Hbar itilde 0;
+    pos Hbar itilde 5;
     pos Hbar jcircumflex 15;
     pos Hbar Sacute -25;
     pos Hbar Scircumflex -25;
@@ -2687,6 +2669,9 @@ feature kern {
     pos Itilde Icircumflex 20;
     pos Itilde Idieresis 60;
     pos Itilde Ibreve 40;
+    pos itilde V 5;
+    pos itilde W 5;
+    pos itilde Y 5;
     pos itilde a -5;
     pos itilde c -5;
     pos itilde d -5;
@@ -2709,8 +2694,8 @@ feature kern {
     pos itilde acircumflex -5;
     pos itilde ae -5;
     pos itilde ecircumflex -5;
-    pos itilde icircumflex 5;
-    pos itilde idieresis 25;
+    pos itilde icircumflex 10;
+    pos itilde idieresis 30;
     pos itilde ocircumflex -5;
     pos itilde oslash -5;
     pos itilde ucircumflex -5;
@@ -2720,16 +2705,20 @@ feature kern {
     pos itilde ebreve -5;
     pos itilde gcircumflex -5;
     pos itilde gbreve -5;
-    pos itilde ibreve 25;
+    pos itilde ibreve 30;
     pos itilde jcircumflex 20;
     pos itilde obreve -5;
     pos itilde oe -5;
     pos itilde scircumflex -5;
     pos itilde ubreve -5;
+    pos itilde Wcircumflex 5;
     pos itilde wcircumflex -5;
+    pos itilde Ycircumflex 5;
     pos itilde ycircumflex -5;
+    pos itilde Ydieresis 5;
     pos itilde ohorn -5;
     pos itilde uhorn -5;
+    pos itilde Wdieresis 5;
     pos Imacron Igrave 20;
     pos Imacron Idieresis 30;
     pos Imacron Ibreve 5;
@@ -2742,7 +2731,7 @@ feature kern {
     pos Ibreve Iacute 10;
     pos Ibreve Icircumflex 15;
     pos Ibreve Idieresis 75;
-    pos Ibreve Itilde 40;
+    pos Ibreve Itilde 35;
     pos Ibreve Ibreve 60;
     pos Ibreve lacute 15;
     pos Ibreve uni1EC9 -10;
@@ -2863,6 +2852,7 @@ feature kern {
     pos ibreve uni1EDB -5;
     pos ibreve uni1EDD -5;
     pos ibreve uni1EDF -5;
+    pos ibreve uni1EE1 -5;
     pos ibreve uni1EE3 -5;
     pos ibreve uni1EE5 -5;
     pos ibreve uni1EE7 -5;
@@ -2937,7 +2927,6 @@ feature kern {
     pos uni0136 Amacron 15;
     pos uni0136 Abreve 15;
     pos uni0136 Aogonek 15;
-    pos uni0136 itilde -10;
     pos uni0136 ibreve 10;
     pos uni0136 Tcaron 5;
     pos uni0136 Wcircumflex 15;
@@ -2958,7 +2947,6 @@ feature kern {
     pos uni0136 uni1EB4 15;
     pos uni0136 uni1EB6 15;
     pos uni0136 uni1EC9 -30;
-    pos uni0136 uni1EE1 -55;
     pos uni0137 numbersign 15;
     pos uni0137 percent 15;
     pos uni0137 two 15;
@@ -3083,7 +3071,6 @@ feature kern {
     pos Ncaron ibreve 0;
     pos Ncaron uni1EC9 -10;
     pos Obreve iacute -5;
-    pos Obreve itilde -5;
     pos Obreve ibreve -5;
     pos Obreve uni1EC9 -5;
     pos obreve igrave -5;
@@ -3093,7 +3080,6 @@ feature kern {
     pos obreve ibreve -5;
     pos obreve uni1EC9 -5;
     pos Ohungarumlaut iacute -5;
-    pos Ohungarumlaut itilde -5;
     pos Ohungarumlaut ibreve -5;
     pos Ohungarumlaut uni1EC9 -5;
     pos OE x 5;
@@ -3407,7 +3393,6 @@ feature kern {
     pos Scircumflex Lslash -15;
     pos Scircumflex uni1EC9 -45;
     pos scircumflex iacute -5;
-    pos scircumflex itilde -5;
     pos scircumflex ibreve -5;
     pos scircumflex uni1EC9 -5;
     pos Scedilla igrave -25;
@@ -3428,7 +3413,7 @@ feature kern {
     pos Tcaron abreve -80;
     pos Tcaron Hbar -5;
     pos Tcaron hbar -15;
-    pos Tcaron itilde 5;
+    pos Tcaron itilde 10;
     pos Tcaron ibreve 30;
     pos Tcaron jcircumflex 20;
     pos Tcaron ohungarumlaut -75;
@@ -3441,7 +3426,7 @@ feature kern {
     pos Tcaron uni1EB7 -80;
     pos Tcaron uni1EC9 -35;
     pos Tcaron uni1EDD -85;
-    pos Tcaron uni1EE1 -35;
+    pos Tcaron uni1EE1 -85;
     pos tcaron igrave 10;
     pos Utilde ibreve 0;
     pos utilde icircumflex -5;
@@ -3489,7 +3474,6 @@ feature kern {
     pos Wcircumflex Wacute 15;
     pos Wcircumflex Wdieresis 15;
     pos Wcircumflex uni1EC9 -30;
-    pos Wcircumflex uni1EE1 -35;
     pos Wcircumflex Ygrave 15;
     pos Wcircumflex uni1EF4 15;
     pos Wcircumflex uni1EF6 15;
@@ -3524,12 +3508,11 @@ feature kern {
     pos Ycircumflex W 15;
     pos Ycircumflex Y 15;
     pos Ycircumflex Yacute 15;
-    pos Ycircumflex atilde -75;
     pos Ycircumflex igrave 20;
     pos Ycircumflex idieresis 5;
     pos Ycircumflex thorn -25;
     pos Ycircumflex hbar -10;
-    pos Ycircumflex itilde 0;
+    pos Ycircumflex itilde -10;
     pos Ycircumflex ibreve 30;
     pos Ycircumflex rcaron -70;
     pos Ycircumflex Wcircumflex 15;
@@ -3539,7 +3522,6 @@ feature kern {
     pos Ycircumflex Wacute 15;
     pos Ycircumflex Wdieresis 15;
     pos Ycircumflex uni1EC9 -30;
-    pos Ycircumflex uni1EE1 -45;
     pos Ycircumflex Ygrave 15;
     pos Ycircumflex uni1EF4 15;
     pos Ycircumflex uni1EF6 15;
@@ -3573,12 +3555,11 @@ feature kern {
     pos Ydieresis W 15;
     pos Ydieresis Y 15;
     pos Ydieresis Yacute 15;
-    pos Ydieresis atilde -75;
     pos Ydieresis igrave 20;
     pos Ydieresis idieresis 5;
     pos Ydieresis thorn -25;
     pos Ydieresis hbar -10;
-    pos Ydieresis itilde 0;
+    pos Ydieresis itilde -10;
     pos Ydieresis ibreve 30;
     pos Ydieresis rcaron -70;
     pos Ydieresis Wcircumflex 15;
@@ -3588,7 +3569,6 @@ feature kern {
     pos Ydieresis Wacute 15;
     pos Ydieresis Wdieresis 15;
     pos Ydieresis uni1EC9 -30;
-    pos Ydieresis uni1EE1 -45;
     pos Ydieresis Ygrave 15;
     pos Ydieresis uni1EF4 15;
     pos Ydieresis uni1EF6 15;
@@ -3600,7 +3580,7 @@ feature kern {
     pos Zacute idieresis 5;
     pos Zacute oslash -25;
     pos Zacute Hbar -15;
-    pos Zacute itilde -10;
+    pos Zacute itilde -5;
     pos Zacute ibreve 5;
     pos Zacute jcircumflex 0;
     pos Zacute Lslash -15;
@@ -3660,7 +3640,7 @@ feature kern {
     pos ohorn icircumflex 10;
     pos ohorn idieresis 15;
     pos ohorn yacute 20;
-    pos ohorn itilde 5;
+    pos ohorn itilde 10;
     pos ohorn ibreve 5;
     pos ohorn jcircumflex 20;
     pos ohorn tcaron 10;
@@ -3727,8 +3707,8 @@ feature kern {
     pos Uhorn Hcircumflex 20;
     pos Uhorn hcircumflex 5;
     pos Uhorn hbar 20;
-    pos Uhorn Itilde 45;
-    pos Uhorn itilde 35;
+    pos Uhorn Itilde 50;
+    pos Uhorn itilde 30;
     pos Uhorn Imacron 20;
     pos Uhorn Ibreve 35;
     pos Uhorn ibreve 55;
@@ -3949,7 +3929,6 @@ feature kern {
     pos uhorn uni1EDC 10;
     pos uhorn uni1EDE 10;
     pos uhorn uni1EE0 10;
-    pos uhorn uni1EE1 10;
     pos uhorn uni1EE2 10;
     pos uhorn uni1EE4 10;
     pos uhorn uni1EE5 20;
@@ -3989,7 +3968,7 @@ feature kern {
     pos uni021A abreve -80;
     pos uni021A Hbar -5;
     pos uni021A hbar -15;
-    pos uni021A itilde 5;
+    pos uni021A itilde 10;
     pos uni021A ibreve 30;
     pos uni021A jcircumflex 20;
     pos uni021A ohungarumlaut -75;
@@ -4002,7 +3981,7 @@ feature kern {
     pos uni021A uni1EB7 -80;
     pos uni021A uni1EC9 -35;
     pos uni021A uni1EDD -85;
-    pos uni021A uni1EE1 -35;
+    pos uni021A uni1EE1 -85;
     pos uni021B A 10;
     pos uni021B X 10;
     pos uni021B f 20;
@@ -4062,7 +4041,6 @@ feature kern {
     pos Wgrave Ycircumflex 15;
     pos Wgrave Ydieresis 15;
     pos Wgrave Wdieresis 15;
-    pos Wgrave uni1EE1 -35;
     pos wgrave numbersign 10;
     pos wgrave percent 10;
     pos wgrave v 45;
@@ -4091,7 +4069,6 @@ feature kern {
     pos Wacute Ycircumflex 15;
     pos Wacute Ydieresis 15;
     pos Wacute Wdieresis 15;
-    pos Wacute uni1EE1 -35;
     pos wacute numbersign 10;
     pos wacute percent 10;
     pos wacute v 45;
@@ -4124,7 +4101,6 @@ feature kern {
     pos Wdieresis Wacute 15;
     pos Wdieresis Wdieresis 15;
     pos Wdieresis uni1EC9 -30;
-    pos Wdieresis uni1EE1 -35;
     pos Wdieresis Ygrave 15;
     pos Wdieresis uni1EF4 15;
     pos Wdieresis uni1EF6 15;
@@ -4391,7 +4367,7 @@ feature kern {
     pos uni1EB8 idieresis 10;
     pos uni1EB8 oslash -20;
     pos uni1EB8 Hbar -10;
-    pos uni1EB8 itilde -5;
+    pos uni1EB8 itilde 0;
     pos uni1EB8 ibreve 10;
     pos uni1EB8 jcircumflex 5;
     pos uni1EB8 Lslash -10;
@@ -4405,7 +4381,7 @@ feature kern {
     pos uni1EBA idieresis 10;
     pos uni1EBA oslash -20;
     pos uni1EBA Hbar -10;
-    pos uni1EBA itilde -5;
+    pos uni1EBA itilde 0;
     pos uni1EBA ibreve 10;
     pos uni1EBA jcircumflex 5;
     pos uni1EBA Lslash -10;
@@ -4420,7 +4396,7 @@ feature kern {
     pos uni1EBC idieresis 10;
     pos uni1EBC oslash -20;
     pos uni1EBC Hbar -10;
-    pos uni1EBC itilde -5;
+    pos uni1EBC itilde 0;
     pos uni1EBC ibreve 10;
     pos uni1EBC jcircumflex 5;
     pos uni1EBC Lslash -10;
@@ -4433,7 +4409,7 @@ feature kern {
     pos uni1EBE idieresis 10;
     pos uni1EBE oslash -20;
     pos uni1EBE Hbar -10;
-    pos uni1EBE itilde -5;
+    pos uni1EBE itilde 0;
     pos uni1EBE ibreve 10;
     pos uni1EBE jcircumflex 5;
     pos uni1EBE Lslash -10;
@@ -4448,7 +4424,7 @@ feature kern {
     pos uni1EC0 idieresis 10;
     pos uni1EC0 oslash -20;
     pos uni1EC0 Hbar -10;
-    pos uni1EC0 itilde -5;
+    pos uni1EC0 itilde 0;
     pos uni1EC0 ibreve 10;
     pos uni1EC0 jcircumflex 5;
     pos uni1EC0 Lslash -10;
@@ -4462,8 +4438,8 @@ feature kern {
     pos uni1EC2 idieresis 10;
     pos uni1EC2 oslash -20;
     pos uni1EC2 Hbar -10;
-    pos uni1EC2 Itilde 0;
-    pos uni1EC2 itilde -5;
+    pos uni1EC2 Itilde -20;
+    pos uni1EC2 itilde 0;
     pos uni1EC2 Ibreve 40;
     pos uni1EC2 ibreve 10;
     pos uni1EC2 jcircumflex 5;
@@ -4498,7 +4474,7 @@ feature kern {
     pos uni1EC4 idieresis 10;
     pos uni1EC4 oslash -20;
     pos uni1EC4 Hbar -10;
-    pos uni1EC4 itilde -5;
+    pos uni1EC4 itilde 0;
     pos uni1EC4 ibreve 10;
     pos uni1EC4 jcircumflex 5;
     pos uni1EC4 Lslash -10;
@@ -4512,7 +4488,7 @@ feature kern {
     pos uni1EC6 idieresis 10;
     pos uni1EC6 oslash -20;
     pos uni1EC6 Hbar -10;
-    pos uni1EC6 itilde -5;
+    pos uni1EC6 itilde 0;
     pos uni1EC6 ibreve 10;
     pos uni1EC6 jcircumflex 5;
     pos uni1EC6 Lslash -10;
@@ -5681,19 +5657,17 @@ feature kern {
     pos Ygrave V 15;
     pos Ygrave W 15;
     pos Ygrave Y 15;
-    pos Ygrave atilde -75;
     pos Ygrave igrave 0;
     pos Ygrave idieresis 5;
     pos Ygrave thorn -25;
     pos Ygrave hbar -10;
-    pos Ygrave itilde 0;
+    pos Ygrave itilde -10;
     pos Ygrave ibreve 30;
     pos Ygrave rcaron -70;
     pos Ygrave Wcircumflex 15;
     pos Ygrave Ycircumflex 15;
     pos Ygrave Ydieresis 15;
     pos Ygrave Wdieresis 15;
-    pos Ygrave uni1EE1 -45;
     pos ygrave numbersign 10;
     pos ygrave percent 10;
     pos ygrave v 45;
@@ -5710,19 +5684,17 @@ feature kern {
     pos uni1EF4 V 15;
     pos uni1EF4 W 15;
     pos uni1EF4 Y 15;
-    pos uni1EF4 atilde -75;
     pos uni1EF4 igrave 0;
     pos uni1EF4 idieresis 5;
     pos uni1EF4 thorn -25;
     pos uni1EF4 hbar -10;
-    pos uni1EF4 itilde 0;
+    pos uni1EF4 itilde -10;
     pos uni1EF4 ibreve 30;
     pos uni1EF4 rcaron -70;
     pos uni1EF4 Wcircumflex 15;
     pos uni1EF4 Ycircumflex 15;
     pos uni1EF4 Ydieresis 15;
     pos uni1EF4 Wdieresis 15;
-    pos uni1EF4 uni1EE1 -45;
     pos uni1EF5 numbersign 10;
     pos uni1EF5 percent 10;
     pos uni1EF5 v 45;
@@ -5741,19 +5713,17 @@ feature kern {
     pos uni1EF6 V 15;
     pos uni1EF6 W 15;
     pos uni1EF6 Y 15;
-    pos uni1EF6 atilde -75;
     pos uni1EF6 igrave 0;
     pos uni1EF6 idieresis 5;
     pos uni1EF6 thorn -25;
     pos uni1EF6 hbar -10;
-    pos uni1EF6 itilde 0;
+    pos uni1EF6 itilde -10;
     pos uni1EF6 ibreve 30;
     pos uni1EF6 rcaron -70;
     pos uni1EF6 Wcircumflex 15;
     pos uni1EF6 Ycircumflex 15;
     pos uni1EF6 Ydieresis 15;
     pos uni1EF6 Wdieresis 15;
-    pos uni1EF6 uni1EE1 -45;
     pos uni1EF7 numbersign 10;
     pos uni1EF7 percent 10;
     pos uni1EF7 v 45;
@@ -5772,19 +5742,17 @@ feature kern {
     pos uni1EF8 V 15;
     pos uni1EF8 W 15;
     pos uni1EF8 Y 15;
-    pos uni1EF8 atilde -75;
     pos uni1EF8 igrave 0;
     pos uni1EF8 idieresis 5;
     pos uni1EF8 thorn -25;
     pos uni1EF8 hbar -10;
-    pos uni1EF8 itilde 0;
+    pos uni1EF8 itilde -10;
     pos uni1EF8 ibreve 30;
     pos uni1EF8 rcaron -70;
     pos uni1EF8 Wcircumflex 15;
     pos uni1EF8 Ycircumflex 15;
     pos uni1EF8 Ydieresis 15;
     pos uni1EF8 Wdieresis 15;
-    pos uni1EF8 uni1EE1 -45;
     pos uni1EF9 numbersign 10;
     pos uni1EF9 percent 10;
     pos uni1EF9 v 45;

@@ -264,9 +264,118 @@ def mk_breve(**_):
     return [('add', path)]
 
 
+TILDE_R8M_CREST = 0.29       # R8m: centre-line crest at 0.29 of the width (top edge peaks at the sample's 0.27), trough at 0.71
+TILDE_R8M_MID_HANDLE = 0.30  # crest -> trough cubic: level handles 0.30 of the span (sample centre slope 26.6°)
+TILDE_R8M_END_ANG = 45.0     # the centre line leaves each end at 45° (sample: ends steeper than the middle)
+TILDE_R8M_END_HANDLE = 0.6   # end handles 0.6 of the crest handle
+TILDE_R8M_FLANK = 0.94       # stroke T where it runs level (crest, trough), thinning toward 0.94 T as it turns steep:
+                             # the sample's square-to-run thickness is 0.607 H at the crest, 0.58 H at 26.6° (ratio 0.955).
+                             # The four numbers above were set by the best area match to the sample (XOR 4.5 % of its ink).
+
+
+def mk_tilde_r8m(half, amp, T):
+    """R8m (31/10, designer's sample: 'vấn đề không nằm ở điểm cắt, nó là cân bằng điểm cong'). Measured on the sample:
+    crest at 0.27 / trough at 0.71-0.74 of the width; the left end's lower corner ON the trough line and the right end's
+    upper corner ON the crest line (four extremes on two level lines); flatter through the middle (26.6°), steeper at
+    the ends (39°); T square to the run. The old wave was one sine period cut at its zero crossings (ends at mid
+    height: one crest and one trough), so its mass read as leaning down to the right.
+    Construction (three cubic segments, no tracing): anchors at the crest (x = -half + 0.54 half, y = +amp) and the
+    trough (point-symmetric), both with level tangents; crest -> trough handles TILDE_R8M_MID_HANDLE of the span; each
+    end leaves at TILDE_R8M_END_ANG with handles as long as the crest's, its height solved so the end's lower (left) /
+    upper (right) corner, offset T / 2cos square to the run, lies on the trough / crest line. Ends cut vertical; T
+    square to the run (R8l)."""
+    xc = -half + 2 * half * TILDE_R8M_CREST            # crest x; trough at -xc
+    span = -2 * xc
+    h = TILDE_R8M_MID_HANDLE * span
+    te = _m.radians(TILDE_R8M_END_ANG)
+    def cub(P, t):
+        m = 1 - t
+        x = m**3 * P[0][0] + 3 * m * m * t * P[1][0] + 3 * m * t * t * P[2][0] + t**3 * P[3][0]
+        y = m**3 * P[0][1] + 3 * m * m * t * P[1][1] + 3 * m * t * t * P[2][1] + t**3 * P[3][1]
+        dx = 3 * (m * m * (P[1][0] - P[0][0]) + 2 * m * t * (P[2][0] - P[1][0]) + t * t * (P[3][0] - P[2][0]))
+        dy = 3 * (m * m * (P[1][1] - P[0][1]) + 2 * m * t * (P[2][1] - P[1][1]) + t * t * (P[3][1] - P[2][1]))
+        return (x, y), (dx, dy)
+    ye = -amp - T / 2 + T / (2 * _m.cos(te))              # the left end's lower corner on the trough line
+    lh = min(TILDE_R8M_END_HANDLE * h, (xc + half) * 0.9)
+    E = (-half - 80 * _m.cos(te), ye - 80 * _m.sin(te))   # centre line runs on past the cut, along the end tangent
+    S1 = [E, (-half + lh * _m.cos(te), ye + lh * _m.sin(te)), (xc - lh, amp), (xc, amp)]
+    S2 = [(xc, amp), (xc + h, amp), (-xc - h, -amp), (-xc, -amp)]
+    S3 = [(-q[0], -q[1]) for q in S1[::-1]]
+    # the two edges, sampled finely (T where level, FLANK x T where steep, square to the run)
+    top, bot = [], []
+    for k, S in enumerate((S1, S2, S3)):
+        for i in range(0 if k == 0 else 1, 201):
+            (x, y), (dx, dy) = cub(S, i / 200)
+            d = _m.hypot(dx, dy) or 1
+            r = (T + (TILDE_R8M_FLANK * T - T) * abs(dy) / d) / 2
+            top.append((x - dy / d * r, y + dx / d * r)); bot.append((x + dy / d * r, y - dx / d * r))
+    def clip(E_):            # keep -half <= x <= half, ends interpolated exactly on the vertical cuts
+        out = []
+        for a, b in zip(E_, E_[1:]):
+            for q in (a, b):
+                pass
+        pts = [q for q in E_ if -half <= q[0] <= half]
+        def at(xv):
+            for a, b in zip(E_, E_[1:]):
+                if (a[0] - xv) * (b[0] - xv) <= 0 and a[0] != b[0]:
+                    t = (xv - a[0]) / (b[0] - a[0]); return (xv, a[1] + t * (b[1] - a[1]))
+        return [at(-half)] + pts + [at(half)]
+    top, bot = clip(top), clip(bot)
+    # R8m-b (31/10 'chỉnh nét smooth hơn mẫu mình vẽ'): each edge is redrawn as THREE cubics with nodes only at its ends
+    # and its two extremes (level tangents there), handles fitted to the offset edge by least squares: no facets, no
+    # boolean re-fit, and the same 8 segments (4 corners) in every weight, so the masters stay point-compatible.
+    def fit(P, t0, t1):
+        n = len(P); L = [0.0]
+        for a, b in zip(P, P[1:]): L.append(L[-1] + _m.dist(a, b))
+        us = [l / L[-1] for l in L]
+        p0, p3 = P[0], P[-1]
+        A11 = A12 = A22 = B1 = B2 = 0.0
+        for u, q in zip(us, P):
+            b0, b1, b2, b3 = (1 - u) ** 3, 3 * (1 - u) ** 2 * u, 3 * (1 - u) * u * u, u ** 3
+            c1 = (b1 * t0[0], b1 * t0[1]); c2 = (-b2 * t1[0], -b2 * t1[1])
+            rx = q[0] - (b0 + b1) * p0[0] - (b2 + b3) * p3[0]; ry = q[1] - (b0 + b1) * p0[1] - (b2 + b3) * p3[1]
+            A11 += c1[0] ** 2 + c1[1] ** 2; A12 += c1[0] * c2[0] + c1[1] * c2[1]; A22 += c2[0] ** 2 + c2[1] ** 2
+            B1 += c1[0] * rx + c1[1] * ry; B2 += c2[0] * rx + c2[1] * ry
+        det = A11 * A22 - A12 * A12
+        a = (B1 * A22 - A12 * B2) / det; b = (A11 * B2 - A12 * B1) / det
+        return (p0[0] + a * t0[0], p0[1] + a * t0[1]), (p3[0] - b * t1[0], p3[1] - b * t1[1]), p3
+    def unit(a, b):
+        d = _m.dist(a, b) or 1; return ((b[0] - a[0]) / d, (b[1] - a[1]) / d)
+    def edge_cubics(P):
+        n = len(P)
+        imax = max(range(n // 2), key=lambda i: P[i][1])          # the extreme near the crest
+        imin = min(range(n // 2, n), key=lambda i: P[i][1])        # the extreme near the trough
+        parts = [(0, imax), (imax, imin), (imin, n - 1)]
+        out = []
+        for a, b in parts:
+            seg = P[a:b + 1]
+            t0 = unit(seg[0], seg[min(3, len(seg) - 1)]) if a == 0 else (1.0, 0.0)
+            t1 = unit(seg[max(-4, -len(seg))], seg[-1]) if b == n - 1 else (1.0, 0.0)
+            out.append(fit(seg, t0, t1))
+        return P[0], out
+    yc = amp + T / 2
+    sh = lambda q: (round(q[0], 2), round(q[1] + yc, 2))
+    t0, tc = edge_cubics(top)
+    b0, bc = edge_cubics(bot)
+    path = [('M',) + sh(t0)]
+    for c1, c2, p3 in tc:
+        path.append(('C',) + sh(c1) + sh(c2) + sh(p3))
+    path.append(('L',) + sh(bot[-1]))                         # right end: vertical cut
+    rev = []                                                  # bottom edge right -> left
+    pts_b = [b0] + [c[2] for c in bc]
+    for k in range(len(bc) - 1, -1, -1):
+        c1, c2, p3 = bc[k]
+        rev.append(('C',) + sh(c2) + sh(c1) + sh(pts_b[k]))
+    path += rev
+    path.append(('Z',))                                       # left end: vertical cut
+    return [('add', path)]
+
+
 def mk_tilde(**_):
     T = _st()
     amp = max(24, 0.35 * T)
+    if R8I():
+        return mk_tilde_r8m(150, amp, T)
     return mk_tilde_v94(hgt=T + 2 * (amp + 4), half=150, w=T, wh=T)
 
 
@@ -284,6 +393,8 @@ def mk_hook_stack(**_):
 def mk_tilde_stack(**_):
     T = _st()
     amp = max(20, 0.28 * T)
+    if R8I():
+        return mk_tilde_r8m(140, amp, T)
     return mk_tilde_v94(hgt=T + 2 * (amp + 4), half=140, w=T, wh=T)
 
 
