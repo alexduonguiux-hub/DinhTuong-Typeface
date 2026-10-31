@@ -47,7 +47,8 @@ R_W = float(os.environ.get('R_W', '0.70'))   # F7c: r's vertical cut at this fra
 Z_PERP_K = 0.835   # R2d2: z diagonal thickness square to the stroke, in v (Regular's measured value)
 TERM_C, TERM_E, TERM_S, TERM_A, TERM_R = 35, 20, 28, 150, float(os.environ.get('TERM_R', '40'))   # F7b (03:02 'đuôi a, e, c ngắn'): terminals end on a RAY from
                            # the round's centre (cut square to the stroke), at these angles (deg, 0 = right, ccw)
-CX = 0.88                  # F9 (02:49 'co ngang'): every round is an upright ellipse, horizontal radii x 0.88
+CX0 = 0.88
+CX = CX0 * __import__('width').WID   # C2 Condensed: rings x DT_WIDTH (wd() scales the other bodies); F9 (02:49 'co ngang'): every round is an upright ellipse, horizontal radii x 0.88
 # R2d: Regular body widths (before CX) of the lowercase diagonals; R2D=0 restores the v0.967 widths
 DIAG_W = ({'v': 551, 'y': 551, 'x': 541, 'w': 452, 'k': 505, 'z': 462} if os.environ.get('R2D', '1') == '1'
           else {'v': 470, 'y': 470, 'x': 450, 'w': 380, 'k': 470, 'z': 420})   # k z: reference medians 1.02 / 0.89 (designer 02:44)
@@ -127,7 +128,7 @@ class LF(A.LC):
         return CX * self.Rr + __import__('r2c').grow('round', self.v - self.v_reg) / 2
 
     def wd(self, W_reg):
-        return round(W_reg + 1.2 * (self.v - self.v_reg))
+        return round(__import__('width').cw(W_reg) + 1.2 * (self.v - self.v_reg))
 
     def G(self, name, body, lsb, rsb, ops, guides=()):
         return dict(name=name, body=body, lsb=lsb, rsb=rsb, ops=ops, guides=list(guides))
@@ -335,7 +336,7 @@ class LF(A.LC):
         shoulder (F7). Bowl = a smaller upright ellipse ring (0.58 x-height) springing out of the stem,
         its counter running JT into the stem (F10). Stem from the baseline (flared) into the hood."""
         v, h = self.v, self.h
-        W = self.wd(round(470 * CX))
+        W = self.wd(round(470 * CX0))
         r = (W - v - 0.85 * v) / 2                   # hood counter: between the hood's left side and the stem
         ry = r / CX
         xs = W - v                                   # stem's left edge
@@ -601,26 +602,26 @@ class LF(A.LC):
     # caps' own proportion: ink / n = V / H (v y 1.10, x 1.08, w 1.58). Before: v y 0.94, x 0.91, w 1.30 (refs 1.09-1.17).
     def g_v(self):
         import glyphs_c as GL
-        W = self.wd(round(DIAG_W['v'] * CX))
+        W = self.wd(round(DIAG_W['v'] * CX0))
         dw = 0.9 * self.v / math.cos(math.atan2(W / 2 - 50, XH))
         return self.G('v', W, 14, 14, GL.vshape(0, W, XH, 0, dw, 110))
 
     def g_w(self):
         import glyphs_c as GL
-        W1 = self.wd(round(DIAG_W['w'] * CX))
+        W1 = self.wd(round(DIAG_W['w'] * CX0))
         dw = 0.85 * self.v / math.cos(math.atan2(W1 / 2 - 40, XH))
         W = 2 * W1 - dw
         return self.G('w', W, 12, 12, [('group', GL.vshape(0, W1, XH, 0, dw, 96)), ('group', GL.vshape(W - W1, W, XH, 0, dw, 96))])
 
     def g_x(self):
         import glyphs_c as GL
-        W = self.wd(round(DIAG_W['x'] * CX))
+        W = self.wd(round(DIAG_W['x'] * CX0))
         dw = 0.9 * self.v / math.cos(math.atan2(W - 160, XH)) * 1.04
         return self.G('x', W, 12, 12, [('add', GL.pinch((dw / 2, XH), (W - dw / 2, 0), dw)), ('add', GL.pinch((W - dw / 2, XH), (dw / 2, 0), dw))])
 
     def g_z(self):
         from concept_v1 import poly
-        W, h = self.wd(round(DIAG_W['z'] * CX)), self.h
+        W, h = self.wd(round(DIAG_W['z'] * CX0)), self.h
         dw = 0.9 * self.v / math.cos(math.atan2(W - 200, XH - 2 * h)) * 1.04
         if os.environ.get('Z_PERP', '1') == '1':
             # R2d2 (28/10 visual-weight audit: z Bold grew +9% over the lowercase median; refs -8..+1%): the old width
@@ -643,7 +644,7 @@ class LF(A.LC):
         V between the stem and the leg, and above it one clean V between the arm and the leg."""
         from concept_v1 import poly
         v = self.v
-        W = self.wd(round(DIAG_W['k'] * CX))
+        W = self.wd(round(DIAG_W['k'] * CX0))
         dg = 0.9 * v
         yc, yj = 0.30 * XH, 0.52 * XH
         aw = dg / math.cos(math.atan2(W - v - 40, XH - yc))
@@ -672,7 +673,7 @@ class LF(A.LC):
         the descender (level cut); the left arm runs on until BOTH its edges meet the right arm's inner edge, so it
         ends flush inside the right arm: one V crotch above, one clean knee below, no ledge."""
         from concept_v1 import poly
-        W = self.wd(round(DIAG_W['y'] * CX))
+        W = self.wd(round(DIAG_W['y'] * CX0))
         dw = 0.9 * self.v / math.cos(math.atan2(W / 2 - 50, XH))
         fb = 110
         c = W / 2

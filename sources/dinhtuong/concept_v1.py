@@ -30,9 +30,11 @@ W8 = {'bold':    dict(V=168, H=140, HM=124, v=150, h=124, FL=9, fl=8),
       'medium':  dict(V=142, H=120, HM=106, v=128, h=106, FL=8, fl=7),
       'regular': dict(V=116, H=100, HM=90,  v=104, h=88,  FL=7, fl=6)}
 
+import width as _WD                  # C2/C3 Condensed switch (DT_WIDTH, default 1.0 = Normal)
+W8 = {k: _WD.strokes(v) for k, v in W8.items()}
 CAP, XH, ASC, DESC = 700, 530, 760, -200
 OV_C, OV_L = 8, 6
-RING_O, RING_o = 560, 498
+RING_O, RING_o = _WD.cw(560), _WD.cw(498)
 TAIL_KEEP, TAIL_PHI = 0.45, 35.0   # R5 (R5b 62 deg tried 27/10 16:02, on hold 16:08)
 HOOK_PHI = 35.0                     # R6 hook cut (unchanged; was shared with TAIL_PHI)
 TAIL_MODE = os.environ.get('TAIL_MODE', 'R5d')  # R5d v0.963 (27/10 16:28 'cong vừa', weights keep Regular's curve)
@@ -711,7 +713,7 @@ class Build:
         """n (approved v0.9 form): the arch's top runs flat out of the stem top and turns down
         through ONE compass semicircle; R9: the inside junction with the stem is a CRISP square
         corner, so the joint reads (no fillet blending the arch into the stem)."""
-        G, W, v, h = [], 470, self.v, self.h
+        G, W, v, h = [], _WD.cw(470), self.v, self.h
         top = XH + OV_L
         Ra = (W - v / 2) / 2
         G += [('circle', W - Ra, top - Ra, Ra, Ra, 'shoulder'), ('pt', v, top - h, 'junction')]
@@ -724,7 +726,7 @@ class Build:
         return dict(name='n', body=W, lsb=46, rsb=46, ops=ops, guides=G)
 
     def g_H(self):
-        W, V, HM = 520 + __import__('r2c').grow('straight', self.dV), self.V, self.HM
+        W, V, HM = _WD.cw(520) + __import__('r2c').grow('straight', self.dV), self.V, self.HM
         yb = BAR_AT * CAP - HM / 2                 # R12
         ops = [('add', fstem(0, 0, V, CAP, self.FL)), ('add', fstem(W - V, 0, W, CAP, self.FL)),
                ('add', rect(V - 1, yb, W - V + 1, yb + HM))]
@@ -934,13 +936,13 @@ class Build:
         return [('group', up), ('group', lo)], tu, tl
 
     def g_s(self):
-        G, W = [], 432 + 2 * (self.v - W8['regular']['v']) * SWIDE
+        G, W = [], _WD.cw(432) + 2 * (self.v - W8['regular']['v']) * SWIDE
         v, h = self.v * DENSE, self.h * DENSE
         ops, tu, tl = self.s_shape(G, W, XH, OV_L, v - 8, h, SPINE * h, 18)
         return dict(name='s', body=W, lsb=30, rsb=30, ops=ops, guides=G)
 
     def g_S(self):
-        G, W = [], 516 + (__import__('r2c').grow('s', self.dV) if __import__('r2c').ON else 2 * self.dV * SWIDE)
+        G, W = [], _WD.cw(516) + (__import__('r2c').grow('s', self.dV) if __import__('r2c').ON else 2 * self.dV * SWIDE)
         ops, tu, tl = self.s_shape(G, W, CAP, OV_C, self.V - 10, self.H, SPINE * self.H, 22)
         return dict(name='S', body=W, lsb=34, rsb=34, ops=ops, guides=G)
 

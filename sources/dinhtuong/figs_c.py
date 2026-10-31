@@ -74,7 +74,7 @@ def figweight(fn):
 
 @figweight
 def fig0():
-    W = 500 + gw('round')
+    W = __import__('width').cw(500) + gw('round')
     g = _g('0', W, SBF, SBF)
     g.group(ring(0, -OV_C, W, CAP + OV_C, V, H, FULL, FULL))
     return _reg(g)

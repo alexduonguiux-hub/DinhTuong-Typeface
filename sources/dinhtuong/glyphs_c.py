@@ -1115,6 +1115,8 @@ WEIGHT = _os.environ.get('A2_WEIGHT', 'bold')
 _WT = {'bold':    dict(V=168, H=140, HM=124, v=150, h=124, SB=(42, 30, 14), F=(9, 8)),
        'medium':  dict(V=142, H=120, HM=106, v=128, h=106, SB=(46, 33, 16), F=(8, 7)),
        'regular': dict(V=116, H=100, HM=90,  v=104, h=88,  SB=(50, 36, 18), F=(7, 6))}[WEIGHT]
+import width as _WD                           # C2/C3 Condensed switch (DT_WIDTH, default 1.0 = Normal)
+_WT = _WD.strokes(_WT)
 V, H, HM = _WT['V'], _WT['H'], _WT['HM']      # caps: stem, horizontal, middle bar
 v, h = _WT['v'], _WT['h']                     # lowercase
 WK = v / 150                                  # stroke scale vs Bold, for literal stroke sizes
@@ -1148,7 +1150,7 @@ def gw(kind):
 #   o-ring (lowercase): box RING_o wide; R_o = RING_o/2; r_o = R_o - v.
 #   r1 = r_o / 2:       the small compass — every inside corner, every join, every hook counter.
 # Strokes: V, H = .83V, HM = .74V; v, h = .83v; diagonals .9 of the stem (weight table above).
-RING_O, RING_o = 560, 498
+RING_O, RING_o = _WD.cw(560), _WD.cw(498)
 R_O, R_o = RING_O / 2, RING_o / 2
 r_O, r_o = R_O - V, R_o - v
 r1 = r_o / 2
@@ -1435,7 +1437,7 @@ def cap_B():
 
 
 def cap_O():
-    W = 560
+    W = _WD.cw(560)
     g = Glyph('O', W, SB_ROUND, SB_ROUND, 0x4F)
     apply(g, ring(0, -OV_C, W, CAP + OV_C, V, H, FULL, FULL))
     return reg(g)
@@ -1493,7 +1495,7 @@ def cap_F():
 
 
 def cap_H():
-    W = 520
+    W = _WD.cw(520)
     g = Glyph('H', W, SB_STRAIGHT, SB_STRAIGHT, 0x48)
     g.add(fstem(0, 0, V, CAP), fstem(W - V, 0, W, CAP), rect(V - 1, 300, W - V + 1, 300 + HM))
     return reg(g)
