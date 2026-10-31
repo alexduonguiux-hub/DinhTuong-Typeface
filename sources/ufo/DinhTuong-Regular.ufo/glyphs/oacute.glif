@@ -6,8 +6,8 @@
     <contour>
       <point x="164" y="580" type="line"/>
       <point x="359" y="679" type="line"/>
-      <point x="359" y="728" type="line"/>
-      <point x="164" y="629" type="line"/>
+      <point x="359" y="734" type="line"/>
+      <point x="164" y="635" type="line"/>
     </contour>
     <contour>
       <point x="262" y="542" type="curve" smooth="yes"/>

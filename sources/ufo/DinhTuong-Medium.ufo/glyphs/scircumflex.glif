@@ -49,9 +49,9 @@
       <point x="110" y="562" type="line"/>
       <point x="230" y="631" type="line"/>
       <point x="350" y="562" type="line"/>
-      <point x="350" y="622" type="line"/>
-      <point x="230" y="691" type="line"/>
-      <point x="110" y="622" type="line"/>
+      <point x="350" y="631" type="line"/>
+      <point x="230" y="700" type="line"/>
+      <point x="110" y="631" type="line"/>
     </contour>
   </outline>
 </glyph>

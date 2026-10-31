@@ -50,9 +50,9 @@
       <point x="181" y="733" type="line"/>
       <point x="301" y="802" type="line"/>
       <point x="421" y="733" type="line"/>
-      <point x="421" y="793" type="line"/>
-      <point x="301" y="862" type="line"/>
-      <point x="181" y="793" type="line"/>
+      <point x="421" y="802" type="line"/>
+      <point x="301" y="871" type="line"/>
+      <point x="181" y="802" type="line"/>
     </contour>
   </outline>
 </glyph>

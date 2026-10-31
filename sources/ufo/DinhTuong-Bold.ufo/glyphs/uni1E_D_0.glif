@@ -6,16 +6,16 @@
     <contour>
       <point x="420" y="871" type="line"/>
       <point x="615" y="970" type="line"/>
-      <point x="615" y="1041" type="line"/>
-      <point x="420" y="942" type="line"/>
+      <point x="615" y="1050" type="line"/>
+      <point x="420" y="950" type="line"/>
     </contour>
     <contour>
       <point x="208" y="727" type="line"/>
       <point x="328" y="796" type="line"/>
       <point x="448" y="727" type="line"/>
-      <point x="448" y="798" type="line"/>
-      <point x="328" y="867" type="line"/>
-      <point x="208" y="798" type="line"/>
+      <point x="448" y="808" type="line"/>
+      <point x="328" y="878" type="line"/>
+      <point x="208" y="808" type="line"/>
     </contour>
     <contour>
       <point x="328" y="708" type="curve" smooth="yes"/>

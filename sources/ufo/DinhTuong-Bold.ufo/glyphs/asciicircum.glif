@@ -7,9 +7,9 @@
       <point x="40" y="420" type="line"/>
       <point x="202" y="531" type="line"/>
       <point x="364" y="420" type="line"/>
-      <point x="364" y="533" type="line"/>
-      <point x="202" y="644" type="line"/>
-      <point x="40" y="533" type="line"/>
+      <point x="364" y="550" type="line"/>
+      <point x="202" y="661" type="line"/>
+      <point x="40" y="550" type="line"/>
     </contour>
   </outline>
 </glyph>

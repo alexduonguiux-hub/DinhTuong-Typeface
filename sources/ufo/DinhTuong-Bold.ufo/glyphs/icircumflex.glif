@@ -7,9 +7,9 @@
       <point x="22" y="557" type="line"/>
       <point x="142" y="626" type="line"/>
       <point x="262" y="557" type="line"/>
-      <point x="262" y="628" type="line"/>
-      <point x="142" y="697" type="line"/>
-      <point x="22" y="628" type="line"/>
+      <point x="262" y="638" type="line"/>
+      <point x="142" y="708" type="line"/>
+      <point x="22" y="638" type="line"/>
     </contour>
     <contour>
       <point x="55" y="0" type="curve"/>

@@ -75,7 +75,7 @@ def mk_dblacute(upper=False):
         # double acute at the single acute's angle (±5°), each stroke 0.7-1.0 of it, the pair 0.55-0.68 of the O): two
         # parallel R8i strips — vertical cuts, vertical thickness T, rise ACUTE_R8I_ANG — each DBL_K of the span, side by
         # side on the same foot line with a PERPENDICULAR ink gap MARK_GAP (40). Pair ≈ 0.62 of O (Bold).
-        t, s = mf._st(), DBL_K * mf.ACUTE_R8I_SPAN
+        t, s = mf.tv(mf.ACUTE_R8I_ANG), DBL_K * mf.ACUTE_R8I_SPAN      # R8l: T square to the strip
         a_ = math.radians(mf.ACUTE_R8I_ANG)
         dx = (MARK_GAP + t * math.cos(a_)) / math.sin(a_)      # horizontal offset that leaves MARK_GAP square to the strips
         rise = s * math.tan(a_)

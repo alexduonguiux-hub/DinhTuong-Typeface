@@ -47,9 +47,9 @@
       <point x="320" y="-22"/>
     </contour>
     <contour>
-      <point x="421" y="879" type="line"/>
-      <point x="301" y="810" type="line"/>
-      <point x="181" y="879" type="line"/>
+      <point x="421" y="888" type="line"/>
+      <point x="301" y="819" type="line"/>
+      <point x="181" y="888" type="line"/>
       <point x="181" y="819" type="line"/>
       <point x="301" y="750" type="line"/>
       <point x="421" y="819" type="line"/>

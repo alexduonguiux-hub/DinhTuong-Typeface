@@ -58,9 +58,16 @@ def R8I():
     return __import__('os').environ.get('ACUTE_TOPLINE', '4') in ('4', '5')
 
 
+def tv(ang):
+    """R8l (31/10 'cân bằng độ dày các dấu với nhau'): a sheared strip is T thick SQUARE to its run, like the level
+    huyền, trăng, ngã, hỏi, nặng (measured 1.002: sắc 0.89 T, mũ 0.92 T — vertical T made them read lighter), so its
+    vertical-cut thickness is T / cos(angle)."""
+    return _st() / _m.cos(_m.radians(ang))
+
+
 def mk_acute(length=ACUTE_L, **_):
     if R8I():
-        t, s = _st(), ACUTE_R8I_SPAN
+        t, s = tv(ACUTE_R8I_ANG), ACUTE_R8I_SPAN
         rise = s * _m.tan(_m.radians(ACUTE_R8I_ANG))
         return [('add', poly([(-s / 2, ACUTE_UP), (s / 2, ACUTE_UP + rise), (s / 2, ACUTE_UP + rise + t), (-s / 2, ACUTE_UP + t)]))]
     return _mk_acute_r8e(length)
@@ -189,6 +196,7 @@ CIRC_R8K_GAP = 40
 def mk_circumflex(**_):
     T = _st()
     if R8I():
+        T = tv(CIRC_R8K_ANG)                           # R8l
         h = CIRC_R8K_HALF; r = h * _m.tan(_m.radians(CIRC_R8K_ANG))
         return [('add', poly([(-h, 0), (-h, T), (0, r + T), (h, T), (h, 0), (0, r)]))]
     return mk_circumflex_v94_T(hgt=CIRC_HGT(), half=144, t=T, flat=T)
@@ -196,7 +204,7 @@ def mk_circumflex(**_):
 
 def CIRC_HGT():
     if R8I():
-        return CIRC_R8K_HALF * _m.tan(_m.radians(CIRC_R8K_ANG)) + _st()
+        return CIRC_R8K_HALF * _m.tan(_m.radians(CIRC_R8K_ANG)) + tv(CIRC_R8K_ANG)
     """mũ height — v0.95 review "giảm độ cao của dấu ô": max(118, 1.7T) -> max(96, 1.45T); the inner
     apex stays pointed and the counter open (Bold: 32u under the flat top)."""
     return max(96, 1.45 * _st())

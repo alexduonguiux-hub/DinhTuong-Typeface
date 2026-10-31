@@ -10,8 +10,9 @@
 - New **circumflex** (mũ), after the designer's sample. Two strips of the new acute meeting in a pointed apex, inside and out. Each arm rises 30°, the outer ends are cut vertically, the vertical thickness is that of every mark, and the mark is 240 units wide. It sits 40 units above its letter's ink (Â 720, Ê 739, â 563 in Bold), so each letter keeps the same gap. Hỏi beside the circumflex (Ẩ ẩ) also keeps 40 units from it.
   - The same mark serves Ĉ Ĝ Ĥ Ĵ Ŝ Ŵ Ŷ and their lowercase, the spacing ˆ, the combining circumflex and ^.
   - The caron (Č Ě Ň Ř Š Ž and lowercase, ˇ) is this circumflex turned over, as before.
+- All marks share one stroke weight, measured square to the stroke: the sloped strips of the acute, double acute, circumflex and caron are cut T / cos(angle) thick vertically, so they read as heavy as the level grave, breve, tilde, hook and dot below (before: 0.89–0.92 T).
 - Kerning re-run for every pair with a changed letter (acute, double acute, circumflex, caron). Every Vietnamese marked-letter pair inside a Vietnamese syllable (lowercase, Capitalised, ALL CAPS) keeps at least 26 units of ink gap. The only exceptions are the Bold É / Ế + t, v, y pairs, which are as tight as E + t, v, y in 1.001.
-- The highest point of the font drops from 1102 to 1077 (Bold Ế). Vertical metrics are unchanged.
+- The highest point of the font drops from 1102 to 1097 (Bold Ế). Vertical metrics are unchanged.
 
 ## 1.001 (2026-10-29)
 - Lowercase **ß**, **ð** and **þ** are drawn as true lowercase letters. Until now ß was replaced by "SS" (a `ccmp` rule left from the capitals-only edition) and ð þ were typed as the capitals Ð Þ.
