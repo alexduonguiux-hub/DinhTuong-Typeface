@@ -49,3 +49,4 @@ build.log
 venv-install.log
 build.stamp
 venv/
+sources/vf/
