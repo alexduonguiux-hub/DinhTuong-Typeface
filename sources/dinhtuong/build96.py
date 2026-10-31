@@ -252,6 +252,31 @@ for n in NEWK:
 # R16b (31/10 'kerning số cặp 6 và 7 cần chỉnh lại cho gần hơn' -> 'nên làm tương đương 6 và 9'): the white of 67 equals
 # that of 69, and 76 equals 96 (S1c white, profiles clamped 0.12 cap), nearest 5; ink gap kept >= 26
 K['exceptions'].update({'67': {'regular': -50, 'medium': -45, 'bold': -40}[W8], '76': {'regular': -40, 'medium': -35, 'bold': -35}[W8]})
+# R16c (31/10 'kerning chữ K và A nên gần lại' -> 'Regular 40, Bold 44'): capitals whose diagonals meet at one point
+# (K A, X A, A X, A A, R A, R X, K V..Y, V W X Y with each other) were held open by the 26 floor (kern +5..+25) though the
+# white opens into a V right above the contact. For these the feet / arm tips OVERLAP by R16C_OV (Regular 40, Medium 42,
+# Bold 44) inside the body band; marks of accented forms still keep >= 26 from the other letter. Only ever tightens.
+R16C_OV = {'regular': 40, 'medium': 42, 'bold': 44}[W8]
+R16C_L, R16C_R = set('AKRVWXY'), set('AVWXY')
+base_of = lambda c: unicodedata.normalize('NFD', c)[0]
+held = {a + b for a in R16C_L for b in R16C_R if a in G and b in G and kv(a, b) > 0}
+r16c = 0
+for a in letters:
+    for b in letters:
+        if not (a.isupper() and b.isupper()) or base_of(a) + base_of(b) not in held or (toned(a) and toned(b)):
+            continue
+        k = kv(a, b)
+        body = kern.raw_gap(G[a], G[b], 0, kern.CAP, k)
+        kn = k - (body + R16C_OV)
+        for y0, y1 in ((kern.CAP + 1, 1240), (-400, -1)):            # marks above the cap / below the baseline
+            mg = kern.raw_gap(G[a], G[b], y0, y1, kn)
+            if mg < PAIR_MIN:
+                kn = max(kn, kn + PAIR_MIN - mg)
+        kn = int(round(kn))
+        if kn < k:
+            K['exceptions'][a + b] = kn
+            r16c += 1
+print('R16c point-contact pairs', len(held), sorted(held), 'exceptions', r16c)
 kf = os.path.join(OUTD, f'kern_v096_{W8}.json')
 json.dump(K, open(kf, 'w'), ensure_ascii=False, indent=0)
 print('new letters', len(NEWK), 'collision exceptions added', added)
