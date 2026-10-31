@@ -839,6 +839,7 @@ feature kern {
     pos T jcircumflex 30;
     pos T rcaron -55;
     pos T scaron -65;
+    pos T uhungarumlaut -90;
     pos T uni1EAF -65;
     pos T uni1EB1 -65;
     pos T uni1EB3 -65;
@@ -3690,6 +3691,7 @@ feature kern {
     pos Tcaron jcircumflex 30;
     pos Tcaron rcaron -55;
     pos Tcaron scaron -65;
+    pos Tcaron uhungarumlaut -90;
     pos Tcaron uni1EAF -65;
     pos Tcaron uni1EB1 -65;
     pos Tcaron uni1EB3 -65;
@@ -4172,6 +4174,7 @@ feature kern {
     pos uni021A jcircumflex 30;
     pos uni021A rcaron -55;
     pos uni021A scaron -65;
+    pos uni021A uhungarumlaut -90;
     pos uni021A uni1EAF -65;
     pos uni021A uni1EB1 -65;
     pos uni021A uni1EB3 -65;

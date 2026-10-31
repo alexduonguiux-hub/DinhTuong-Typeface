@@ -5,7 +5,8 @@
   - Alone (Á É Í Ó Ú Ý Ớ Ứ, á é í ó ú ý …): it sits on the mark zone, centred on the letter.
   - On the circumflex and breve, capitals: Ấ Ế Ố and Ắ end on one line. The acute keeps 35 units from the breve and the circumflex, and sits 62 units right of the axis on Ắ.
   - On the circumflex, lowercase (ấ ế ố): it keeps 40 units from the circumflex and sits 22 units left of the circumflex's centre.
-  - The spacing acute ´, the combining acute and the acute of Ć Ĺ Ń Ŕ Ś Ź Ẃ (and lowercase) use the same mark. The double acute (Ő Ű ő ű ˝) is unchanged.
+  - The spacing acute ´, the combining acute and the acute of Ć Ĺ Ń Ŕ Ś Ź Ẃ (and lowercase) use the same mark.
+- New **double acute** (Ő Ű ő ű ˝ and the combining mark). It follows the new acute, the same way most typefaces derive it (6 of 8 reference fonts keep the single acute's angle; the pair spans 0.55–0.68 of the O). Two parallel acute strips, each 0.75 of the acute's width, at the same 27° rise, on one foot line, with a 40-unit ink gap between them. The pair is about 0.62 of the O.
 - Kerning re-run for every pair with an acute letter. Every such pair inside a Vietnamese syllable (lowercase, Capitalised, ALL CAPS) keeps at least 26 units of ink gap. The only exceptions are the Bold É / Ế + t, v, y pairs, which are as tight as E + t, v, y in 1.001.
 - The highest point of the font drops from 1102 to 1055 (Bold Ẳ). Vertical metrics are unchanged.
 

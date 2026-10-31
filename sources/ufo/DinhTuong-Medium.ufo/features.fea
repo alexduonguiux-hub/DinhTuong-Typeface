@@ -845,6 +845,7 @@ feature kern {
     pos T itilde 5;
     pos T ibreve 30;
     pos T jcircumflex 45;
+    pos T ohungarumlaut -85;
     pos T rcaron -55;
     pos T scircumflex -65;
     pos T scaron -75;
@@ -3631,6 +3632,7 @@ feature kern {
     pos Tcaron itilde 5;
     pos Tcaron ibreve 30;
     pos Tcaron jcircumflex 45;
+    pos Tcaron ohungarumlaut -85;
     pos Tcaron rcaron -55;
     pos Tcaron scircumflex -65;
     pos Tcaron scaron -75;
@@ -4217,6 +4219,7 @@ feature kern {
     pos uni021A itilde 5;
     pos uni021A ibreve 30;
     pos uni021A jcircumflex 45;
+    pos uni021A ohungarumlaut -85;
     pos uni021A rcaron -55;
     pos uni021A scircumflex -65;
     pos uni021A scaron -75;
