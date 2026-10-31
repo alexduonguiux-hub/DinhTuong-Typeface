@@ -358,7 +358,7 @@ def fbar(x0, y0, x1, y1, f, left=False, right=True):
 
 # R2b reach table: Regular's tail reach per (glyph, end), the floor for Medium / Bold
 _REACH = {}
-_REACH_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'out', 'tail_reach_regular.json')
+_REACH_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'out', 'tail_reach_regular%s.json' % ('' if _WD.WID == 1.0 else '_w%d' % round(100 * _WD.WID)))
 _SRC = ('concept_v1.py', 'concept_port.py', 'glyphs_c.py', 'figs_c.py', 'latin1_c.py', 'lc96f.py', 'lcfont.py')
 
 
@@ -393,6 +393,36 @@ def _save_reach():
 
 
 _REACH_REG = None
+_REACH_NRM = {}
+_REACH_OUT = {}
+
+
+def _save_out_atexit():
+    out = os.environ.get('REACH_OUT')
+    if out and _REACH_OUT:
+        import json
+        tmp = out + '.%d' % os.getpid()
+        json.dump(_REACH_OUT, open(tmp, 'w'), indent=0, sort_keys=True)
+        os.replace(tmp, out)
+
+
+_atexit.register(_save_out_atexit)
+
+
+def _reach_normal(weight):
+    """C5b: the final tail reaches of the Normal-width (DT_WIDTH = 1) master of this weight, for the Condensed masters."""
+    if weight not in _REACH_NRM:
+        import json, subprocess
+        here = os.path.dirname(os.path.abspath(__file__))
+        f = os.path.join(here, 'out', 'tail_reach_w100_%s.json' % weight)
+        newest = max(os.path.getmtime(os.path.join(here, x)) for x in _SRC if os.path.exists(os.path.join(here, x)))
+        if not os.path.exists(f) or os.path.getmtime(f) < newest:
+            env = dict(os.environ, A2_WEIGHT=weight, LC_OPT=os.environ.get('LC_OPT', 'f'), DT_WIDTH='1.0', REACH_OUT=f)
+            env.pop('REACH_GEN', None)
+            subprocess.run(['python3', '-c', 'import lcfont as L; L.lowercase_set()'], cwd=here, env=env,
+                           check=True, stdout=subprocess.DEVNULL)
+        _REACH_NRM[weight] = json.load(open(f))
+    return _REACH_NRM[weight]
 
 
 def _reach_regular():
@@ -496,6 +526,19 @@ class Build:
             dx = max(dx, _reach_regular().get(_tail_key(vdir, side), 0.0))
             if dx > u * a_i:
                 a_i = dx / u
+        if _WD.WID < 1.0:
+            # C5b (31/10 'bản condensed … các chữ không còn cân đối nữa'): a Condensed counter shrinks MORE than its
+            # body (stroke x0.93 inside a body x0.80: o's counter radius 136 -> 95 = x0.70), so tails measured on the
+            # counter came out short and the letters opened up and lost colour (s -0.15, a -0.10, e -0.06 vs n).
+            # The reach scales with the BODY: floor = DT_WIDTH x the Normal reach of the same tail in the same weight; the same
+            # stretched-cap curve is stretched further to keep it (as the R2b weight floor does).
+            dxn = _WD.WID * _reach_normal(self.w).get(_tail_key(vdir, side), 0.0)
+            if dxn > dx:
+                dx = dxn
+                if dx > u * a_i:
+                    a_i = dx / u
+        if os.environ.get('REACH_OUT'):
+            _REACH_OUT[_tail_key(vdir, side)] = dx
         elif os.environ.get('REACH_GEN') == '1':     # only the generator writes the table (once, at exit)
             _REACH[_tail_key(vdir, side)] = dx
         tip = ci + sy * ry * math.sqrt(max(0.0, 1 - (dx / a_i) ** 2))

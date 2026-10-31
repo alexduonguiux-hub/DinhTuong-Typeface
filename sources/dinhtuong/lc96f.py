@@ -235,6 +235,12 @@ class LF(A.LC):
                 arm = ('group', [ring, ('sub', rect(x_cut, -3000, 6000, 6000))])
             else:
                 x_cut = min(R_W * self.Wn, cx + r_ * math.cos(math.atan(ry_ / r_ * math.tan(math.radians(35)))))
+                if os.environ.get('REACH_OUT'):
+                    CV._REACH_OUT['lc96f.g_r:arm'] = x_cut - cx
+                if __import__('width').WID < 1.0:
+                    # C5b: the arm's reach scales with the body (x DT_WIDTH of the Normal reach in this weight), not
+                    # with the Condensed counter (which shrinks to ~0.7): r was 0.65 / 0.62 / 0.60 of n vs 0.69 / 0.67 / 0.64
+                    x_cut = max(x_cut, cx + __import__('width').WID * CV._reach_normal(self.w).get('lc96f.g_r:arm', 0.0))
                 dx = x_cut - cx
                 lo, hi = max(dx, r_), 20 * r_
                 for _ in range(80):
@@ -526,7 +532,7 @@ class LF(A.LC):
             G = []
             tl = self.tail(G, Rx, cy - ryi, 2 * Rx - self.ts, self.ts, 'r', 'down', tip_limit=lo - AP_S, cry=ryi,
                            ring=(cy, Rx, R), face=float(os.environ.get('E_FACE', '1.12')),
-                           reach=float(os.environ.get('E_REACH', '192')) + (Rx - CX * R))   # R5e: lone tail: approved F7 reach, optical face
+                           reach=float(os.environ.get('E_REACH', '192')) * __import__('width').WID + (Rx - CX * R))   # C5b: x DT_WIDTH   # R5e: lone tail: approved F7 reach, optical face
             cut = CV.arm_ink(tl) + CV.band(tl['disk'], y1=lo) + [('sub', rect(tl['xt'], -3000, 6000, lo)),
                                                                   ('sub', rect(Rx, tl['tip'], 6000, lo))]
             return self.G('e', 2 * Rx, 36, 24, [('group', ring + cut), bar], G)

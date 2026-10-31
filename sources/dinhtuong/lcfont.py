@@ -176,6 +176,13 @@ def tune_spacing(rounds=3, k=0.85):
         ra = _np.maximum(ra, _np.nanmax(rA[sl]) - D); lb = _np.minimum(lb, _np.nanmin(lB[sl]) + D)
         return float(_np.mean(aA - ra + lb))
     n = BASE['n']
+    import width as _WD
+    if _WD.WID < 1.0:
+        # C8 (vf-condensed-concept-v1): the Condensed sidebearings are x SSB (0.85 at 80 %) of Normal. n, i, l keep
+        # their own sides (everything else is solved against n|n below), so they are the ones scaled here.
+        for c in 'nil':
+            if c in BASE:
+                BASE[c].lsb *= _WD.SSB; BASE[c].rsb *= _WD.SSB
     names = [c for c in 'abcdefghjkmopqrstuvwxyzđı' if c in BASE]
     log = {}
     if os.environ.get('S1B', '1') != '1':                         # the v0.967 measure (40u from the advance edge)
