@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.003 (2026-11-01)
+- Kerning floor (R16d): every pair of letters, figures and . , : ; ! ? - was measured against Inter, Poppins, Liberation and Carlito, over the cap height whenever a capital is involved. Pairs tighter than the tightest of them are opened to it (357 / 293 / 411 base pairs, accented forms included; only ever opens). The largest change is F + lowercase, which had lost the white above the x-height: Fa −90 → −35, Fr −90 → −30, Fe / Fo −55 → −35 in Regular; also T, P, K + lowercase and r + capitals. 67 / 76 and the diagonal capital pairs keep the values chosen above.
+
 ## 1.002 (2026-10-31)
 - New **acute** (dấu sắc), after the designer's sample. It is the grave strip (huyền) sheared up to the right: both ends cut vertically, the same vertical thickness as every mark, rising 27°, 195 units wide. Huyền stays level and sắc now leans, so the two read apart at any size.
   - Alone (Á É Í Ó Ú Ý Ớ Ứ, á é í ó ú ý …): it sits on the mark zone, centred on the letter.

@@ -277,6 +277,27 @@ for a in letters:
             K['exceptions'][a + b] = kn
             r16c += 1
 print('R16c point-contact pairs', len(held), sorted(held), 'exceptions', r16c)
+# R16d (01/11 'Kerning chữ F và các chữ còn lại hơi khít' -> QA, option A): every base pair (A-Z a-z 0-9 . , : ; ! ? -)
+# is measured as S1c white over the CAP band for any pair with a capital (lowercase pairs over the x-height), normalised
+# by HH / Hn / nH / nn / 00, against Inter, Poppins, Liberation, Carlito. A pair tighter than the tightest reference
+# (by > 0.03) opens by the difference, nearest 5 up (k16d.json, solved from the 1.002 build). The old K3 pass measured
+# capital + lowercase pairs in the x-height band only, so F T P K + lowercase lost the white above it (Fr / Fa 50-60
+# units too tight). R16b (67 / 76) and R16c (diagonal pairs) are the designer's and stay. Accented forms follow their
+# base pair. Only ever opens.
+K16D = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'k16d.json')))[W8]
+r16d = 0
+for a in G:
+    if len(a) != 1:
+        continue
+    for b in G:
+        if len(b) != 1:
+            continue
+        dlt = K16D.get(base_of(a) + base_of(b))
+        if not dlt or (toned(a) and toned(b)):
+            continue
+        K['exceptions'][a + b] = kv(a, b) + dlt
+        r16d += 1
+print('R16d base pairs', len(K16D), 'exceptions', r16d)
 kf = os.path.join(OUTD, f'kern_v096_{W8}.json')
 json.dump(K, open(kf, 'w'), ensure_ascii=False, indent=0)
 print('new letters', len(NEWK), 'collision exceptions added', added)
