@@ -21,7 +21,7 @@ python3 scripts/qa_fontbakery.py --no-run   # re-compare existing out/fontbakery
 - Profiles: `check-googlefonts` on `fonts/ttf/*.ttf`, `check-universal` on `fonts/otf/*.otf`, all three weights.
 - Reports: `out/fontbakery/googlefonts.{json,md}`, `out/fontbakery/universal.{json,md}` (not committed).
 - Long run (a few minutes): start it in the background; do not block on wait loops.
-- CI runs the same `make qa` step in `.github/workflows/build.yaml` (next to fontspector, `make test`).
+- CI runs the same `make qa` step in `.github/workflows/build.yaml` (next to fontspector, `make test`); it is blocking: a NEW result turns CI red. CI checks the fonts it rebuilds with fontmake, which can differ from `fonts/` by 1 u rounding, so the glyph lists per weight may differ from a local run while the check / code keys stay the same.
 
 ## Triage — every non-PASS result gets exactly one verdict
 The script reduces results to `(profile, check id, code)` and compares with

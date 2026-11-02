@@ -89,8 +89,8 @@ jobs:
           PY
       - name: Technical QA with Font Bakery (make qa)
         # Fails on any Font Bakery result not listed in documentation/qa/fontbakery-accepted.txt.
+        # Note: CI checks the fonts it rebuilt with fontmake (1 u rounding may differ from fonts/ in the repo).
         run: make qa
-        continue-on-error: true
       - name: Generate proofs
         run: make proof
         continue-on-error: true

@@ -4,7 +4,7 @@
 #   accept = intentional or out of scope for Dinh Tuong; keep the reason current.
 #   todo   = a real defect or an open decision; fix it in the constructor (a fix is a rule), then delete the line.
 # A result that is not listed here fails `make qa`. A listed line that no longer occurs is printed as STALE: delete it.
-# Baseline: 1.003 (main e1d0a15), Font Bakery 1.1.0, 2026-11-02.
+# Baseline: 1.003 (main e1d0a15), Font Bakery 1.1.0, 2026-11-02. Offline here and online in CI (run 41434834735): new 0, network 0.
 
 # --- todo: outline defects (fix in the constructor, all weights) -------------------------------------------------
 todo    googlefonts  outline_semi_vertical     found-semi-vertical    # segments 1 u off level/vertical. Regular (53): E L Æ Œ S e æ œ b $ + every composite (É Ê Ẹ Ế…Ệ, ê ế…ệ, Ł Ș …), e.g. E foot bar (166,101)->(334,100); Medium: Ħ; Bold (12): Z z 7 b ß Ħ + Ź Ž Ż ź ž ż
