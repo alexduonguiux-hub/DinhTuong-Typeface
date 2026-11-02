@@ -1,6 +1,7 @@
 *~
 venv
 venv-test
+venv-qa
 build.stamp
 proof
 node_modules
