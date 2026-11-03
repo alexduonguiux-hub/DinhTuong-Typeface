@@ -11,8 +11,6 @@
 todo    googlefonts  outline_short_segments    found-short-segments   # pre-existing: segments < ~1 % of the outline (cedilla / ogonek joins, $ & @ § ¥ ƒ ß ð đ ₫ Þ F f ...). Font Bakery stays silent above 100 glyphs ('by design'): Medium / Bold are still above; Regular fell to 94 after D1 and is reported
 
 # --- todo: open decisions for the designer --------------------------------------------------------------------------
-todo    googlefonts  math_signs_width          width-outliers         # < > are 512 and × is 500 wide, the other math signs 560: same width (tabular math) or keep?
-todo    universal    math_signs_width          width-outliers         # same as googlefonts/math_signs_width (OTF)
 todo    googlefonts  contour_count             contour-count          # § 1 contour (refs 2), ť 1 (refs 2), soft hyphen 1 (refs 0): confirm each is the design, then accept
 todo    googlefonts  soft_hyphen               softhyphen             # the font maps U+00AD: Google Fonts recommends removing it; keep or remove?
 todo    universal    soft_hyphen               softhyphen             # same as googlefonts/soft_hyphen (OTF)
