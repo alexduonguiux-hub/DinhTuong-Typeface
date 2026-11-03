@@ -637,16 +637,12 @@ def _paren_ops(W):
     rx, ry = W - V / 2, (top - bot) / 2 + 40
     cx, cy = W, (top + bot) / 2
 
-    def end(t):          # centre-line point, unit tangent, height of the outer corner of a square cut at angle t
-        x, y = cx + rx * _m.cos(t), cy + ry * _m.sin(t)
-        dx, dy = -rx * _m.sin(t), ry * _m.cos(t)
-        d = _m.hypot(dx, dy); r = (wh + (wv - wh) * abs(dy) / d) / 2
-        return (x, y), (dx / d, dy / d), y + abs(dx / d) * r
-    lo, hi = _m.pi * 0.5, _m.pi * 0.8
-    for _ in range(60):
-        mid = (lo + hi) / 2
-        lo, hi = (mid, hi) if end(mid)[2] > top else (lo, mid)
-    (px, py), (tx, ty), _ = end(hi)
+    Ro, ro = rx + wv / 2, ry + wh / 2      # outer oval
+    sphi = (top - cy) / ro                 # outer corner Q exactly on the bracket line (upper-left quadrant)
+    cphi = -_m.sqrt(max(0.0, 1 - sphi * sphi))
+    px, py = cx + Ro * cphi, top
+    tx, ty = -Ro * sphi, ro * cphi         # outer edge tangent at Q (pointing down the stroke)
+    d = _m.hypot(tx, ty); tx, ty = tx / d, ty / d
     ux, uy = -tx, -ty                     # direction the stroke runs past the cut (towards the top)
     nx, ny = -uy, ux
     B = 2000

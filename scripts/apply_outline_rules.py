@@ -50,7 +50,8 @@ def from_segs(segs, smooth):
         else:
             (a, b), (c, d), (x, y) = s[2], s[3], s[4]
             pts += [Point(a, b), Point(c, d), Point(x, y, 'curve', smooth=(x, y) in smooth)]
-    return Contour(points=pts)
+    # the last segment ends on the contour's original first point: put it back in front (same start, same order)
+    return Contour(points=[pts[-1]] + pts[:-1])
 
 
 def norm(v):

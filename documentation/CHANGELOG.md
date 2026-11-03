@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.004 (unreleased)
+- **Parentheses ( )** redrawn (R17, after the designer: "sửa phần cắt của dấu ()"). They are now a true compass ring, an outer oval minus a counter oval, like the hook mark and the ?. The old polygon band left a wavy counter, and short kinked segments in Bold. Each end is cut square to the stroke, with 90° corners; the outer corner sits on the bracket lines (790 / −140) shared with [ ] { }. The old end was half a level cut and half the band's own end, which made a bevel. The ends are about 25 units shorter. Kerning of every pair with ( or ) was re-measured.
+- **Straight runs are exactly level or vertical** (outline rule R-axis). Rounding after the boolean unions had left lines 1–2 units off level or vertical: the foot bar of E L Æ Œ and every accented E / L (Ê Ế … Ệ included), the bar of e æ œ and every ê, S, b, $, @, € in Regular, Ħ in Medium, Z z 7 ß b Ħ and their accented forms in Bold. Each run is made exactly level or vertical by moving the end that does not continue along it; no outline moves by more than 1 unit (@: 2 units).
+- **Near-collinear points removed** (outline rule R-colinear): 2 and the tabular 2 (Regular), ² ½ ¾ and the comma / quote shapes (Medium) had a point within 1 unit of a straight line. Bold 7ï is kerned 10 (was 15) after the 7's cut was straightened.
+- Font Bakery: outline_semi_vertical and outline_colinear_vectors now pass in every weight. All other glyphs, metrics and kerning are byte-identical to 1.003.
+
 ## 1.003 (2026-11-01)
 - Kerning floor (R16d): every pair of letters, figures and . , : ; ! ? - was measured against Inter, Poppins, Liberation and Carlito, over the cap height whenever a capital is involved. Pairs tighter than the tightest of them are opened to it (357 / 293 / 411 base pairs, accented forms included; only ever opens). The largest change is F + lowercase, which had lost the white above the x-height: Fa −90 → −35, Fr −90 → −30, Fe / Fo −55 → −35 in Regular; also T, P, K + lowercase and r + capitals. 67 / 76 and the diagonal capital pairs keep the values chosen above.
 

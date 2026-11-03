@@ -5,10 +5,9 @@
 #   todo   = a real defect or an open decision; fix it in the constructor (a fix is a rule), then delete the line.
 # A result that is not listed here fails `make qa`. A listed line that no longer occurs is printed as STALE: delete it.
 # Baseline: 1.003 (main e1d0a15), Font Bakery 1.1.0, 2026-11-02. Offline here and online in CI (run 41434834735): new 0, network 0.
+# 1.004: outline_semi_vertical and outline_colinear_vectors fixed by the outline rules R-axis / R-colinear (removed).
 
 # --- todo: outline defects (fix in the constructor, all weights) -------------------------------------------------
-todo    googlefonts  outline_semi_vertical     found-semi-vertical    # segments 1 u off level/vertical. Regular (53): E L Æ Œ S e æ œ b $ + every composite (É Ê Ẹ Ế…Ệ, ê ế…ệ, Ł Ș …), e.g. E foot bar (166,101)->(334,100); Medium: Ħ; Bold (12): Z z 7 b ß Ħ + Ź Ž Ż ź ž ż
-todo    googlefonts  outline_colinear_vectors  found-colinear-vectors # a short segment continues a diagonal: Regular 2 two.tf (5 u at the foot), Medium ² ½, Bold ²; merge it into the diagonal
 todo    googlefonts  outline_alignment_miss    found-misalignments    # on-curve points 1-2 u off a guideline (77/87/81 glyphs R/M/B: a e f t J $ ( [ ] { } ? ¢ £ § ẞ ~ and Vietnamese a/e composites; e.g. $ at 698, ? at 701, J at 0.5, ¢ at -1.5): decide overshoot vs error, write the rule
 todo    googlefonts  soft_dotted               soft-dotted            # i / j / į / ị + combining mark keep the dot; extend the dotless-ȷ rule (ccmp) to ı for i-based soft-dotted input
 todo    googlefonts  alt_caron                 decomposed-outline     # Ľ ď ľ ť are decomposed, Font Bakery cannot check them: confirm by eye that their caron is the comma form
