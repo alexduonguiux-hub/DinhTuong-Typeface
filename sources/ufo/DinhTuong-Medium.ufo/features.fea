@@ -6740,7 +6740,6 @@ feature kern {
     pos tcaron eacute 15;
     pos tcaron ecircumflex 15;
     pos tcaron edieresis 15;
-    pos tcaron igrave 10;
     pos tcaron ograve 15;
     pos tcaron oacute 15;
     pos tcaron ocircumflex 15;
@@ -6760,6 +6759,7 @@ feature kern {
     pos tcaron gbreve 15;
     pos tcaron gdotaccent 15;
     pos tcaron uni0123 15;
+    pos tcaron ibreve 5;
     pos tcaron obreve 15;
     pos tcaron ohungarumlaut 15;
     pos tcaron zacute 5;

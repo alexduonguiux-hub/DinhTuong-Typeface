@@ -9,7 +9,6 @@
 
 # --- todo: outline defects (fix in the constructor, all weights) -------------------------------------------------
 todo    googlefonts  outline_short_segments    found-short-segments   # pre-existing: segments < ~1 % of the outline (cedilla / ogonek joins, $ & @ § ¥ ƒ ß ð đ ₫ Þ F f ...). Font Bakery stays silent above 100 glyphs ('by design'): Medium / Bold are still above; Regular fell to 94 after D1 and is reported
-todo    googlefonts  alt_caron                 decomposed-outline     # Ľ ď ľ ť are decomposed, Font Bakery cannot check them: confirm by eye that their caron is the comma form
 
 # --- todo: open decisions for the designer --------------------------------------------------------------------------
 todo    googlefonts  math_signs_width          width-outliers         # < > are 512 and × is 500 wide, the other math signs 560: same width (tabular math) or keep?
@@ -20,6 +19,7 @@ todo    universal    soft_hyphen               softhyphen             # same as 
 
 # --- accept: Google Fonts submission metadata (the family is not submitted to Google Fonts) ------------------------
 accept  googlefonts  outline_alignment_miss    found-misalignments      # A1 (1.004): no design point is off a guideline. Of 84-85 points per weight, 75-80 exist only in the TTF (cu2qu splits curves that run along a guideline: flares leaving a cut, bowls near the baseline) and the rest are marks / joins placed by other rules. Guarded by scripts/qa_alignment.py (make qa) on the UFO design points: 0
+accept  googlefonts  alt_caron                 decomposed-outline       # 1.004 checked by eye and measured: Ľ ď ľ ť all use the comma-form caron (0.85 of ’), mark-base gap 41-58 u (rule >= 38); ť's comma moved off the crossbar (R8m-t). Font Bakery cannot see it because the glyphs are decomposed
 accept  googlefonts  googlefonts/vendor_id                       unknown                  # DIZA (Dizai Studio) is our vendor id; register it with Microsoft when the family ships commercially
 accept  googlefonts  googlefonts/meta/script_lang_tags           lacks-meta-table         # no `meta` table; only needed for Google Fonts' script tagging
 accept  googlefonts  googlefonts/article/images                  lacks-article            # Google Fonts article; the repo has documentation/article without the GF layout
