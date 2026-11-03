@@ -7,7 +7,7 @@ help:
 	@echo "  make generate: Regenerates sources/ufo from the rule-based generators (sources/dinhtuong)"
 	@echo "  make compare:  Checks the fontmake build against the generators' reference binaries"
 	@echo "  make test:   Tests the fonts with fontspector (Google Fonts profile)"
-	@echo "  make qa:     Font Bakery on fonts/ttf + fonts/otf, compared with documentation/qa/fontbakery-accepted.txt"
+	@echo "  make qa:     Font Bakery on fonts/ttf + fonts/otf (vs documentation/qa/fontbakery-accepted.txt) + guideline audit on the UFOs"
 	@echo "  make proof:  Creates HTML proof documents in out/proof"
 	@echo
 
@@ -43,6 +43,7 @@ venv-qa/touchfile: requirements-qa.txt
 
 qa: venv-qa/touchfile
 	. venv-qa/bin/activate; python3 scripts/qa_fontbakery.py
+	. venv-qa/bin/activate; python3 scripts/qa_alignment.py sources/ufo/DinhTuong-Regular.ufo sources/ufo/DinhTuong-Medium.ufo sources/ufo/DinhTuong-Bold.ufo
 
 proof: venv build.stamp
 	which diff3proof || (echo "diff3proof not found. Please install it with 'cargo binstall diffenator3'." && exit 1)

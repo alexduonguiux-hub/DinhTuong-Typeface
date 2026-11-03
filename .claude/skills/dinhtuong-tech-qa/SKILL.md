@@ -42,6 +42,11 @@ Rules:
   `outline_colinear_vectors` (a short segment continuing a line), `outline_short_segments`, `outline_jaggy_segments`:
   find the rule that produced the off-by-one (rounding of a sheared or offset construction, an overlap left in a
   union), fix the rule, and re-run on **every glyph that uses that rule**, not only the ones listed.
+- `outline_alignment_miss` is checked on the TTF, where cu2qu adds on-curve points along every curve that runs near a
+  guideline, and where marks / joins placed by other rules land near one by coincidence (1.004: 84-85 points per weight,
+  all of these). It is accepted only because `scripts/qa_alignment.py` (part of `make qa`) checks the UFO design points:
+  both ends of every horizontal edge and every round extreme must lie ON a guideline or more than 2 u away (marks,
+  quotes and mark-zone contours left out). That audit must stay at 0.
 - An intended overshoot is not a misalignment: write the overshoot rule (amount per weight) and accept the check
   only for the glyphs it covers, listed by name in the reason.
 - **Shaping warnings belong to the Vietnamese rule book:** `soft_dotted` → the dotless-ı / ȷ substitution (ccmp)
