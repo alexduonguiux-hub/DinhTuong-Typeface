@@ -69,7 +69,15 @@ def core_lc(c):
         bg = LF.BASE[b0]
         xs_r = LC.ink_x_at(bg.ops, LF.lcm.ASC - 60, 'r') if b0 in 'dl' else LC.ink_x_at(bg.ops, LF.lcm.XH + 60, 'r')
         top = LF.lcm.ASC if b0 in 'dl' else LC.bounds(bg.ops)[3]
-        o = LC.vcaron_on(xs_r, top)
+        sc = 0.85
+        if b0 == 't':
+            # R8m-t (1.004): on t the comma came down onto the crossbar (ť was one contour, 0 u gap; rule >= 38).
+            # It now stands ABOVE the x-height, MARK_GAP over it, top on the ascender like ď ľ, scaled to that room
+            # (Regular ~170 u; Inter / Liberation / DejaVu / Carlito: 155-185 u, bottom 22-83 over the x-height)
+            top = LF.lcm.ASC
+            h85 = LC.bounds(LC.mk_vcaron(0.85)); h85 = h85[3] - h85[1]
+            sc = 0.85 * (LF.lcm.ASC - LF.lcm.XH - LC.MARK_GAP) / h85
+        o = LC.vcaron_on(xs_r, top, sc)
         nm = 'vcaron'
     elif c == 'ģ':                                 # R8l: the comma turned above (no room under the g)
         bg = LF.BASE['g']

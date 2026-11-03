@@ -137,8 +137,8 @@ def ogonek_on(bops, body, foot_y=12):
     return shift_ops(mk_ogonek(), xr - 12 - w / 2, 0)
 
 
-def vcaron_on(stem_right, top):
-    return shift_ops(mk_vcaron(), stem_right + MARK_GAP, top)
+def vcaron_on(stem_right, top, scale=0.85):
+    return shift_ops(mk_vcaron(scale), stem_right + MARK_GAP, top)
 
 
 # ------------------------------------------------------------------ capitals
