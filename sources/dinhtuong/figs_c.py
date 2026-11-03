@@ -627,13 +627,35 @@ def p_quotedblleft():
 
 
 def _paren_ops(W):
+    """R17 (1.004, designer 03/11 "sửa phần cắt của dấu ()"): ( ) are a true compass ring, outer oval minus counter
+    oval (sides 0.92 V, top / bottom 0.92 H), like the hook mark and the ? (the old polygon band left a wavy counter
+    and, in Bold, short kinked segments). Each end is cut SQUARE to the stroke (90 deg corners), at the point where the
+    outer corner sits on the bracket lines CAP + 90 / -140 shared with [ ] { }. The old end was half level cut, half
+    the band's own end: a bevel. A level cut is not possible on this oval (the counter never reaches CAP + 90)."""
     top, bot = CAP + 90, -140
+    wv, wh = V * 0.92, H * 0.92
     rx, ry = W - V / 2, (top - bot) / 2 + 40
     cx, cy = W, (top + bot) / 2
-    arc = [(cx + rx * _m.cos(a), cy + ry * _m.sin(a)) for a in [_m.pi * (0.62 + 0.76 * i / 120) for i in range(121)]]
-    return [('group', [('add', band(arc, V * 0.92, H * 0.92)),
-                       ('sub', rect(-200, top, W + 200, top + 300)),
-                       ('sub', rect(-200, bot - 300, W + 200, bot))])]
+
+    def end(t):          # centre-line point, unit tangent, height of the outer corner of a square cut at angle t
+        x, y = cx + rx * _m.cos(t), cy + ry * _m.sin(t)
+        dx, dy = -rx * _m.sin(t), ry * _m.cos(t)
+        d = _m.hypot(dx, dy); r = (wh + (wv - wh) * abs(dy) / d) / 2
+        return (x, y), (dx / d, dy / d), y + abs(dx / d) * r
+    lo, hi = _m.pi * 0.5, _m.pi * 0.8
+    for _ in range(60):
+        mid = (lo + hi) / 2
+        lo, hi = (mid, hi) if end(mid)[2] > top else (lo, mid)
+    (px, py), (tx, ty), _ = end(hi)
+    ux, uy = -tx, -ty                     # direction the stroke runs past the cut (towards the top)
+    nx, ny = -uy, ux
+    B = 2000
+    cut = [(px + nx * B, py + ny * B), (px - nx * B, py - ny * B),
+           (px - nx * B + ux * B, py - ny * B + uy * B), (px + nx * B + ux * B, py + ny * B + uy * B)]
+    return [('group', [('add', _oval(cx - rx - wv / 2, cy - ry - wh / 2, cx + rx + wv / 2, cy + ry + wh / 2)),
+                       ('sub', _oval(cx - rx + wv / 2, cy - ry + wh / 2, cx + rx - wv / 2, cy + ry - wh / 2)),
+                       ('sub', rect(cx, -600, cx + 600, 1600)),
+                       ('sub', poly(cut)), ('sub', poly([(x, 2 * cy - y) for x, y in cut]))])]
 
 
 def p_parenleft():

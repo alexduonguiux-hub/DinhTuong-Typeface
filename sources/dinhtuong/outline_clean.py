@@ -6,6 +6,10 @@
   3. micro steps: a straight segment shorter than MICRO between two edges it turns away from
      (stair-step / ledge on an edge) is collapsed into the intersection of its neighbours
   4. consecutive collinear lines are merged
+  5. R-axis (1.004, Font Bakery outline_semi_vertical): a straight run within 2 u of level / vertical is made exactly
+     level / vertical, moving the end that is not anchored onto the line the outline keeps running along
+  6. R-colinear (1.004, Font Bakery outline_colinear_vectors): two straight segments whose shared point lies within
+     1 u of the line through their outer ends are one straight run
 The result is drawn into the CFF exactly as before (same segment tuples).
 """
 import math
@@ -274,6 +278,79 @@ def _merge_collinear(segs):
     return segs
 
 
+AXIS_SNAP = 2.0      # units; a straight run this close to level / vertical is meant to be level / vertical (R-axis)
+AXIS_MIN = 12.0      # ... only for runs at least this long (shorter ones are steps, handled by _collapse_micro)
+COLIN_DEV = 1.0      # units; a corner that bends the outline by less than this is grid noise (R-colinear)
+STATS = {'axis': 0, 'colinear': 0}
+
+
+def _axis_anchor(seg_in, seg_out, P, axis):
+    """True when the outline at P keeps running exactly along `axis` ('h' or 'v') on the side away from the
+    segment being snapped (its tangent there is level / vertical)."""
+    k = 1 if axis == 'h' else 0
+    for s, at_end in ((seg_in, True), (seg_out, False)):
+        if s is None:
+            continue
+        d = _end_tan(s) if at_end else _start_tan(s)
+        if abs(d[k]) < 1e-6 and abs(d[1 - k]) > 1e-6:
+            return True
+    return False
+
+
+def _snap_axis(segs):
+    """R-axis: a straight segment within AXIS_SNAP of level (or vertical) over at least AXIS_MIN is made exactly
+    level (vertical). The end that is not anchored moves onto the anchored end's line; when both or neither end is
+    anchored, the end with the shorter neighbouring segment moves."""
+    n = len(segs)
+    for i in range(n):
+        s = segs[i]
+        if s[0] != 'L':
+            continue
+        a, b = s[1], s[2]
+        dx, dy = b[0] - a[0], b[1] - a[1]
+        for axis, off, run in (('h', dy, dx), ('v', dx, dy)):
+            if off == 0 or abs(off) > AXIS_SNAP or abs(run) < AXIS_MIN:
+                continue
+            k = 1 if axis == 'h' else 0
+            prv, nxt = segs[i - 1], segs[(i + 1) % n]
+            anc_a = _axis_anchor(prv, None, a, axis)
+            anc_b = _axis_anchor(None, nxt, b, axis)
+            if anc_a == anc_b:                            # no clear anchor: the shorter neighbour gives way
+                anc_a = _seglen(prv) >= _seglen(nxt)      # (real steps are shorter than AXIS_MIN and never get here)
+            dst_is_b = anc_a
+            if dst_is_b:
+                P = (b[0], a[1]) if axis == 'h' else (a[0], b[1])
+                _set_end(s, P); _set_start(nxt, P)
+            else:
+                P = (a[0], b[1]) if axis == 'h' else (b[0], a[1])
+                _set_start(s, P); _set_end(prv, P)
+            STATS['axis'] += 1
+            break
+    return segs
+
+
+def _merge_near_colinear(segs):
+    """R-colinear: two straight segments in a row whose shared point lies within COLIN_DEV of the line joining
+    their outer ends are one straight run (the shared point is rounding noise)."""
+    i = 0
+    while len(segs) > 3 and i < len(segs):
+        n = len(segs)
+        a, b = segs[i], segs[(i + 1) % n]
+        if a[0] == 'L' and b[0] == 'L':
+            p, q, r = a[1], a[2], b[2]
+            d = _sub(r, p); L = _len(d)
+            if L > 0:
+                dev = abs((q[0] - p[0]) * d[1] - (q[1] - p[1]) * d[0]) / L
+                semi = any(0 < abs(d[k]) <= AXIS_SNAP and abs(d[1 - k]) >= AXIS_MIN for k in (0, 1))
+                if dev <= COLIN_DEV and not semi and _dot(_sub(q, p), d) > 0 and _dot(_sub(r, q), d) > 0 \
+                        and _turn(_sub(q, p), _sub(r, q)) < 15:     # R-axis wins: never merge into a tilted run
+                    a[2] = r; del segs[(i + 1) % n]; STATS['colinear'] += 1
+                    if (i + 1) % n < i: i -= 1
+                    continue
+        i += 1
+    return segs
+
+
 def clean(contours):
     out = []
     for c in contours:
@@ -284,7 +361,9 @@ def clean(contours):
         segs = _refit_chains(segs)
         segs = _tiny_curves_to_lines(segs)
         segs = _collapse_micro(segs)
+        segs = _snap_axis(segs)
         segs = _merge_collinear(segs)
+        segs = _merge_near_colinear(segs)
         segs = _smooth_joints(segs)
         out.append(_from_cyc(segs))
     return out
