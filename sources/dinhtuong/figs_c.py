@@ -766,6 +766,11 @@ def p_underscore():
 
 MATH_Y = 330          # optical centre for math signs (between x-height middle and cap middle)
 MT_ = 124 * K_        # math stroke
+MATH_ADV = 560        # M1 (1.004, Font Bakery math_signs_width): every math sign on the + advance, ink centred (tabular math)
+
+
+def _math_sb(W):
+    return (MATH_ADV - W) / 2
 
 
 def p_plus():
@@ -789,7 +794,7 @@ def p_equal():
 
 def p_multiply():
     W = 400
-    g = _g('×', W, 50, 50)
+    g = _g('×', W, _math_sb(W), _math_sb(W))          # M1: was 50 / 50 (advance 500)
     L = W * 0.70
     arm = [('add', rect(W / 2 - L, MATH_Y - MT_ / 2 + 6, W / 2 + L, MATH_Y + MT_ / 2 - 6))]
     g.ops += rot_ops(arm, _m.pi / 4, W / 2, MATH_Y) + rot_ops(arm, -_m.pi / 4, W / 2, MATH_Y)
@@ -814,12 +819,14 @@ def _chev(W, H_, t):
 
 def p_less():
     W = 420
-    g = _g('<', W, 46, 46); g.ops += _chev(W, 480, 118 * K_); return _reg(g)
+    g = _g('<', W, _math_sb(W), _math_sb(W))          # M1: was 46 / 46 (advance 512)
+    g.ops += _chev(W, 480, 118 * K_); return _reg(g)
 
 
 def p_greater():
     W = 420
-    g = _g('>', W, 46, 46); g.ops += rot180_ops(_chev(W, 480, 118 * K_), W / 2, MATH_Y); return _reg(g)
+    g = _g('>', W, _math_sb(W), _math_sb(W))          # M1: was 46 / 46 (advance 512)
+    g.ops += rot180_ops(_chev(W, 480, 118 * K_), W / 2, MATH_Y); return _reg(g)
 
 
 def p_guillemotleft():
