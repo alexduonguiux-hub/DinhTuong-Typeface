@@ -4616,7 +4616,7 @@ feature kern {
     pos abreve itilde -5;
     pos abreve ibreve -5;
     pos abreve uni1EC9 -5;
-    pos Aogonek parenright 10;
+    pos Aogonek parenright 15;
     pos Aogonek comma 60;
     pos Aogonek slash 90;
     pos Aogonek semicolon 60;
@@ -4935,7 +4935,7 @@ feature kern {
     pos Edotaccent wacute -20;
     pos Edotaccent wdieresis -20;
     pos Edotaccent uni1EC9 -15;
-    pos Eogonek parenright -5;
+    pos Eogonek parenright 0;
     pos Eogonek comma 45;
     pos Eogonek slash 75;
     pos Eogonek semicolon 45;
@@ -7794,6 +7794,7 @@ feature kern {
     pos ohorn uni1EF7 20;
     pos ohorn uni1EF9 20;
     pos Uhorn exclam 10;
+    pos Uhorn parenright 5;
     pos Uhorn three 5;
     pos Uhorn seven 20;
     pos Uhorn A -45;
@@ -9776,6 +9777,7 @@ feature kern {
     pos uni1EE7 icircumflex -5;
     pos uni1EE7 ibreve -5;
     pos uni1EE8 exclam 10;
+    pos uni1EE8 parenright 5;
     pos uni1EE8 three 5;
     pos uni1EE8 seven 20;
     pos uni1EE8 A -45;
@@ -9990,6 +9992,7 @@ feature kern {
     pos uni1EE9 quotedblright 10;
     pos uni1EE9 guilsinglright 20;
     pos uni1EEA exclam 10;
+    pos uni1EEA parenright 5;
     pos uni1EEA three 5;
     pos uni1EEA seven 20;
     pos uni1EEA A -45;
@@ -10204,6 +10207,7 @@ feature kern {
     pos uni1EEB quotedblright 10;
     pos uni1EEB guilsinglright 20;
     pos uni1EEC exclam 10;
+    pos uni1EEC parenright 5;
     pos uni1EEC three 5;
     pos uni1EEC seven 20;
     pos uni1EEC A -45;
@@ -10418,6 +10422,7 @@ feature kern {
     pos uni1EED quotedblright 10;
     pos uni1EED guilsinglright 20;
     pos uni1EEE exclam 10;
+    pos uni1EEE parenright 5;
     pos uni1EEE three 5;
     pos uni1EEE seven 20;
     pos uni1EEE A -45;
@@ -10632,6 +10637,7 @@ feature kern {
     pos uni1EEF quotedblright 10;
     pos uni1EEF guilsinglright 20;
     pos uni1EF0 exclam 10;
+    pos uni1EF0 parenright 5;
     pos uni1EF0 three 5;
     pos uni1EF0 seven 20;
     pos uni1EF0 A -45;

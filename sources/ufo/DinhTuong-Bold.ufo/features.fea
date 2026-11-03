@@ -2374,7 +2374,6 @@ feature kern {
     pos P uni1EF4 -55;
     pos P uni1EF6 -55;
     pos P uni1EF8 -55;
-    pos Q parenright 5;
     pos Q I -15;
     pos Q U -15;
     pos Q V -40;
@@ -6275,7 +6274,7 @@ feature kern {
     pos abreve ibreve -5;
     pos abreve uni1EC9 -5;
     pos Aogonek exclam -20;
-    pos Aogonek parenright 30;
+    pos Aogonek parenright 35;
     pos Aogonek comma 60;
     pos Aogonek slash 85;
     pos Aogonek semicolon 60;

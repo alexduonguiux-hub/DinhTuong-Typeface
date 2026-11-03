@@ -543,9 +543,6 @@ feature kern {
     pos ampersand uni1EDF 5;
     pos ampersand uni1EE1 5;
     pos ampersand uni1EE3 5;
-    pos parenleft j 10;
-    pos parenleft jcircumflex 10;
-    pos parenleft uni0237 10;
     pos slash Igrave 50;
     pos slash Icircumflex 15;
     pos slash Idieresis 40;
@@ -5401,7 +5398,7 @@ feature kern {
     pos abreve itilde -5;
     pos abreve ibreve -5;
     pos abreve uni1EC9 -5;
-    pos Aogonek parenright -5;
+    pos Aogonek parenright 0;
     pos Aogonek comma 60;
     pos Aogonek slash 95;
     pos Aogonek semicolon 60;
@@ -5913,7 +5910,7 @@ feature kern {
     pos Edotaccent uni1EEF -15;
     pos Edotaccent uni1EF1 -15;
     pos edotaccent M 10;
-    pos Eogonek parenright -20;
+    pos Eogonek parenright -15;
     pos Eogonek comma 45;
     pos Eogonek slash 80;
     pos Eogonek semicolon 45;
@@ -13304,6 +13301,7 @@ feature kern {
     pos [parenleft] @kR_S -40;
     pos [parenleft] @kR_T -25;
     pos [parenleft] @kR_Z -40;
+    pos [parenleft] @kR_j 65;
     pos [parenleft] @kR_s -20;
     pos parenleft v -30;
     pos [parenleft] @kR_w -20;

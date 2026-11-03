@@ -638,10 +638,18 @@ def _paren_ops(W):
     cx, cy = W, (top + bot) / 2
 
     Ro, ro = rx + wv / 2, ry + wh / 2      # outer oval
-    sphi = (top - cy) / ro                 # outer corner Q exactly on the bracket line (upper-left quadrant)
-    cphi = -_m.sqrt(max(0.0, 1 - sphi * sphi))
-    px, py = cx + Ro * cphi, top
-    tx, ty = -Ro * sphi, ro * cphi         # outer edge tangent at Q (pointing down the stroke)
+    # outer corner Q exactly on the bracket line, found on the DRAWN outer curve (the _oval quarter from its top to
+    # its left extreme, k = 0.56), and the cut square to that curve's tangent there
+    k = 0.56
+    P0, P1, P2, P3 = (cx, cy + ro), (cx - k * Ro, cy + ro), (cx - Ro, cy + k * ro), (cx - Ro, cy)
+    bz = lambda t, i: ((1 - t) ** 3 * P0[i] + 3 * (1 - t) ** 2 * t * P1[i] + 3 * (1 - t) * t * t * P2[i] + t ** 3 * P3[i])
+    dbz = lambda t, i: (3 * (1 - t) ** 2 * (P1[i] - P0[i]) + 6 * (1 - t) * t * (P2[i] - P1[i]) + 3 * t * t * (P3[i] - P2[i]))
+    lo, hi = 0.0, 1.0
+    for _ in range(60):
+        mid = (lo + hi) / 2
+        lo, hi = (mid, hi) if bz(mid, 1) > top else (lo, mid)
+    px, py = bz(hi, 0), top
+    tx, ty = dbz(hi, 0), dbz(hi, 1)        # outer edge tangent at Q (pointing down the stroke)
     d = _m.hypot(tx, ty); tx, ty = tx / d, ty / d
     ux, uy = -tx, -ty                     # direction the stroke runs past the cut (towards the top)
     nx, ny = -uy, ux
