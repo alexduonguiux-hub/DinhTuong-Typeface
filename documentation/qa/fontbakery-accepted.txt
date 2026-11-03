@@ -8,6 +8,7 @@
 # 1.004: outline_semi_vertical and outline_colinear_vectors fixed by the outline rules R-axis / R-colinear (removed).
 
 # --- todo: outline defects (fix in the constructor, all weights) -------------------------------------------------
+todo    googlefonts  outline_short_segments    found-short-segments   # pre-existing: segments < ~1 % of the outline (cedilla / ogonek joins, $ & @ § ¥ ƒ ß ð đ ₫ Þ F f ...). Font Bakery stays silent above 100 glyphs ('by design'): Medium / Bold are still above; Regular fell to 94 after D1 and is reported
 todo    googlefonts  outline_alignment_miss    found-misalignments    # on-curve points 1-2 u off a guideline (77/87/81 glyphs R/M/B: a e f t J $ ( [ ] { } ? ¢ £ § ẞ ~ and Vietnamese a/e composites; e.g. $ at 698, ? at 701, J at 0.5, ¢ at -1.5): decide overshoot vs error, write the rule
 todo    googlefonts  soft_dotted               soft-dotted            # i / j / į / ị + combining mark keep the dot; extend the dotless-ȷ rule (ccmp) to ı for i-based soft-dotted input
 todo    googlefonts  alt_caron                 decomposed-outline     # Ľ ď ľ ť are decomposed, Font Bakery cannot check them: confirm by eye that their caron is the comma form

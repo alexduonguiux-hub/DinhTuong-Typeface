@@ -13881,7 +13881,7 @@ feature kern {
     pos @kL_L @kR_T -115;
     pos @kL_L @kR_U -70;
     pos @kL_L [V] -100;
-    pos @kL_L @kR_W -90;
+    pos @kL_L @kR_W -95;
     pos @kL_L @kR_Y -110;
     pos @kL_L @kR_Z -25;
     pos @kL_L [bracketright] -90;
@@ -13981,7 +13981,7 @@ feature kern {
     pos [P] @kR_T -45;
     pos [P] @kR_U -45;
     pos P V -65;
-    pos [P] @kR_W -55;
+    pos [P] @kR_W -60;
     pos P X -80;
     pos [P] @kR_Y -90;
     pos [P] @kR_Z -60;
