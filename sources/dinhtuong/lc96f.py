@@ -608,14 +608,25 @@ class LF(A.LC):
     def g_w(self):
         import glyphs_c as GL
         W1 = self.wd(round(DIAG_W['w'] * CX))
-        dw = 0.85 * self.v / math.cos(math.atan2(W1 / 2 - 40, XH))
+        kw = 0.9 if os.environ.get('DT_W_DIAG') == 'v' else 0.85     # D1 option: w at v's diagonal weight
+        dw = kw * self.v / math.cos(math.atan2(W1 / 2 - 40, XH))
         W = 2 * W1 - dw
         return self.G('w', W, 12, 12, [('group', GL.vshape(0, W1, XH, 0, dw, 96)), ('group', GL.vshape(W - W1, W, XH, 0, dw, 96))])
 
     def g_x(self):
         import glyphs_c as GL
         W = self.wd(round(DIAG_W['x'] * CX))
-        dw = 0.9 * self.v / math.cos(math.atan2(W - 160, XH)) * 1.04
+        # D1 (1.004, designer 03/11 "độ dày các chữ x ... chưa cân bằng"): the stroke was solved on a fixed run W - 160
+        # while the strokes really run W - dw; as dw grows with the weight the diagonal came out heavier (x / n 0.88 R,
+        # 0.90 M, 0.93 B against v / k 0.85-0.88). Now dw is solved on its own run, with the constant that keeps the
+        # approved Regular x exactly as it was, so every weight carries the Regular ratio.
+        W_r = round(DIAG_W['x'] * CX)
+        dw_r = 0.9 * self.v_reg / math.cos(math.atan2(W_r - 160, XH)) * 1.04
+        c = dw_r * math.cos(math.atan2(W_r - dw_r, XH)) / self.v_reg
+        dw = dw_r
+        if self.v != self.v_reg:
+            for _ in range(40):
+                dw = c * self.v / math.cos(math.atan2(W - dw, XH))
         return self.G('x', W, 12, 12, [('add', GL.pinch((dw / 2, XH), (W - dw / 2, 0), dw)), ('add', GL.pinch((W - dw / 2, XH), (dw / 2, 0), dw))])
 
     def g_z(self):

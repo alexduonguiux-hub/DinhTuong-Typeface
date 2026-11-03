@@ -1573,8 +1573,12 @@ def cap_M():
     VM = round(160 * WKC)
     g = Glyph('M', W, SB_STRAIGHT - 4, SB_STRAIGHT - 4, 0x4D)
     g.add(fstem(0, 0, VM, CAP), fstem(W - VM, 0, W, CAP))
-    dw = diag_dx(DIAG_MULTI, W / 2 - VM, CAP - 190)
-    g.group(vshape(0, W, CAP, 190, dw, 140 * WKC))
+    # D1 (1.004, designer 03/11 "độ dày ... chưa cân bằng"): the stroke width is solved on the run the vshape really
+    # draws (outer edge x = 0 -> c - fb / 2), not W / 2 - VM: that steeper run made M's diagonals 0.73 V instead of
+    # DIAG_MULTI (W measures 0.80-0.82; now M matches it)
+    fbm = 140 * WKC
+    dw = diag_dx(DIAG_MULTI, W / 2 - fbm / 2, CAP - 190)
+    g.group(vshape(0, W, CAP, 190, dw, fbm))
     return reg(g)
 
 
@@ -1665,12 +1669,14 @@ def cap_V():
 
 
 def cap_W():
+    # D1 option (DT_W_DIAG=v): W drawn with the single-diagonal weight DIAG (V's) instead of DIAG_MULTI
+    DW = DIAG if __import__('os').environ.get('DT_W_DIAG') == 'v' else DIAG_MULTI
     W_reg = 2 * 470 - diag_dx(round(116 * 0.84), 470 / 2 - 40, CAP)
     W1 = 470
     for _ in range(6):                         # R2c: solve the half-width so the whole W widens by gw('multi')
-        dw = diag_dx(DIAG_MULTI, W1 / 2 - 40, CAP)
+        dw = diag_dx(DW, W1 / 2 - 40, CAP)
         W1 = (W_reg + gw('multi') + dw) / 2
-    dw = diag_dx(DIAG_MULTI, W1 / 2 - 40, CAP)
+    dw = diag_dx(DW, W1 / 2 - 40, CAP)
     W = 2 * W1 - dw
     g = Glyph('W', W, SB_DIAG, SB_DIAG, 0x57)
     g.group(vshape(0, W1, CAP, 0, dw, 128))
