@@ -117,7 +117,10 @@ def compose(ch, gaps=None):
     if not new:
         return _compose_vn(ch, gaps)
     upper = base.isupper()
-    bname = 'dotlessi' if base == 'i' else base
+    # SD1 (1.004, Font Bakery soft_dotted): i loses its dot only under a mark ABOVE; with marks below only
+    # (ogonek, cedilla, comma below, dot below) it keeps it: į was drawn on ı (no dot)
+    BELOW = (CEDIL, LC.OGON, LC.COMMAB, '\u0323')
+    bname = 'dotlessi' if base == 'i' and any(m not in BELOW for m in marks) else base
     bg = G[bname]
     import latin_core_c as LC                       # GF Latin Core (R8i-R8m): dot above, double acute, ogonek, comma below
     if any(m in (LC.DOTA, LC.DBLAC, LC.OGON, LC.COMMAB) for m in marks) or (CEDIL in marks and base in LC.LATVIAN):

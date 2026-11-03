@@ -962,7 +962,8 @@ def compose(ch, gaps=None):
     d = unicodedata.normalize('NFD', ch)
     base, marks = d[0], d[1:]
     upper = base.isupper()
-    bname = 'dotlessi' if base == 'i' else base
+    # SD1 (1.004): the dot goes only under a mark above (same rule as latin1_c.compose)
+    bname = 'dotlessi' if base == 'i' and any(m not in ('\u0327', '\u0328', '\u0326', '\u0323') for m in marks) else base
     bg = G[bname]
     g = Glyph('uni%04X' % ord(ch), bg.body, bg.lsb, bg.rsb, ord(ch))
     g.ops = list(bg.ops)
