@@ -60,7 +60,8 @@ def core_lc(c):
     import latin_core_c as LC
     lv, lh = LF.B.v, LF.B.h
     if c in 'ąęįų':                                # R8k: ogonek from the rightmost foot of the lowercase base
-        bg = LF.BASE['ı' if c == 'į' else unicodedata.normalize('NFD', c)[0]]
+        # SD1 (1.004): į keeps the dot of i (it was drawn on ı); the ogonek is a mark below, the dot stays
+        bg = LF.BASE[unicodedata.normalize('NFD', c)[0]]
         o = LC.ogonek_on(bg.ops, bg.body)
         nm = 'ogonek'
     elif c in 'ďľť':                               # R8m: vertical caron right of the stem, top on the stem's top
