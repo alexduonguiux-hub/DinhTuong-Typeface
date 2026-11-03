@@ -26,7 +26,7 @@ for w in ['Regular', 'Medium', 'Bold']:
         base = TTFont(f'{OLD}/{kind}/DinhTuong-{w}.{kind}')
         fm = TTFont(f'{FM}/{kind}/DinhTuong-{w}.{kind}')
         old_ver = f"{base['head'].fontRevision:.3f}"
-        order = base.getGlyphOrder()
+        order = list(base.getGlyphOrder())       # a copy: in an OTF the glyph order IS the CFF charset list
         added = [g for g in names if g not in order]
         if added:
             if fm.getGlyphOrder() != order + added:
@@ -71,4 +71,9 @@ for w in ['Regular', 'Medium', 'Bold']:
         base['head'].fontRevision = float(VERSION)
         for p in [f'fonts/{kind}/DinhTuong-{w}.{kind}', f'sources/reference/fonts/{kind}/DinhTuong-{w}.{kind}']:
             base.save(p)
+            chk = TTFont(p)                          # read back: glyph order, maxp, hmtx and the outlines agree
+            n = len(chk.getGlyphOrder())
+            if n != chk['maxp'].numGlyphs or n != len(order) + len(added) or len(chk['hmtx'].metrics) != n:
+                sys.exit(f'{p}: {n} glyphs in the order, maxp {chk["maxp"].numGlyphs}, expected {len(order) + len(added)}')
+            chk.getGlyphSet()
     print(w, 'glyphs replaced', len(names))

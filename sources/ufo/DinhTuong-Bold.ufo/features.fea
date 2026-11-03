@@ -15,6 +15,17 @@ feature tnum {
   sub nine by nine.tf;
 } tnum;
 
+# SD1 soft-dotted (soft_dotted.py) begin
+@SD_BASE = [i j iogonek uni1ECB];
+@SD_TOP = [gravecomb acutecomb uni0302 tildecomb uni0304 uni0306 uni0307 uni0308 hookabovecomb uni030A uni030B uni030C];
+@SD_LOW = [uni031B dotbelowcomb uni0326 uni0327 uni0328];
+lookup SD_DOTLESS {
+  sub i by dotlessi;
+  sub j by uni0237;
+  sub iogonek by iogonek.dotless;
+  sub uni1ECB by uni1ECB.dotless;
+} SD_DOTLESS;
+# SD1 soft-dotted end
 feature ccmp {
   lookup VN_COMPOSE {
     sub A uni0306 acutecomb by uni1EAE;
@@ -350,6 +361,11 @@ feature ccmp {
     sub j acutecomb by jacute;
     sub uni0237 acutecomb by jacute;
   } VN_COMPOSE;
+  lookup SOFT_DOTTED {
+    sub @SD_BASE' lookup SD_DOTLESS @SD_TOP;
+    sub @SD_BASE' lookup SD_DOTLESS @SD_LOW @SD_TOP;
+    sub @SD_BASE' lookup SD_DOTLESS @SD_LOW @SD_LOW @SD_TOP;
+  } SOFT_DOTTED;
 } ccmp;
 
 @kL_A = [A Agrave Aacute Acircumflex Atilde Adieresis Aring Abreve Amacron Aogonek uni1EA2 uni1EA0 uni1EAE uni1EB0 uni1EB2 uni1EB4 uni1EB6 uni1EA4 uni1EA6 uni1EA8 uni1EAA uni1EAC];
@@ -2814,6 +2830,7 @@ feature kern {
     pos W hbar 0;
     pos W itilde -15;
     pos W ibreve 25;
+    pos W iogonek -20;
     pos W jcircumflex -10;
     pos W nacute -45;
     pos W uni0146 -45;
@@ -9649,6 +9666,7 @@ feature kern {
     pos Wcircumflex hbar 0;
     pos Wcircumflex itilde -15;
     pos Wcircumflex ibreve 25;
+    pos Wcircumflex iogonek -20;
     pos Wcircumflex jcircumflex -10;
     pos Wcircumflex nacute -45;
     pos Wcircumflex uni0146 -45;
@@ -10696,6 +10714,7 @@ feature kern {
     pos Wgrave uni0123 -45;
     pos Wgrave hbar 0;
     pos Wgrave ibreve 25;
+    pos Wgrave iogonek -20;
     pos Wgrave jcircumflex -10;
     pos Wgrave uni0146 -45;
     pos Wgrave ncaron -45;
@@ -10787,6 +10806,7 @@ feature kern {
     pos Wacute uni0123 -45;
     pos Wacute hbar 0;
     pos Wacute ibreve 25;
+    pos Wacute iogonek -20;
     pos Wacute jcircumflex -10;
     pos Wacute uni0146 -45;
     pos Wacute ncaron -45;
@@ -10889,6 +10909,7 @@ feature kern {
     pos Wdieresis hbar 0;
     pos Wdieresis itilde -15;
     pos Wdieresis ibreve 25;
+    pos Wdieresis iogonek -20;
     pos Wdieresis jcircumflex -10;
     pos Wdieresis nacute -45;
     pos Wdieresis uni0146 -45;

@@ -15,6 +15,17 @@ feature tnum {
   sub nine by nine.tf;
 } tnum;
 
+# SD1 soft-dotted (soft_dotted.py) begin
+@SD_BASE = [i j iogonek uni1ECB];
+@SD_TOP = [gravecomb acutecomb uni0302 tildecomb uni0304 uni0306 uni0307 uni0308 hookabovecomb uni030A uni030B uni030C];
+@SD_LOW = [uni031B dotbelowcomb uni0326 uni0327 uni0328];
+lookup SD_DOTLESS {
+  sub i by dotlessi;
+  sub j by uni0237;
+  sub iogonek by iogonek.dotless;
+  sub uni1ECB by uni1ECB.dotless;
+} SD_DOTLESS;
+# SD1 soft-dotted end
 feature ccmp {
   lookup VN_COMPOSE {
     sub A uni0306 acutecomb by uni1EAE;
@@ -350,6 +361,11 @@ feature ccmp {
     sub j acutecomb by jacute;
     sub uni0237 acutecomb by jacute;
   } VN_COMPOSE;
+  lookup SOFT_DOTTED {
+    sub @SD_BASE' lookup SD_DOTLESS @SD_TOP;
+    sub @SD_BASE' lookup SD_DOTLESS @SD_LOW @SD_TOP;
+    sub @SD_BASE' lookup SD_DOTLESS @SD_LOW @SD_LOW @SD_TOP;
+  } SOFT_DOTTED;
 } ccmp;
 
 @kL_A = [A Agrave Aacute Acircumflex Atilde Adieresis Aring Abreve Amacron Aogonek uni1EA2 uni1EA0 uni1EAE uni1EB0 uni1EB2 uni1EB4 uni1EB6 uni1EA4 uni1EA6 uni1EA8 uni1EAA uni1EAC];
@@ -3059,7 +3075,7 @@ feature kern {
     pos r Ibreve 25;
     pos r ibreve 10;
     pos r Iogonek 25;
-    pos r iogonek 10;
+    pos r iogonek 15;
     pos r Idotaccent 25;
     pos r jcircumflex 35;
     pos r uni0136 30;
@@ -4916,6 +4932,7 @@ feature kern {
     pos igrave hbar 35;
     pos igrave imacron 30;
     pos igrave ibreve 70;
+    pos igrave iogonek 5;
     pos igrave jcircumflex 75;
     pos igrave uni0136 10;
     pos igrave uni0137 10;
@@ -5456,7 +5473,7 @@ feature kern {
     pos Aogonek itilde -30;
     pos Aogonek ibreve -30;
     pos Aogonek Iogonek 0;
-    pos Aogonek iogonek 0;
+    pos Aogonek iogonek 5;
     pos Aogonek jcircumflex 155;
     pos Aogonek uni013C 25;
     pos Aogonek Obreve -55;
@@ -5967,7 +5984,7 @@ feature kern {
     pos Eogonek Ibreve -25;
     pos Eogonek ibreve 30;
     pos Eogonek Iogonek -5;
-    pos Eogonek iogonek -10;
+    pos Eogonek iogonek 0;
     pos Eogonek Idotaccent -25;
     pos Eogonek jcircumflex 155;
     pos Eogonek uni0137 10;
@@ -7682,7 +7699,7 @@ feature kern {
     pos racute Ibreve 25;
     pos racute ibreve 35;
     pos racute Iogonek 25;
-    pos racute iogonek 10;
+    pos racute iogonek 15;
     pos racute Idotaccent 25;
     pos racute jcircumflex 35;
     pos racute uni0136 30;
@@ -7902,7 +7919,7 @@ feature kern {
     pos rcaron Ibreve 25;
     pos rcaron ibreve 55;
     pos rcaron Iogonek 25;
-    pos rcaron iogonek 10;
+    pos rcaron iogonek 15;
     pos rcaron Idotaccent 25;
     pos rcaron jcircumflex 35;
     pos rcaron uni0136 30;

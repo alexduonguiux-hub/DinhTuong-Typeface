@@ -10,7 +10,9 @@
   - **x**: 0.88 / 0.87 / 0.88 in Regular / Medium / Bold (was 0.88 / 0.90 / 0.93: it grew heavier with the weight). The Regular x is unchanged.
   - Y is unchanged: its arms already measure as V (0.84–0.88).
   - Kerning re-measured for every pair with a changed glyph (e.g. Bold AW −85 → −90).
-- Font Bakery: outline_semi_vertical and outline_colinear_vectors now pass in every weight. All other glyphs, metrics and kerning are byte-identical to 1.003.
+- **Soft-dotted i j į ị** (SD1, Font Bakery soft_dotted). The dot of i, j, į, ị now goes whenever a combining mark is set above it, also with a mark below or the horn in between: i + ◌̊, j + ◌̀, į + ◌́, ị + ◌̂ and the other 37 test sequences. The ccmp feature swaps in ı, ȷ and two new glyphs, į and ị without their dot. Precomposed letters and Vietnamese input (NFC or NFD) render exactly as before.
+- **į has its dot again.** It had been drawn on ı in every weight. It is now built on i, which makes it 6 units narrower; kerning was re-measured for its pairs.
+- Font Bakery: outline_semi_vertical, outline_colinear_vectors and soft_dotted now pass in every weight. All other glyphs, metrics and kerning are byte-identical to 1.003.
 
 ## 1.003 (2026-11-01)
 - Kerning floor (R16d): every pair of letters, figures and . , : ; ! ? - was measured against Inter, Poppins, Liberation and Carlito, over the cap height whenever a capital is involved. Pairs tighter than the tightest of them are opened to it (357 / 293 / 411 base pairs, accented forms included; only ever opens). The largest change is F + lowercase, which had lost the white above the x-height: Fa −90 → −35, Fr −90 → −30, Fe / Fo −55 → −35 in Regular; also T, P, K + lowercase and r + capitals. 67 / 76 and the diagonal capital pairs keep the values chosen above.
