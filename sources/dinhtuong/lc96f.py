@@ -608,8 +608,8 @@ class LF(A.LC):
     def g_w(self):
         import glyphs_c as GL
         W1 = self.wd(round(DIAG_W['w'] * CX))
-        kw = 0.9 if os.environ.get('DT_W_DIAG') == 'v' else 0.85     # D1 option: w at v's diagonal weight
-        dw = kw * self.v / math.cos(math.atan2(W1 / 2 - 40, XH))
+        # D1 (1.004, designer 03/11 'B'): w carries v's diagonal weight 0.9 v (was 0.85 v, ~6 % lighter than v)
+        dw = 0.9 * self.v / math.cos(math.atan2(W1 / 2 - 40, XH))
         W = 2 * W1 - dw
         return self.G('w', W, 12, 12, [('group', GL.vshape(0, W1, XH, 0, dw, 96)), ('group', GL.vshape(W - W1, W, XH, 0, dw, 96))])
 
