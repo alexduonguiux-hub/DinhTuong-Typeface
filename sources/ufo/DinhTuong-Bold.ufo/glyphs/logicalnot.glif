@@ -6,15 +6,15 @@
     <contour>
       <point x="160" y="330" type="curve"/>
       <point x="396" y="330" type="line"/>
-      <point x="396" y="180.00000000000003" type="line"/>
-      <point x="408.9054125204027" y="180.00000000000003" type="line"/>
-      <point x="445.9369416802685" y="180.00000000000003"/>
-      <point x="482.9684708401342" y="180"/>
+      <point x="396" y="180" type="line"/>
+      <point x="409" y="180" type="line"/>
+      <point x="446" y="180"/>
+      <point x="483" y="180"/>
       <point x="520" y="180" type="curve"/>
       <point x="520" y="454" type="line"/>
-      <point x="479.9054931823771" y="454"/>
-      <point x="439.8109863647542" y="454"/>
-      <point x="399.7164795471313" y="454" type="curve"/>
+      <point x="480" y="454"/>
+      <point x="440" y="454"/>
+      <point x="400" y="454" type="curve"/>
       <point x="160" y="454" type="line"/>
       <point x="124" y="454"/>
       <point x="82" y="455"/>

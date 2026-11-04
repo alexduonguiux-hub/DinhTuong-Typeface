@@ -28,4 +28,8 @@ python3 s_spine_fix.py spine_data.json "$ROOT/sources/ufo/DinhTuong-Regular.ufo"
 # VF3 (vf-concept-v1): point-compatible masters for the variable font; exact, outlines unchanged
 python3 vf_compat.py "$ROOT/sources/ufo/DinhTuong-Regular.ufo" "$ROOT/sources/ufo/DinhTuong-Medium.ufo" \
   "$ROOT/sources/ufo/DinhTuong-Bold.ufo"
+# Outline rules on the finished masters (1.004): R-axis, R-colinear, R-absorb, and the review-audit rules R-micro2 / R-g1
+# (micro segments left by unions, joints that turn 0.6-10 deg on the integer grid); only the points they target move
+python3 "$ROOT/scripts/apply_outline_rules.py" "$ROOT/sources/out/outline_rules_changed.json" "$ROOT/sources/ufo/DinhTuong-Regular.ufo" \
+  "$ROOT/sources/ufo/DinhTuong-Medium.ufo" "$ROOT/sources/ufo/DinhTuong-Bold.ufo"
 echo "UFO sources: $ROOT/sources/ufo  (reference binaries: $ROOT/sources/reference/fonts)"

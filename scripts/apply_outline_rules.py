@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""1.004: apply the outline rules R-axis, R-colinear and R-absorb (sources/dinhtuong/outline_clean.py) to the UFO masters as
+"""1.004: apply the outline rules R-axis, R-colinear, R-absorb, R-micro2 and R-g1 (sources/dinhtuong/outline_clean.py) to the UFO masters as
 they stand, so only the points those rules target move and every other glyph stays exactly as released.
 The generator applies the same rules in outline_clean.clean() to every new build.
 
@@ -58,6 +58,18 @@ def norm(v):
     return int(v) if float(v).is_integer() else v
 
 
+def rules(segs):
+    segs = oc._snap_axis(segs)
+    segs = oc._merge_collinear(segs)
+    segs = oc._merge_near_colinear(segs)
+    segs = oc._absorb_micro(segs)
+    segs = oc._absorb_any(segs)
+    segs = [[s[0]] + [(float(round(q[0])), float(round(q[1]))) for q in s[1:]] for s in segs]   # the grid the font stores: kinks show there
+    segs = oc._g1_kinks(segs)
+    segs = [[s[0]] + [(float(round(q[0])), float(round(q[1]))) for q in s[1:]] for s in segs]
+    return segs
+
+
 def apply(font):
     changed = []
     for g in font:
@@ -68,10 +80,11 @@ def apply(font):
                 new.append(c); continue
             segs, smooth = r
             before = [list(s) for s in segs]
-            segs = oc._snap_axis(segs)
-            segs = oc._merge_collinear(segs)
-            segs = oc._merge_near_colinear(segs)
-            segs = oc._absorb_micro(segs)
+            for _ in range(6):                        # to a fixed point: removing one micro step can expose the next
+                prev_round = [list(s) for s in segs]
+                segs = rules(segs)
+                if segs == prev_round:
+                    break
             if segs != before:
                 touched = True
                 nc = from_segs(segs, smooth)
