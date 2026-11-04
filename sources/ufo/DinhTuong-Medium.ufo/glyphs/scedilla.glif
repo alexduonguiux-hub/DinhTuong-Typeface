@@ -17,16 +17,16 @@
       <point x="106" y="5"/>
       <point x="158" y="-10"/>
       <point x="206" y="-13" type="curve"/>
-      <point x="206" y="-52" type="line"/>
-      <point x="206" y="-62"/>
+      <point x="206" y="-44" type="line"/>
+      <point x="206" y="-58"/>
       <point x="198" y="-70"/>
       <point x="188" y="-70" type="curve"/>
       <point x="149" y="-70" type="line"/>
       <point x="149" y="-129" type="line"/>
       <point x="215" y="-129" type="line"/>
       <point x="252" y="-129"/>
-      <point x="281" y="-100"/>
-      <point x="281" y="-63" type="curve"/>
+      <point x="281" y="-93"/>
+      <point x="281" y="-47" type="curve"/>
       <point x="281" y="-8" type="line"/>
       <point x="296" y="-5"/>
       <point x="310" y="0"/>

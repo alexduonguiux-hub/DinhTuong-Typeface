@@ -5472,8 +5472,8 @@ feature kern {
     pos Aogonek uni0123 5;
     pos Aogonek itilde -30;
     pos Aogonek ibreve -30;
-    pos Aogonek Iogonek 0;
-    pos Aogonek iogonek 5;
+    pos Aogonek Iogonek -5;
+    pos Aogonek iogonek 0;
     pos Aogonek jcircumflex 155;
     pos Aogonek uni013C 25;
     pos Aogonek Obreve -55;
@@ -5983,8 +5983,8 @@ feature kern {
     pos Eogonek imacron -15;
     pos Eogonek Ibreve -25;
     pos Eogonek ibreve 30;
-    pos Eogonek Iogonek -5;
-    pos Eogonek iogonek 0;
+    pos Eogonek Iogonek -10;
+    pos Eogonek iogonek -10;
     pos Eogonek Idotaccent -25;
     pos Eogonek jcircumflex 155;
     pos Eogonek uni0137 10;

@@ -14986,7 +14986,7 @@ feature kern {
     pos @kL_L @kR_w -75;
     pos @kL_L [x] 25;
     pos @kL_L @kR_y -70;
-    pos @kL_L [braceright] -45;
+    pos @kL_L [braceright] -40;
     pos @kL_L [guillemotright] -55;
     pos @kL_L [quoteright] -55;
     pos @kL_L [quotedblright] -55;
