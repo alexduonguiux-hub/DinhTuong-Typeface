@@ -4,7 +4,7 @@
     python3 scripts/qa_fontbakery.py            # run Font Bakery, then compare
     python3 scripts/qa_fontbakery.py --no-run   # compare existing out/fontbakery/*.json only
 
-Profiles: check-googlefonts on fonts/ttf/*.ttf, check-universal on fonts/otf/*.otf.
+Profiles: check-googlefonts on fonts/ttf/*.ttf and on fonts/variable/*.ttf (profile name gf-variable in the\naccepted list), check-universal on fonts/otf/*.otf.
 
 Every FAIL / FATAL / WARN / ERROR result is reduced to (profile, check id, code). Each one must be
 listed in documentation/qa/fontbakery-accepted.txt as `accept` (intentional, with a reason) or `todo`
@@ -29,6 +29,7 @@ ACCEPTED = os.path.join(ROOT, "documentation", "qa", "fontbakery-accepted.txt")
 RUNS = [  # (profile name, fontbakery subcommand, font glob)
     ("googlefonts", "check-googlefonts", "fonts/ttf/*.ttf"),
     ("universal", "check-universal", "fonts/otf/*.otf"),
+    ("gf-variable", "check-googlefonts", "fonts/variable/*.ttf"),
 ]
 BAD = ("FAIL", "FATAL", "WARN", "ERROR")
 NETWORK = re.compile(r"ProxyError|ConnectionError|Max retries exceeded|Tunnel connection failed|"

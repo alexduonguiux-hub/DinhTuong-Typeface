@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<glyph name="imacron" format="2">
+  <advance width="286"/>
+  <unicode hex="012B"/>
+  <outline>
+    <contour>
+      <point x="52" y="571" type="line"/>
+      <point x="80" y="579"/>
+      <point x="109" y="580"/>
+      <point x="133" y="580" type="curve" smooth="yes"/>
+      <point x="151" y="580" type="line" smooth="yes"/>
+      <point x="175" y="580"/>
+      <point x="204" y="579"/>
+      <point x="232" y="571" type="curve"/>
+      <point x="232" y="660" type="line"/>
+      <point x="204" y="652"/>
+      <point x="175" y="651"/>
+      <point x="151" y="651" type="curve" smooth="yes"/>
+      <point x="133" y="651" type="line" smooth="yes"/>
+      <point x="109" y="651"/>
+      <point x="80" y="652"/>
+      <point x="52" y="660" type="curve"/>
+    </contour>
+    <contour>
+      <point x="55" y="0" type="curve"/>
+      <point x="229" y="0" type="line"/>
+      <point x="221" y="42"/>
+      <point x="220" y="84"/>
+      <point x="220" y="120" type="curve" smooth="yes"/>
+      <point x="220" y="410" type="line" smooth="yes"/>
+      <point x="220" y="446"/>
+      <point x="221" y="488"/>
+      <point x="229" y="530" type="curve"/>
+      <point x="55" y="530" type="line"/>
+      <point x="63" y="488"/>
+      <point x="64" y="446"/>
+      <point x="64" y="410" type="curve" smooth="yes"/>
+      <point x="64" y="120" type="line" smooth="yes"/>
+      <point x="64" y="84"/>
+      <point x="63" y="42"/>
+    </contour>
+  </outline>
+</glyph>
