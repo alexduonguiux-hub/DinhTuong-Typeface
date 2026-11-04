@@ -8,7 +8,8 @@ outline runs LEVEL (either end of a horizontal straight edge, or a round's extre
 baseline, x-height, cap height, ascender or descender. Marks are not aligned to guidelines and are left out: spacing /
 combining mark glyphs, quotes (placed from the cap height), in composites every component but the base letter, and in
 decomposed letters every contour that lies wholly in a mark zone (above the x-height / cap height, or below the
-baseline).
+baseline). Counters (holes, the opposite winding to the outer ink) are left out too: their edges are strokes inside
+the ink and never sit on a guideline (1.004: the § counter's top fell 2 u from the x-height in Medium).
 
 Usage: python3 scripts/qa_alignment.py sources/ufo/DinhTuong-Regular.ufo ...   (exit 1 when anything is found)
 """
@@ -19,6 +20,10 @@ import ufoLib2
 from fontTools.pens.recordingPen import RecordingPen
 
 TOL = 2.0
+# glyph, guideline: a point of this glyph near this guideline is placed by another rule (listed, with the reason)
+ALLOW = {
+    ('section', 'x-height'),   # R0c: § is placed by its top on the ascender; its spine's top edge falls near 530 by chance
+}
 
 
 def is_mark(glyph):
@@ -75,6 +80,12 @@ def level_points(cont):
                 seen.add(p); yield p
 
 
+def _area(cont):
+    """signed area of the contour's on-curve polygon (the winding tells outer ink from counters)."""
+    pts = [p for _, p, _ in cont]
+    return sum(pts[i - 1][0] * pts[i][1] - pts[i][0] * pts[i - 1][1] for i in range(len(pts))) / 2
+
+
 def audit(path):
     f = ufoLib2.Font.open(path)
     i = f.info
@@ -86,13 +97,18 @@ def audit(path):
             continue
         ch = chr(g.unicodes[0]) if g.unicodes else ''
         top = i.capHeight if ch.isupper() else i.xHeight
-        for c in contours(f, g):
+        cs = contours(f, g)
+        areas = [_area(c) for c in cs]
+        outer_sign = (max(areas, key=abs) > 0) if areas else True
+        for c, a in zip(cs, areas):
+            if (a > 0) != outer_sign:
+                continue                                 # a counter (hole): its edge is a stroke inside the ink, never on a guideline
             ys = [p[1] for _, p, _ in c]
             if g.unicodes and (min(ys) >= top - 10 or max(ys) <= 10 and min(ys) < -20):
                 continue                                 # a mark contour inside a decomposed letter (ẩ, ặ, ...)
             for p in level_points(c):
                 for name, y in lines.items():
-                    if y is not None and 0 < abs(p[1] - y) <= TOL:
+                    if y is not None and 0 < abs(p[1] - y) <= TOL and (g.name, name) not in ALLOW:
                         found.append((g.name, p, name, y))
     return found
 
