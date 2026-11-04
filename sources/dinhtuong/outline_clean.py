@@ -10,6 +10,8 @@
      level / vertical, moving the end that is not anchored onto the line the outline keeps running along
   6. R-colinear (1.004, Font Bakery outline_colinear_vectors): two straight segments whose shared point lies within
      1 u of the line through their outer ends are one straight run
+  7. R-absorb (1.004, Font Bakery outline_short_segments): a straight segment under MICRO that continues a curve
+     smoothly is taken over by that curve (the corner at its other end stays)
 The result is drawn into the CFF exactly as before (same segment tuples).
 """
 import math
@@ -351,6 +353,69 @@ def _merge_near_colinear(segs):
     return segs
 
 
+SMOOTH_TURN = 10.0   # deg; a join turning less than this is a smooth continuation (R-absorb)
+ABSORB_DEV = 1.0     # units; the outline may move at most this much when a curve takes over a micro segment
+
+
+def _sample(c, n=32):
+    return [_bez(c[1], c[2], c[3], c[4], k / n) for k in range(n + 1)]
+
+
+def _dev(A, B):
+    """largest distance from a point of A to the polyline B."""
+    best = 0.0
+    for p in A:
+        m = 1e9
+        for a, b in zip(B, B[1:]):
+            d = _sub(b, a); L = _dot(d, d)
+            t = 0.0 if L == 0 else max(0.0, min(1.0, _dot(_sub(p, a), d) / L))
+            m = min(m, _len(_sub(p, _add(a, _mul(d, t)))))
+        best = max(best, m)
+    return best
+
+
+def _absorb_micro(segs):
+    """R-absorb (1.004, Font Bakery outline_short_segments): a straight segment shorter than MICRO that continues a
+    curve smoothly (turn < SMOOTH_TURN) is the curve's own last few units, cut off by rounding after a union; the curve
+    takes it over: its end moves to the segment's far end, its handle moves with it (same tangent), the segment goes.
+    The corner at the other end stays where it is. Only when the outline moves by at most ABSORB_DEV."""
+    changed = True
+    while changed and len(segs) > 3:
+        changed = False
+        n = len(segs)
+        for i in range(n):
+            s = segs[i]
+            if s[0] != 'L' or _seglen(s) >= MICRO or _seglen(s) < 1e-6:
+                continue
+            prv, nxt = segs[i - 1], segs[(i + 1) % n]
+            d = _sub(s[2], s[1])
+            done = False
+            for side in ('prv', 'nxt'):
+                c = prv if side == 'prv' else nxt
+                if c[0] != 'C':
+                    continue
+                if side == 'prv' and _turn(_end_tan(c), d) >= SMOOTH_TURN:
+                    continue
+                if side == 'nxt' and _turn(d, _start_tan(c)) >= SMOOTH_TURN:
+                    continue
+                trial = list(c)
+                if side == 'prv':
+                    _set_end(trial, s[2]); before = _sample(c) + [s[2]]
+                else:
+                    _set_start(trial, s[1]); before = [s[1]] + _sample(c)
+                if _dev(_sample(trial), before) <= ABSORB_DEV and _dev(before, _sample(trial)) <= ABSORB_DEV:
+                    c[:] = trial; done = True
+                    break
+            if not done:
+                continue
+            del segs[i]
+            STATS['absorb'] = STATS.get('absorb', 0) + 1
+            changed = True
+            break
+    return segs
+
+
+
 def clean(contours):
     out = []
     for c in contours:
@@ -364,6 +429,7 @@ def clean(contours):
         segs = _snap_axis(segs)
         segs = _merge_collinear(segs)
         segs = _merge_near_colinear(segs)
+        segs = _absorb_micro(segs)
         segs = _smooth_joints(segs)
         out.append(_from_cyc(segs))
     return out

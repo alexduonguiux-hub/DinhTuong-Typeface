@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""1.004: apply the outline rules R-axis and R-colinear (sources/dinhtuong/outline_clean.py) to the UFO masters as
+"""1.004: apply the outline rules R-axis, R-colinear and R-absorb (sources/dinhtuong/outline_clean.py) to the UFO masters as
 they stand, so only the points those rules target move and every other glyph stays exactly as released.
 The generator applies the same rules in outline_clean.clean() to every new build.
 
@@ -71,6 +71,7 @@ def apply(font):
             segs = oc._snap_axis(segs)
             segs = oc._merge_collinear(segs)
             segs = oc._merge_near_colinear(segs)
+            segs = oc._absorb_micro(segs)
             if segs != before:
                 touched = True
                 nc = from_segs(segs, smooth)
