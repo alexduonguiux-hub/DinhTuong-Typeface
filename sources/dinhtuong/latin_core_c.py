@@ -109,7 +109,20 @@ def mk_ogonek(upper=True):
     pt = lambda R, a: (cx + R * _m.cos(a), cy + R * _m.sin(a))
     hook = [('M',) + pt(Ro, a1)] + F._arc((cx, cy), Ro, a1, a2) + [('L',) + pt(Ri, a2)] + \
            F._arc((cx, cy), Ri, a2, a1) + [('Z',)]
-    return [('group', [('add', hook), ('sub', rect(-600, 0, -w / 2, 400)), ('sub', rect(w / 2, 0, 600, 400))])]
+    xl0, xr0 = ogonek_base_run()
+    return [('group', [('add', hook), ('sub', rect(-600, 0, xl0, 400)), ('sub', rect(xr0, 0, 600, 400))])]
+
+
+def ogonek_base_run():
+    """R8k-e (1.004 review, designer: 'xem lại đoạn gắn chưa ngay giữa các mối glyph'): where the hook meets the base
+    is the BASELINE, not the arc's start inside the foot: the ink run of the hook at y = 0 (outer and inner circle
+    crossing the baseline, left of the centre). Placement aligns this run; above the baseline the hook keeps to it."""
+    w = 1.15 * 88 * GL.WK
+    a1 = _m.radians(150)
+    rc = (40 + 175 - w / 2) / (1 + _m.sin(a1))
+    cx, cy = -rc * _m.cos(a1), -175 + w / 2 + rc
+    x = lambda R: cx - _m.sqrt(R * R - cy * cy)
+    return x(rc + w / 2), x(rc - w / 2)
 
 
 def mk_commabelow(scale=0.78):
@@ -146,14 +159,15 @@ def ogonek_on(bops, body, foot_y=12, base=None):
     on I i (a single stem) and U (a bowl, no right foot) the ogonek's stroke is centred on the base's ink at the
     baseline: the middle of the stem, the middle of the bowl's bottom. Inter, DejaVu, Liberation, Carlito and Poppins
     all hang Į į from the stem's centre and Ų from the bottom of the bowl; Ą ą Ę ę ų keep the right foot."""
-    w = 1.15 * 88 * GL.WK
+    # R8k-e: aligned by the hook's own ink run on the baseline (where it visibly joins the base)
+    h0, h1 = ogonek_base_run()
     if base in OGONEK_CENTRE:
         xl, xr = ink_x_at(bops, foot_y, 'l'), ink_x_at(bops, foot_y, 'r')
         if xl is not None and xr is not None:
-            return shift_ops(mk_ogonek(), (xl + xr) / 2, 0)
+            return shift_ops(mk_ogonek(), (xl + xr) / 2 - (h0 + h1) / 2, 0)
     xr = ink_x_at(bops, foot_y, 'r')
     xr = body if xr is None else xr
-    return shift_ops(mk_ogonek(), xr - 12 - w / 2, 0)
+    return shift_ops(mk_ogonek(), xr - 12 - h1, 0)
 
 
 def vcaron_on(stem_right, top, scale=0.85):
