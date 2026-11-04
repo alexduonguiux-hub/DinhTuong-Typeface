@@ -99,8 +99,8 @@ def mk_ogonek(upper=True):
     xs, ytop = 0, 40
     ybot = -175
     xl = xs - 1.55 * r
-    ced = [('group', [('add', rrect(xl, ybot, xs + w / 2, ytop, (0, 0, r + w / 2, 0))),
-                      ('sub', rrect(xl - 1, ybot + wh, xs - w / 2, ytop + 1, (0, 0, max(r - w / 2, 18), 0)))])]
+    ced = [('group', [('add', rrect(xl, ybot, xs + w / 2, ytop, (0, 0, (r + w / 2, r + wh / 2), 0))),
+                      ('sub', rrect(xl - 1, ybot + wh, xs - w / 2, ytop + 1, (0, 0, (r - w / 2, r - wh / 2), 0)))])]
     return L1.tf_ops(ced, lambda x, y: (-x, y))          # stroke at x in [-w/2, w/2], tail to the right
 
 

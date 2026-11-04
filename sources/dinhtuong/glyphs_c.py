@@ -1104,7 +1104,24 @@ KC = 0.56                     # circle-like curves (0.552 = true circle)
 
 
 def rrect(x0, y0, x1, y1, r=(0, 0, 0, 0), k=KC):
-    return _base_rrect(x0, y0, x1, y1, r, k)
+    """rounded rect, radii (tl, tr, br, bl). A corner given as (rx, ry) is an elliptical quarter (R-conc, 1.004):
+    used where a stroke turns a corner with different vertical and horizontal weights, so the outer and inner
+    corners can share one centre (outer = r + w/2, r + wh/2; inner = r - w/2, r - wh/2)."""
+    if isinstance(r, (int, float)) or not any(isinstance(c, (tuple, list)) for c in r):
+        return _base_rrect(x0, y0, x1, y1, r, k)
+    cs = [c if isinstance(c, (tuple, list)) else (c, c) for c in r]
+    lx, ly = (x1 - x0) / 2, (y1 - y0) / 2
+    (tlx, tly), (trx, try_), (brx, bry), (blx, bly) = [(min(max(a, 0), lx), min(max(b, 0), ly)) for a, b in cs]
+    p = [('M', x0 + tlx, y1), ('L', x1 - trx, y1)]
+    if trx and try_: p.append(('C', x1 - trx + k * trx, y1, x1, y1 - try_ + k * try_, x1, y1 - try_))
+    p.append(('L', x1, y0 + bry))
+    if brx and bry: p.append(('C', x1, y0 + bry - k * bry, x1 - brx + k * brx, y0, x1 - brx, y0))
+    p.append(('L', x0 + blx, y0))
+    if blx and bly: p.append(('C', x0 + blx - k * blx, y0, x0, y0 + bly - k * bly, x0, y0 + bly))
+    p.append(('L', x0, y1 - tly))
+    if tlx and tly: p.append(('C', x0, y1 - tly + k * tly, x0 + tlx - k * tlx, y1, x0 + tlx, y1))
+    p.append(('Z',))
+    return p
 
 
 FULL = 9999                   # radius 'full' -> clamps to a semicircle

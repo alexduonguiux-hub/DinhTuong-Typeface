@@ -708,11 +708,11 @@ def _brace_ops(W):
     for sign in (1, -1):
         yo = top if sign > 0 else top          # mirrored by rr()
         # end corner: bar along the top turning down into the spine (top-left corner)
-        ops.append(('group', [('add', rr(sx - wv / 2, mid, W, yo, (r1 + wv / 2, 0, 0, 0), sign)),
-                              ('sub', rr(sx + wv / 2, mid - 1, W + 1, yo - wh, (max(r1 - wv / 2, 12), 0, 0, 0), sign))]))
+        ops.append(('group', [('add', rr(sx - wv / 2, mid, W, yo, ((r1 + wv / 2, r1 + wh / 2), 0, 0, 0), sign)),
+                              ('sub', rr(sx + wv / 2, mid - 1, W + 1, yo - wh, ((r1 - wv / 2, r1 - wh / 2), 0, 0, 0), sign))]))
         # nib corner: spine turning left into the nib (bottom-right corner of this half)
-        ops.append(('group', [('add', rr(-1, mid - wh / 2, sx + wv / 2, mid + r2 + 120, (0, 0, r2 + wv / 2, 0), sign)),
-                              ('sub', rr(-2, mid + wh / 2, sx - wv / 2, mid + r2 + 121, (0, 0, max(r2 - wv / 2, 12), 0), sign))]))
+        ops.append(('group', [('add', rr(-1, mid - wh / 2, sx + wv / 2, mid + r2 + 120, (0, 0, (r2 + wv / 2, r2 + wh / 2), 0), sign)),
+                              ('sub', rr(-2, mid + wh / 2, sx - wv / 2, mid + r2 + 121, (0, 0, (r2 - wv / 2, r2 - wh / 2), 0), sign))]))
     return [('group', ops + [('sub', rect(-300, -600, 0, 1400)), ('sub', rect(W, -600, W + 300, 1400))])]
 
 
