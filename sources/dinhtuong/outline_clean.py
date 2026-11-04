@@ -6,6 +6,19 @@
   3. micro steps: a straight segment shorter than MICRO between two edges it turns away from
      (stair-step / ledge on an edge) is collapsed into the intersection of its neighbours
   4. consecutive collinear lines are merged
+  5. R-axis (1.004, Font Bakery outline_semi_vertical): a straight run within 2 u of level / vertical is made exactly
+     level / vertical, moving the end that is not anchored onto the line the outline keeps running along
+  6. R-colinear (1.004, Font Bakery outline_colinear_vectors): two straight segments whose shared point lies within
+     1 u of the line through their outer ends are one straight run
+  7. R-absorb (1.004, Font Bakery outline_short_segments): a straight segment under MICRO that continues a curve
+     smoothly is taken over by that curve (the corner at its other end stays)
+  R-micro2 and R-g1 below run ONCE on the finished UFO masters (scripts/apply_outline_rules.py, last step of
+  sources/generate.sh), never on the intermediate boolean results, where they would move the construction:
+  8. R-micro2 (1.004 review audit): any segment, straight or curved, under MICRO that a union left between a line and
+     a curve is taken over by the neighbour it continues best, or both neighbours meet at its midpoint (outline moves
+     <= 1.25 u)
+  9. R-g1 (1.004 review audit): on the integer grid, a joint turning 0.6-10 deg is meant smooth: a short straight-in-
+     fact curve there becomes a line and the other side's handle turns onto it (handle tip moves <= 4 u)
 The result is drawn into the CFF exactly as before (same segment tuples).
 """
 import math
@@ -274,6 +287,248 @@ def _merge_collinear(segs):
     return segs
 
 
+AXIS_SNAP = 2.0      # units; a straight run this close to level / vertical is meant to be level / vertical (R-axis)
+AXIS_MIN = 12.0      # ... only for runs at least this long (shorter ones are steps, handled by _collapse_micro)
+COLIN_DEV = 1.0      # units; a corner that bends the outline by less than this is grid noise (R-colinear)
+STATS = {'axis': 0, 'colinear': 0}
+
+
+def _axis_anchor(seg_in, seg_out, P, axis):
+    """True when the outline at P keeps running exactly along `axis` ('h' or 'v') on the side away from the
+    segment being snapped (its tangent there is level / vertical)."""
+    k = 1 if axis == 'h' else 0
+    for s, at_end in ((seg_in, True), (seg_out, False)):
+        if s is None:
+            continue
+        d = _end_tan(s) if at_end else _start_tan(s)
+        if abs(d[k]) < 1e-6 and abs(d[1 - k]) > 1e-6:
+            return True
+    return False
+
+
+def _snap_axis(segs):
+    """R-axis: a straight segment within AXIS_SNAP of level (or vertical) over at least AXIS_MIN is made exactly
+    level (vertical). The end that is not anchored moves onto the anchored end's line; when both or neither end is
+    anchored, the end with the shorter neighbouring segment moves."""
+    n = len(segs)
+    for i in range(n):
+        s = segs[i]
+        if s[0] != 'L':
+            continue
+        a, b = s[1], s[2]
+        dx, dy = b[0] - a[0], b[1] - a[1]
+        for axis, off, run in (('h', dy, dx), ('v', dx, dy)):
+            if off == 0 or abs(off) > AXIS_SNAP or abs(run) < AXIS_MIN:
+                continue
+            k = 1 if axis == 'h' else 0
+            prv, nxt = segs[i - 1], segs[(i + 1) % n]
+            anc_a = _axis_anchor(prv, None, a, axis)
+            anc_b = _axis_anchor(None, nxt, b, axis)
+            if anc_a == anc_b:                            # no clear anchor: the shorter neighbour gives way
+                anc_a = _seglen(prv) >= _seglen(nxt)      # (real steps are shorter than AXIS_MIN and never get here)
+            dst_is_b = anc_a
+            if dst_is_b:
+                P = (b[0], a[1]) if axis == 'h' else (a[0], b[1])
+                _set_end(s, P); _set_start(nxt, P)
+            else:
+                P = (a[0], b[1]) if axis == 'h' else (b[0], a[1])
+                _set_start(s, P); _set_end(prv, P)
+            STATS['axis'] += 1
+            break
+    return segs
+
+
+def _merge_near_colinear(segs):
+    """R-colinear: two straight segments in a row whose shared point lies within COLIN_DEV of the line joining
+    their outer ends are one straight run (the shared point is rounding noise)."""
+    i = 0
+    while len(segs) > 3 and i < len(segs):
+        n = len(segs)
+        a, b = segs[i], segs[(i + 1) % n]
+        if a[0] == 'L' and b[0] == 'L':
+            p, q, r = a[1], a[2], b[2]
+            d = _sub(r, p); L = _len(d)
+            if L > 0:
+                dev = abs((q[0] - p[0]) * d[1] - (q[1] - p[1]) * d[0]) / L
+                semi = any(0 < abs(d[k]) <= AXIS_SNAP and abs(d[1 - k]) >= AXIS_MIN for k in (0, 1))
+                if dev <= COLIN_DEV and not semi and _dot(_sub(q, p), d) > 0 and _dot(_sub(r, q), d) > 0 \
+                        and _turn(_sub(q, p), _sub(r, q)) < 15:     # R-axis wins: never merge into a tilted run
+                    a[2] = r; del segs[(i + 1) % n]; STATS['colinear'] += 1
+                    if (i + 1) % n < i: i -= 1
+                    continue
+        i += 1
+    return segs
+
+
+SMOOTH_TURN = 10.0   # deg; a join turning less than this is a smooth continuation (R-absorb)
+ABSORB_DEV = 1.0     # units; the outline may move at most this much when a curve takes over a micro segment
+
+
+def _sample(c, n=32):
+    return [_bez(c[1], c[2], c[3], c[4], k / n) for k in range(n + 1)]
+
+
+def _dev(A, B):
+    """largest distance from a point of A to the polyline B."""
+    best = 0.0
+    for p in A:
+        m = 1e9
+        for a, b in zip(B, B[1:]):
+            d = _sub(b, a); L = _dot(d, d)
+            t = 0.0 if L == 0 else max(0.0, min(1.0, _dot(_sub(p, a), d) / L))
+            m = min(m, _len(_sub(p, _add(a, _mul(d, t)))))
+        best = max(best, m)
+    return best
+
+
+def _absorb_micro(segs):
+    """R-absorb (1.004, Font Bakery outline_short_segments): a straight segment shorter than MICRO that continues a
+    curve smoothly (turn < SMOOTH_TURN) is the curve's own last few units, cut off by rounding after a union; the curve
+    takes it over: its end moves to the segment's far end, its handle moves with it (same tangent), the segment goes.
+    The corner at the other end stays where it is. Only when the outline moves by at most ABSORB_DEV."""
+    changed = True
+    while changed and len(segs) > 3:
+        changed = False
+        n = len(segs)
+        for i in range(n):
+            s = segs[i]
+            if s[0] != 'L' or _seglen(s) >= MICRO or _seglen(s) < 1e-6:
+                continue
+            prv, nxt = segs[i - 1], segs[(i + 1) % n]
+            d = _sub(s[2], s[1])
+            done = False
+            for side in ('prv', 'nxt'):
+                c = prv if side == 'prv' else nxt
+                if c[0] != 'C':
+                    continue
+                if side == 'prv' and _turn(_end_tan(c), d) >= SMOOTH_TURN:
+                    continue
+                if side == 'nxt' and _turn(d, _start_tan(c)) >= SMOOTH_TURN:
+                    continue
+                trial = list(c)
+                if side == 'prv':
+                    _set_end(trial, s[2]); before = _sample(c) + [s[2]]
+                else:
+                    _set_start(trial, s[1]); before = [s[1]] + _sample(c)
+                if _dev(_sample(trial), before) <= ABSORB_DEV and _dev(before, _sample(trial)) <= ABSORB_DEV:
+                    c[:] = trial; done = True
+                    break
+            if not done:
+                continue
+            del segs[i]
+            STATS['absorb'] = STATS.get('absorb', 0) + 1
+            changed = True
+            break
+    return segs
+
+
+
+MICRO2_TURN = 25.0   # deg; R-micro2: a micro segment continuing a neighbour within this turn is that neighbour's tail
+MICRO2_DEV = 1.25    # units; ... the outline may move at most this much
+KINK_MIN, KINK_MAX = 0.6, 10.0   # deg; a joint turning this little is meant smooth (a corner turns far more)
+FLAT_TOL = 0.75      # units; a curve whose handles lie this close to its chord is straight
+G1_MOVE = 4.0        # units; R-g1 may swing a handle tip at most this far (the curve itself moves about half that)
+STATS.update({'micro2': 0, 'flat': 0, 'g1': 0})
+
+
+def _absorb_any(segs):
+    """R-micro2 (1.004 review, audit 'đoạn ngắn'): a segment (straight OR curved) whose chord is under MICRO, left by a
+    union between a line and a curve, is taken over by the neighbour it continues best (turn < MICRO2_TURN): that
+    neighbour's end moves to the micro segment's far end (a curve's handle moves with it, a line just extends).
+    Only when the outline moves by at most MICRO2_DEV."""
+    changed = True
+    while changed and len(segs) > 3:
+        changed = False
+        n = len(segs)
+        for i in range(n):
+            s = segs[i]
+            if _seglen(s) >= MICRO or _seglen(s) < 1e-6:
+                continue
+            prv, nxt = segs[i - 1], segs[(i + 1) % n]
+            cand = []
+            if _seglen(prv) >= MICRO: cand.append((_turn(_end_tan(prv), _start_tan(s)), 'prv'))
+            if _seglen(nxt) >= MICRO: cand.append((_turn(_end_tan(s), _start_tan(nxt)), 'nxt'))
+            for t, side in sorted(cand):
+                if t >= MICRO2_TURN:
+                    break
+                c = prv if side == 'prv' else nxt
+                pts = lambda z: _sample(z) if z[0] == 'C' else [_add(z[1], _mul(_sub(z[2], z[1]), k / 16)) for k in range(17)]
+                before = (pts(c) + pts(s)) if side == 'prv' else (pts(s) + pts(c))
+                trials = []
+                tr = list(c)
+                if side == 'prv': _set_end(tr, s[-1])
+                else: _set_start(tr, s[1])
+                trials.append(tr)
+                if c[0] == 'C' and t < 2.0:          # in line with the curve's tangent: only the end moves, the handle stays
+                    tr2 = list(c)
+                    if side == 'prv': tr2[-1] = s[-1]
+                    else: tr2[1] = s[1]
+                    trials.insert(0, tr2)
+                ok = next((tr for tr in trials if _dev(pts(tr), before) <= MICRO2_DEV and _dev(before, pts(tr)) <= MICRO2_DEV), None)
+                if ok is not None:
+                    c[:] = ok; del segs[i]; STATS['micro2'] += 1; changed = True
+                    break
+            if changed:
+                break
+            # neither neighbour can take it alone: both meet at its midpoint (each moves half as far)
+            if cand and min(t for t, _ in cand) < MICRO2_TURN:
+                M = _mul(_add(s[1], s[-1]), 0.5)
+                tp, tn = list(prv), list(nxt)
+                _set_end(tp, M); _set_start(tn, M)
+                pts = lambda z: _sample(z) if z[0] == 'C' else [_add(z[1], _mul(_sub(z[2], z[1]), k / 16)) for k in range(17)]
+                before = pts(prv) + pts(s) + pts(nxt); after = pts(tp) + pts(tn)
+                if _dev(after, before) <= MICRO2_DEV and _dev(before, after) <= MICRO2_DEV:
+                    prv[:], nxt[:] = tp, tn; del segs[i]; STATS['micro2'] += 1; changed = True
+                    break
+    return segs
+
+
+def _flat(s):
+    """a curve whose handles lie within FLAT_TOL of its chord, between its ends"""
+    if s[0] != 'C': return False
+    a, b = s[1], s[4]; d = _sub(b, a); L = _len(d)
+    if L < 1e-6: return False
+    for q in (s[2], s[3]):
+        t = _dot(_sub(q, a), d) / (L * L)
+        if t < -0.05 or t > 1.05: return False
+        if abs(d[0] * (q[1] - a[1]) - d[1] * (q[0] - a[0])) / L > FLAT_TOL: return False
+    return True
+
+
+def _g1_kinks(segs):
+    """R-g1 (1.004 review, audit 'gãy góc nhẹ'): a joint that turns KINK_MIN..KINK_MAX deg is meant smooth; a short curve
+    there that is in fact straight becomes a line, and the curve on the other side turns its handle onto the line (its
+    length kept), or two curves share the averaged tangent. Real corners (turning more) are left alone."""
+    n = len(segs)
+    for i in range(n):
+        a, b = segs[i], segs[(i + 1) % n]
+        t = _turn(_end_tan(a), _start_tan(b))
+        if not (KINK_MIN < t < KINK_MAX):
+            continue
+        P = a[-1]
+        flat = [s for s in (a, b) if _flat(s) and _seglen(s) <= 24]
+        ta, tb = (['L', a[1], a[4]] if a in flat else a), (['L', b[1], b[4]] if b in flat else b)
+        na, nb = list(ta), list(tb)
+        if ta[0] == 'L' and tb[0] == 'C':
+            d = _norm(_sub(ta[2], ta[1])); nb[2] = _add(P, _mul(d, _len(_sub(tb[2], P))))
+        elif ta[0] == 'C' and tb[0] == 'L':
+            d = _norm(_sub(tb[2], tb[1])); na[3] = _sub(P, _mul(d, _len(_sub(P, ta[3]))))
+        elif ta[0] == 'C' and tb[0] == 'C':
+            la, lb = _len(_sub(P, ta[3])), _len(_sub(tb[2], P))
+            if la < 1e-6 or lb < 1e-6: continue
+            d = _norm(_add(_norm(_end_tan(ta)), _norm(_start_tan(tb))))
+            na[3] = _sub(P, _mul(d, la)); nb[2] = _add(P, _mul(d, lb))
+        else:
+            continue
+        # a handle that would swing its tip more than G1_MOVE is a long one: the joint is left as drawn
+        mv = max(_len(_sub(x, y)) for s0, s1 in ((ta, na), (tb, nb)) if s0[0] == 'C' for x, y in zip(s0[2:4], s1[2:4]))
+        if mv > G1_MOVE:
+            continue
+        a[:], b[:] = na, nb
+        STATS['g1'] += 1; STATS['flat'] += len(flat)
+    return segs
+
+
 def clean(contours):
     out = []
     for c in contours:
@@ -284,7 +539,10 @@ def clean(contours):
         segs = _refit_chains(segs)
         segs = _tiny_curves_to_lines(segs)
         segs = _collapse_micro(segs)
+        segs = _snap_axis(segs)
         segs = _merge_collinear(segs)
+        segs = _merge_near_colinear(segs)
+        segs = _absorb_micro(segs)
         segs = _smooth_joints(segs)
         out.append(_from_cyc(segs))
     return out

@@ -153,6 +153,10 @@ def main():
         if abs(res) < 5:
             continue
         k1 = int(round((k0 + res) / 5.0)) * 5
+        # K3d (1.004): a close that the 5-unit rounding would take under the ink floor is rounded the other way
+        # (the build's S3b guard, on its own mask, reopens it by 5 anyway): keep >= FLOOR + 1 on our raster
+        while k1 < k0 and fo.gap(a, b, k1) < FLOOR + 1:
+            k1 += 5
         if k1 == round(k0):
             continue
         if a + b in K['exceptions']:

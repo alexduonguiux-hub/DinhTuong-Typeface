@@ -8,6 +8,7 @@ help:
 	@echo "  make vf:       Builds fonts/variable/DinhTuong[wght].ttf from the static masters and checks it against them"
 	@echo "  make compare:  Checks the fontmake build against the generators' reference binaries"
 	@echo "  make test:   Tests the fonts with fontspector (Google Fonts profile)"
+	@echo "  make qa:     Font Bakery on fonts/ttf + fonts/otf (vs documentation/qa/fontbakery-accepted.txt) + guideline audit on the UFOs"
 	@echo "  make proof:  Creates HTML proof documents in out/proof"
 	@echo
 
@@ -36,6 +37,17 @@ compare: build.stamp
 test: build.stamp
 	which fontspector || (echo "fontspector not found. Please install it with 'cargo binstall fontspector'." && exit 1)
 	TOCHECK=$$(find fonts/ttf -type f 2>/dev/null); mkdir -p out/ out/fontspector; fontspector --profile googlefonts -l warn --full-lists --succinct --html out/fontspector/fontspector-report.html --ghmarkdown out/fontspector/fontspector-report.md --badges out/badges $$TOCHECK  || echo '::warning file=sources/build.sh,title=fontspector failures::The fontspector QA check reported errors in your font. Please check the generated report.'
+
+# Technical QA (Font Bakery). Checks the fonts already in fonts/ (no rebuild); fails on any result that is not
+# listed in documentation/qa/fontbakery-accepted.txt. See .claude/skills/dinhtuong-tech-qa/SKILL.md.
+venv-qa/touchfile: requirements-qa.txt
+	test -d venv-qa || python3 -m venv venv-qa
+	. venv-qa/bin/activate; pip install -Ur requirements-qa.txt
+	touch venv-qa/touchfile
+
+qa: venv-qa/touchfile
+	. venv-qa/bin/activate; python3 scripts/qa_fontbakery.py
+	. venv-qa/bin/activate; python3 scripts/qa_alignment.py sources/ufo/DinhTuong-Regular.ufo sources/ufo/DinhTuong-Medium.ufo sources/ufo/DinhTuong-Bold.ufo
 
 proof: venv build.stamp
 	which diff3proof || (echo "diff3proof not found. Please install it with 'cargo binstall diffenator3'." && exit 1)

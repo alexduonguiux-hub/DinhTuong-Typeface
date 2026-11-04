@@ -60,15 +60,24 @@ def core_lc(c):
     import latin_core_c as LC
     lv, lh = LF.B.v, LF.B.h
     if c in 'ąęįų':                                # R8k: ogonek from the rightmost foot of the lowercase base
-        bg = LF.BASE['ı' if c == 'į' else unicodedata.normalize('NFD', c)[0]]
-        o = LC.ogonek_on(bg.ops, bg.body)
+        # SD1 (1.004): į keeps the dot of i (it was drawn on ı); the ogonek is a mark below, the dot stays
+        bg = LF.BASE[unicodedata.normalize('NFD', c)[0]]
+        o = LC.ogonek_on(bg.ops, bg.body, base=unicodedata.normalize('NFD', c)[0])
         nm = 'ogonek'
     elif c in 'ďľť':                               # R8m: vertical caron right of the stem, top on the stem's top
         b0 = unicodedata.normalize('NFD', c)[0]
         bg = LF.BASE[b0]
         xs_r = LC.ink_x_at(bg.ops, LF.lcm.ASC - 60, 'r') if b0 in 'dl' else LC.ink_x_at(bg.ops, LF.lcm.XH + 60, 'r')
         top = LF.lcm.ASC if b0 in 'dl' else LC.bounds(bg.ops)[3]
-        o = LC.vcaron_on(xs_r, top)
+        sc = 0.85
+        if b0 == 't':
+            # R8m-t (1.004): on t the comma came down onto the crossbar (ť was one contour, 0 u gap; rule >= 38).
+            # It now stands ABOVE the x-height, MARK_GAP over it, top on the ascender like ď ľ, scaled to that room
+            # (Regular ~170 u; Inter / Liberation / DejaVu / Carlito: 155-185 u, bottom 22-83 over the x-height)
+            top = LF.lcm.ASC
+            h85 = LC.bounds(LC.mk_vcaron(0.85)); h85 = h85[3] - h85[1]
+            sc = 0.85 * (LF.lcm.ASC - LF.lcm.XH - LC.MARK_GAP) / h85
+        o = LC.vcaron_on(xs_r, top, sc)
         nm = 'vcaron'
     elif c == 'ģ':                                 # R8l: the comma turned above (no room under the g)
         bg = LF.BASE['g']
@@ -206,7 +215,14 @@ if os.environ.get('K3', '1') == '1' and os.path.exists(K3F):
     # S1f: a side that (unkerned) is outside the references for MOST partners moves as spacing, on the base glyph and
     # every member of its class (accented forms keep the base's spacing)
     done_ids = set()
-    for x, (dl, dr) in K3.get('sides', {}).items():
+    # S1g (1.004, Bold ( 313 vs ) 288): a bracket's spacing is its partner's mirrored: a side moved on ( [ { moves the
+    # opposite side of ) ] } (and back), unless the partner carries its own value.
+    SIDES = dict(K3.get('sides', {}))
+    for a, b in (('(', ')'), ('[', ']'), ('{', '}')):
+        for p, q in ((a, b), (b, a)):
+            if p in SIDES and q not in SIDES:
+                SIDES[q] = [SIDES[p][1], SIDES[p][0]]
+    for x, (dl, dr) in SIDES.items():
         for c, g in G.items():
             if len(c) != 1 or id(g) in done_ids:
                 continue
@@ -218,7 +234,7 @@ if os.environ.get('K3', '1') == '1' and os.path.exists(K3F):
             if hit:
                 done_ids.add(id(g))
     kern.MASK.clear()
-    print('S1f sides', K3.get('sides', {}))
+    print('S1f sides', SIDES)
     print('K3 pairs', len(K3.get('pairs', {})), 'exceptions', len(K3.get('exceptions', {})))
 
 # S3b (28/10 full pair audit): the collision guard covers EVERY pair that can occur in text: letters, figures and

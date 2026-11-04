@@ -26,8 +26,6 @@
       <point x="166" y="808" type="curve"/>
     </contour>
     <contour>
-      <point x="506.3333333333333" y="638.0"/>
-      <point x="510.6666666666667" y="638.0"/>
       <point x="515" y="638" type="curve"/>
       <point x="559" y="638"/>
       <point x="596" y="660"/>
@@ -50,6 +48,8 @@
       <point x="596" y="513"/>
       <point x="560" y="587"/>
       <point x="502" y="638" type="curve"/>
+      <point x="506" y="638"/>
+      <point x="511" y="638"/>
     </contour>
     <contour>
       <point x="408" y="608"/>

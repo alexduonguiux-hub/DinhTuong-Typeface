@@ -1,0 +1,2 @@
+# Technical QA (make qa): Font Bakery with the Google Fonts profile, pinned so the accepted list stays comparable.
+fontbakery[googlefonts]==1.1.0
