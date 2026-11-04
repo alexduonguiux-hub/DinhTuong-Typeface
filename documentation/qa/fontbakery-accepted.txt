@@ -11,9 +11,8 @@
 todo    googlefonts  outline_short_segments    found-short-segments   # pre-existing: segments < ~1 % of the outline (cedilla / ogonek joins, $ & @ § ¥ ƒ ß ð đ ₫ Þ F f ...). Font Bakery stays silent above 100 glyphs ('by design'): Medium / Bold are still above; Regular fell to 94 after D1 and is reported
 
 # --- todo: open decisions for the designer --------------------------------------------------------------------------
-todo    googlefonts  contour_count             contour-count          # § 1 contour (refs 2), ť 1 (refs 2), soft hyphen 1 (refs 0): confirm each is the design, then accept
-todo    googlefonts  soft_hyphen               softhyphen             # the font maps U+00AD: Google Fonts recommends removing it; keep or remove?
-todo    universal    soft_hyphen               softhyphen             # same as googlefonts/soft_hyphen (OTF)
+accept  googlefonts  soft_hyphen               softhyphen             # designer 04/11: U+00AD is kept (line breaking) as an empty zero-width glyph, as Google Fonts asks for the glyph
+accept  universal    soft_hyphen               softhyphen             # same as googlefonts/soft_hyphen (OTF)
 
 # --- accept: Google Fonts submission metadata (the family is not submitted to Google Fonts) ------------------------
 accept  googlefonts  outline_alignment_miss    found-misalignments      # A1 (1.004): no design point is off a guideline. Of 84-85 points per weight, 75-80 exist only in the TTF (cu2qu splits curves that run along a guideline: flares leaving a cut, bowls near the baseline) and the rest are marks / joins placed by other rules. Guarded by scripts/qa_alignment.py (make qa) on the UFO design points: 0
