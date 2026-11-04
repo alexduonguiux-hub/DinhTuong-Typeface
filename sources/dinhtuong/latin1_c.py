@@ -98,7 +98,7 @@ def mk_cedilla():
     ybot = -40 - r - wh / 2                       # outer bottom of the turn
     xl = xs - 1.7 * r                             # free end (cut flat)
     return [('group', [('add', rrect(xl, ybot, xs + w / 2, ytop, (0, 0, (r + w / 2, r + wh / 2), 0))),
-                       ('sub', rrect(xl - 1, ybot + wh, xs - w / 2, ytop + 1, (0, 0, (r - w / 2, r - wh / 2), 0)))])]
+                       ('sub', GL.offset_corner_inner(xs + w / 2, ybot, -1, 1, r + w / 2, r + wh / 2, w, wh, (xl - 1, ytop + 1)))])]
 
 
 NEW_TOP = {DIA: mk_diaeresis, RING: mk_ring, CARON: mk_caron, MACRON: mk_macron}

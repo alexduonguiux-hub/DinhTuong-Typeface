@@ -704,15 +704,20 @@ def _brace_ops(W):
             return rrect(x0, y0, x1, y1, (tl, tr, br, bl))
         return rrect(x0, 2 * mid - y1, x1, 2 * mid - y0, (bl, br, tr, tl))
 
+    def mir(c, sign):                     # the lower half is the upper half mirrored about mid (as rr() does)
+        return c if sign > 0 else transform(c, lambda x, y: (x, 2 * mid - y))
+
     ops = []
     for sign in (1, -1):
         yo = top if sign > 0 else top          # mirrored by rr()
         # end corner: bar along the top turning down into the spine (top-left corner)
         ops.append(('group', [('add', rr(sx - wv / 2, mid, W, yo, ((r1 + wv / 2, r1 + wh / 2), 0, 0, 0), sign)),
-                              ('sub', rr(sx + wv / 2, mid - 1, W + 1, yo - wh, ((r1 - wv / 2, r1 - wh / 2), 0, 0, 0), sign))]))
+                              ('sub', mir(GL.offset_corner_inner(sx - wv / 2, yo, 1, -1, r1 + wv / 2, r1 + wh / 2, wv, wh,
+                                                                 (W + 1, mid - 1)), sign))]))
         # nib corner: spine turning left into the nib (bottom-right corner of this half)
         ops.append(('group', [('add', rr(-1, mid - wh / 2, sx + wv / 2, mid + r2 + 120, (0, 0, (r2 + wv / 2, r2 + wh / 2), 0), sign)),
-                              ('sub', rr(-2, mid + wh / 2, sx - wv / 2, mid + r2 + 121, (0, 0, (r2 - wv / 2, r2 - wh / 2), 0), sign))]))
+                              ('sub', mir(GL.offset_corner_inner(sx + wv / 2, mid - wh / 2, -1, 1, r2 + wv / 2, r2 + wh / 2, wv, wh,
+                                                                 (-2, mid + r2 + 121)), sign))]))
     return [('group', ops + [('sub', rect(-300, -600, 0, 1400)), ('sub', rect(W, -600, W + 300, 1400))])]
 
 

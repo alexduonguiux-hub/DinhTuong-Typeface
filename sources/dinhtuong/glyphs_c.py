@@ -1125,6 +1125,50 @@ def rrect(x0, y0, x1, y1, r=(0, 0, 0, 0), k=KC):
 
 
 FULL = 9999                   # radius 'full' -> clamps to a semicircle
+
+
+def offset_corner_inner(Xc, Yc, sx, sy, Rx, Ry, w, wh, far, k=None):
+    """R-conc2 (1.004, designer 04/11 "dựng đường trong bằng offset cho nét đều tuyệt đối"): the INSIDE of a stroke that
+    turns a corner, built as the true offset of the drawn outer corner (the rrect quarter, k = KC) instead of a second
+    ellipse. Corner (Xc, Yc) of the outer rect; (sx, sy) point from that corner into the rect; outer radii (Rx, Ry);
+    vertical stroke w, horizontal stroke wh. Each outer point moves inward along its normal by the stroke's weight in
+    that direction (wh + (w - wh) * |vertical part of the tangent|, as band() weights a stroke), and one cubic is fitted
+    to the offset with its end tangents kept vertical / horizontal. far = the inner rect's far corner (x, y).
+    Returns the contour of the region to subtract (inner rect with that corner replaced by the offset curve)."""
+    k = KC if k is None else k
+    P0 = (Xc, Yc + sy * Ry); P1 = (Xc, Yc + sy * Ry * (1 - k)); P2 = (Xc + sx * Rx * (1 - k), Yc); P3 = (Xc + sx * Rx, Yc)
+    def B(t, i): u = 1 - t; return u**3*P0[i] + 3*u*u*t*P1[i] + 3*u*t*t*P2[i] + t**3*P3[i]
+    def dB(t, i): u = 1 - t; return 3*u*u*(P1[i]-P0[i]) + 6*u*t*(P2[i]-P1[i]) + 3*t*t*(P3[i]-P2[i])
+    cx, cy = Xc + sx * Rx, Yc + sy * Ry                       # the corner's centre side
+    Q = []
+    for j in range(65):
+        t = j / 64
+        x, y = B(t, 0), B(t, 1); tx, ty = dB(t, 0), dB(t, 1); d = _m.hypot(tx, ty) or 1.0
+        nx, ny = -ty / d, tx / d
+        if (cx - x) * nx + (cy - y) * ny < 0:
+            nx, ny = -nx, -ny                                 # inward: towards the centre side
+        th = wh + (w - wh) * abs(ty) / d
+        Q.append((x + nx * th, y + ny * th))
+    Q0, Q3 = (Xc + sx * w, P0[1]), (P3[0], Yc + sy * wh)    # exact ends on the inner edges
+    Q[0], Q[-1] = Q0, Q3
+    T0, T3 = (0.0, -sy), (sx, 0.0)                            # vertical in, horizontal out
+    L = [0.0]
+    for a, b in zip(Q, Q[1:]): L.append(L[-1] + _m.hypot(b[0] - a[0], b[1] - a[1]))
+    us = [l / L[-1] for l in L]
+    A11 = A12 = A22 = r1 = r2 = 0.0
+    for u, q in zip(us, Q):
+        b0, b1, b2, b3 = (1-u)**3, 3*(1-u)**2*u, 3*(1-u)*u*u, u**3
+        a1 = (b1 * T0[0], b1 * T0[1]); a2 = (-b2 * T3[0], -b2 * T3[1])
+        base = ((b0 + b1) * Q0[0] + (b2 + b3) * Q3[0], (b0 + b1) * Q0[1] + (b2 + b3) * Q3[1])
+        rx, ry = q[0] - base[0], q[1] - base[1]
+        A11 += a1[0]*a1[0] + a1[1]*a1[1]; A12 += a1[0]*a2[0] + a1[1]*a2[1]; A22 += a2[0]*a2[0] + a2[1]*a2[1]
+        r1 += a1[0]*rx + a1[1]*ry; r2 += a2[0]*rx + a2[1]*ry
+    det = A11 * A22 - A12 * A12
+    al = (r1 * A22 - r2 * A12) / det; be = (A11 * r2 - A12 * r1) / det
+    C1 = (Q0[0] + al * T0[0], Q0[1] + al * T0[1]); C2 = (Q3[0] - be * T3[0], Q3[1] - be * T3[1])
+    fx, fy = far
+    return [('M', Q3[0], Q3[1]), ('L', fx, Q3[1]), ('L', fx, fy), ('L', Q0[0], fy), ('L', Q0[0], Q0[1]),
+            ('C', C1[0], C1[1], C2[0], C2[1], Q3[0], Q3[1]), ('Z',)]
 import os as _os
 WEIGHT = _os.environ.get('A2_WEIGHT', 'bold')
 # stem table per weight (Bold = the approved master). Regular/Medium keep the same
