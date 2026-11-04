@@ -15,7 +15,7 @@ help:
 build: build.stamp
 
 vf: venv
-	. venv/bin/activate; python3 scripts/make_vf_sources.py && fontmake -m "sources/vf/DinhTuong[wght].designspace" -o variable --output-path "fonts/variable/DinhTuong[wght].ttf" && python3 scripts/vf_vs_static.py
+	. venv/bin/activate; python3 scripts/make_vf_sources.py && fontmake -m "sources/vf/DinhTuong[wght].designspace" -o variable --output-path "fonts/variable/DinhTuong[wght].ttf" && python3 scripts/vf_vs_static.py && python3 scripts/vf_interp_check.py
 
 venv: venv/touchfile
 
