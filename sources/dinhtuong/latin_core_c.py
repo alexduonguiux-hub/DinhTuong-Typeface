@@ -21,6 +21,7 @@ Rule book additions (R8i … R8p, L-letters), every part cut from the house kit,
 import math
 import unicodedata
 import glyphs_c as GL
+import math as _m
 from glyphs_c import *
 import figs_c as F
 
@@ -91,24 +92,24 @@ def mk_dblacute(upper=False):
 
 
 def mk_ogonek(upper=True):
-    """R8k: the house cedilla's construction (vertical stroke, one compass turn, horizontal end cut flat), MIRRORED,
-    one size up (it carries the letter's foot): stroke 1.15 x the cedilla's, turn radius 85, drop to -175."""
-    import latin1_c as L1
-    w, wh = 1.15 * 88 * GL.WK, 1.15 * 70 * GL.WK
-    r = max(85, w / 2 + 24)
-    xs, ytop = 0, 40
-    ybot = -175
-    xl = xs - 1.55 * r
-    # R8k-b (1.004 review, designer: 'móc nên là 1 đường uốn cong'): no straight run and no tight turn any more: below
-    # the base (from y = 10, inside the foot, down to the bottom) the whole hook is ONE elliptical bend, from the
-    # vertical stroke to the flat-cut tail (outer quarter spanning the full width and height; inner = its true offset,
-    # R-conc2, so the stroke stays even). Above y = 10 the stroke stands straight inside the base's foot.
-    # ... and ONE weight all along (designer: 'độ dày phải đều'): the offset is w at the stem AND at the tail (no
-    # vertical -> horizontal contrast in the hook), so the stroke is the same thickness measured square everywhere
-    Rx, Ry = xs + w / 2 - xl, 10 - ybot
-    ced = [('group', [('add', rrect(xl, ybot, xs + w / 2, ytop, (0, 0, (Rx, Ry), 0))),
-                      ('sub', GL.offset_corner_inner(xs + w / 2, ybot, -1, 1, Rx, Ry, w, w, (xl - 1, ytop + 1)))])]
-    return L1.tf_ops(ced, lambda x, y: (-x, y))          # stroke at x in [-w/2, w/2], tail to the right
+    """R8k-d (1.004 review, designer: 'hướng 2' = the hook shape of the reference fonts, 'nét móc phải đều như
+    concept'): the ogonek is a c-shaped hook, ONE arc of two concentric circles, so the stroke is exactly w measured
+    square everywhere (the parentheses' construction, R17b). It leaves the base at 150 deg (running down-left out of the
+    foot), bulges left, rounds the bottom and ends at 285 deg with the tail rising a little to the right; both ends
+    are cut along the radius (square to the stroke). Bottom of the ink at -175 as before. Above the baseline only what
+    lies inside the stroke's own width is kept (it sits in the base's foot), so nothing shows beside the foot.
+    Stroke centre at the top: x = 0 (the placement rules of ogonek_on put it under the foot / the stem's middle)."""
+    import figs_c as F
+    w = 1.15 * 88 * GL.WK
+    a1, a2 = _m.radians(150), _m.radians(285)
+    ytop, ybot = 40, -175
+    rc = (ytop - ybot - w / 2) / (1 + _m.sin(a1))         # centre-line radius: top of the arc at ytop, ink bottom at ybot
+    cx, cy = -rc * _m.cos(a1), ybot + w / 2 + rc
+    Ro, Ri = rc + w / 2, rc - w / 2
+    pt = lambda R, a: (cx + R * _m.cos(a), cy + R * _m.sin(a))
+    hook = [('M',) + pt(Ro, a1)] + F._arc((cx, cy), Ro, a1, a2) + [('L',) + pt(Ri, a2)] + \
+           F._arc((cx, cy), Ri, a2, a1) + [('Z',)]
+    return [('group', [('add', hook), ('sub', rect(-600, 0, -w / 2, 400)), ('sub', rect(w / 2, 0, 600, 400))])]
 
 
 def mk_commabelow(scale=0.78):
