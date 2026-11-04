@@ -12296,6 +12296,7 @@ feature kern {
     pos @kL_a [question] 15;
     pos @kL_a @kR_J -20;
     pos @kL_a [V] -10;
+    pos @kL_a @kR_W -10;
     pos @kL_b [seven] -15;
     pos @kL_b [question] 15;
     pos @kL_b @kR_J -15;
@@ -12345,6 +12346,7 @@ feature kern {
     pos @kL_h [question] 15;
     pos @kL_h @kR_J -15;
     pos @kL_h [V] -10;
+    pos @kL_h @kR_W -10;
     pos @kL_h [x] 5;
     pos @kL_i [four] -15;
     pos @kL_i [question] 15;
@@ -12383,6 +12385,7 @@ feature kern {
     pos @kL_l [question] 15;
     pos @kL_l @kR_J -15;
     pos @kL_l @kR_S -10;
+    pos @kL_l @kR_W -10;
     pos @kL_l [bracketright] 20;
     pos m question 15;
     pos [m] @kR_J -15;
@@ -12390,6 +12393,7 @@ feature kern {
     pos @kL_n [question] 15;
     pos @kL_n @kR_J -20;
     pos @kL_n [V] -10;
+    pos @kL_n @kR_W -10;
     pos @kL_n [x] 5;
     pos @kL_o [seven] -15;
     pos @kL_o [question] 15;
@@ -12497,12 +12501,14 @@ feature kern {
     pos v braceright -20;
     pos v ellipsis -20;
     pos @kL_w [period] -35;
+    pos @kL_w [slash] -10;
     pos @kL_w [six] -15;
     pos @kL_w [seven] -15;
     pos @kL_w [question] 5;
     pos @kL_w @kR_A -10;
     pos @kL_w @kR_J -25;
     pos @kL_w @kR_T -10;
+    pos @kL_w @kR_W -10;
     pos @kL_w @kR_Z -20;
     pos @kL_w [bracketright] -20;
     pos @kL_w [f] 35;
@@ -12516,7 +12522,7 @@ feature kern {
     pos x parenright 10;
     pos x slash -15;
     pos x two 10;
-    pos x question 20;
+    pos x question 0;
     pos [x] @kR_J -20;
     pos x bracketright -25;
     pos x b 5;

@@ -14297,6 +14297,7 @@ feature kern {
     pos V ellipsis -55;
     pos V guilsinglright -50;
     pos @kL_W [comma] -50;
+    pos @kL_W [hyphen] -10;
     pos @kL_W [period] -50;
     pos @kL_W [slash] -50;
     pos @kL_W [two] -15;
