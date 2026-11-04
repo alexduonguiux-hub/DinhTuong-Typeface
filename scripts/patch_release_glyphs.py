@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Release patch (1.004 on 1.003, same method as scripts/patch_release_binaries.py for 1.002): the new binaries are the
-previous binaries with ONLY the changed glyphs replaced. OTF charstrings are drawn from the UFO, TTF glyphs and hmtx
-come from the fontmake build of the same UFOs, GPOS from that build (the UFO features.fea), and the version is set in
+previous binaries with ONLY the changed glyphs replaced. OTF charstrings are drawn from the fontmake OTF (the UFO with
+overlaps removed, exactly what the build makes), TTF glyphs and hmtx come from the fontmake build of the same UFOs, GPOS from that build (the UFO features.fea), and the version is set in
 name ID 3 / 5 and head.fontRevision. Every other glyph and table stays byte-identical.
 Glyphs that are new in the UFO (not in the previous binaries) are appended to the glyph order (as fontmake does from
 public.glyphOrder), and GSUB is then taken from the fontmake build too.
@@ -25,6 +25,7 @@ for w in ['Regular', 'Medium', 'Bold']:
     for kind in ['ttf', 'otf']:
         base = TTFont(f'{OLD}/{kind}/DinhTuong-{w}.{kind}')
         fm = TTFont(f'{FM}/{kind}/DinhTuong-{w}.{kind}')
+        fmgs = fm.getGlyphSet()
         old_ver = f"{base['head'].fontRevision:.3f}"
         order = list(base.getGlyphOrder())       # a copy: in an OTF the glyph order IS the CFF charset list
         added = [g for g in names if g not in order]
@@ -35,7 +36,7 @@ for w in ['Regular', 'Medium', 'Bold']:
                 td = base['CFF '].cff.topDictIndex[0]
                 cs = td.CharStrings
                 for g in added:
-                    pen = T2CharStringPen(u[g].width, None); u[g].draw(pen)
+                    pen = T2CharStringPen(u[g].width, None); fmgs[g].draw(pen)
                     c = pen.getCharString(private=td.Private, globalSubrs=base['CFF '].cff.GlobalSubrs)
                     td.charset.append(g)
                     if cs.charStringsAreIndexed:
@@ -57,7 +58,7 @@ for w in ['Regular', 'Medium', 'Bold']:
             else:
                 cs = base['CFF '].cff.topDictIndex[0].CharStrings
                 pen = T2CharStringPen(u[g].width, None)
-                u[g].draw(pen)
+                fmgs[g].draw(pen)                      # the fontmake outline: overlaps removed, as the build does
                 cs[g] = pen.getCharString(private=cs[g].private, globalSubrs=cs[g].globalSubrs)
             base['hmtx'][g] = fm['hmtx'][g]
         base['GPOS'] = fm['GPOS']
