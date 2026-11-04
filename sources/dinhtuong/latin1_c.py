@@ -397,8 +397,28 @@ def S_brokenbar():
 
 
 def S_section():
+    """R0c (1.004, designer 04/11 "vẽ lại §"): § = the current s + the same s turned 180 deg about the centre of its
+    LOWER ring. That ring is an ellipse, so it maps onto itself and becomes the shared middle loop: each copy covers the
+    other's opening and buries the other's inner terminal in its stroke, the counter stays open, and every stroke,
+    terminal and the spine are exactly the s's. The § is point-symmetric; its top sits on the lowercase ascender line.
+    (Was two s stacked 370 apart: the lower bowl of one and the upper bowl of the other overlapped off-centre and the
+    middle filled solid, one contour; references Inter / Liberation / DejaVu / Carlito: two contours.)"""
     s = lcg('s')                                 # R0b: the current s
-    ops = [('group', shift_ops(s.ops, 0, 250))] + [('group', shift_ops(s.ops, 0, -120))]
+    pts = []
+
+    def walk(ops):
+        for op, c in ops:
+            if op == 'group':
+                walk(c)
+            elif op == 'add':
+                pts.extend(flatten(c, 24))
+    walk(s.ops)
+    xmin, xmax = min(p[0] for p in pts), max(p[0] for p in pts)
+    right = sorted(p[1] for p in pts if p[0] > xmax - 0.5)
+    cx, cy = (xmin + xmax) / 2, right[len(right) // 2]      # the lower ring's centre: its right extreme's height
+    turned = tf_ops(s.ops, lambda x, y: (2 * cx - x, 2 * cy - y))
+    dy = LASC - max(p[1] for p in pts)
+    ops = [('group', shift_ops(s.ops, 0, dy)), ('group', shift_ops(turned, 0, dy))]
     make('§', ops, s.lsb, s.rsb)
 
 
@@ -533,7 +553,9 @@ def build_latin1():
     import latin_core_c as LC
     LC.build_core()
     G['Ð'] = G['Dcroat']
-    G['­'] = G['-']
+    # 1.004 (designer 04/11): the soft hyphen is an empty, zero-width glyph (Google Fonts); a renderer draws the hyphen
+    # where it breaks the line and nothing elsewhere (it was a copy of the hyphen)
+    G['­'] = Glyph('uni00AD', 0, 0, 0, 0xAD)
     return G
 
 
