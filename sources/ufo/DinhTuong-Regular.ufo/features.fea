@@ -13334,7 +13334,7 @@ feature kern {
     pos [parenleft] @kR_T -25;
     pos [parenleft] @kR_Z -40;
     pos [parenleft] @kR_j 65;
-    pos [parenleft] @kR_s -20;
+    pos [parenleft] @kR_s -5;
     pos parenleft v -30;
     pos [parenleft] @kR_w -20;
     pos [parenleft] @kR_y -5;

@@ -215,7 +215,14 @@ if os.environ.get('K3', '1') == '1' and os.path.exists(K3F):
     # S1f: a side that (unkerned) is outside the references for MOST partners moves as spacing, on the base glyph and
     # every member of its class (accented forms keep the base's spacing)
     done_ids = set()
-    for x, (dl, dr) in K3.get('sides', {}).items():
+    # S1g (1.004, Bold ( 313 vs ) 288): a bracket's spacing is its partner's mirrored: a side moved on ( [ { moves the
+    # opposite side of ) ] } (and back), unless the partner carries its own value.
+    SIDES = dict(K3.get('sides', {}))
+    for a, b in (('(', ')'), ('[', ']'), ('{', '}')):
+        for p, q in ((a, b), (b, a)):
+            if p in SIDES and q not in SIDES:
+                SIDES[q] = [SIDES[p][1], SIDES[p][0]]
+    for x, (dl, dr) in SIDES.items():
         for c, g in G.items():
             if len(c) != 1 or id(g) in done_ids:
                 continue
@@ -227,7 +234,7 @@ if os.environ.get('K3', '1') == '1' and os.path.exists(K3F):
             if hit:
                 done_ids.add(id(g))
     kern.MASK.clear()
-    print('S1f sides', K3.get('sides', {}))
+    print('S1f sides', SIDES)
     print('K3 pairs', len(K3.get('pairs', {})), 'exceptions', len(K3.get('exceptions', {})))
 
 # S3b (28/10 full pair audit): the collision guard covers EVERY pair that can occur in text: letters, figures and
