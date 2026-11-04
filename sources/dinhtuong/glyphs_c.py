@@ -1685,6 +1685,11 @@ def cap_Q():
     apply(g, ring(0, -OV_C, W, CAP + OV_C, V, H, FULL, FULL))
     tw = diag_dx(146 * WKC, 200, 290)
     g.add(stroke((W * 0.62, 190), (W - 40, -96), tw))
+    # Q-cut (1.004, designer: 'xử lý ở bản này'): the tail's level top always runs into the ring's inner edge, as in
+    # Medium / Bold. Regular's thinner tail stopped 23 u short at y 190 and left a wedge of counter between the tail and
+    # the ring (one node more than Medium / Bold, so the variable font blended two different cuts at 550-650). The
+    # block lies inside the tail and the ring in every weight; it only fills that wedge.
+    g.add(rect(W * 0.62 + tw * 0.25, 160, W - V / 2, 190))
     return reg(g)
 
 
