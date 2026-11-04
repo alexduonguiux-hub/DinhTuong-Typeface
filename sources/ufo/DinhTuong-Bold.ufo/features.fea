@@ -710,8 +710,7 @@ feature kern {
     pos ampersand uni1EDF 5;
     pos ampersand uni1EE1 5;
     pos ampersand uni1EE3 5;
-    pos parenleft igrave -5;
-    pos parenleft oslash -5;
+    pos parenleft Idieresis 15;
     pos slash Igrave 30;
     pos slash Idieresis 45;
     pos zero nine -5;
@@ -4883,6 +4882,7 @@ feature kern {
     pos Icircumflex uni1EDE -25;
     pos Icircumflex uni1EE0 -25;
     pos Icircumflex uni1EE2 -25;
+    pos Idieresis parenright 15;
     pos Idieresis G -30;
     pos Idieresis O -25;
     pos Idieresis Z -30;
@@ -6291,7 +6291,7 @@ feature kern {
     pos abreve ibreve -5;
     pos abreve uni1EC9 -5;
     pos Aogonek exclam -20;
-    pos Aogonek parenright 30;
+    pos Aogonek parenright 50;
     pos Aogonek comma 60;
     pos Aogonek slash 85;
     pos Aogonek semicolon 60;
@@ -6653,7 +6653,7 @@ feature kern {
     pos Edotaccent wdieresis -15;
     pos Edotaccent uni1EC9 -5;
     pos edotaccent exclam 10;
-    pos Eogonek parenright 20;
+    pos Eogonek parenright 35;
     pos Eogonek comma 50;
     pos Eogonek slash 75;
     pos Eogonek semicolon 50;
@@ -7346,6 +7346,7 @@ feature kern {
     pos ibreve uni1EF7 -5;
     pos ibreve uni1EF8 15;
     pos ibreve uni1EF9 -5;
+    pos Iogonek parenright 10;
     pos Iogonek comma 25;
     pos Iogonek slash 50;
     pos Iogonek semicolon 25;
@@ -10170,7 +10171,7 @@ feature kern {
     pos ohorn uni1EF7 25;
     pos ohorn uni1EF9 25;
     pos Uhorn exclam 15;
-    pos Uhorn parenright 15;
+    pos Uhorn parenright 5;
     pos Uhorn seven 20;
     pos Uhorn A -50;
     pos Uhorn C -20;
@@ -12113,7 +12114,6 @@ feature kern {
     pos uni1EC2 wdieresis -15;
     pos uni1EC2 uni1EC8 -10;
     pos uni1EC3 exclam 10;
-    pos uni1EC3 parenright 10;
     pos uni1EC3 seven 5;
     pos uni1EC3 T 10;
     pos uni1EC3 V 20;
@@ -12558,7 +12558,6 @@ feature kern {
     pos uni1ED4 Uhorn -25;
     pos uni1ED4 Wdieresis -50;
     pos uni1ED5 exclam 10;
-    pos uni1ED5 parenright 5;
     pos uni1ED5 seven 5;
     pos uni1ED5 T 5;
     pos uni1ED5 V 15;
@@ -13085,7 +13084,7 @@ feature kern {
     pos uni1EE7 icircumflex -5;
     pos uni1EE7 ibreve -5;
     pos uni1EE8 exclam 15;
-    pos uni1EE8 parenright 15;
+    pos uni1EE8 parenright 5;
     pos uni1EE8 seven 20;
     pos uni1EE8 A -50;
     pos uni1EE8 C -20;
@@ -13270,7 +13269,7 @@ feature kern {
     pos uni1EE9 quotedblleft 15;
     pos uni1EE9 quotedblright 10;
     pos uni1EEA exclam 15;
-    pos uni1EEA parenright 15;
+    pos uni1EEA parenright 5;
     pos uni1EEA seven 20;
     pos uni1EEA A -50;
     pos uni1EEA C -20;
@@ -13455,7 +13454,7 @@ feature kern {
     pos uni1EEB quotedblleft 15;
     pos uni1EEB quotedblright 10;
     pos uni1EEC exclam 15;
-    pos uni1EEC parenright 15;
+    pos uni1EEC parenright 5;
     pos uni1EEC seven 20;
     pos uni1EEC A -50;
     pos uni1EEC C -20;
@@ -13640,7 +13639,7 @@ feature kern {
     pos uni1EED quotedblleft 15;
     pos uni1EED quotedblright 10;
     pos uni1EEE exclam 15;
-    pos uni1EEE parenright 15;
+    pos uni1EEE parenright 5;
     pos uni1EEE seven 20;
     pos uni1EEE A -50;
     pos uni1EEE C -20;
@@ -13825,7 +13824,7 @@ feature kern {
     pos uni1EEF quotedblleft 15;
     pos uni1EEF quotedblright 10;
     pos uni1EF0 exclam 15;
-    pos uni1EF0 parenright 15;
+    pos uni1EF0 parenright 5;
     pos uni1EF0 seven 20;
     pos uni1EF0 A -50;
     pos uni1EF0 C -20;
@@ -14286,7 +14285,7 @@ feature kern {
     pos [ampersand] @kR_W -10;
     pos [quotesingle] @kR_J -25;
     pos parenleft zero -25;
-    pos parenleft one 35;
+    pos parenleft one 0;
     pos parenleft two -20;
     pos parenleft three 5;
     pos parenleft four -30;
@@ -14296,8 +14295,6 @@ feature kern {
     pos parenleft nine -30;
     pos [parenleft] @kR_A -25;
     pos [parenleft] @kR_C -10;
-    pos [parenleft] @kR_G -30;
-    pos [parenleft] @kR_I -20;
     pos [parenleft] @kR_J -75;
     pos [parenleft] @kR_O -10;
     pos parenleft Q -10;
@@ -14324,7 +14321,7 @@ feature kern {
     pos parenleft t -5;
     pos [parenleft] @kR_u 0;
     pos parenleft v -10;
-    pos [parenleft] @kR_w -30;
+    pos [parenleft] @kR_w -25;
     pos parenleft x 0;
     pos [parenleft] @kR_y 0;
     pos [parenleft] @kR_z 20;

@@ -626,50 +626,40 @@ def p_quotedblleft():
     return _reg(g)
 
 
-def _paren_ops(W):
-    """R17 (1.004, designer 03/11 "sửa phần cắt của dấu ()"): ( ) are a true compass ring, outer oval minus counter
-    oval (sides 0.92 V, top / bottom 0.92 H), like the hook mark and the ? (the old polygon band left a wavy counter
-    and, in Bold, short kinked segments). Each end is cut SQUARE to the stroke (90 deg corners), at the point where the
-    outer corner sits on the bracket lines CAP + 90 / -140 shared with [ ] { }. The old end was half level cut, half
-    the band's own end: a bevel. A level cut is not possible on this oval (the counter never reaches CAP + 90)."""
+def _paren_geom():
+    """R17b (1.004, designer 04/11 "dấu () nét không đều mà lại nhỏ dần, không đúng concept" + sample "nên làm kiểu như
+    này"): ( ) are a shallow arc of ONE even stroke, both edges concentric circles (normal thickness = wv everywhere),
+    the ends cut LEVEL on the bracket lines CAP + 90 / -140 shared with [ ] { }. Measured on the sample: bulge (the
+    outer edge's sagitta over the full height) 0.092 of the height; its stroke, 0.118 of the height, is Regular's wv.
+    (R17, the elliptical ring cut square, thinned from wv at the middle to wh at the ends.)"""
     top, bot = CAP + 90, -140
-    wv, wh = V * 0.92, H * 0.92
-    rx, ry = W - V / 2, (top - bot) / 2 + 40
-    cx, cy = W, (top + bot) / 2
+    wv = V * 0.92
+    h = (top - bot) / 2; cy = (top + bot) / 2
+    s = 0.092 * (top - bot)                       # outer sagitta
+    Ro = (h * h + s * s) / (2 * s)                # outer radius; centre (Ro, cy), leftmost outer point x = 0
+    Ri = Ro - wv
+    xi = Ro - _m.sqrt(Ri * Ri - h * h)            # inner edge on the cut lines (the glyph's right extreme)
+    return dict(top=top, bot=bot, cy=cy, h=h, wv=wv, s=s, Ro=Ro, Ri=Ri, xi=xi)
 
-    Ro, ro = rx + wv / 2, ry + wh / 2      # outer oval
-    # outer corner Q exactly on the bracket line, found on the DRAWN outer curve (the _oval quarter from its top to
-    # its left extreme, k = 0.56), and the cut square to that curve's tangent there
-    k = 0.56
-    P0, P1, P2, P3 = (cx, cy + ro), (cx - k * Ro, cy + ro), (cx - Ro, cy + k * ro), (cx - Ro, cy)
-    bz = lambda t, i: ((1 - t) ** 3 * P0[i] + 3 * (1 - t) ** 2 * t * P1[i] + 3 * (1 - t) * t * t * P2[i] + t ** 3 * P3[i])
-    dbz = lambda t, i: (3 * (1 - t) ** 2 * (P1[i] - P0[i]) + 6 * (1 - t) * t * (P2[i] - P1[i]) + 3 * t * t * (P3[i] - P2[i]))
-    lo, hi = 0.0, 1.0
-    for _ in range(60):
-        mid = (lo + hi) / 2
-        lo, hi = (mid, hi) if bz(mid, 1) > top else (lo, mid)
-    px, py = bz(hi, 0), top
-    tx, ty = dbz(hi, 0), dbz(hi, 1)        # outer edge tangent at Q (pointing down the stroke)
-    d = _m.hypot(tx, ty); tx, ty = tx / d, ty / d
-    ux, uy = -tx, -ty                     # direction the stroke runs past the cut (towards the top)
-    nx, ny = -uy, ux
-    B = 2000
-    cut = [(px + nx * B, py + ny * B), (px - nx * B, py - ny * B),
-           (px - nx * B + ux * B, py - ny * B + uy * B), (px + nx * B + ux * B, py + ny * B + uy * B)]
-    return [('group', [('add', _oval(cx - rx - wv / 2, cy - ry - wh / 2, cx + rx + wv / 2, cy + ry + wh / 2)),
-                       ('sub', _oval(cx - rx + wv / 2, cy - ry + wh / 2, cx + rx - wv / 2, cy + ry - wh / 2)),
-                       ('sub', rect(cx, -600, cx + 600, 1600)),
-                       ('sub', poly(cut)), ('sub', poly([(x, 2 * cy - y) for x, y in cut]))])]
+
+def _paren_ops():
+    q = _paren_geom(); C = (q['Ro'], q['cy'])
+    ao = _m.asin(q['h'] / q['Ro']); ai = _m.asin(q['h'] / q['Ri'])
+    outer = _arc(C, q['Ro'], _m.pi - ao, _m.pi) + _arc(C, q['Ro'], _m.pi, _m.pi + ao)   # (s, top) -> (0, cy) -> (s, bot)
+    inner = _arc(C, q['Ri'], _m.pi + ai, _m.pi) + _arc(C, q['Ri'], _m.pi, _m.pi - ai)   # (xi, bot) -> (wv, cy) -> (xi, top)
+    p0 = (C[0] + q['Ro'] * _m.cos(_m.pi - ao), q['top'])
+    p1 = (C[0] + q['Ri'] * _m.cos(_m.pi + ai), q['bot'])
+    return [('add', [('M', *p0)] + outer + [('L', *p1)] + inner + [('Z',)])]
 
 
 def p_parenleft():
-    W = 230
-    g = _g('(', W, 44, 14); g.ops += _paren_ops(W); return _reg(g)
+    q = _paren_geom()
+    g = _g('(', q['xi'], 49, 50); g.ops += _paren_ops(); return _reg(g)
 
 
 def p_parenright():
-    W = 230
-    g = _g(')', W, 14, 44); g.ops += rot180_ops(_paren_ops(W), W / 2, (CAP - 50) / 2); return _reg(g)
+    q = _paren_geom()
+    g = _g(')', q['xi'], 50, 49); g.ops += rot180_ops(_paren_ops(), q['xi'] / 2, q['cy']); return _reg(g)
 
 
 def p_bracketleft():
