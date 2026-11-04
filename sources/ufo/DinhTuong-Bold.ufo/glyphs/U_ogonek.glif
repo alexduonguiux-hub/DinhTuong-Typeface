@@ -37,15 +37,15 @@
       <point x="310.78943752434776" y="-7.448877165452902"/>
       <point x="317.3647374266469" y="-7.832018669029036"/>
       <point x="324" y="-8" type="curve"/>
-      <point x="324" y="-68" type="line"/>
-      <point x="324" y="-128"/>
-      <point x="364" y="-175"/>
-      <point x="415" y="-175" type="curve"/>
+      <point x="324" y="-50" type="line"/>
+      <point x="324" y="-120"/>
+      <point x="384" y="-175"/>
+      <point x="460" y="-175" type="curve"/>
       <point x="507" y="-175" type="line"/>
       <point x="507" y="-94" type="line"/>
       <point x="460" y="-94" type="line"/>
-      <point x="441" y="-94"/>
-      <point x="425" y="-75"/>
+      <point x="436" y="-94"/>
+      <point x="425" y="-69"/>
       <point x="425" y="-50" type="curve"/>
       <point x="425" y="7" type="line"/>
     </contour>

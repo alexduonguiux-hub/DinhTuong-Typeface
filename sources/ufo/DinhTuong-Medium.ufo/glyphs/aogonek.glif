@@ -4,15 +4,15 @@
   <unicode hex="0105"/>
   <outline>
     <contour>
-      <point x="367" y="-68" type="line"/>
-      <point x="367" y="-128"/>
-      <point x="405" y="-175"/>
-      <point x="454" y="-175" type="curve"/>
+      <point x="367" y="-56" type="line"/>
+      <point x="367" y="-122"/>
+      <point x="423" y="-175"/>
+      <point x="495" y="-175" type="curve"/>
       <point x="542" y="-175" type="line"/>
       <point x="542" y="-106" type="line"/>
       <point x="495" y="-106" type="line"/>
-      <point x="472" y="-106"/>
-      <point x="453" y="-84"/>
+      <point x="470" y="-106"/>
+      <point x="453" y="-78"/>
       <point x="453" y="-56" type="curve"/>
       <point x="453" y="0" type="line"/>
       <point x="467" y="0" type="line"/>

@@ -19,15 +19,15 @@
     </contour>
     <contour>
       <point x="98" y="0" type="line"/>
-      <point x="98" y="-68" type="line"/>
-      <point x="98" y="-128"/>
-      <point x="136" y="-175"/>
-      <point x="185" y="-175" type="curve"/>
+      <point x="98" y="-56" type="line"/>
+      <point x="98" y="-122"/>
+      <point x="154" y="-175"/>
+      <point x="226" y="-175" type="curve"/>
       <point x="273" y="-175" type="line"/>
       <point x="273" y="-106" type="line"/>
       <point x="226" y="-106" type="line"/>
-      <point x="203" y="-106"/>
-      <point x="184" y="-84"/>
+      <point x="201" y="-106"/>
+      <point x="184" y="-78"/>
       <point x="184" y="-56" type="curve"/>
       <point x="184" y="0" type="line"/>
       <point x="198" y="0" type="line"/>

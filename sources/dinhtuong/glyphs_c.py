@@ -1110,8 +1110,16 @@ def rrect(x0, y0, x1, y1, r=(0, 0, 0, 0), k=KC):
     if isinstance(r, (int, float)) or not any(isinstance(c, (tuple, list)) for c in r):
         return _base_rrect(x0, y0, x1, y1, r, k)
     cs = [c if isinstance(c, (tuple, list)) else (c, c) for c in r]
-    lx, ly = (x1 - x0) / 2, (y1 - y0) / 2
-    (tlx, tly), (trx, try_), (brx, bry), (blx, bly) = [(min(max(a, 0), lx), min(max(b, 0), ly)) for a, b in cs]
+    # R-conc2: a radius may take the whole side when the neighbouring corner on that side is square (the half-side
+    # clamp of _base_rrect shrank one-corner turns below their design radius, so the inner offset no longer matched);
+    # two rounded corners sharing a side are scaled down together only if they overlap.
+    W_, H_ = x1 - x0, y1 - y0
+    (tlx, tly), (trx, try_), (brx, bry), (blx, bly) = [(min(max(a, 0), W_), min(max(b, 0), H_)) for a, b in cs]
+    def fit(a, b, L):
+        s = min(1.0, L / (a + b)) if a + b else 1.0
+        return a * s, b * s
+    tlx, trx = fit(tlx, trx, W_); blx, brx = fit(blx, brx, W_)
+    tly, bly = fit(tly, bly, H_); try_, bry = fit(try_, bry, H_)
     p = [('M', x0 + tlx, y1), ('L', x1 - trx, y1)]
     if trx and try_: p.append(('C', x1 - trx + k * trx, y1, x1, y1 - try_ + k * try_, x1, y1 - try_))
     p.append(('L', x1, y0 + bry))

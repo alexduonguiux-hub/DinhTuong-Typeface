@@ -5472,8 +5472,8 @@ feature kern {
     pos Aogonek uni0123 5;
     pos Aogonek itilde -30;
     pos Aogonek ibreve -30;
-    pos Aogonek Iogonek -5;
-    pos Aogonek iogonek 0;
+    pos Aogonek Iogonek -10;
+    pos Aogonek iogonek -10;
     pos Aogonek jcircumflex 155;
     pos Aogonek uni013C 25;
     pos Aogonek Obreve -55;
@@ -5506,8 +5506,8 @@ feature kern {
     pos Aogonek uni1EB4 -62;
     pos Aogonek uni1EB6 -62;
     pos Aogonek uni1EC9 -30;
-    pos Aogonek uni1ECA 10;
-    pos Aogonek uni1ECB 0;
+    pos Aogonek uni1ECA 15;
+    pos Aogonek uni1ECB 5;
     pos Aogonek uni1ECC -55;
     pos Aogonek uni1ECE -55;
     pos Aogonek uni1ED0 -55;
@@ -5983,8 +5983,8 @@ feature kern {
     pos Eogonek imacron -15;
     pos Eogonek Ibreve -25;
     pos Eogonek ibreve 30;
-    pos Eogonek Iogonek -10;
-    pos Eogonek iogonek -10;
+    pos Eogonek Iogonek -15;
+    pos Eogonek iogonek -15;
     pos Eogonek Idotaccent -25;
     pos Eogonek jcircumflex 155;
     pos Eogonek uni0137 10;
@@ -6014,8 +6014,8 @@ feature kern {
     pos Eogonek wdieresis -25;
     pos Eogonek uni1EC8 -25;
     pos Eogonek uni1EC9 -15;
-    pos Eogonek uni1ECA 5;
-    pos Eogonek uni1ECB -5;
+    pos Eogonek uni1ECA 10;
+    pos Eogonek uni1ECB 0;
     pos Eogonek uni1EE5 -15;
     pos Eogonek uni1EE7 -15;
     pos Eogonek uni1EE9 -15;
