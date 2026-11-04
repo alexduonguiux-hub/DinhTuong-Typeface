@@ -15,17 +15,13 @@
       <point x="466" y="33"/>
       <point x="470" y="0" type="curve"/>
       <point x="529" y="0" type="line"/>
-      <point x="529" y="-50" type="line"/>
-      <point x="529" y="-120"/>
-      <point x="588" y="-175"/>
-      <point x="664" y="-175" type="curve"/>
-      <point x="711" y="-175" type="line"/>
-      <point x="711" y="-94" type="line"/>
-      <point x="664" y="-94" type="line"/>
-      <point x="641" y="-94"/>
-      <point x="630" y="-69"/>
-      <point x="630" y="-50" type="curve"/>
-      <point x="630" y="0" type="line"/>
+      <point x="534" y="-99"/>
+      <point x="612" y="-175"/>
+      <point x="711" y="-175" type="curve"/>
+      <point x="711" y="-74" type="line"/>
+      <point x="668" y="-74"/>
+      <point x="635" y="-41"/>
+      <point x="630" y="0" type="curve"/>
       <point x="648" y="0" type="line"/>
       <point x="641" y="12"/>
       <point x="633" y="28"/>

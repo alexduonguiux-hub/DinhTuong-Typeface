@@ -62,7 +62,7 @@ def core_lc(c):
     if c in 'ąęįų':                                # R8k: ogonek from the rightmost foot of the lowercase base
         # SD1 (1.004): į keeps the dot of i (it was drawn on ı); the ogonek is a mark below, the dot stays
         bg = LF.BASE[unicodedata.normalize('NFD', c)[0]]
-        o = LC.ogonek_on(bg.ops, bg.body)
+        o = LC.ogonek_on(bg.ops, bg.body, base=unicodedata.normalize('NFD', c)[0])
         nm = 'ogonek'
     elif c in 'ďľť':                               # R8m: vertical caron right of the stem, top on the stem's top
         b0 = unicodedata.normalize('NFD', c)[0]

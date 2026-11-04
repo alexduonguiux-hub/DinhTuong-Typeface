@@ -912,7 +912,13 @@ def p_ampersand():
     g.group(ring(0, -OV_C, 480, 452, V, H, FULL, FULL) +
             [('sub', poly([(xe(470), 470), (W + 50, 470), (W + 50, -60), (xe(-60), -60)]))])
     g.add(poly([(96, 452), (96 + dw, 452), (W, 0), (W - dw, 0)]))
-    g.add(fbar(360, 236, W, 236 + HM, left=False, right=True))
+    # R0d (1.004 review, designer: '& bị lỗi ở regular'): the arm started at x 360 in every weight; Regular's leg is
+    # thinner, so its right edge crossed the arm's top line left of 360 and left a 13 u vertical ledge (a spike in the
+    # joint). The arm now starts in the middle of the range where its whole end lies inside the leg (leg's left
+    # edge at the arm's bottom .. leg's right edge at the arm's top): it always runs into the leg, in every weight
+    xl = lambda y: 96 + (452 - y) / 452 * (W - dw - 96)
+    x_arm = (xl(236) + xl(236 + HM) + dw) / 2
+    g.add(fbar(x_arm, 236, W, 236 + HM, left=False, right=True))
     return _reg(g)
 
 

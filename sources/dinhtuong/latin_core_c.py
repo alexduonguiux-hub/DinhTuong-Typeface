@@ -99,8 +99,15 @@ def mk_ogonek(upper=True):
     xs, ytop = 0, 40
     ybot = -175
     xl = xs - 1.55 * r
-    ced = [('group', [('add', rrect(xl, ybot, xs + w / 2, ytop, (0, 0, (r + w / 2, r + wh / 2), 0))),
-                      ('sub', GL.offset_corner_inner(xs + w / 2, ybot, -1, 1, r + w / 2, r + wh / 2, w, wh, (xl - 1, ytop + 1)))])]
+    # R8k-b (1.004 review, designer: 'móc nên là 1 đường uốn cong'): no straight run and no tight turn any more: below
+    # the base (from y = 10, inside the foot, down to the bottom) the whole hook is ONE elliptical bend, from the
+    # vertical stroke to the flat-cut tail (outer quarter spanning the full width and height; inner = its true offset,
+    # R-conc2, so the stroke stays even). Above y = 10 the stroke stands straight inside the base's foot.
+    # ... and ONE weight all along (designer: 'độ dày phải đều'): the offset is w at the stem AND at the tail (no
+    # vertical -> horizontal contrast in the hook), so the stroke is the same thickness measured square everywhere
+    Rx, Ry = xs + w / 2 - xl, 10 - ybot
+    ced = [('group', [('add', rrect(xl, ybot, xs + w / 2, ytop, (0, 0, (Rx, Ry), 0))),
+                      ('sub', GL.offset_corner_inner(xs + w / 2, ybot, -1, 1, Rx, Ry, w, w, (xl - 1, ytop + 1)))])]
     return L1.tf_ops(ced, lambda x, y: (-x, y))          # stroke at x in [-w/2, w/2], tail to the right
 
 
@@ -129,11 +136,22 @@ def mk_vcaron(scale=0.85):
 
 
 # ------------------------------------------------------------------ placement on a base
-def ogonek_on(bops, body, foot_y=12):
-    """R8k: the ogonek's stroke stands under the base's rightmost foot on the baseline (its right edge 12 inside it)."""
+OGONEK_CENTRE = set('IiU')     # R8k-c: bases whose ogonek joins the MIDDLE of the glyph's foot
+
+
+def ogonek_on(bops, body, foot_y=12, base=None):
+    """R8k: the ogonek's stroke stands under the base's rightmost foot on the baseline (its right edge 12 inside it).
+    R8k-c (1.004 review, designer: 'các glyph này nên canh cho nét nối giữa glyph' + 'so sánh với các font khác'):
+    on I i (a single stem) and U (a bowl, no right foot) the ogonek's stroke is centred on the base's ink at the
+    baseline: the middle of the stem, the middle of the bowl's bottom. Inter, DejaVu, Liberation, Carlito and Poppins
+    all hang Į į from the stem's centre and Ų from the bottom of the bowl; Ą ą Ę ę ų keep the right foot."""
+    w = 1.15 * 88 * GL.WK
+    if base in OGONEK_CENTRE:
+        xl, xr = ink_x_at(bops, foot_y, 'l'), ink_x_at(bops, foot_y, 'r')
+        if xl is not None and xr is not None:
+            return shift_ops(mk_ogonek(), (xl + xr) / 2, 0)
     xr = ink_x_at(bops, foot_y, 'r')
     xr = body if xr is None else xr
-    w = 1.15 * 88 * GL.WK
     return shift_ops(mk_ogonek(), xr - 12 - w / 2, 0)
 
 
@@ -155,7 +173,7 @@ def compose_caps(ch, bg, upper=True):
         elif m == DBLAC:
             o = shift_ops(mk_dblacute(upper), cx, zone); nm = 'dblacute'
         elif m == OGON:
-            o = ogonek_on(bg.ops, bg.body); nm = 'ogonek'
+            o = ogonek_on(bg.ops, bg.body, base=base); nm = 'ogonek'
         elif m == COMMAB or (m == CEDIL and base in LATVIAN):
             yb = min(0, bounds(bg.ops)[1])           # R8l: 40 under the base's own ink (round bases overshoot)
             o = shift_ops(mk_commabelow(), cx, yb); nm = 'commabelow'
