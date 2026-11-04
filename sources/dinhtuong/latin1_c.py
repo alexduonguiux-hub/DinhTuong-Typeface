@@ -397,28 +397,44 @@ def S_brokenbar():
 
 
 def S_section():
-    """R0c (1.004, designer 04/11 "vẽ lại §"): § = the current s + the same s turned 180 deg about the centre of its
-    LOWER ring. That ring is an ellipse, so it maps onto itself and becomes the shared middle loop: each copy covers the
-    other's opening and buries the other's inner terminal in its stroke, the counter stays open, and every stroke,
-    terminal and the spine are exactly the s's. The § is point-symmetric; its top sits on the lowercase ascender line.
-    (Was two s stacked 370 apart: the lower bowl of one and the upper bowl of the other overlapped off-centre and the
-    middle filled solid, one contour; references Inter / Liberation / DejaVu / Carlito: two contours.)"""
-    s = lcg('s')                                 # R0b: the current s
-    pts = []
+    """R0c (1.004, designer 04/11 "vẽ lại §", then "kiểm tra lỗi và nét thừa"): § = the lower ring of the current s as a
+    WHOLE ring (its own outer and counter ellipses) + the s's upper half (upper ring group + spine) + that half turned
+    180 deg about the ring's centre. The ring is the shared middle loop with an open counter; neither s's lower tail is
+    used, so no terminal cut is left on or inside the loop (the first R0c build, two whole s, left both inner tails'
+    cut faces as 20 u steps on the outline). Strokes, the two visible terminals and the spine are exactly the s's;
+    the § is point-symmetric, its top on the lowercase ascender line. (1.003: two s stacked 370 apart, the middle
+    filled solid, one contour.)"""
+    s = lcg('s')                                 # R0b: the current s  [('group', upper ring), ('group', lower ring), spine]
+    shaped = (len(s.ops) == 3 and s.ops[0][0] == 'group' and s.ops[1][0] == 'group' and s.ops[2][0] == 'add'
+              and s.ops[1][1][0][0] == 'add' and s.ops[1][1][1][0] == 'sub')
+    if not shaped:                               # first pass of a clean checkout (lcsym's provisional s): s + s turned
+        pts = []
+        for op, c in s.ops:
+            if op == 'add':
+                pts.extend(flatten(c, 24))
+        if not pts:
+            make('§', s.ops, s.lsb, s.rsb); return
+        cx = (min(p[0] for p in pts) + max(p[0] for p in pts)) / 2; cy = (min(p[1] for p in pts) + max(p[1] for p in pts)) / 2
+        make('§', [('group', s.ops), ('group', tf_ops(s.ops, lambda x, y: (2 * cx - x, 2 * cy - y)))], s.lsb, s.rsb)
+        return
+    up, lo, spine = s.ops[0][1], s.ops[1][1], s.ops[2]
+    ring = [('add', lo[0][1]), ('sub', lo[1][1])]
+    pts = flatten(lo[0][1], 24)
+    cx = (min(p[0] for p in pts) + max(p[0] for p in pts)) / 2
+    cy = (min(p[1] for p in pts) + max(p[1] for p in pts)) / 2
+    half = [('group', up), spine]
+    top = []
 
     def walk(ops):
         for op, c in ops:
             if op == 'group':
                 walk(c)
             elif op == 'add':
-                pts.extend(flatten(c, 24))
-    walk(s.ops)
-    xmin, xmax = min(p[0] for p in pts), max(p[0] for p in pts)
-    right = sorted(p[1] for p in pts if p[0] > xmax - 0.5)
-    cx, cy = (xmin + xmax) / 2, right[len(right) // 2]      # the lower ring's centre: its right extreme's height
-    turned = tf_ops(s.ops, lambda x, y: (2 * cx - x, 2 * cy - y))
-    dy = LASC - max(p[1] for p in pts)
-    ops = [('group', shift_ops(s.ops, 0, dy)), ('group', shift_ops(turned, 0, dy))]
+                top.extend(p[1] for p in flatten(c, 24))
+    walk(half)
+    dy = LASC - max(top)
+    ops = [('group', ring), ('group', half), ('group', tf_ops(half, lambda x, y: (2 * cx - x, 2 * cy - y)))]
+    ops = [('group', shift_ops(c, 0, dy)) for _, c in ops]
     make('§', ops, s.lsb, s.rsb)
 
 
