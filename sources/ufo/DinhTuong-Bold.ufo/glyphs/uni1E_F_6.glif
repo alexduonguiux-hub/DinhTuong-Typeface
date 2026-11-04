@@ -14,10 +14,9 @@
       <point x="315" y="948"/>
       <point x="305" y="946"/>
       <point x="295" y="944" type="curve"/>
-      <point x="296" y="866" type="line"/>
-      <point x="299.20513911757837" y="868.8301239314192" type="line"/>
-      <point x="305.93735707969" y="874.0674635572946"/>
-      <point x="314.86897737383055" y="877.0"/>
+      <point x="295" y="866" type="line"/>
+      <point x="302" y="871"/>
+      <point x="315" y="877"/>
       <point x="326" y="877" type="curve"/>
       <point x="347" y="877"/>
       <point x="364" y="865"/>

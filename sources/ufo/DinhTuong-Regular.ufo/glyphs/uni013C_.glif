@@ -25,9 +25,6 @@
       <point x="60" y="-274" type="line"/>
       <point x="101" y="-274" type="line"/>
       <point x="154" y="-123" type="line"/>
-      <point x="154.66666666666666" y="-122.0"/>
-      <point x="155.33333333333334" y="-121.0"/>
-      <point x="156" y="-120" type="curve"/>
       <point x="161" y="-112"/>
       <point x="164" y="-103"/>
       <point x="164" y="-93" type="curve"/>

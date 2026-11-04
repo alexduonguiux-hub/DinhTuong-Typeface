@@ -962,7 +962,8 @@ def compose(ch, gaps=None):
     d = unicodedata.normalize('NFD', ch)
     base, marks = d[0], d[1:]
     upper = base.isupper()
-    bname = 'dotlessi' if base == 'i' else base
+    # SD1 (1.004): the dot goes only under a mark above (same rule as latin1_c.compose)
+    bname = 'dotlessi' if base == 'i' and any(m not in ('\u0327', '\u0328', '\u0326', '\u0323') for m in marks) else base
     bg = G[bname]
     g = Glyph('uni%04X' % ord(ch), bg.body, bg.lsb, bg.rsb, ord(ch))
     g.ops = list(bg.ops)
@@ -1103,10 +1104,79 @@ KC = 0.56                     # circle-like curves (0.552 = true circle)
 
 
 def rrect(x0, y0, x1, y1, r=(0, 0, 0, 0), k=KC):
-    return _base_rrect(x0, y0, x1, y1, r, k)
+    """rounded rect, radii (tl, tr, br, bl). A corner given as (rx, ry) is an elliptical quarter (R-conc, 1.004):
+    used where a stroke turns a corner with different vertical and horizontal weights, so the outer and inner
+    corners can share one centre (outer = r + w/2, r + wh/2; inner = r - w/2, r - wh/2)."""
+    if isinstance(r, (int, float)) or not any(isinstance(c, (tuple, list)) for c in r):
+        return _base_rrect(x0, y0, x1, y1, r, k)
+    cs = [c if isinstance(c, (tuple, list)) else (c, c) for c in r]
+    # R-conc2: a radius may take the whole side when the neighbouring corner on that side is square (the half-side
+    # clamp of _base_rrect shrank one-corner turns below their design radius, so the inner offset no longer matched);
+    # two rounded corners sharing a side are scaled down together only if they overlap.
+    W_, H_ = x1 - x0, y1 - y0
+    (tlx, tly), (trx, try_), (brx, bry), (blx, bly) = [(min(max(a, 0), W_), min(max(b, 0), H_)) for a, b in cs]
+    def fit(a, b, L):
+        s = min(1.0, L / (a + b)) if a + b else 1.0
+        return a * s, b * s
+    tlx, trx = fit(tlx, trx, W_); blx, brx = fit(blx, brx, W_)
+    tly, bly = fit(tly, bly, H_); try_, bry = fit(try_, bry, H_)
+    p = [('M', x0 + tlx, y1), ('L', x1 - trx, y1)]
+    if trx and try_: p.append(('C', x1 - trx + k * trx, y1, x1, y1 - try_ + k * try_, x1, y1 - try_))
+    p.append(('L', x1, y0 + bry))
+    if brx and bry: p.append(('C', x1, y0 + bry - k * bry, x1 - brx + k * brx, y0, x1 - brx, y0))
+    p.append(('L', x0 + blx, y0))
+    if blx and bly: p.append(('C', x0 + blx - k * blx, y0, x0, y0 + bly - k * bly, x0, y0 + bly))
+    p.append(('L', x0, y1 - tly))
+    if tlx and tly: p.append(('C', x0, y1 - tly + k * tly, x0 + tlx - k * tlx, y1, x0 + tlx, y1))
+    p.append(('Z',))
+    return p
 
 
 FULL = 9999                   # radius 'full' -> clamps to a semicircle
+
+
+def offset_corner_inner(Xc, Yc, sx, sy, Rx, Ry, w, wh, far, k=None):
+    """R-conc2 (1.004, designer 04/11 "dựng đường trong bằng offset cho nét đều tuyệt đối"): the INSIDE of a stroke that
+    turns a corner, built as the true offset of the drawn outer corner (the rrect quarter, k = KC) instead of a second
+    ellipse. Corner (Xc, Yc) of the outer rect; (sx, sy) point from that corner into the rect; outer radii (Rx, Ry);
+    vertical stroke w, horizontal stroke wh. Each outer point moves inward along its normal by the stroke's weight in
+    that direction (wh + (w - wh) * |vertical part of the tangent|, as band() weights a stroke), and one cubic is fitted
+    to the offset with its end tangents kept vertical / horizontal. far = the inner rect's far corner (x, y).
+    Returns the contour of the region to subtract (inner rect with that corner replaced by the offset curve)."""
+    k = KC if k is None else k
+    P0 = (Xc, Yc + sy * Ry); P1 = (Xc, Yc + sy * Ry * (1 - k)); P2 = (Xc + sx * Rx * (1 - k), Yc); P3 = (Xc + sx * Rx, Yc)
+    def B(t, i): u = 1 - t; return u**3*P0[i] + 3*u*u*t*P1[i] + 3*u*t*t*P2[i] + t**3*P3[i]
+    def dB(t, i): u = 1 - t; return 3*u*u*(P1[i]-P0[i]) + 6*u*t*(P2[i]-P1[i]) + 3*t*t*(P3[i]-P2[i])
+    cx, cy = Xc + sx * Rx, Yc + sy * Ry                       # the corner's centre side
+    Q = []
+    for j in range(65):
+        t = j / 64
+        x, y = B(t, 0), B(t, 1); tx, ty = dB(t, 0), dB(t, 1); d = _m.hypot(tx, ty) or 1.0
+        nx, ny = -ty / d, tx / d
+        if (cx - x) * nx + (cy - y) * ny < 0:
+            nx, ny = -nx, -ny                                 # inward: towards the centre side
+        th = wh + (w - wh) * abs(ty) / d
+        Q.append((x + nx * th, y + ny * th))
+    Q0, Q3 = (Xc + sx * w, P0[1]), (P3[0], Yc + sy * wh)    # exact ends on the inner edges
+    Q[0], Q[-1] = Q0, Q3
+    T0, T3 = (0.0, -sy), (sx, 0.0)                            # vertical in, horizontal out
+    L = [0.0]
+    for a, b in zip(Q, Q[1:]): L.append(L[-1] + _m.hypot(b[0] - a[0], b[1] - a[1]))
+    us = [l / L[-1] for l in L]
+    A11 = A12 = A22 = r1 = r2 = 0.0
+    for u, q in zip(us, Q):
+        b0, b1, b2, b3 = (1-u)**3, 3*(1-u)**2*u, 3*(1-u)*u*u, u**3
+        a1 = (b1 * T0[0], b1 * T0[1]); a2 = (-b2 * T3[0], -b2 * T3[1])
+        base = ((b0 + b1) * Q0[0] + (b2 + b3) * Q3[0], (b0 + b1) * Q0[1] + (b2 + b3) * Q3[1])
+        rx, ry = q[0] - base[0], q[1] - base[1]
+        A11 += a1[0]*a1[0] + a1[1]*a1[1]; A12 += a1[0]*a2[0] + a1[1]*a2[1]; A22 += a2[0]*a2[0] + a2[1]*a2[1]
+        r1 += a1[0]*rx + a1[1]*ry; r2 += a2[0]*rx + a2[1]*ry
+    det = A11 * A22 - A12 * A12
+    al = (r1 * A22 - r2 * A12) / det; be = (A11 * r2 - A12 * r1) / det
+    C1 = (Q0[0] + al * T0[0], Q0[1] + al * T0[1]); C2 = (Q3[0] - be * T3[0], Q3[1] - be * T3[1])
+    fx, fy = far
+    return [('M', Q3[0], Q3[1]), ('L', fx, Q3[1]), ('L', fx, fy), ('L', Q0[0], fy), ('L', Q0[0], Q0[1]),
+            ('C', C1[0], C1[1], C2[0], C2[1], Q3[0], Q3[1]), ('Z',)]
 import os as _os
 WEIGHT = _os.environ.get('A2_WEIGHT', 'bold')
 # stem table per weight (Bold = the approved master). Regular/Medium keep the same
@@ -1573,8 +1643,19 @@ def cap_M():
     VM = round(160 * WKC)
     g = Glyph('M', W, SB_STRAIGHT - 4, SB_STRAIGHT - 4, 0x4D)
     g.add(fstem(0, 0, VM, CAP), fstem(W - VM, 0, W, CAP))
-    dw = diag_dx(DIAG_MULTI, W / 2 - VM, CAP - 190)
-    g.group(vshape(0, W, CAP, 190, dw, 140 * WKC))
+    # D1 (1.004, designer 03/11 "độ dày ... chưa cân bằng", "M bằng W luôn"): M's diagonals carry exactly W's weight,
+    # measured square to the stroke at mid-height with the same ink trap as every vertex. The width is solved on the
+    # run the vshape really draws (the old W / 2 - VM made M 0.73 V); M's V is shorter (CAP - 190), so the trap thins it
+    # more and the width is solved for the thickness, not taken from the nominal rule.
+    fbm = 140 * WKC
+    W1, dwW = _w_geom()
+    target = _vshape_mid(0, W1, CAP, 0, dwW, 128)
+    lo, hi = 0.5 * DIAG, 2.0 * DIAG
+    for _ in range(60):
+        mid = (lo + hi) / 2
+        lo, hi = (mid, hi) if _vshape_mid(0, W, CAP, 190, mid, fbm) < target else (lo, mid)
+    dw = (lo + hi) / 2
+    g.group(vshape(0, W, CAP, 190, dw, fbm))
     return reg(g)
 
 
@@ -1664,13 +1745,36 @@ def cap_V():
     return reg(g)
 
 
-def cap_W():
-    W_reg = 2 * 470 - diag_dx(round(116 * 0.84), 470 / 2 - 40, CAP)
+def _vshape_mid(x0, x1, top, bottom, dw, fb, trap=None):
+    """D1: stroke thickness, square to the stroke, of a vshape diagonal at its mid-height (the outer edge and the
+    trapped inner edge exactly as vshape draws them)."""
+    c = (x0 + x1) / 2
+    run = (c - fb / 2) - x0
+    t = (c - (x0 + dw)) / run
+    yi = top - t * (top - bottom)
+    if trap is None:
+        trap = TRAP if (top - bottom) > 600 else TRAP * 0.8
+    yi = max(bottom + 0.35 * fb, yi - trap)
+    ym = (top + bottom) / 2
+    xo = x0 + (top - ym) / (top - bottom) * run                 # outer edge at ym
+    xi = (x0 + dw) + (top - ym) / (top - yi) * (c - x0 - dw)   # inner edge at ym
+    a_o = _m.atan2(run, top - bottom); a_i = _m.atan2(c - x0 - dw, top - yi)
+    return (xi - xo) * _m.cos((a_o + a_i) / 2)
+
+
+def _w_geom():
+    """W's half-width W1 and stroke dw. D1 (1.004, designer 03/11 'B'): W is drawn with the single-diagonal weight
+    DIAG like V (was DIAG_MULTI 0.84 V: W read ~7 % lighter than V / A / X / Y beside it)."""
+    W_reg = 2 * 470 - diag_dx(round(116 * 0.84), 470 / 2 - 40, CAP)   # Regular width kept from the approved W
     W1 = 470
     for _ in range(6):                         # R2c: solve the half-width so the whole W widens by gw('multi')
-        dw = diag_dx(DIAG_MULTI, W1 / 2 - 40, CAP)
+        dw = diag_dx(DIAG, W1 / 2 - 40, CAP)
         W1 = (W_reg + gw('multi') + dw) / 2
-    dw = diag_dx(DIAG_MULTI, W1 / 2 - 40, CAP)
+    return W1, diag_dx(DIAG, W1 / 2 - 40, CAP)
+
+
+def cap_W():
+    W1, dw = _w_geom()
     W = 2 * W1 - dw
     g = Glyph('W', W, SB_DIAG, SB_DIAG, 0x57)
     g.group(vshape(0, W1, CAP, 0, dw, 128))

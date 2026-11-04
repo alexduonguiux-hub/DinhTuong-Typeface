@@ -626,24 +626,40 @@ def p_quotedblleft():
     return _reg(g)
 
 
-def _paren_ops(W):
+def _paren_geom():
+    """R17b (1.004, designer 04/11 "dấu () nét không đều mà lại nhỏ dần, không đúng concept" + sample "nên làm kiểu như
+    này"): ( ) are a shallow arc of ONE even stroke, both edges concentric circles (normal thickness = wv everywhere),
+    the ends cut LEVEL on the bracket lines CAP + 90 / -140 shared with [ ] { }. Measured on the sample: bulge (the
+    outer edge's sagitta over the full height) 0.092 of the height; its stroke, 0.118 of the height, is Regular's wv.
+    (R17, the elliptical ring cut square, thinned from wv at the middle to wh at the ends.)"""
     top, bot = CAP + 90, -140
-    rx, ry = W - V / 2, (top - bot) / 2 + 40
-    cx, cy = W, (top + bot) / 2
-    arc = [(cx + rx * _m.cos(a), cy + ry * _m.sin(a)) for a in [_m.pi * (0.62 + 0.76 * i / 120) for i in range(121)]]
-    return [('group', [('add', band(arc, V * 0.92, H * 0.92)),
-                       ('sub', rect(-200, top, W + 200, top + 300)),
-                       ('sub', rect(-200, bot - 300, W + 200, bot))])]
+    wv = V * 0.92
+    h = (top - bot) / 2; cy = (top + bot) / 2
+    s = 0.092 * (top - bot)                       # outer sagitta
+    Ro = (h * h + s * s) / (2 * s)                # outer radius; centre (Ro, cy), leftmost outer point x = 0
+    Ri = Ro - wv
+    xi = Ro - _m.sqrt(Ri * Ri - h * h)            # inner edge on the cut lines (the glyph's right extreme)
+    return dict(top=top, bot=bot, cy=cy, h=h, wv=wv, s=s, Ro=Ro, Ri=Ri, xi=xi)
+
+
+def _paren_ops():
+    q = _paren_geom(); C = (q['Ro'], q['cy'])
+    ao = _m.asin(q['h'] / q['Ro']); ai = _m.asin(q['h'] / q['Ri'])
+    outer = _arc(C, q['Ro'], _m.pi - ao, _m.pi) + _arc(C, q['Ro'], _m.pi, _m.pi + ao)   # (s, top) -> (0, cy) -> (s, bot)
+    inner = _arc(C, q['Ri'], _m.pi + ai, _m.pi) + _arc(C, q['Ri'], _m.pi, _m.pi - ai)   # (xi, bot) -> (wv, cy) -> (xi, top)
+    p0 = (C[0] + q['Ro'] * _m.cos(_m.pi - ao), q['top'])
+    p1 = (C[0] + q['Ri'] * _m.cos(_m.pi + ai), q['bot'])
+    return [('add', [('M', *p0)] + outer + [('L', *p1)] + inner + [('Z',)])]
 
 
 def p_parenleft():
-    W = 230
-    g = _g('(', W, 44, 14); g.ops += _paren_ops(W); return _reg(g)
+    q = _paren_geom()
+    g = _g('(', q['xi'], 49, 50); g.ops += _paren_ops(); return _reg(g)
 
 
 def p_parenright():
-    W = 230
-    g = _g(')', W, 14, 44); g.ops += rot180_ops(_paren_ops(W), W / 2, (CAP - 50) / 2); return _reg(g)
+    q = _paren_geom()
+    g = _g(')', q['xi'], 50, 49); g.ops += rot180_ops(_paren_ops(), q['xi'] / 2, q['cy']); return _reg(g)
 
 
 def p_bracketleft():
@@ -678,15 +694,20 @@ def _brace_ops(W):
             return rrect(x0, y0, x1, y1, (tl, tr, br, bl))
         return rrect(x0, 2 * mid - y1, x1, 2 * mid - y0, (bl, br, tr, tl))
 
+    def mir(c, sign):                     # the lower half is the upper half mirrored about mid (as rr() does)
+        return c if sign > 0 else transform(c, lambda x, y: (x, 2 * mid - y))
+
     ops = []
     for sign in (1, -1):
         yo = top if sign > 0 else top          # mirrored by rr()
         # end corner: bar along the top turning down into the spine (top-left corner)
-        ops.append(('group', [('add', rr(sx - wv / 2, mid, W, yo, (r1 + wv / 2, 0, 0, 0), sign)),
-                              ('sub', rr(sx + wv / 2, mid - 1, W + 1, yo - wh, (max(r1 - wv / 2, 12), 0, 0, 0), sign))]))
+        ops.append(('group', [('add', rr(sx - wv / 2, mid, W, yo, ((r1 + wv / 2, r1 + wh / 2), 0, 0, 0), sign)),
+                              ('sub', mir(GL.offset_corner_inner(sx - wv / 2, yo, 1, -1, r1 + wv / 2, r1 + wh / 2, wv, wh,
+                                                                 (W + 1, mid - 1)), sign))]))
         # nib corner: spine turning left into the nib (bottom-right corner of this half)
-        ops.append(('group', [('add', rr(-1, mid - wh / 2, sx + wv / 2, mid + r2 + 120, (0, 0, r2 + wv / 2, 0), sign)),
-                              ('sub', rr(-2, mid + wh / 2, sx - wv / 2, mid + r2 + 121, (0, 0, max(r2 - wv / 2, 12), 0), sign))]))
+        ops.append(('group', [('add', rr(-1, mid - wh / 2, sx + wv / 2, mid + r2 + 120, (0, 0, (r2 + wv / 2, r2 + wh / 2), 0), sign)),
+                              ('sub', mir(GL.offset_corner_inner(sx + wv / 2, mid - wh / 2, -1, 1, r2 + wv / 2, r2 + wh / 2, wv, wh,
+                                                                 (-2, mid + r2 + 121)), sign))]))
     return [('group', ops + [('sub', rect(-300, -600, 0, 1400)), ('sub', rect(W, -600, W + 300, 1400))])]
 
 
@@ -740,6 +761,11 @@ def p_underscore():
 
 MATH_Y = 330          # optical centre for math signs (between x-height middle and cap middle)
 MT_ = 124 * K_        # math stroke
+MATH_ADV = 560        # M1 (1.004, Font Bakery math_signs_width): every math sign on the + advance, ink centred (tabular math)
+
+
+def _math_sb(W):
+    return (MATH_ADV - W) / 2
 
 
 def p_plus():
@@ -763,7 +789,7 @@ def p_equal():
 
 def p_multiply():
     W = 400
-    g = _g('×', W, 50, 50)
+    g = _g('×', W, _math_sb(W), _math_sb(W))          # M1: was 50 / 50 (advance 500)
     L = W * 0.70
     arm = [('add', rect(W / 2 - L, MATH_Y - MT_ / 2 + 6, W / 2 + L, MATH_Y + MT_ / 2 - 6))]
     g.ops += rot_ops(arm, _m.pi / 4, W / 2, MATH_Y) + rot_ops(arm, -_m.pi / 4, W / 2, MATH_Y)
@@ -788,12 +814,14 @@ def _chev(W, H_, t):
 
 def p_less():
     W = 420
-    g = _g('<', W, 46, 46); g.ops += _chev(W, 480, 118 * K_); return _reg(g)
+    g = _g('<', W, _math_sb(W), _math_sb(W))          # M1: was 46 / 46 (advance 512)
+    g.ops += _chev(W, 480, 118 * K_); return _reg(g)
 
 
 def p_greater():
     W = 420
-    g = _g('>', W, 46, 46); g.ops += rot180_ops(_chev(W, 480, 118 * K_), W / 2, MATH_Y); return _reg(g)
+    g = _g('>', W, _math_sb(W), _math_sb(W))          # M1: was 46 / 46 (advance 512)
+    g.ops += rot180_ops(_chev(W, 480, 118 * K_), W / 2, MATH_Y); return _reg(g)
 
 
 def p_guillemotleft():
@@ -884,7 +912,13 @@ def p_ampersand():
     g.group(ring(0, -OV_C, 480, 452, V, H, FULL, FULL) +
             [('sub', poly([(xe(470), 470), (W + 50, 470), (W + 50, -60), (xe(-60), -60)]))])
     g.add(poly([(96, 452), (96 + dw, 452), (W, 0), (W - dw, 0)]))
-    g.add(fbar(360, 236, W, 236 + HM, left=False, right=True))
+    # R0d (1.004 review, designer: '& bị lỗi ở regular'): the arm started at x 360 in every weight; Regular's leg is
+    # thinner, so its right edge crossed the arm's top line left of 360 and left a 13 u vertical ledge (a spike in the
+    # joint). The arm now starts in the middle of the range where its whole end lies inside the leg (leg's left
+    # edge at the arm's bottom .. leg's right edge at the arm's top): it always runs into the leg, in every weight
+    xl = lambda y: 96 + (452 - y) / 452 * (W - dw - 96)
+    x_arm = (xl(236) + xl(236 + HM) + dw) / 2
+    g.add(fbar(x_arm, 236, W, 236 + HM, left=False, right=True))
     return _reg(g)
 
 

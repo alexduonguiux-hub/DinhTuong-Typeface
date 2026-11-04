@@ -1,0 +1,23 @@
+# Font Bakery results that are known. Read by scripts/qa_fontbakery.py (make qa).
+#
+# Format:  <accept|todo>  <profile>  <check id>  <code>   # reason (required)
+#   accept = intentional or out of scope for Dinh Tuong; keep the reason current.
+#   todo   = a real defect or an open decision; fix it in the constructor (a fix is a rule), then delete the line.
+# A result that is not listed here fails `make qa`. A listed line that no longer occurs is printed as STALE: delete it.
+# Baseline: 1.003 (main e1d0a15), Font Bakery 1.1.0, 2026-11-02. Offline here and online in CI (run 41434834735): new 0, network 0.
+# 1.004: outline_semi_vertical and outline_colinear_vectors fixed by the outline rules R-axis / R-colinear (removed).
+
+# --- todo: outline defects (fix in the constructor, all weights) -------------------------------------------------
+
+# --- todo: open decisions for the designer --------------------------------------------------------------------------
+accept  googlefonts  soft_hyphen               softhyphen             # designer 04/11: U+00AD is kept (line breaking) as an empty zero-width glyph, as Google Fonts asks for the glyph
+accept  universal    soft_hyphen               softhyphen             # same as googlefonts/soft_hyphen (OTF)
+
+# --- accept: Google Fonts submission metadata (the family is not submitted to Google Fonts) ------------------------
+accept  googlefonts  outline_alignment_miss    found-misalignments      # A1 (1.004): no design point is off a guideline. Of 84-85 points per weight, 75-80 exist only in the TTF (cu2qu splits curves that run along a guideline: flares leaving a cut, bowls near the baseline) and the rest are marks / joins placed by other rules. Guarded by scripts/qa_alignment.py (make qa) on the UFO design points: 0
+accept  googlefonts  alt_caron                 decomposed-outline       # 1.004 checked by eye and measured: Ľ ď ľ ť all use the comma-form caron (0.85 of ’), mark-base gap 41-58 u (rule >= 38); ť's comma moved off the crossbar (R8m-t). Font Bakery cannot see it because the glyphs are decomposed
+accept  googlefonts  googlefonts/vendor_id                       unknown                  # DIZA (Dizai Studio) is our vendor id; register it with Microsoft when the family ships commercially
+accept  googlefonts  googlefonts/meta/script_lang_tags           lacks-meta-table         # no `meta` table; only needed for Google Fonts' script tagging
+accept  googlefonts  googlefonts/article/images                  lacks-article            # Google Fonts article; the repo has documentation/article without the GF layout
+accept  googlefonts  googlefonts/metadata/unreachable_subsetting unreachable-subsetting   # no METADATA.pb subsets; spacing / combining marks not in a GF subset
+accept  googlefonts  googlefonts/glyphsets/shape_languages       warning-language-shaping # auxiliary letters of other Latin languages (Ō ō Ŀ ŀ …); Vietnamese and the core Latin set are complete

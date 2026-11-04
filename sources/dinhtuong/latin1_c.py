@@ -97,8 +97,8 @@ def mk_cedilla():
     xs, ytop = 14, 40
     ybot = -40 - r - wh / 2                       # outer bottom of the turn
     xl = xs - 1.7 * r                             # free end (cut flat)
-    return [('group', [('add', rrect(xl, ybot, xs + w / 2, ytop, (0, 0, r + w / 2, 0))),
-                       ('sub', rrect(xl - 1, ybot + wh, xs - w / 2, ytop + 1, (0, 0, max(r - w / 2, 18), 0)))])]
+    return [('group', [('add', rrect(xl, ybot, xs + w / 2, ytop, (0, 0, (r + w / 2, r + wh / 2), 0))),
+                       ('sub', GL.offset_corner_inner(xs + w / 2, ybot, -1, 1, r + w / 2, r + wh / 2, w, wh, (xl - 1, ytop + 1)))])]
 
 
 NEW_TOP = {DIA: mk_diaeresis, RING: mk_ring, CARON: mk_caron, MACRON: mk_macron}
@@ -117,7 +117,10 @@ def compose(ch, gaps=None):
     if not new:
         return _compose_vn(ch, gaps)
     upper = base.isupper()
-    bname = 'dotlessi' if base == 'i' else base
+    # SD1 (1.004, Font Bakery soft_dotted): i loses its dot only under a mark ABOVE; with marks below only
+    # (ogonek, cedilla, comma below, dot below) it keeps it: į was drawn on ı (no dot)
+    BELOW = (CEDIL, LC.OGON, LC.COMMAB, '\u0323')
+    bname = 'dotlessi' if base == 'i' and any(m not in BELOW for m in marks) else base
     bg = G[bname]
     import latin_core_c as LC                       # GF Latin Core (R8i-R8m): dot above, double acute, ogonek, comma below
     if any(m in (LC.DOTA, LC.DBLAC, LC.OGON, LC.COMMAB) for m in marks) or (CEDIL in marks and base in LC.LATVIAN):
@@ -394,8 +397,49 @@ def S_brokenbar():
 
 
 def S_section():
-    s = lcg('s')                                 # R0b: the current s
-    ops = [('group', shift_ops(s.ops, 0, 250))] + [('group', shift_ops(s.ops, 0, -120))]
+    """R0c (1.004, designer 04/11 "vẽ lại §", then "kiểm tra lỗi và nét thừa"): § = the lower ring of the current s as a
+    WHOLE ring (its own outer and counter ellipses) + the s's upper half (upper ring group + spine) + that half turned
+    180 deg about the ring's centre, and the ring's counter ellipse cut last, whole: a smooth, centred, point-symmetric
+counter. The ring is the shared middle loop; neither s's lower tail is
+    used, so no terminal cut is left on or inside the loop (the first R0c build, two whole s, left both inner tails'
+    cut faces as 20 u steps on the outline). Strokes, the two visible terminals and the spine are exactly the s's;
+    the § is point-symmetric, its top on the lowercase ascender line. (1.003: two s stacked 370 apart, the middle
+    filled solid, one contour.)"""
+    s = lcg('s')                                 # R0b: the current s  [('group', upper ring), ('group', lower ring), spine]
+    shaped = (len(s.ops) == 3 and s.ops[0][0] == 'group' and s.ops[1][0] == 'group' and s.ops[2][0] == 'add'
+              and s.ops[1][1][0][0] == 'add' and s.ops[1][1][1][0] == 'sub')
+    if not shaped:                               # first pass of a clean checkout (lcsym's provisional s): s + s turned
+        pts = []
+        for op, c in s.ops:
+            if op == 'add':
+                pts.extend(flatten(c, 24))
+        if not pts:
+            make('§', s.ops, s.lsb, s.rsb); return
+        cx = (min(p[0] for p in pts) + max(p[0] for p in pts)) / 2; cy = (min(p[1] for p in pts) + max(p[1] for p in pts)) / 2
+        make('§', [('group', s.ops), ('group', tf_ops(s.ops, lambda x, y: (2 * cx - x, 2 * cy - y)))], s.lsb, s.rsb)
+        return
+    up, lo, spine = s.ops[0][1], s.ops[1][1], s.ops[2]
+    ring = [('add', lo[0][1])]                   # the outer ellipse; the counter is cut once, last (no coincident edges)
+    counter = lo[1][1]
+    pts = flatten(lo[0][1], 24)
+    cx = (min(p[0] for p in pts) + max(p[0] for p in pts)) / 2
+    cy = (min(p[1] for p in pts) + max(p[1] for p in pts)) / 2
+    half = [('group', up), spine]
+    top = []
+
+    def walk(ops):
+        for op, c in ops:
+            if op == 'group':
+                walk(c)
+            elif op == 'add':
+                top.extend(p[1] for p in flatten(c, 24))
+    walk(half)
+    dy = LASC - max(top)
+    # designer 04/11 "điều chỉnh nét bên trong vòng khoét cho smooth và cân": the counter is the ring's own counter
+    # ellipse, whole, cut after everything else, so the two spines no longer bite into it (it was a lumpy lens)
+    ops = [('group', ring), ('group', half), ('group', tf_ops(half, lambda x, y: (2 * cx - x, 2 * cy - y))),
+           ('sub', counter)]
+    ops = [(op, shift_ops(c, 0, dy)) if op == 'group' else (op, shift_ops([('add', c)], 0, dy)[0][1]) for op, c in ops]
     make('§', ops, s.lsb, s.rsb)
 
 
@@ -530,7 +574,9 @@ def build_latin1():
     import latin_core_c as LC
     LC.build_core()
     G['Ð'] = G['Dcroat']
-    G['­'] = G['-']
+    # 1.004 (designer 04/11): the soft hyphen is an empty, zero-width glyph (Google Fonts); a renderer draws the hyphen
+    # where it breaks the line and nothing elsewhere (it was a copy of the hyphen)
+    G['­'] = Glyph('uni00AD', 0, 0, 0, 0xAD)
     return G
 
 

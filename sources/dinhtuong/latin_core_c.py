@@ -21,6 +21,7 @@ Rule book additions (R8i … R8p, L-letters), every part cut from the house kit,
 import math
 import unicodedata
 import glyphs_c as GL
+import math as _m
 from glyphs_c import *
 import figs_c as F
 
@@ -91,17 +92,37 @@ def mk_dblacute(upper=False):
 
 
 def mk_ogonek(upper=True):
-    """R8k: the house cedilla's construction (vertical stroke, one compass turn, horizontal end cut flat), MIRRORED,
-    one size up (it carries the letter's foot): stroke 1.15 x the cedilla's, turn radius 85, drop to -175."""
-    import latin1_c as L1
-    w, wh = 1.15 * 88 * GL.WK, 1.15 * 70 * GL.WK
-    r = max(85, w / 2 + 24)
-    xs, ytop = 0, 40
-    ybot = -175
-    xl = xs - 1.55 * r
-    ced = [('group', [('add', rrect(xl, ybot, xs + w / 2, ytop, (0, 0, r + w / 2, 0))),
-                      ('sub', rrect(xl - 1, ybot + wh, xs - w / 2, ytop + 1, (0, 0, max(r - w / 2, 18), 0)))])]
-    return L1.tf_ops(ced, lambda x, y: (-x, y))          # stroke at x in [-w/2, w/2], tail to the right
+    """R8k-d (1.004 review, designer: 'hướng 2' = the hook shape of the reference fonts, 'nét móc phải đều như
+    concept'): the ogonek is a c-shaped hook, ONE arc of two concentric circles, so the stroke is exactly w measured
+    square everywhere (the parentheses' construction, R17b). It leaves the base at 150 deg (running down-left out of the
+    foot), bulges left, rounds the bottom and ends at 285 deg with the tail rising a little to the right; both ends
+    are cut along the radius (square to the stroke). Bottom of the ink at -175 as before. Above the baseline only what
+    lies inside the stroke's own width is kept (it sits in the base's foot), so nothing shows beside the foot.
+    Stroke centre at the top: x = 0 (the placement rules of ogonek_on put it under the foot / the stem's middle)."""
+    import figs_c as F
+    w = 1.15 * 88 * GL.WK
+    a1, a2 = _m.radians(150), _m.radians(285)
+    ytop, ybot = 40, -175
+    rc = (ytop - ybot - w / 2) / (1 + _m.sin(a1))         # centre-line radius: top of the arc at ytop, ink bottom at ybot
+    cx, cy = -rc * _m.cos(a1), ybot + w / 2 + rc
+    Ro, Ri = rc + w / 2, rc - w / 2
+    pt = lambda R, a: (cx + R * _m.cos(a), cy + R * _m.sin(a))
+    hook = [('M',) + pt(Ro, a1)] + F._arc((cx, cy), Ro, a1, a2) + [('L',) + pt(Ri, a2)] + \
+           F._arc((cx, cy), Ri, a2, a1) + [('Z',)]
+    xl0, xr0 = ogonek_base_run()
+    return [('group', [('add', hook), ('sub', rect(-600, 0, xl0, 400)), ('sub', rect(xr0, 0, 600, 400))])]
+
+
+def ogonek_base_run():
+    """R8k-e (1.004 review, designer: 'xem lại đoạn gắn chưa ngay giữa các mối glyph'): where the hook meets the base
+    is the BASELINE, not the arc's start inside the foot: the ink run of the hook at y = 0 (outer and inner circle
+    crossing the baseline, left of the centre). Placement aligns this run; above the baseline the hook keeps to it."""
+    w = 1.15 * 88 * GL.WK
+    a1 = _m.radians(150)
+    rc = (40 + 175 - w / 2) / (1 + _m.sin(a1))
+    cx, cy = -rc * _m.cos(a1), -175 + w / 2 + rc
+    x = lambda R: cx - _m.sqrt(R * R - cy * cy)
+    return x(rc + w / 2), x(rc - w / 2)
 
 
 def mk_commabelow(scale=0.78):
@@ -129,16 +150,28 @@ def mk_vcaron(scale=0.85):
 
 
 # ------------------------------------------------------------------ placement on a base
-def ogonek_on(bops, body, foot_y=12):
-    """R8k: the ogonek's stroke stands under the base's rightmost foot on the baseline (its right edge 12 inside it)."""
+OGONEK_CENTRE = set('IiU')     # R8k-c: bases whose ogonek joins the MIDDLE of the glyph's foot
+
+
+def ogonek_on(bops, body, foot_y=12, base=None):
+    """R8k: the ogonek's stroke stands under the base's rightmost foot on the baseline (its right edge 12 inside it).
+    R8k-c (1.004 review, designer: 'các glyph này nên canh cho nét nối giữa glyph' + 'so sánh với các font khác'):
+    on I i (a single stem) and U (a bowl, no right foot) the ogonek's stroke is centred on the base's ink at the
+    baseline: the middle of the stem, the middle of the bowl's bottom. Inter, DejaVu, Liberation, Carlito and Poppins
+    all hang Į į from the stem's centre and Ų from the bottom of the bowl; Ą ą Ę ę ų keep the right foot."""
+    # R8k-e: aligned by the hook's own ink run on the baseline (where it visibly joins the base)
+    h0, h1 = ogonek_base_run()
+    if base in OGONEK_CENTRE:
+        xl, xr = ink_x_at(bops, foot_y, 'l'), ink_x_at(bops, foot_y, 'r')
+        if xl is not None and xr is not None:
+            return shift_ops(mk_ogonek(), (xl + xr) / 2 - (h0 + h1) / 2, 0)
     xr = ink_x_at(bops, foot_y, 'r')
     xr = body if xr is None else xr
-    w = 1.15 * 88 * GL.WK
-    return shift_ops(mk_ogonek(), xr - 12 - w / 2, 0)
+    return shift_ops(mk_ogonek(), xr - 12 - h1, 0)
 
 
-def vcaron_on(stem_right, top):
-    return shift_ops(mk_vcaron(), stem_right + MARK_GAP, top)
+def vcaron_on(stem_right, top, scale=0.85):
+    return shift_ops(mk_vcaron(scale), stem_right + MARK_GAP, top)
 
 
 # ------------------------------------------------------------------ capitals
@@ -155,7 +188,7 @@ def compose_caps(ch, bg, upper=True):
         elif m == DBLAC:
             o = shift_ops(mk_dblacute(upper), cx, zone); nm = 'dblacute'
         elif m == OGON:
-            o = ogonek_on(bg.ops, bg.body); nm = 'ogonek'
+            o = ogonek_on(bg.ops, bg.body, base=base); nm = 'ogonek'
         elif m == COMMAB or (m == CEDIL and base in LATVIAN):
             yb = min(0, bounds(bg.ops)[1])           # R8l: 40 under the base's own ink (round bases overshoot)
             o = shift_ops(mk_commabelow(), cx, yb); nm = 'commabelow'
