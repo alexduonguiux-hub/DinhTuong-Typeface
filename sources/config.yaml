@@ -1,15 +1,14 @@
-# Google Fonts build (gftools builder -> fontmake). The UFOs are the build sources; they are written by the rule-based
-# generators in sources/dinhtuong/ (`make generate`), which draw every glyph from its construction rules.
+# Google Fonts build (gftools builder): the variable font DinhTuong[wght].ttf, wght 400-700.
+# Sources: sources/vf, the three UFO masters made point-compatible (scripts/make_vf_sources.py: exact splits, the
+# outlines are those of sources/ufo) and their designspace. At 400 / 500 / 700 the variable font draws exactly like the
+# static Regular / Medium / Bold (scripts/vf_vs_static.py); the static fonts are built by sources/config-static.yaml.
 sources:
-  - ufo/DinhTuong-Regular.ufo
-  - ufo/DinhTuong-Medium.ufo
-  - ufo/DinhTuong-Bold.ufo
+  - vf/DinhTuong.designspace
 familyName: "Dinh Tuong"
-buildVariable: false
-buildStatic: true
-buildOTF: true
-buildTTF: true
+axisOrder:
+  - wght
+buildVariable: true
+buildStatic: false
 buildWebfont: false
 autohintTTF: false
-checkCompatibility: false
 outputDir: "../fonts"

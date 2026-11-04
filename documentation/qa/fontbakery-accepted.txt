@@ -18,6 +18,17 @@ accept  googlefonts  outline_alignment_miss    found-misalignments      # A1 (1.
 accept  googlefonts  alt_caron                 decomposed-outline       # 1.004 checked by eye and measured: Ľ ď ľ ť all use the comma-form caron (0.85 of ’), mark-base gap 41-58 u (rule >= 38); ť's comma moved off the crossbar (R8m-t). Font Bakery cannot see it because the glyphs are decomposed
 accept  googlefonts  googlefonts/vendor_id                       unknown                  # DIZA (Dizai Studio) is our vendor id; register it with Microsoft when the family ships commercially
 accept  googlefonts  googlefonts/meta/script_lang_tags           lacks-meta-table         # no `meta` table; only needed for Google Fonts' script tagging
-accept  googlefonts  googlefonts/article/images                  lacks-article            # Google Fonts article; the repo has documentation/article without the GF layout
+accept  googlefonts  googlefonts/article/images                  lacks-article            # Font Bakery looks for the article next to the fonts (fonts/ttf/article); ours is documentation/article/ARTICLE.en_us.html (upstream layout), and in the Google Fonts layout the check passes (330 words, 3 images under the size limits)
 accept  googlefonts  googlefonts/metadata/unreachable_subsetting unreachable-subsetting   # no METADATA.pb subsets; spacing / combining marks not in a GF subset
 accept  googlefonts  googlefonts/glyphsets/shape_languages       warning-language-shaping # auxiliary letters of other Latin languages (Ō ō Ŀ ŀ …); Vietnamese and the core Latin set are complete
+
+# --- accept: the variable font fonts/variable/DinhTuong[wght].ttf (googlefonts profile, 1.004) -------------------------
+accept  gf-variable  soft_hyphen                                 softhyphen               # same as googlefonts/soft_hyphen
+accept  gf-variable  alt_caron                                   decomposed-outline       # same as googlefonts/alt_caron
+accept  gf-variable  googlefonts/vendor_id                       unknown                  # same as googlefonts/vendor_id
+accept  gf-variable  googlefonts/meta/script_lang_tags           lacks-meta-table         # same as googlefonts/meta/script_lang_tags
+accept  gf-variable  googlefonts/article/images                  lacks-article            # Font Bakery looks for the article next to the fonts (fonts/variable/article); ours is documentation/article/ARTICLE.en_us.html, the upstream layout
+accept  gf-variable  googlefonts/metadata/unreachable_subsetting unreachable-subsetting   # same as googlefonts/metadata/unreachable_subsetting
+accept  gf-variable  googlefonts/glyphsets/shape_languages       warning-language-shaping # same as googlefonts/glyphsets/shape_languages
+accept  gf-variable  mandatory_avar_table                        missing-avar             # the masters stand at their own weights (400 / 500 / 700) and the static fonts are those masters; interpolation is checked linear and steady (scripts/vf_interp_check.py), so no avar remapping is wanted
+accept  gf-variable  outline_alignment_miss                      found-misalignments      # same as googlefonts/outline_alignment_miss; the half units (e.g. $ at 698.5) are the SemiBold instance between masters that hold a point at different heights

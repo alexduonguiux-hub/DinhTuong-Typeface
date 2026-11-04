@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<glyph name="paragraph" format="2">
+  <advance width="570"/>
+  <unicode hex="00B6"/>
+  <outline>
+    <contour>
+      <point x="290" y="-160" type="curve"/>
+      <point x="310.6666666666667" y="-160.0"/>
+      <point x="331.3333333333333" y="-160.0"/>
+      <point x="352" y="-160" type="curve"/>
+      <point x="352.0" y="-13.333333333333343"/>
+      <point x="352.0" y="133.33333333333331"/>
+      <point x="352" y="280" type="curve"/>
+      <point x="361.3333333333333" y="280.0"/>
+      <point x="370.6666666666667" y="280.0"/>
+      <point x="380" y="280" type="curve"/>
+      <point x="380.0" y="399.3333333333333"/>
+      <point x="380.0" y="518.6666666666666"/>
+      <point x="380" y="638" type="curve"/>
+      <point x="409.3333333333333" y="638.0"/>
+      <point x="438.6666666666667" y="638.0"/>
+      <point x="468" y="638" type="curve"/>
+      <point x="468.0" y="372.0"/>
+      <point x="468.0" y="106.0"/>
+      <point x="468" y="-160" type="curve"/>
+      <point x="488.6666666666667" y="-160.0"/>
+      <point x="509.3333333333333" y="-160.0"/>
+      <point x="530" y="-160" type="curve"/>
+      <point x="530.0" y="126.66666666666669"/>
+      <point x="530.0" y="413.33333333333337"/>
+      <point x="530" y="700" type="curve"/>
+      <point x="423.3333333333333" y="700.0"/>
+      <point x="316.66666666666663" y="700.0"/>
+      <point x="210" y="700" type="curve"/>
+      <point x="115" y="700"/>
+      <point x="40" y="625"/>
+      <point x="40" y="530" type="curve"/>
+      <point x="40.0" y="503.3333333333333"/>
+      <point x="40.0" y="476.6666666666667"/>
+      <point x="40" y="450" type="curve"/>
+      <point x="40" y="355"/>
+      <point x="115" y="280"/>
+      <point x="210" y="280" type="curve"/>
+      <point x="236.66666666666666" y="280.0"/>
+      <point x="263.3333333333333" y="280.0"/>
+      <point x="290" y="280" type="curve"/>
+      <point x="290.0" y="133.33333333333334"/>
+      <point x="290.0" y="-13.333333333333314"/>
+    </contour>
+  </outline>
+</glyph>

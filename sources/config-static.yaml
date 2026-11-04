@@ -1,0 +1,15 @@
+# Static build (make build): Regular / Medium / Bold from the UFO masters in sources/ufo, as released in fonts/ttf + fonts/otf.
+# The UFOs are written by the rule-based generators in sources/dinhtuong/ (`make generate`).
+sources:
+  - ufo/DinhTuong-Regular.ufo
+  - ufo/DinhTuong-Medium.ufo
+  - ufo/DinhTuong-Bold.ufo
+familyName: "Dinh Tuong"
+buildVariable: false
+buildStatic: true
+buildOTF: true
+buildTTF: true
+buildWebfont: false
+autohintTTF: false
+checkCompatibility: false
+outputDir: "../fonts"

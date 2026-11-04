@@ -20,14 +20,15 @@ Dinh Tuong là kiểu chữ trưng bày dựng theo chữ khuôn thép đúc tr�
 
 ## Fonts
 
-Ready-to-use binaries are in `fonts/ttf` and `fonts/otf` (also attached to every [release](https://github.com/alexduonguiux-hub/DinhTuong-Typeface/releases)). They are rebuilt by `make build`; CI checks that the fontmake build is identical to the generators' reference binaries in `sources/reference/fonts`.
+Ready-to-use binaries are in `fonts/ttf` and `fonts/otf` (static Regular, Medium, Bold) and `fonts/variable/DinhTuong[wght].ttf` (variable, weight 400–700), also attached to every [release](https://github.com/alexduonguiux-hub/DinhTuong-Typeface/releases). Install either the variable font or the static fonts, not both. They are rebuilt by `make build`; CI checks that the fontmake build is identical to the generators' reference binaries in `sources/reference/fonts`, and that the variable font draws exactly like the static fonts at 400 / 500 / 700.
 
 ## Building
 
-The fonts are built from the UFO sources in `sources/ufo` with [gftools builder](https://github.com/googlefonts/gftools) (fontmake), configured in `sources/config.yaml`:
+The fonts are built with [gftools builder](https://github.com/googlefonts/gftools) (fontmake). The static fonts come from the UFO sources in `sources/ufo` (`sources/config-static.yaml`); the variable font comes from `sources/vf`, the same three masters made point-compatible by exact splits, and its designspace (`sources/config.yaml`, the Google Fonts build):
 
 ```sh
-make build        # fonts/ttf, fonts/otf from sources/ufo (gftools builder + fontmake)
+make build        # fonts/ttf, fonts/otf from sources/ufo + fonts/variable from sources/vf (gftools builder + fontmake)
+make vf           # remakes sources/vf from sources/ufo, builds the variable font and checks it against the static fonts
 make compare      # the build must match the generators' reference binaries (sources/reference/fonts)
 make test         # fontspector, Google Fonts profile (needs fontspector)
 make proof        # HTML proofs (needs diffenator3)
