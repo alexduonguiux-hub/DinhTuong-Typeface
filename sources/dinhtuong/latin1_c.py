@@ -399,7 +399,8 @@ def S_brokenbar():
 def S_section():
     """R0c (1.004, designer 04/11 "vẽ lại §", then "kiểm tra lỗi và nét thừa"): § = the lower ring of the current s as a
     WHOLE ring (its own outer and counter ellipses) + the s's upper half (upper ring group + spine) + that half turned
-    180 deg about the ring's centre. The ring is the shared middle loop with an open counter; neither s's lower tail is
+    180 deg about the ring's centre, and the ring's counter ellipse cut last, whole: a smooth, centred, point-symmetric
+counter. The ring is the shared middle loop; neither s's lower tail is
     used, so no terminal cut is left on or inside the loop (the first R0c build, two whole s, left both inner tails'
     cut faces as 20 u steps on the outline). Strokes, the two visible terminals and the spine are exactly the s's;
     the § is point-symmetric, its top on the lowercase ascender line. (1.003: two s stacked 370 apart, the middle
@@ -418,7 +419,8 @@ def S_section():
         make('§', [('group', s.ops), ('group', tf_ops(s.ops, lambda x, y: (2 * cx - x, 2 * cy - y)))], s.lsb, s.rsb)
         return
     up, lo, spine = s.ops[0][1], s.ops[1][1], s.ops[2]
-    ring = [('add', lo[0][1]), ('sub', lo[1][1])]
+    ring = [('add', lo[0][1])]                   # the outer ellipse; the counter is cut once, last (no coincident edges)
+    counter = lo[1][1]
     pts = flatten(lo[0][1], 24)
     cx = (min(p[0] for p in pts) + max(p[0] for p in pts)) / 2
     cy = (min(p[1] for p in pts) + max(p[1] for p in pts)) / 2
@@ -433,8 +435,11 @@ def S_section():
                 top.extend(p[1] for p in flatten(c, 24))
     walk(half)
     dy = LASC - max(top)
-    ops = [('group', ring), ('group', half), ('group', tf_ops(half, lambda x, y: (2 * cx - x, 2 * cy - y)))]
-    ops = [('group', shift_ops(c, 0, dy)) for _, c in ops]
+    # designer 04/11 "điều chỉnh nét bên trong vòng khoét cho smooth và cân": the counter is the ring's own counter
+    # ellipse, whole, cut after everything else, so the two spines no longer bite into it (it was a lumpy lens)
+    ops = [('group', ring), ('group', half), ('group', tf_ops(half, lambda x, y: (2 * cx - x, 2 * cy - y))),
+           ('sub', counter)]
+    ops = [(op, shift_ops(c, 0, dy)) if op == 'group' else (op, shift_ops([('add', c)], 0, dy)[0][1]) for op, c in ops]
     make('§', ops, s.lsb, s.rsb)
 
 
