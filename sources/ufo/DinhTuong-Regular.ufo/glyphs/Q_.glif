@@ -42,10 +42,9 @@
       <point x="480" y="536"/>
       <point x="480" y="444" type="curve" smooth="yes"/>
       <point x="480" y="256" type="line" smooth="yes"/>
-      <point x="480" y="224"/>
-      <point x="471" y="195"/>
-      <point x="456" y="170" type="curve"/>
-      <point x="444" y="190" type="line"/>
+      <point x="480" y="232"/>
+      <point x="475" y="210"/>
+      <point x="467" y="190" type="curve"/>
     </contour>
   </outline>
 </glyph>
