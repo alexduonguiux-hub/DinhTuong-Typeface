@@ -1101,7 +1101,8 @@ def STACK_TOP(first):
     mf = __import__('marks_flat')
     fo = mark_ops(first, True); x0, x1 = ops_xrange(fo); ftop = ops_yrange(fo)[1]
     tops = []
-    for t in ('acute', 'grave', 'tilde'):        # hỏi (centred on the trăng, taller) does not set the line: ằ = ấ
+    for t in ('acute', 'grave'):                 # the sắc / huyền set the line (sample: 30 over the mũ and over the trăng): ằ = ấ;
+                                                 # ngã / hỏi sit on it, or above it when their own gap needs more
         o = MARK_STACK_FN[t]() if (t in ('tilde', 'hook') and t in MARK_STACK_FN) else mark_ops(t, True)
         o = CLEAR_UP(shift_ops(o, (x0 + x1) / 2, 0), fo, mf.W_GAP)
         tops.append(ops_yrange(o)[1] - ftop)
