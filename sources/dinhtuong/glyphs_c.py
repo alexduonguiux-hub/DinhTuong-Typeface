@@ -1107,7 +1107,7 @@ def STACK_SYNC(ops, tone, first_ops, first, zone, centred=None):
         ops = shift_ops(centred, mx, zone)
     else:
         ops = shift_ops(ops, 0, zone - ops_yrange(ops)[0])            # start on the mark's foot, then lift clear
-    ops = CLEAR_UP(ops, first_ops, mf.CIRC_R8K_GAP if (tone == 'hook' and first == 'circumflex') else mf.W_GAP)
+    ops = CLEAR_UP(ops, first_ops, mf.W_GAP)                      # R8w-ô2: hỏi beside the lower mũ too keeps W_GAP (40 lifted it over the line)
     target = ops_yrange(first_ops)[1] + STACK_TOP(first)
     top = ops_yrange(ops)[1]
     return shift_ops(ops, 0, target - top) if top < target else ops
