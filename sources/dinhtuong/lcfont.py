@@ -114,8 +114,8 @@ def compose(ch):
                 ydy, dx = 0, GL.ACUTE_BESIDE_DX(True)
             elif tone == 'acute' and GL.ACUTE_MODE() in ('4', '5'):    # R8i: centred over the mũ
                 ops = GL.mark_ops('acute', True)
-                dx = GL.ACUTE_N_DX()                                        # R8n: left end flush over the mũ's left end
-                ydy = GL.ACUTE_CIRC_Y(False, dx)                            # R8n: parallel to the left arm, ACUTE_N_GAP over it
+                dx = GL.ACUTE_IN_DX(GL.ACUTE_R8I_LC_DX, bg.ops, cx)        # R8k-b behind the mũ, R8k-c inside the letter
+                ydy = GL.ACUTE_CIRC_Y(False, dx)                            # 40 from the mũ
             elif tone == 'acute' and GL.ACUTE_TOPLINE():               # R8f trial: ấ's sắc ends on ắ's line
                 ydy = GL.ACUTE_STACK_Y()
                 dx = GL.ACUTE_CIRC_DX(dx, ydy, True)                   # R8f: pulled left to 40 from the mũ

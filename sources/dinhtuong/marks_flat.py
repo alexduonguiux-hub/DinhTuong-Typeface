@@ -50,12 +50,8 @@ ACUTE_TILT = float(__import__('os').environ.get('ACUTE_TILT', '18'))   # R8e (28
 # (sample 72 u; T Bold 70.6), long edges rising ACUTE_R8I_ANG (sample v2 27.1°, v1 22.2°), horizontal span
 # ACUTE_R8I_SPAN (sample v2 194 = 0.65 x STRIP_L; v1 246), the same everywhere (caps / lowercase, lone / stacked).
 # Trial switch: ACUTE_TOPLINE=4 (glyphs_c).
-# R8n (10/11, designer's sample 'KẾ KÉ': 'sửa lại dấu sắc … để dấu sắc chung với dấu ô như này', measured at cap 238 px):
-# the sắc is the mũ's own arm — it rises at the mũ's angle CIRC_R8K_ANG (sample 31°, was 27°), vertical cuts, the same
-# R8l thickness as the mũ (sample 72 u = the mũ's), horizontal span 160 (sample 159; was 195). On the mũ it lies
-# parallel to the mũ's left arm (see glyphs_c.ACUTE_N_DX / ACUTE_N_GAP).
-ACUTE_R8I_ANG = 30.0
-ACUTE_R8I_SPAN = 160
+ACUTE_R8I_ANG = 27.0
+ACUTE_R8I_SPAN = round(0.65 * STRIP_L)      # 195
 
 
 def R8I():
