@@ -213,7 +213,8 @@ def mk_tilde_v94(hgt=122, half=156, w=None, wh=None):
 # meeting in a POINTED apex (outer and inner) — each arm rises CIRC_R8K_ANG (sample 29.0-29.5°, height 144 = 120 tan 30°
 # + 75), both outer ends cut VERTICAL, vertical thickness T (sample 75; T Bold 70.6), half-width CIRC_R8K_HALF (sample
 # width 238-241). It sits CIRC_R8K_GAP above its letter's ink (sample Â 41, â 40): see glyphs_c.CIRC_FOOT.
-CIRC_R8K_ANG = 30.0
+CIRC_R8K_ANG = 23.0     # R8w-ô2 (10/11 'tôi có update dấu ô thấp hơn', KẾ sample at cap 359 px): arms 23° (was 30°), same
+                        # half-width 120 -> the mũ 125 tall (was 145); feet 33 over the letter, the wedge 30 over its apex
 CIRC_R8K_HALF = 120.0
 CIRC_R8K_GAP = 40
 
