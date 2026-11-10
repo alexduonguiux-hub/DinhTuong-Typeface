@@ -38,8 +38,12 @@ GRAVE_UP = 12        # huyền floats 62 above the cap (sample 62)
 DOTB_GAP = 62        # nặng hangs 62 under the baseline (sample 62)
 
 
+MARK_LIGHT_K = 0.5      # R8w-t (10/11 'dấu regular hơi mỏng'): lighter weights get a heavier mark strip than STRIP_T x V:
+                        # x (1 + 0.5 (1 - WK)) -> Regular x1.14, Medium x1.06, Bold x1.00 (the sample weight)
+
+
 def _st():
-    return STRIP_T * GL.V
+    return STRIP_T * GL.V * (1 + MARK_LIGHT_K * max(0.0, 1 - GL.WK))
 
 
 ACUTE_TILT = float(__import__('os').environ.get('ACUTE_TILT', '18'))   # R8e (28/10 10:5x, designer chose 18°: 'Sí' read as 'Sl' with a standing strip): degrees off vertical, top to the right
@@ -65,7 +69,30 @@ def tv(ang):
     return _st() / _m.cos(_m.radians(ang))
 
 
+# R8w (10/11, designer's sample 'KÉ KẾ KỀ KÈ': 'thử lại dấu sắc và huyền mới', measured at cap 261 px on Bold): sắc and
+# huyền are ONE long WEDGE: a level underside, the top edge rising toward the thick end (sắc: thick on the right; huyền:
+# the mirror, thick on the left), both ends cut vertical. Span W_SPAN (sample 298 = STRIP_L), thin end W_THIN x T and
+# thick end W_THICK x T (sample 29.5 / 86 u at T Bold 70.6), underside W_UP over the mark zone (sample 64 over the cap
+# = zone + 14). Centred on the letter; on the mũ / trăng centred over it, W_GAP over its ink (glyphs_c).
+W_SPAN = STRIP_L
+W_THIN, W_THICK = 0.42, 1.22
+W_UP = 14
+W_GAP = 30                # KẾ sample (cap 450 px): the sắc's underside 30 over the mũ's apex; the same over the trăng
+
+
+def R8W():
+    return __import__('os').environ.get('ACUTE_WEDGE', '1') == '1'
+
+
+def _wedge(thick_right):
+    t = _st(); s = W_SPAN; a, b = W_THIN * t, W_THICK * t
+    l, r = (a, b) if thick_right else (b, a)
+    return [('add', poly([(-s / 2, W_UP), (s / 2, W_UP), (s / 2, W_UP + r), (-s / 2, W_UP + l)]))]
+
+
 def mk_acute(length=ACUTE_L, **_):
+    if R8W():
+        return _wedge(True)
     if R8I():
         t, s = tv(ACUTE_R8I_ANG), ACUTE_R8I_SPAN
         rise = s * _m.tan(_m.radians(ACUTE_R8I_ANG))
@@ -87,7 +114,9 @@ def _mk_acute_r8e(length=ACUTE_L, **_):
 
 
 def mk_grave(length=STRIP_L, **_):
-    """huyền: the strip LYING, centred on the letter (built at final size: no cap scaling)."""
+    """huyền: the strip LYING, centred on the letter (built at final size: no cap scaling). R8w: the wedge, thick left."""
+    if R8W():
+        return _wedge(False)
     t = _st()
     return [('add', rect(-length / 2, GRAVE_UP, length / 2, GRAVE_UP + t))]
 
@@ -188,9 +217,19 @@ def mk_tilde_v94(hgt=122, half=156, w=None, wh=None):
 # meeting in a POINTED apex (outer and inner) — each arm rises CIRC_R8K_ANG (sample 29.0-29.5°, height 144 = 120 tan 30°
 # + 75), both outer ends cut VERTICAL, vertical thickness T (sample 75; T Bold 70.6), half-width CIRC_R8K_HALF (sample
 # width 238-241). It sits CIRC_R8K_GAP above its letter's ink (sample Â 41, â 40): see glyphs_c.CIRC_FOOT.
-CIRC_R8K_ANG = 30.0
+CIRC_R8K_ANG = 23.0     # R8w-ô2 (10/11 'tôi có update dấu ô thấp hơn', KẾ sample at cap 359 px): arms 23° (was 30°), same
+                        # half-width 120 -> the mũ 125 tall (was 145); feet 33 over the letter, the wedge 30 over its apex
 CIRC_R8K_HALF = 120.0
 CIRC_R8K_GAP = 40
+
+
+# R8w-ô (10/11 'tức là giữ lại dấu ô cũ'): the R8k mũ stays; from the designer's KẾ sample (cap 450 px) only its height
+# over the letter changes: its feet keep CIRC_W_FOOT_GAP from the letter's ink (sample 33; R8k had 40).
+CIRC_W_FOOT_GAP = 33
+
+
+def CIRC_FOOT_GAP():
+    return CIRC_W_FOOT_GAP if R8W() else CIRC_R8K_GAP
 
 
 def mk_circumflex(**_):

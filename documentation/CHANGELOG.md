@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.005 (2026-11-10)
+Vietnamese marks redrawn from the designer's samples (KÉ KẾ KỀ KÈ Ằ). Only the glyphs that carry these marks change
+(Regular 229, Medium 229, Bold 164); every other glyph and table is byte-identical to 1.004.1
+(`scripts/patch_release_glyphs.py`, the same release method as 1.004).
+- **R8w sắc / huyền:** one long wedge: a level underside, the top edge rising toward the thick end (sắc thick on the
+  right, huyền the mirror), both ends cut vertical; span 300, ends 0.42 T / 1.22 T, underside 64 over the cap line.
+  The double acute (Ő ő) keeps its strips.
+- **Mũ (R8k) lower:** same width (240) and stroke, arms at 23° (were 30°): 125 tall (was 145); feet 33 over the
+  letter's ink (were 40). The caron (the mũ turned over) follows. The trăng keeps its shape; its top now stands on the
+  mũ's top line on the same letter (R8w-ă).
+- **Stacked tones (R8w-h):** on the mũ and on the trăng the sắc / huyền are centred, 30 over the mark; ấ ầ ắ ằ (and the
+  capitals) end on one top line (Regular 761 / 927, Medium 782 / 944, Bold 799 / 959). Ngã and hỏi keep 30 from the
+  mark and may stand higher (designer: 'dấu hỏi và ngã cho phép cao hơn').
+- **Mark weight (R8w-t):** the mark strip is heavier in the lighter weights (Regular x1.14, Medium x1.06; Bold as before).
+- Kerning: the generator's collision guard re-run with the new marks (UFO features.fea).
+- Checks: variable font = static fonts at 400 / 500 / 700 (450 characters, 11,789 kerning pairs, no difference) and
+  steady between; Font Bakery: no new result; `make compare`: identical.
+
 ## 1.004.1 (2026-11-04)
 - Same fonts as 1.004: the static Regular / Medium / Bold and the variable font draw exactly as in the 1.004 release. This release tags the repository state that Google Fonts builds from.
 - **Variable font on main** (Google Fonts onboarding). `fonts/variable/DinhTuong[wght].ttf`, weight 400–700, named instances Regular / Medium / SemiBold / Bold, built by gftools builder from `sources/vf` (`sources/config.yaml`). `sources/vf` holds the three masters of `sources/ufo` made point-compatible (`scripts/make_vf_sources.py`: VF3 corner-matched splits and VF5 position-matched splits, both exact) and the designspace. At 400 / 500 / 700 it draws exactly like the static fonts (`scripts/vf_vs_static.py`: 450 characters and 11,789 kerning pairs, no difference). In between, every glyph interpolates steadily (`scripts/vf_interp_check.py`). The static fonts are built by `sources/config-static.yaml`. Font Bakery's googlefonts profile now also checks the variable font (`make qa`).

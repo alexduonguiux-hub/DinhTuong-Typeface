@@ -5,11 +5,11 @@
   <outline>
     <contour>
       <point x="227" y="536" type="line"/>
-      <point x="347" y="605" type="line"/>
+      <point x="347" y="587" type="line"/>
       <point x="467" y="536" type="line"/>
-      <point x="467" y="592" type="line"/>
-      <point x="347" y="662" type="line"/>
-      <point x="227" y="592" type="line"/>
+      <point x="467" y="597" type="line"/>
+      <point x="347" y="648" type="line"/>
+      <point x="227" y="597" type="line"/>
     </contour>
     <contour>
       <point x="-7" y="530" type="line"/>

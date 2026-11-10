@@ -4,26 +4,26 @@
   <unicode hex="1EE1"/>
   <outline>
     <contour>
-      <point x="106" y="578" type="line"/>
-      <point x="127" y="596"/>
+      <point x="106" y="579" type="line"/>
+      <point x="127" y="597"/>
       <point x="161" y="628"/>
       <point x="192" y="628" type="curve"/>
       <point x="237" y="628"/>
       <point x="271" y="580"/>
       <point x="319" y="580" type="curve"/>
       <point x="350" y="580"/>
-      <point x="381" y="601"/>
-      <point x="406" y="619" type="curve"/>
-      <point x="406" y="678" type="line"/>
-      <point x="385" y="660"/>
-      <point x="350" y="629"/>
-      <point x="320" y="629" type="curve"/>
-      <point x="274" y="629"/>
-      <point x="240" y="677"/>
-      <point x="193" y="677" type="curve"/>
-      <point x="161" y="677"/>
-      <point x="130" y="655"/>
-      <point x="106" y="638" type="curve"/>
+      <point x="381" y="600"/>
+      <point x="406" y="617" type="curve"/>
+      <point x="406" y="685" type="line"/>
+      <point x="385" y="668"/>
+      <point x="350" y="636"/>
+      <point x="320" y="636" type="curve"/>
+      <point x="274" y="636"/>
+      <point x="240" y="684"/>
+      <point x="193" y="684" type="curve"/>
+      <point x="162" y="684"/>
+      <point x="130" y="664"/>
+      <point x="106" y="647" type="curve"/>
     </contour>
     <contour>
       <point x="430" y="477" type="curve"/>

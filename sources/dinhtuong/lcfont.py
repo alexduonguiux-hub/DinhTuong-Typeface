@@ -95,6 +95,8 @@ def compose(ch):
     top_h = 0
     if first == 'circumflex':                        # R8k: the mũ (and every tone on it) sits 40 over the letter's ink
         ZONE = ZONE + GL.CIRC_FOOT(bg.ops + h_ops, cx, ZONE, ('L', base, round(cx, 1)))
+    elif first == 'breve' and MF.R8W():             # R8w-ă: the trăng's top on the mũ's top line
+        ZONE = ZONE + GL.BREVE_FOOT(bg.ops + h_ops, cx, ZONE, ('L', base, round(cx, 1)))
     if first:
         ops = GL.shift_ops(GL.mark_ops(first, True), cx, ZONE)
         g.ops += ops; g.parts.append((first, ops))
@@ -137,6 +139,10 @@ def compose(ch):
             if tone == 'grave' and adv - 40 < MF.STRIP_L and os.environ.get('GRAVE_FULL', '1') != '1':   # caps Ì rule (off since R8h: huyền full length on ì)
                 ops = GL.mark_ops('grave', True, adv - 40)
             ops = GL.shift_ops(ops, cx + hx, ZONE)
+        if first and tone in ('acute', 'grave', 'tilde', 'hook') and MF.R8W():
+            # R8w: sắc / huyền centred over the mũ / trăng; R8w-h: every stacked tone ends on one top line
+            fo = [o for nm, o2 in g.parts if nm == first for o in o2]
+            ops = GL.STACK_SYNC(ops, tone, fo, first, ZONE, GL.mark_ops(tone, True) if tone in ('acute', 'grave') else None)
         g.ops += ops; g.parts.append((tone, ops))
     if DOTB in marks:
         adv = bg.lsb + bg.body + bg.rsb

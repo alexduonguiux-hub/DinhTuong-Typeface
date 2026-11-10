@@ -724,10 +724,18 @@ def CIRC_FOOT(base_ops, cx, zone, key=None):
     lo, hi = -250.0, 250.0
     for _ in range(18):
         mid = (lo + hi) / 2
-        if MQ.min_dist(b, MQ.raster(shift_ops(mark_ops('circumflex', True), cx, zone + mid))) >= mf.CIRC_R8K_GAP: hi = mid
+        if MQ.min_dist(b, MQ.raster(shift_ops(mark_ops('circumflex', True), cx, zone + mid))) >= mf.CIRC_FOOT_GAP(): hi = mid
         else: lo = mid
     if key is not None: _CFOOT[key] = hi
     return hi
+def BREVE_FOOT(base_ops, cx, zone, key=None):
+    """R8w-ă (10/11 sample 'KỀ KÈ Ằ', one red top line): the trăng's top stands where the mũ's top would stand on the
+    same letter (sample: both 157-158 over the cap line; trăng foot 51 over A), so a tone on the trăng and a tone on the
+    mũ end on ONE line (the tones keep W_GAP over either mark)."""
+    yc = CIRC_FOOT(base_ops, cx, zone, key)
+    return yc + ops_yrange(mark_ops('circumflex', True))[1] - ops_yrange(mark_ops('breve', True))[1]
+
+
 ACUTE_R8I_BREVE_DX = 62   # R8i v2: on the trăng the sắc's centre is 62 right of the axis (sample Ắ +62)
 
 
@@ -990,6 +998,8 @@ def compose(ch, gaps=None):
     tone = next((TONES[m] for m in marks if m in TONES), None)
     sshift = side_shift(tone, upper, gaps) if (first == 'circumflex' and tone in ('acute', 'hook') and not (tone == 'acute' and ACUTE_MODE() in ('4', '5'))) else 0
     yc = CIRC_FOOT(bg.ops + (h_ops if HORN in marks else []), cx + sshift, zone, ('U', bname, round(cx + sshift, 1))) if first == 'circumflex' else 0.0
+    if first == 'breve' and __import__('marks_flat').R8W():        # R8w-ă: the trăng's top on the mũ's top line
+        yc = BREVE_FOOT(bg.ops, cx, zone, ('U', bname, round(cx, 1)))
     zone0 = zone
     zone = zone + yc                                 # R8k: the mũ and every tone stacked on it move with the mũ's foot
     if first:
@@ -1040,6 +1050,10 @@ def compose(ch, gaps=None):
                 if adv - 40 < __import__('marks_flat').STRIP_L:
                     ops = mark_ops('grave', upper, adv - 40)
             ops = shift_ops(ops, cx + hx, zone)
+        if first and tone in ('acute', 'grave', 'tilde', 'hook') and __import__('marks_flat').R8W():
+            # R8w: sắc / huyền centred over the mũ / trăng; R8w-h: every stacked tone ends on one top line
+            fo = [o for nm, o2 in g.parts if nm == first for o in o2]
+            ops = STACK_SYNC(ops, tone, fo, first, zone, mark_ops(tone, upper) if tone in ('acute', 'grave') else None)
         g.ops += ops; g.parts.append((tone, ops))
     if DOTB in marks:
         adv = bg.lsb + bg.body + bg.rsb
@@ -1064,6 +1078,50 @@ def ops_xrange(ops):
         elif op == 'add':
             xs += [p[0] for p in flatten(c, 6)]
     return min(xs), max(xs)
+
+
+def ops_yrange(ops):
+    ys = []
+    for op, c in ops:
+        if op == 'group':
+            a, b = ops_yrange(c); ys += [a, b]
+        elif op == 'add':
+            ys += [p[1] for p in flatten(c, 6)]
+    return min(ys), max(ys)
+
+
+_STACK_TOP = {}
+
+
+def STACK_TOP(first):
+    """R8w-h (10/11 'đo lại chiều cao dấu đôi cho đồng bộ: dấu, dẫu, dẩu, dầu'): every tone stacked on a mũ / trăng ends
+    on ONE top line, this far over the mark's own top: the highest of sắc / huyền / ngã each centred over it with its
+    ink W_GAP from it, and hỏi too on the trăng (the others are raised to it; hỏi beside the mũ too)."""
+    if first in _STACK_TOP: return _STACK_TOP[first]
+    mf = __import__('marks_flat')
+    fo = mark_ops(first, True); x0, x1 = ops_xrange(fo); ftop = ops_yrange(fo)[1]
+    tops = []
+    for t in ('acute', 'grave'):                 # the sắc / huyền set the line (sample: 30 over the mũ and over the trăng): ằ = ấ;
+                                                 # ngã / hỏi sit on it, or above it when their own gap needs more
+        o = MARK_STACK_FN[t]() if (t in ('tilde', 'hook') and t in MARK_STACK_FN) else mark_ops(t, True)
+        o = CLEAR_UP(shift_ops(o, (x0 + x1) / 2, 0), fo, mf.W_GAP)
+        tops.append(ops_yrange(o)[1] - ftop)
+    _STACK_TOP[first] = max(tops)
+    return _STACK_TOP[first]
+
+
+def STACK_SYNC(ops, tone, first_ops, first, zone, centred=None):
+    """R8w / R8w-h: the stacked tone at its lowest clear place, then raised to the stack's common top line."""
+    mf = __import__('marks_flat')
+    if centred is not None:
+        mx = sum(ops_xrange(first_ops)) / 2
+        ops = shift_ops(centred, mx, zone)
+    else:
+        ops = shift_ops(ops, 0, zone - ops_yrange(ops)[0])            # start on the mark's foot, then lift clear
+    ops = CLEAR_UP(ops, first_ops, mf.W_GAP)                      # R8w-ô2: hỏi beside the lower mũ too keeps W_GAP (40 lifted it over the line)
+    target = ops_yrange(first_ops)[1] + STACK_TOP(first)
+    top = ops_yrange(ops)[1]
+    return shift_ops(ops, 0, target - top) if top < target else ops
 
 
 def side_shift(tone, upper, gaps=None):
