@@ -73,7 +73,7 @@ def tv(ang):
 W_SPAN = STRIP_L
 W_THIN, W_THICK = 0.42, 1.22
 W_UP = 14
-W_GAP = 24                # sample: the sắc's underside 24 over the mũ's apex (Ế), the same over the trăng
+W_GAP = 30                # KẾ sample (cap 450 px): the sắc's underside 30 over the mũ's apex; the same over the trăng
 
 
 def R8W():
@@ -218,14 +218,9 @@ CIRC_R8K_HALF = 120.0
 CIRC_R8K_GAP = 40
 
 
-# R8w-ô (10/11, same sample 'vẽ lại dấu ô luôn', measured at cap 261 px on Bold): the mũ is a chevron with LEVEL feet:
-# both edges rise CIRC_W_ANG (sample outer 38°, inner 35°), outer and inner apex pointed, the two arms cut level on the
-# foot line; vertical thickness T (sample 72 u at T Bold 70.6), half-width CIRC_W_HALF (sample 135), so the outer apex
-# stands h tan(A) = 102 over the feet (sample 105) and the inner apex T under it (sample 31 over the feet). Its feet
-# keep CIRC_W_FOOT_GAP from the letter's ink (sample 59 over E's cap line; glyphs_c.CIRC_FOOT).
-CIRC_W_ANG = 37.0
-CIRC_W_HALF = 135.0
-CIRC_W_FOOT_GAP = 58
+# R8w-ô (10/11 'tức là giữ lại dấu ô cũ'): the R8k mũ stays; from the designer's KẾ sample (cap 450 px) only its height
+# over the letter changes: its feet keep CIRC_W_FOOT_GAP from the letter's ink (sample 33; R8k had 40).
+CIRC_W_FOOT_GAP = 33
 
 
 def CIRC_FOOT_GAP():
@@ -234,9 +229,6 @@ def CIRC_FOOT_GAP():
 
 def mk_circumflex(**_):
     T = _st()
-    if R8W():
-        h = CIRC_W_HALF; k = _m.tan(_m.radians(CIRC_W_ANG)); r = h * k; f = h - T / k
-        return [('add', poly([(-h, 0), (-f, 0), (0, r - T), (f, 0), (h, 0), (0, r)]))]
     if R8I():
         T = tv(CIRC_R8K_ANG)                           # R8l
         h = CIRC_R8K_HALF; r = h * _m.tan(_m.radians(CIRC_R8K_ANG))
@@ -245,8 +237,6 @@ def mk_circumflex(**_):
 
 
 def CIRC_HGT():
-    if R8W():
-        return CIRC_W_HALF * _m.tan(_m.radians(CIRC_W_ANG))
     if R8I():
         return CIRC_R8K_HALF * _m.tan(_m.radians(CIRC_R8K_ANG)) + tv(CIRC_R8K_ANG)
     """mũ height — v0.95 review "giảm độ cao của dấu ô": max(118, 1.7T) -> max(96, 1.45T); the inner
