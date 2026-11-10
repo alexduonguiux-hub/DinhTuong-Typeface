@@ -38,8 +38,12 @@ GRAVE_UP = 12        # huyền floats 62 above the cap (sample 62)
 DOTB_GAP = 62        # nặng hangs 62 under the baseline (sample 62)
 
 
+MARK_LIGHT_K = 0.5      # R8w-t (10/11 'dấu regular hơi mỏng'): lighter weights get a heavier mark strip than STRIP_T x V:
+                        # x (1 + 0.5 (1 - WK)) -> Regular x1.14, Medium x1.06, Bold x1.00 (the sample weight)
+
+
 def _st():
-    return STRIP_T * GL.V
+    return STRIP_T * GL.V * (1 + MARK_LIGHT_K * max(0.0, 1 - GL.WK))
 
 
 ACUTE_TILT = float(__import__('os').environ.get('ACUTE_TILT', '18'))   # R8e (28/10 10:5x, designer chose 18°: 'Sí' read as 'Sl' with a standing strip): degrees off vertical, top to the right
