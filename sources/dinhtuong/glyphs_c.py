@@ -1086,13 +1086,13 @@ _STACK_TOP = {}
 def STACK_TOP(first):
     """R8w-h (10/11 'đo lại chiều cao dấu đôi cho đồng bộ: dấu, dẫu, dẩu, dầu'): every tone stacked on a mũ / trăng ends
     on ONE top line, this far over the mark's own top: the highest of sắc / huyền / ngã each centred over it with its
-    ink W_GAP from it (the others are raised to it; hỏi beside the mũ too)."""
+    ink W_GAP from it, and hỏi too on the trăng (the others are raised to it; hỏi beside the mũ too)."""
     if first in _STACK_TOP: return _STACK_TOP[first]
     mf = __import__('marks_flat')
     fo = mark_ops(first, True); x0, x1 = ops_xrange(fo); ftop = ops_yrange(fo)[1]
     tops = []
-    for t in ('acute', 'grave', 'tilde'):
-        o = MARK_STACK_FN[t]() if (t == 'tilde' and t in MARK_STACK_FN) else mark_ops(t, True)
+    for t in ('acute', 'grave', 'tilde') + (('hook',) if first == 'breve' else ()):   # on the trăng hỏi sits centred too
+        o = MARK_STACK_FN[t]() if (t in ('tilde', 'hook') and t in MARK_STACK_FN) else mark_ops(t, True)
         o = CLEAR_UP(shift_ops(o, (x0 + x1) / 2, 0), fo, mf.W_GAP)
         tops.append(ops_yrange(o)[1] - ftop)
     _STACK_TOP[first] = max(tops)
@@ -1107,7 +1107,7 @@ def STACK_SYNC(ops, tone, first_ops, first, zone, centred=None):
         ops = shift_ops(centred, mx, zone)
     else:
         ops = shift_ops(ops, 0, zone - ops_yrange(ops)[0])            # start on the mark's foot, then lift clear
-    ops = CLEAR_UP(ops, first_ops, mf.CIRC_R8K_GAP if tone == 'hook' else mf.W_GAP)
+    ops = CLEAR_UP(ops, first_ops, mf.CIRC_R8K_GAP if (tone == 'hook' and first == 'circumflex') else mf.W_GAP)
     target = ops_yrange(first_ops)[1] + STACK_TOP(first)
     top = ops_yrange(ops)[1]
     return shift_ops(ops, 0, target - top) if top < target else ops
