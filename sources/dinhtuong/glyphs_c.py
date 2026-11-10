@@ -695,6 +695,19 @@ ACUTE_R8I_LC_GAP = 40     # R8i v2: lowercase ấ ế ố — sắc–mũ gap (s
 ACUTE_R8I_LC_DX = 212     # R8k-b (31/10 'dời dấu sắc ra sau như này', sample Ấ ấ): the sắc rides BEHIND the mũ, over its right arm —
                           # its centre 212 right of the mũ's centre on ấ ế ố (left end 115 past the mũ's centre), height by the 40 gap
 ACUTE_R8K_UC_DX = 189     # R8k-b: on Ấ Ế Ố the centre is 189 right of the mũ's centre (left end 92 past it); height = Ắ's line
+ACUTE_N_GAP = 48          # R8n (10/11 sample 'KẾ'): on the mũ the sắc lies parallel to the mũ's left arm, 48 u from it (sample
+                          # 56 u vertical at the left end = 48 square to the arm; 50 u over the apex)
+
+
+_N_DX = {}
+
+
+def ACUTE_N_DX():
+    """R8n: on Ấ Ế Ố ấ ế ố the sắc's LEFT end stands flush over the mũ's left end (sample: both at x 407 px).
+    Returns the sắc's centre relative to the mũ's centre."""
+    if 'dx' not in _N_DX:
+        _N_DX['dx'] = ops_xrange(mark_ops('circumflex', True))[0] - ops_xrange(mark_ops('acute', True))[0]
+    return _N_DX['dx']
 
 
 _CFOOT = {}
@@ -748,7 +761,7 @@ def ACUTE_IN_DX(dx0, base_ops, cx):
 def ACUTE_CIRC_Y(upper=True, dxa=None):
     """R8i/R8k: the lowest height (over the mũ's own foot) at which the sắc keeps its gap from the mũ: lowercase
     ACUTE_R8I_LC_GAP at ACUTE_R8I_LC_DX; capitals ACUTE_R8I_GAP, centred."""
-    gap, d0 = (ACUTE_R8I_GAP, ACUTE_R8K_UC_DX) if upper else (ACUTE_R8I_LC_GAP, ACUTE_R8I_LC_DX)
+    gap, d0 = ACUTE_N_GAP, ACUTE_N_DX()          # R8n: one gap and one place, capitals and lowercase
     dxa = d0 if dxa is None else dxa
     key = (upper, round(dxa, 1))
     if key in _CIRC_Y: return _CIRC_Y[key]
@@ -1013,8 +1026,8 @@ def compose(ch, gaps=None):
                 ydy, dx = 0, ACUTE_BESIDE_DX(upper)
             elif tone == 'acute' and ACUTE_MODE() in ('4', '5'):   # R8i: the sắc CENTRED over the mũ (sample Ấ +1 u, ấ +3 u)
                 ops = mark_ops('acute', upper)
-                dx = ACUTE_IN_DX(ACUTE_R8K_UC_DX, bg.ops, cx)            # R8k-b behind the mũ, R8k-c inside the letter
-                ydy = max(ACUTE_STACK_Y() + zone0 - zone, ACUTE_CIRC_Y(upper, dx))   # Ắ's line, unless the mũ needs more
+                dx = ACUTE_N_DX()                                         # R8n: left end flush over the mũ's left end
+                ydy = ACUTE_CIRC_Y(upper, dx)                             # R8n: parallel to the left arm, ACUTE_N_GAP over it
             elif tone == 'acute' and ACUTE_TOPLINE():  # R8f trial: the sắc on ấ ends on the same line as on ắ
                 ydy = ACUTE_STACK_Y()
                 dx = ACUTE_CIRC_DX(dx, ydy, True)   # R8f: pulled left to 40 from the mũ
