@@ -728,6 +728,14 @@ def CIRC_FOOT(base_ops, cx, zone, key=None):
         else: lo = mid
     if key is not None: _CFOOT[key] = hi
     return hi
+def BREVE_FOOT(base_ops, cx, zone, key=None):
+    """R8w-ă (10/11 sample 'KỀ KÈ Ằ', one red top line): the trăng's top stands where the mũ's top would stand on the
+    same letter (sample: both 157-158 over the cap line; trăng foot 51 over A), so a tone on the trăng and a tone on the
+    mũ end on ONE line (the tones keep W_GAP over either mark)."""
+    yc = CIRC_FOOT(base_ops, cx, zone, key)
+    return yc + ops_yrange(mark_ops('circumflex', True))[1] - ops_yrange(mark_ops('breve', True))[1]
+
+
 ACUTE_R8I_BREVE_DX = 62   # R8i v2: on the trăng the sắc's centre is 62 right of the axis (sample Ắ +62)
 
 
@@ -990,6 +998,8 @@ def compose(ch, gaps=None):
     tone = next((TONES[m] for m in marks if m in TONES), None)
     sshift = side_shift(tone, upper, gaps) if (first == 'circumflex' and tone in ('acute', 'hook') and not (tone == 'acute' and ACUTE_MODE() in ('4', '5'))) else 0
     yc = CIRC_FOOT(bg.ops + (h_ops if HORN in marks else []), cx + sshift, zone, ('U', bname, round(cx + sshift, 1))) if first == 'circumflex' else 0.0
+    if first == 'breve' and __import__('marks_flat').R8W():        # R8w-ă: the trăng's top on the mũ's top line
+        yc = BREVE_FOOT(bg.ops, cx, zone, ('U', bname, round(cx, 1)))
     zone0 = zone
     zone = zone + yc                                 # R8k: the mũ and every tone stacked on it move with the mũ's foot
     if first:

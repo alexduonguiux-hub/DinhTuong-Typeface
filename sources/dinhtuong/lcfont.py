@@ -95,6 +95,8 @@ def compose(ch):
     top_h = 0
     if first == 'circumflex':                        # R8k: the mũ (and every tone on it) sits 40 over the letter's ink
         ZONE = ZONE + GL.CIRC_FOOT(bg.ops + h_ops, cx, ZONE, ('L', base, round(cx, 1)))
+    elif first == 'breve' and MF.R8W():             # R8w-ă: the trăng's top on the mũ's top line
+        ZONE = ZONE + GL.BREVE_FOOT(bg.ops + h_ops, cx, ZONE, ('L', base, round(cx, 1)))
     if first:
         ops = GL.shift_ops(GL.mark_ops(first, True), cx, ZONE)
         g.ops += ops; g.parts.append((first, ops))
