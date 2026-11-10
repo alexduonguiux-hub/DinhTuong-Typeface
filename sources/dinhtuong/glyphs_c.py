@@ -1040,11 +1040,10 @@ def compose(ch, gaps=None):
                 if adv - 40 < __import__('marks_flat').STRIP_L:
                     ops = mark_ops('grave', upper, adv - 40)
             ops = shift_ops(ops, cx + hx, zone)
-        mf_ = __import__('marks_flat')
-        if first and tone in ('acute', 'grave') and mf_.R8W():   # R8w: centred over the mũ / trăng, W_GAP over its ink
+        if first and tone in ('acute', 'grave', 'tilde', 'hook') and __import__('marks_flat').R8W():
+            # R8w: sắc / huyền centred over the mũ / trăng; R8w-h: every stacked tone ends on one top line
             fo = [o for nm, o2 in g.parts if nm == first for o in o2]
-            mx = sum(ops_xrange(fo)) / 2
-            ops = CLEAR_UP(shift_ops(mark_ops(tone, upper), mx, zone), fo, mf_.W_GAP)
+            ops = STACK_SYNC(ops, tone, fo, first, zone, mark_ops(tone, upper) if tone in ('acute', 'grave') else None)
         g.ops += ops; g.parts.append((tone, ops))
     if DOTB in marks:
         adv = bg.lsb + bg.body + bg.rsb
@@ -1069,6 +1068,49 @@ def ops_xrange(ops):
         elif op == 'add':
             xs += [p[0] for p in flatten(c, 6)]
     return min(xs), max(xs)
+
+
+def ops_yrange(ops):
+    ys = []
+    for op, c in ops:
+        if op == 'group':
+            a, b = ops_yrange(c); ys += [a, b]
+        elif op == 'add':
+            ys += [p[1] for p in flatten(c, 6)]
+    return min(ys), max(ys)
+
+
+_STACK_TOP = {}
+
+
+def STACK_TOP(first):
+    """R8w-h (10/11 'đo lại chiều cao dấu đôi cho đồng bộ: dấu, dẫu, dẩu, dầu'): every tone stacked on a mũ / trăng ends
+    on ONE top line, this far over the mark's own top: the highest of sắc / huyền / ngã each centred over it with its
+    ink W_GAP from it (the others are raised to it; hỏi beside the mũ too)."""
+    if first in _STACK_TOP: return _STACK_TOP[first]
+    mf = __import__('marks_flat')
+    fo = mark_ops(first, True); x0, x1 = ops_xrange(fo); ftop = ops_yrange(fo)[1]
+    tops = []
+    for t in ('acute', 'grave', 'tilde'):
+        o = MARK_STACK_FN[t]() if (t == 'tilde' and t in MARK_STACK_FN) else mark_ops(t, True)
+        o = CLEAR_UP(shift_ops(o, (x0 + x1) / 2, 0), fo, mf.W_GAP)
+        tops.append(ops_yrange(o)[1] - ftop)
+    _STACK_TOP[first] = max(tops)
+    return _STACK_TOP[first]
+
+
+def STACK_SYNC(ops, tone, first_ops, first, zone, centred=None):
+    """R8w / R8w-h: the stacked tone at its lowest clear place, then raised to the stack's common top line."""
+    mf = __import__('marks_flat')
+    if centred is not None:
+        mx = sum(ops_xrange(first_ops)) / 2
+        ops = shift_ops(centred, mx, zone)
+    else:
+        ops = shift_ops(ops, 0, zone - ops_yrange(ops)[0])            # start on the mark's foot, then lift clear
+    ops = CLEAR_UP(ops, first_ops, mf.CIRC_R8K_GAP if tone == 'hook' else mf.W_GAP)
+    target = ops_yrange(first_ops)[1] + STACK_TOP(first)
+    top = ops_yrange(ops)[1]
+    return shift_ops(ops, 0, target - top) if top < target else ops
 
 
 def side_shift(tone, upper, gaps=None):
