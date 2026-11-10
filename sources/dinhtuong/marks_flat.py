@@ -65,7 +65,30 @@ def tv(ang):
     return _st() / _m.cos(_m.radians(ang))
 
 
+# R8w (10/11, designer's sample 'KÉ KẾ KỀ KÈ': 'thử lại dấu sắc và huyền mới', measured at cap 261 px on Bold): sắc and
+# huyền are ONE long WEDGE: a level underside, the top edge rising toward the thick end (sắc: thick on the right; huyền:
+# the mirror, thick on the left), both ends cut vertical. Span W_SPAN (sample 298 = STRIP_L), thin end W_THIN x T and
+# thick end W_THICK x T (sample 29.5 / 86 u at T Bold 70.6), underside W_UP over the mark zone (sample 64 over the cap
+# = zone + 14). Centred on the letter; on the mũ / trăng centred over it, W_GAP over its ink (glyphs_c).
+W_SPAN = STRIP_L
+W_THIN, W_THICK = 0.42, 1.22
+W_UP = 14
+W_GAP = 24                # sample: the sắc's underside 24 over the mũ's apex (Ế), the same over the trăng
+
+
+def R8W():
+    return __import__('os').environ.get('ACUTE_WEDGE', '1') == '1'
+
+
+def _wedge(thick_right):
+    t = _st(); s = W_SPAN; a, b = W_THIN * t, W_THICK * t
+    l, r = (a, b) if thick_right else (b, a)
+    return [('add', poly([(-s / 2, W_UP), (s / 2, W_UP), (s / 2, W_UP + r), (-s / 2, W_UP + l)]))]
+
+
 def mk_acute(length=ACUTE_L, **_):
+    if R8W():
+        return _wedge(True)
     if R8I():
         t, s = tv(ACUTE_R8I_ANG), ACUTE_R8I_SPAN
         rise = s * _m.tan(_m.radians(ACUTE_R8I_ANG))
@@ -87,7 +110,9 @@ def _mk_acute_r8e(length=ACUTE_L, **_):
 
 
 def mk_grave(length=STRIP_L, **_):
-    """huyền: the strip LYING, centred on the letter (built at final size: no cap scaling)."""
+    """huyền: the strip LYING, centred on the letter (built at final size: no cap scaling). R8w: the wedge, thick left."""
+    if R8W():
+        return _wedge(False)
     t = _st()
     return [('add', rect(-length / 2, GRAVE_UP, length / 2, GRAVE_UP + t))]
 
@@ -193,8 +218,25 @@ CIRC_R8K_HALF = 120.0
 CIRC_R8K_GAP = 40
 
 
+# R8w-ô (10/11, same sample 'vẽ lại dấu ô luôn', measured at cap 261 px on Bold): the mũ is a chevron with LEVEL feet:
+# both edges rise CIRC_W_ANG (sample outer 38°, inner 35°), outer and inner apex pointed, the two arms cut level on the
+# foot line; vertical thickness T (sample 72 u at T Bold 70.6), half-width CIRC_W_HALF (sample 135), so the outer apex
+# stands h tan(A) = 102 over the feet (sample 105) and the inner apex T under it (sample 31 over the feet). Its feet
+# keep CIRC_W_FOOT_GAP from the letter's ink (sample 59 over E's cap line; glyphs_c.CIRC_FOOT).
+CIRC_W_ANG = 37.0
+CIRC_W_HALF = 135.0
+CIRC_W_FOOT_GAP = 58
+
+
+def CIRC_FOOT_GAP():
+    return CIRC_W_FOOT_GAP if R8W() else CIRC_R8K_GAP
+
+
 def mk_circumflex(**_):
     T = _st()
+    if R8W():
+        h = CIRC_W_HALF; k = _m.tan(_m.radians(CIRC_W_ANG)); r = h * k; f = h - T / k
+        return [('add', poly([(-h, 0), (-f, 0), (0, r - T), (f, 0), (h, 0), (0, r)]))]
     if R8I():
         T = tv(CIRC_R8K_ANG)                           # R8l
         h = CIRC_R8K_HALF; r = h * _m.tan(_m.radians(CIRC_R8K_ANG))
@@ -203,6 +245,8 @@ def mk_circumflex(**_):
 
 
 def CIRC_HGT():
+    if R8W():
+        return CIRC_W_HALF * _m.tan(_m.radians(CIRC_W_ANG))
     if R8I():
         return CIRC_R8K_HALF * _m.tan(_m.radians(CIRC_R8K_ANG)) + tv(CIRC_R8K_ANG)
     """mũ height — v0.95 review "giảm độ cao của dấu ô": max(118, 1.7T) -> max(96, 1.45T); the inner

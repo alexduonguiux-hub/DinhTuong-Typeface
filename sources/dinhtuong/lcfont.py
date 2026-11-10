@@ -137,6 +137,10 @@ def compose(ch):
             if tone == 'grave' and adv - 40 < MF.STRIP_L and os.environ.get('GRAVE_FULL', '1') != '1':   # caps Ì rule (off since R8h: huyền full length on ì)
                 ops = GL.mark_ops('grave', True, adv - 40)
             ops = GL.shift_ops(ops, cx + hx, ZONE)
+        if first and tone in ('acute', 'grave') and MF.R8W():          # R8w: centred over the mũ / trăng, W_GAP over its ink
+            fo = [o for nm, o2 in g.parts if nm == first for o in o2]
+            mx = sum(GL.ops_xrange(fo)) / 2
+            ops = GL.CLEAR_UP(GL.shift_ops(GL.mark_ops(tone, True), mx, ZONE), fo, MF.W_GAP)
         g.ops += ops; g.parts.append((tone, ops))
     if DOTB in marks:
         adv = bg.lsb + bg.body + bg.rsb

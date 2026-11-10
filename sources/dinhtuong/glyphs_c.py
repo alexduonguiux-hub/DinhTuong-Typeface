@@ -724,7 +724,7 @@ def CIRC_FOOT(base_ops, cx, zone, key=None):
     lo, hi = -250.0, 250.0
     for _ in range(18):
         mid = (lo + hi) / 2
-        if MQ.min_dist(b, MQ.raster(shift_ops(mark_ops('circumflex', True), cx, zone + mid))) >= mf.CIRC_R8K_GAP: hi = mid
+        if MQ.min_dist(b, MQ.raster(shift_ops(mark_ops('circumflex', True), cx, zone + mid))) >= mf.CIRC_FOOT_GAP(): hi = mid
         else: lo = mid
     if key is not None: _CFOOT[key] = hi
     return hi
@@ -1040,6 +1040,11 @@ def compose(ch, gaps=None):
                 if adv - 40 < __import__('marks_flat').STRIP_L:
                     ops = mark_ops('grave', upper, adv - 40)
             ops = shift_ops(ops, cx + hx, zone)
+        mf_ = __import__('marks_flat')
+        if first and tone in ('acute', 'grave') and mf_.R8W():   # R8w: centred over the mũ / trăng, W_GAP over its ink
+            fo = [o for nm, o2 in g.parts if nm == first for o in o2]
+            mx = sum(ops_xrange(fo)) / 2
+            ops = CLEAR_UP(shift_ops(mark_ops(tone, upper), mx, zone), fo, mf_.W_GAP)
         g.ops += ops; g.parts.append((tone, ops))
     if DOTB in marks:
         adv = bg.lsb + bg.body + bg.rsb
