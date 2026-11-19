@@ -1001,6 +1001,7 @@ def compose(ch, gaps=None):
     if first == 'breve' and __import__('marks_flat').R8W():        # R8w-ă: the trăng's top on the mũ's top line
         yc = BREVE_FOOT(bg.ops, cx, zone, ('U', bname, round(cx, 1)))
     zone0 = zone
+    globals()['_ZONE0'] = zone0                     # R9h-d: the lone mark line, for a hỏi beside the mũ
     zone = zone + yc                                 # R8k: the mũ and every tone stacked on it move with the mũ's foot
     if first:
         ops = shift_ops(mark_ops(first, upper), cx + sshift, zone)
@@ -1116,9 +1117,11 @@ def STACK_SYNC(ops, tone, first_ops, first, zone, centred=None):
     if tone == 'hook' and first == 'circumflex' and mf.HOOK_MODE == 'r9':
         # R9h-b (19/11, designer's Ẩ): the hỏi stands BESIDE the mũ, not over it: its left cut HOOK_GAP_X right of the
         # mũ's right foot, its centre HOOK_UP_K x its own height over the mũ's top (Regular: 9 / 36 on the drawing)
+        # R9h-d (19/11 'Dấu hỏi không bằng nhau kìa'): beside the mũ the hỏi stands on the SAME line as a lone hỏi
+        # (ả = ẩ, Ả = Ẩ), not raised with the mũ
         x0, x1 = ops_xrange(ops); y0, y1 = ops_yrange(ops)
-        fx1 = ops_xrange(first_ops)[1]; ftop = ops_yrange(first_ops)[1]
-        return shift_ops(ops, fx1 + mf.HOOK_GAP_X - x0, ftop + mf.HOOK_UP_K * (y1 - y0) - (y0 + y1) / 2)
+        fx1 = ops_xrange(first_ops)[1]
+        return shift_ops(ops, fx1 + mf.HOOK_GAP_X - x0, globals().get('_ZONE0', zone) - y0)
     if centred is not None:
         mx = sum(ops_xrange(first_ops)) / 2
         ops = shift_ops(centred, mx, zone)

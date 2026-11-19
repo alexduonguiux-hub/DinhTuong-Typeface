@@ -93,6 +93,7 @@ def compose(ch):
     first = 'circumflex' if CIRC in marks else ('breve' if BREVE in marks else None)
     tone = next((TONES[m] for m in marks if m in TONES), None)
     top_h = 0
+    GL._ZONE0 = ZONE                                 # R9h-d: the lone mark line, for a hỏi beside the mũ
     if first == 'circumflex':                        # R8k: the mũ (and every tone on it) sits 40 over the letter's ink
         ZONE = ZONE + GL.CIRC_FOOT(bg.ops + h_ops, cx, ZONE, ('L', base, round(cx, 1)))
     elif first == 'breve' and MF.R8W():             # R8w-ă: the trăng's top on the mũ's top line
