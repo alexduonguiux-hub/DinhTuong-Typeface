@@ -101,8 +101,10 @@ def compose(ch):
     g = Glyph('lc_uni%04X' % ord(ch), bg.body, bg.lsb, bg.rsb, ord(ch))
     g.ops = list(bg.ops); g.parts = [('base', list(bg.ops))]
     cx = J_AXIS if base == 'j' else bg.body / 2
+    cx_h = cx                                        # the axis the mark HEIGHT is measured on (clearance search)
     if base == 'a':
         cx = A_AXIS(bg)                              # R11a: the marks on a ride over its head, not the whole letter
+        # (their height stays the one measured on the old axis: on the head the clearance search lifted â / ă 15 over ê ô)
     # v0.970 (mark QA: ĺ's sắc sat ON the l's ascender): a letter with an ascender carries its marks over the ascender
     ZONE = (lcm.ASC + (_ZONE_X - lcm.XH)) if base in 'bdhkl' else _ZONE_X
     h_ops = []
@@ -119,9 +121,9 @@ def compose(ch):
     top_h = 0
     GL._ZONE0 = ZONE + LC_RAISE                      # R9h-d: the lone mark line, for a hỏi beside the mũ
     if first == 'circumflex':                        # R8k: the mũ (and every tone on it) sits 40 over the letter's ink
-        ZONE = ZONE + GL.CIRC_FOOT(bg.ops + h_ops, cx, ZONE, ('L', base, round(cx, 1)))
+        ZONE = ZONE + GL.CIRC_FOOT(bg.ops + h_ops, cx_h, ZONE, ('L', base, round(cx_h, 1)))
     elif first == 'breve' and MF.R8W():             # R8w-ă: the trăng's top on the mũ's top line
-        ZONE = ZONE + GL.BREVE_FOOT(bg.ops + h_ops, cx, ZONE, ('L', base, round(cx, 1)))
+        ZONE = ZONE + GL.BREVE_FOOT(bg.ops + h_ops, cx_h, ZONE, ('L', base, round(cx_h, 1)))
     ZONE += LC_RAISE                                 # R9r: every lowercase mark (and its stack) a little higher
     if first:
         ops = GL.shift_ops(GL.mark_ops(first, True), cx, ZONE)
