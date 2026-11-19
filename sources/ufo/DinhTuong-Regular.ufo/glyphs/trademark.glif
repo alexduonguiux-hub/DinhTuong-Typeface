@@ -53,8 +53,8 @@
       <point x="590" y="663"/>
       <point x="591" y="682"/>
       <point x="593" y="700" type="curve"/>
-      <point x="542" y="700" type="line"/>
-      <point x="450" y="515" type="line"/>
+      <point x="540" y="700" type="line"/>
+      <point x="450" y="517" type="line"/>
       <point x="358" y="700" type="line"/>
       <point x="306" y="700" type="line"/>
       <point x="308" y="682"/>
