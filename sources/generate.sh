@@ -25,6 +25,9 @@ python3 soft_dotted.py "$ROOT/sources/ufo/DinhTuong-Regular.ufo" "$ROOT/sources/
 python3 spine_data.py spine_data.json
 python3 s_spine_fix.py spine_data.json "$ROOT/sources/ufo/DinhTuong-Regular.ufo" "$ROOT/sources/ufo/DinhTuong-Medium.ufo" \
   "$ROOT/sources/ufo/DinhTuong-Bold.ufo"
+# L1 (1.007): standard ligatures t_t f_t t_f f_f, crossbars run on (liga), kerned as their outer letters
+python3 ligatures.py "$ROOT/sources/ufo/DinhTuong-Regular.ufo" "$ROOT/sources/ufo/DinhTuong-Medium.ufo" \
+  "$ROOT/sources/ufo/DinhTuong-Bold.ufo"
 # VF3 (vf-concept-v1): point-compatible masters for the variable font; exact, outlines unchanged
 python3 vf_compat.py "$ROOT/sources/ufo/DinhTuong-Regular.ufo" "$ROOT/sources/ufo/DinhTuong-Medium.ufo" \
   "$ROOT/sources/ufo/DinhTuong-Bold.ufo"
