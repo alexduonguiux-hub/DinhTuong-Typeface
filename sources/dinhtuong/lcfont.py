@@ -93,6 +93,7 @@ def compose(ch):
     first = 'circumflex' if CIRC in marks else ('breve' if BREVE in marks else None)
     tone = next((TONES[m] for m in marks if m in TONES), None)
     top_h = 0
+    GL._ZONE0 = ZONE                                 # R9h-d: the lone mark line, for a hỏi beside the mũ
     if first == 'circumflex':                        # R8k: the mũ (and every tone on it) sits 40 over the letter's ink
         ZONE = ZONE + GL.CIRC_FOOT(bg.ops + h_ops, cx, ZONE, ('L', base, round(cx, 1)))
     elif first == 'breve' and MF.R8W():             # R8w-ă: the trăng's top on the mũ's top line
@@ -234,6 +235,12 @@ def tune_spacing(rounds=3, k=0.85):
             kern.MASK.pop(rr.name, None)
             D = D0
     kern.MASK.clear()
+    if 'c' in BASE and os.environ.get('S1F', '1') == '1':
+        # S1f (19/11 'Kiểm tra lại kerning các cặp đi với c thường khi bold'): the 0.12 x-height measure reads c's open
+        # right side differently as the terminals thicken: c|n came out 17 looser than e|n in Regular but 23 in Medium
+        # and 45 in Bold (rsb 30 / 39 / 61). Matching Regular exactly (Bold 33) read too tight ('kerning c lại hẹp quá');
+        # the designer chose the middle: Bold rsb 47 (-14), Medium as before (39).
+        BASE['c'].rsb += {'bold': -14.0}.get(GL.WEIGHT, 0.0)
     for c in names:
         log[c] = (round(BASE[c].lsb), round(BASE[c].rsb))
     _TUNED.append(log)

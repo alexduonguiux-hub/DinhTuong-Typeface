@@ -713,6 +713,19 @@ def CLEAR_UP(ops, other_ops, gap):
     return shift_ops(ops, 0, hi)
 
 
+def CLEAR_RIGHT(ops, other_ops, gap):
+    """R9h-e: push ops right (never left) until their ink keeps gap from other_ops."""
+    import mark_qa as MQ
+    o = MQ.raster(other_ops)
+    if MQ.min_dist(o, MQ.raster(ops)) >= gap: return ops
+    lo, hi = 0.0, 300.0
+    for _ in range(16):
+        mid = (lo + hi) / 2
+        if MQ.min_dist(o, MQ.raster(shift_ops(ops, mid, 0))) >= gap: hi = mid
+        else: lo = mid
+    return shift_ops(ops, hi, 0)
+
+
 def CIRC_FOOT(base_ops, cx, zone, key=None):
     """R8k: the mũ's foot relative to the mark zone — the lowest height at which its ink keeps CIRC_R8K_GAP (40) from
     the letter's ink (sample Â 41, â 40). 0 when the R8k mũ is off."""
@@ -1001,6 +1014,7 @@ def compose(ch, gaps=None):
     if first == 'breve' and __import__('marks_flat').R8W():        # R8w-ă: the trăng's top on the mũ's top line
         yc = BREVE_FOOT(bg.ops, cx, zone, ('U', bname, round(cx, 1)))
     zone0 = zone
+    globals()['_ZONE0'] = zone0                     # R9h-d: the lone mark line, for a hỏi beside the mũ
     zone = zone + yc                                 # R8k: the mũ and every tone stacked on it move with the mũ's foot
     if first:
         ops = shift_ops(mark_ops(first, upper), cx + sshift, zone)
@@ -1113,6 +1127,13 @@ def STACK_TOP(first):
 def STACK_SYNC(ops, tone, first_ops, first, zone, centred=None):
     """R8w / R8w-h: the stacked tone at its lowest clear place, then raised to the stack's common top line."""
     mf = __import__('marks_flat')
+    if tone == 'hook' and first == 'circumflex' and mf.HOOK_MODE == 'r9':
+        # R9h-b (19/11, designer's Ẩ): the hỏi stands BESIDE the mũ, not over it: its left cut HOOK_GAP_X right of the
+        # mũ's right foot, its centre HOOK_UP_K x its own height over the mũ's top (Regular: 9 / 36 on the drawing)
+        # (R9h-d / R9h-e tried the lone hỏi's line, 19/11; the designer then asked again for the drawing: 'Đặt giống như này')
+        x0, x1 = ops_xrange(ops); y0, y1 = ops_yrange(ops)
+        fx1 = ops_xrange(first_ops)[1]; ftop = ops_yrange(first_ops)[1]
+        return shift_ops(ops, fx1 + mf.HOOK_GAP_X - x0, ftop + mf.HOOK_UP_K * (y1 - y0) - (y0 + y1) / 2)
     if centred is not None:
         mx = sum(ops_xrange(first_ops)) / 2
         ops = shift_ops(centred, mx, zone)
@@ -1538,7 +1559,7 @@ def lerp_path(p0, p1, n=6):
 def cap_A():
     W = 572 + gw('diag')
     g = Glyph('A', W, SB_DIAG, SB_DIAG, 0x41)
-    dw = diag_dx(DIAG, W / 2 - 80, CAP)
+    dw = diag_dx(DIAG, W / 2 - 80, CAP) * dboost('A')
     for op, c in vshape(0, W, CAP, 0, dw, 150):
         g.ops.append((op, mirror_y(c, CAP / 2)))
     # 26/10 "A regular dư nét 2 bên": the bar ends were a fixed 0.6*dw in, which pokes out of
@@ -1675,11 +1696,11 @@ def cap_K():
     W = (529 if CAPW else 556) + gw('multi')
     g = Glyph('K', W, SB_STRAIGHT, SB_DIAG, 0x4B)
     g.add(fstem(0, 0, V, CAP))
-    aw = diag_dx(DIAG_K_ARM, W - V - 60, CAP - 300)
+    aw = diag_dx(DIAG_K_ARM, W - V - 60, CAP - 300) * dboost('K')
     ax0, ax1 = V - aw / 2, W - aw / 2
     yc, yj = K_CROTCH * CAP, K_JOIN * CAP
     g.group([('add', stroke((ax0, yc), (ax1, CAP), aw)), ('sub', rect(-400, -400, V / 4, CAP + 400))])
-    lw = diag_dx(DIAG, W - V - 120, 380) * 0.86
+    lw = diag_dx(DIAG, W - V - 120, 380) * 0.86 * dboost('K')
     xj = ax0 + (yj - yc) / (CAP - yc) * (ax1 - ax0)
     g.add(stroke((xj, yj), (W - lw / 2, 0), lw))
     g.sub(rect(-200, -400, -12, CAP + 400), rect(V, CAP, W + 200, CAP + 400), rect(V, -400, W + 200, 0))
@@ -1707,7 +1728,7 @@ def cap_M():
     # more and the width is solved for the thickness, not taken from the nominal rule.
     fbm = 140 * WKC
     W1, dwW = _w_geom()
-    target = _vshape_mid(0, W1, CAP, 0, dwW, 128)
+    target = _vshape_mid(0, W1, CAP, 0, dwW * dboost('W'), 128)   # D2: M keeps W's (now heavier) diagonal
     lo, hi = 0.5 * DIAG, 2.0 * DIAG
     for _ in range(60):
         mid = (lo + hi) / 2
@@ -1804,10 +1825,25 @@ def cap_U():
     return reg(g)
 
 
+# D2 (19/11 'Các nét xéo chữ X, Y, V, W cảm giác mỏng hơn các chữ khác'): measured square to the stroke the caps
+# diagonals stood at 0.85 (V W) / 0.77-0.80 (X Y) of the stem (A K 0.84, Z 0.87). Each is widened so its true thickness
+# reaches DIAG_TARGET x the stem in every weight (factors from the measured outlines, outer edges unchanged).
+DIAG_BOOST = {'regular': {'V': 1.056, 'W': 1.050, 'X': 1.087, 'Y': 1.091, 'A': 1.078, 'K': 1.070},
+              'medium':  {'V': 1.050, 'W': 1.048, 'X': 1.065, 'Y': 1.070, 'A': 1.061, 'K': 1.066},
+              'bold':    {'V': 1.050, 'W': 1.048, 'X': 1.043, 'Y': 1.053, 'A': 1.073, 'K': 1.071}}   # A K: 19/11 'nâng A K luôn'
+
+
+def dboost(ch):
+    import os as _o
+    if _o.environ.get('D2', '1') != '1':
+        return 1.0
+    return DIAG_BOOST.get(_o.environ.get('A2_WEIGHT', 'bold'), {}).get(ch, 1.0)
+
+
 def cap_V():
     W = 580 + gw('diag')
     g = Glyph('V', W, SB_DIAG, SB_DIAG, 0x56)
-    dw = diag_dx(DIAG, W / 2 - 60, CAP)
+    dw = diag_dx(DIAG, W / 2 - 60, CAP) * dboost('V')
     apply(g, vshape(0, W, CAP, 0, dw, 150))
     return reg(g)
 
@@ -1842,7 +1878,8 @@ def _w_geom():
 
 def cap_W():
     W1, dw = _w_geom()
-    W = 2 * W1 - dw
+    W = 2 * W1 - dw          # D2: the outer width as before; the diagonals thicken inward
+    dw *= dboost('W')
     g = Glyph('W', W, SB_DIAG, SB_DIAG, 0x57)
     g.group(vshape(0, W1, CAP, 0, dw, 128))
     g.group(vshape(W - W1, W, CAP, 0, dw, 128))
@@ -1852,7 +1889,7 @@ def cap_W():
 def cap_X():
     W = 564 + gw('diag')
     g = Glyph('X', W, SB_DIAG, SB_DIAG, 0x58)
-    dw = diag_dx(DIAG_X, W - 200, CAP) * 1.04
+    dw = diag_dx(DIAG_X, W - 200, CAP) * 1.04 * dboost('X')
     g.add(pinch((dw / 2, CAP), (W - dw / 2, 0), dw))
     g.add(pinch((W - dw / 2, CAP), (dw / 2, 0), dw))
     return reg(g)
@@ -1861,7 +1898,7 @@ def cap_X():
 def cap_Y():
     W = 572 + gw('diag')
     g = Glyph('Y', W, SB_DIAG, SB_DIAG, 0x59)
-    dw = diag_dx(DIAG_Y, W / 2 - 60, CAP - 300) * 0.95
+    dw = diag_dx(DIAG_Y, W / 2 - 60, CAP - 300) * 0.95 * dboost('Y')
     c = W / 2
     g.group(vshape(0, W, CAP, 236, dw, V))
     g.add(fstem(c - V / 2, 0, c + V / 2, 300, top=False))

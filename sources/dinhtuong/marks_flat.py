@@ -418,13 +418,58 @@ def mk_tilde(**_):
     return mk_tilde_v94(hgt=T + 2 * (amp + 4), half=150, w=T, wh=T)
 
 
+# R9h (19/11, designer's Figma 'Show-06' Ẩ, 'Update dấu hỏi'): the hỏi is ONE even band bent round a half circle and
+# opening to the LEFT: two level arms, both cut on one vertical line, joined on the right by a half ring (outer radius
+# R = s + r, inner r). Measured on the drawing at Regular (cap 700 = 869 px): band s 53.1, inner r 15.7, arms 62.4 from
+# the cut to the ring's centre, mark 131 x 138. Proportions are kept in every weight; s = HOOK_S_K x the mark strip T
+# (Regular T 56.2 -> 53.1). The same mark alone and stacked (the drawing has one size).
+HOOK_MODE = __import__('os').environ.get('HOOK_MODE', 'r9')
+HOOK_S_K, HOOK_R_K, HOOK_L_K = 0.945, 0.296, 1.175
+HOOK_GAP_X, HOOK_UP_K = 9.0, 0.26    # R9h-b: hỏi beside the mũ (drawing Ẩ, Regular)
+
+
+_HOOK_C = {}
+
+
+def _hook_old_centre():
+    """x centre of the old (v94) lone hỏi's visible ink, this weight (cached)"""
+    if 'c' not in _HOOK_C:
+        import booleng
+        T = _st()
+        r = booleng.evaluate(mk_hook_v94(rx=max(73, 1.0 * T), ry=max(46, 0.9 * T), wv=T, wh=T))
+        xs = [seg[i] for c in r for seg in c if seg[0] != 'Z' for i in range(1, len(seg), 2)]
+        _HOOK_C['c'] = (min(xs) + max(xs)) / 2
+    return _HOOK_C['c']
+
+
+def mk_hook_r9():
+    s = HOOK_S_K * _st()
+    r = HOOK_R_K * s
+    R, L = s + r, HOOK_L_K * s
+    # R9h-c (19/11 'Dấu hỏi bị lệch chứ không canh giữa như cũ'): the box sits where the OLD hỏi's visible box sat
+    # (its ring centred on the axis, the cut-away left side put the ink 32-36 right of it), not centred on the axis
+    xl = _hook_old_centre() - (L + R) / 2
+    xc, cy, k = xl + L, R, 0.5523
+    return [('add', [('M', xc, cy + R),
+                     ('C', xc + k * R, cy + R, xc + R, cy + k * R, xc + R, cy),
+                     ('C', xc + R, cy - k * R, xc + k * R, cy - R, xc, cy - R),
+                     ('L', xl, cy - R), ('L', xl, cy - r), ('L', xc, cy - r),
+                     ('C', xc + k * r, cy - r, xc + r, cy - k * r, xc + r, cy),
+                     ('C', xc + r, cy + k * r, xc + k * r, cy + r, xc, cy + r),
+                     ('L', xl, cy + r), ('L', xl, cy + R), ('Z',)])]
+
+
 def mk_hook(**_):
+    if HOOK_MODE == 'r9':
+        return mk_hook_r9()
     T = _st()
     return mk_hook_v94(rx=max(73, 1.0 * T), ry=max(46, 0.9 * T), wv=T, wh=T)
 
 
 def mk_hook_stack(**_):
     """hỏi riding on a trăng / mũ: same thickness T, a tighter curl so stacks stay low."""
+    if HOOK_MODE == 'r9':
+        return mk_hook_r9()
     T = _st()
     return mk_hook_v94(rx=max(66, 0.85 * T), ry=max(40, 0.65 * T), wv=T, wh=T)
 
