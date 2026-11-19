@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.007 (2026-11-19)
+s, the Bold S and Q redrawn from the designer's Figma drawings and review. Only these glyphs change (Regular 9, Medium
+15, Bold 15: s ś š ş ș ŝ, Q, §, and in Medium / Bold S Ś Š Ş Ș Ŝ $ too); every other glyph is byte-identical to 1.006
+(`scripts/patch_release_glyphs.py`). Kerning is re-made for the changed glyphs only.
+- **F7d, s:** the same construction fitted to the drawing at Regular: narrower (381 / 399 / 417, was 411 / 429 / 446),
+  terminals reaching further round (insets from the glyph edge 36 top / 21 bottom, were 64 / 43), so the letter no
+  longer leans back ('phần thụt đuôi trên của s hơi thụt nhiều so với dưới làm cảm giác chữ bị ngã ra sau'). Strokes
+  unchanged.
+- **F7d-w / F7d-b, s and S in heavier weights:** the arms keep the stroke to the cut in Medium and Bold (were thinning
+  to 108 against a 128 stroke in the Bold s), and the terminals reach further as the weight grows, never past the bowls
+  (s Bold insets 24 / 12; S Bold 35 / 14, were 48 / 22). The Regular S is unchanged.
+- **Q2, Q:** the tail is a straight bar with level cuts that starts inside the counter and ends 50 under the baseline
+  (was a bar from outside the ring to 96 under it); its top rises with the ring's bottom stroke so it stays visible in
+  Bold.
+
 ## 1.006 (2026-11-19)
 Lowercase m: the joint of the second arch was thin next to the thick stems ('khớp nối m thường bị lỗi chỗ dày chỗ
 mỏng'). Only `m` changes (all three weights); every other glyph and table is byte-identical to 1.005

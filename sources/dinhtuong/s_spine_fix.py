@@ -26,8 +26,8 @@ SNAP = 3.0          # a join must lie within this distance of an existing node
 
 
 # ------------------------------------------------------------------ geometry from R11b (concept_v1.s_spine_geom)
-def rings(W, T, ov, sx, sy, sm, ti):
-    ym = (T - sm) / 2 + 8
+def rings(W, T, ov, sx, sy, sm, ti, dym=8):
+    ym = (T - sm) / 2 + dym
     U = (W / 2, (ym + T + ov) / 2, (W - ti) / 2, (T + ov - ym) / 2)
     Uc = (W / 2, ((T + ov - sy) + (ym + sm)) / 2, (W - ti) / 2 - sx, ((T + ov - sy) - (ym + sm)) / 2)
     Lo = (W / 2, (-ov + ym + sm) / 2, W / 2, (ym + sm + ov) / 2)
@@ -206,7 +206,7 @@ def ring_run(S, k, side, E):
 
 def spine_parts(rec, dx):
     W, T, ov, sx, sy, sm, ti = rec['args']
-    U, Uc, Lo, Lc = [(e[0] + dx, e[1], e[2], e[3]) for e in rings(W, T, ov, sx, sy, sm, ti)]
+    U, Uc, Lo, Lc = [(e[0] + dx, e[1], e[2], e[3]) for e in rings(W, T, ov, sx, sy, sm, ti, rec.get('dym', 8))]
     sh = lambda c: [(x + dx, y) for x, y in c]
     top, bot = sh(rec['top']), sh(rec['bot'])
     return [(top, Uc, Lo), (bot, U, Lc)]           # top: P0 on Uc -> P3 on Lo; bottom: Q0 on U -> Q3 on Lc
