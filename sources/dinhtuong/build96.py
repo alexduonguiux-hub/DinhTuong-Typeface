@@ -237,6 +237,17 @@ if os.environ.get('K3', '1') == '1' and os.path.exists(K3F):
     print('S1f sides', SIDES)
     print('K3 pairs', len(K3.get('pairs', {})), 'exceptions', len(K3.get('exceptions', {})))
 
+# K4 (19/11 'kerning CD bị xa'): C's open right side read loose before every straight-sided capital (CD = CH = CE = CB
+# ... = 1.49 / 1.30 / 1.42 x HH white, R / M / B) against the seven references' median 1.11-1.17 (Inter, Liberation,
+# Carlito, DejaVu, Poppins, Work Sans, FreeSans): C (and its accented forms, by class) before B D E F H K L M N P R kerns
+# to that median (CI already holds it). Only ever tightens a pair.
+K4_C = {'regular': -35, 'medium': -15, 'bold': -25}[W8]
+for b in 'BDEFHKLMNPR':
+    key = cls_of('classesL', 'C') + cls_of('classesR', b)
+    if K['pairs'].get(key, 0) > K4_C:
+        K['pairs'][key] = K4_C
+print('K4 C + straight capitals', K4_C)
+
 # S3b (28/10 full pair audit): the collision guard covers EVERY pair that can occur in text: letters, figures and
 # punctuation, lowercase before a capital too (kA, kV, mA, McD), & ( ) / quotes, not only pairs with a new letter.
 # Skipped: two toned letters side by side (never in Vietnamese), punctuation with punctuation.
