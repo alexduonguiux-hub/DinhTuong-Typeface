@@ -1935,7 +1935,7 @@ feature kern {
     pos W Odieresis -55;
     pos W Yacute -56;
     pos W igrave 30;
-    pos W iacute 15;
+    pos W iacute 10;
     pos W icircumflex -10;
     pos W idieresis 15;
     pos W thorn -25;
@@ -4412,7 +4412,7 @@ feature kern {
     pos idieresis seven 15;
     pos idieresis T 20;
     pos idieresis V 10;
-    pos idieresis W 15;
+    pos idieresis W 10;
     pos idieresis X 5;
     pos idieresis Y 5;
     pos idieresis Z 5;
@@ -4428,16 +4428,16 @@ feature kern {
     pos idieresis ibreve 45;
     pos idieresis jcircumflex 35;
     pos idieresis Tcaron 20;
-    pos idieresis Wcircumflex 15;
+    pos idieresis Wcircumflex 10;
     pos idieresis Ycircumflex 5;
     pos idieresis Ydieresis 5;
     pos idieresis Zacute 5;
     pos idieresis Zdotaccent 5;
     pos idieresis Zcaron 5;
     pos idieresis uni021A 20;
-    pos idieresis Wgrave 15;
-    pos idieresis Wacute 15;
-    pos idieresis Wdieresis 15;
+    pos idieresis Wgrave 10;
+    pos idieresis Wacute 10;
+    pos idieresis Wdieresis 10;
     pos idieresis Ygrave 5;
     pos idieresis uni1EF4 5;
     pos idieresis uni1EF6 5;
@@ -7270,7 +7270,7 @@ feature kern {
     pos Wcircumflex Odieresis -55;
     pos Wcircumflex Yacute -56;
     pos Wcircumflex igrave 30;
-    pos Wcircumflex iacute 15;
+    pos Wcircumflex iacute 10;
     pos Wcircumflex icircumflex -10;
     pos Wcircumflex idieresis 15;
     pos Wcircumflex thorn -25;
@@ -8564,7 +8564,7 @@ feature kern {
     pos Wdieresis Odieresis -55;
     pos Wdieresis Yacute -56;
     pos Wdieresis igrave 30;
-    pos Wdieresis iacute 15;
+    pos Wdieresis iacute 10;
     pos Wdieresis icircumflex -10;
     pos Wdieresis idieresis 15;
     pos Wdieresis thorn -25;
@@ -11846,10 +11846,10 @@ feature kern {
     pos @kL_K @kR_s -50;
     pos @kL_K [t] -65;
     pos @kL_K @kR_u -70;
-    pos @kL_K [v] -65;
+    pos @kL_K [v] -70;
     pos @kL_K @kR_w -70;
     pos @kL_K [x] 30;
-    pos @kL_K @kR_y -65;
+    pos @kL_K @kR_y -70;
     pos @kL_K [guillemotright] -55;
     pos @kL_K [quoteright] -20;
     pos @kL_K [quotedblright] -20;
@@ -12262,7 +12262,7 @@ feature kern {
     pos V guillemotright -55;
     pos V ellipsis -60;
     pos V guilsinglright -55;
-    pos @kL_W [comma] -50;
+    pos @kL_W [comma] -55;
     pos @kL_W [hyphen] -15;
     pos @kL_W [period] -50;
     pos @kL_W [slash] -55;
@@ -12694,6 +12694,7 @@ feature kern {
     pos @kL_w @kR_T -10;
     pos @kL_w @kR_W -10;
     pos @kL_w @kR_Z -20;
+    pos @kL_w [bracketright] -20;
     pos @kL_w [f] 35;
     pos @kL_w [t] 35;
     pos @kL_w @kR_u 10;

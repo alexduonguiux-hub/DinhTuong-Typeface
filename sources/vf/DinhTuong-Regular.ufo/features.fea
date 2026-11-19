@@ -15048,7 +15048,7 @@ feature kern {
     pos [questiondown] @kR_S -35;
     pos [questiondown] @kR_T -70;
     pos questiondown V -55;
-    pos [questiondown] @kR_W -45;
+    pos [questiondown] @kR_W -50;
     pos questiondown X -50;
     pos [questiondown] @kR_Y -65;
     pos [questiondown] @kR_Z -45;

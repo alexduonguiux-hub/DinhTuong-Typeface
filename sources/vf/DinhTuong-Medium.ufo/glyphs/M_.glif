@@ -25,15 +25,9 @@
       <point x="716" y="616"/>
       <point x="717" y="658"/>
       <point x="724" y="700" type="curve"/>
-      <point x="573" y="700" type="line"/>
-      <point x="573" y="698"/>
-      <point x="574" y="695"/>
-      <point x="574" y="692" type="curve"/>
-      <point x="379" y="307" type="line"/>
-      <point x="184" y="692" type="line"/>
-      <point x="184" y="695"/>
-      <point x="185" y="698"/>
-      <point x="185" y="700" type="curve"/>
+      <point x="572" y="700" type="line"/>
+      <point x="379" y="318" type="line"/>
+      <point x="186" y="700" type="line"/>
       <point x="34" y="700" type="line"/>
       <point x="41" y="658"/>
       <point x="42" y="616"/>

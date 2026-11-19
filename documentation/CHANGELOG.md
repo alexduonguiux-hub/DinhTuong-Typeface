@@ -23,8 +23,9 @@ byte-identical to 1.006 (`scripts/patch_release_glyphs.py`). Kerning is re-made 
 - **D3, diagonals between stems:** N and M, the two inner diagonals of W and w, and K's upper arm are lighter than the
   diagonal that carries a letter alone ('nét xéo của M, N, và nét xéo trên của K sẽ mỏng hơn ...'; '2 nét xéo trong của W
   cũng vậy'; 'kiểm tra nét xéo giữa của w thường'). They follow the primary diagonal, square to the stroke, by the medians
-  of seven reference families (Inter, Liberation Sans, Carlito, DejaVu Sans, Poppins, Work Sans, FreeSans): N 0.93 x V,
-  M and the W / w inner diagonals 0.88 x V, K's arm 0.94 x its leg. W and w now overlap their two halves by the inner
+  of seven reference families (Inter, Liberation Sans, Carlito, DejaVu Sans, Poppins, Work Sans, FreeSans: N 0.93 x V,
+  M 0.88 x V, K's arm 0.94 x its leg), taken ~4 % heavier by the designer ('đậm lên chút nữa'): N 0.96 x V, M and the
+  W / w inner diagonals 0.92 x V, K's arm 0.97 x its leg. W and w now overlap their two halves by the inner
   stroke, so the middle peak is one clean apex.
 - **S1f, c Bold:** c's right side came out looser as the weight grew (rsb 30 / 39 / 61); Bold is now 47, the
   designer's choice between Regular's proportion (33, read too tight) and the old 61. Regular and Medium unchanged.
