@@ -1544,7 +1544,7 @@ def lerp_path(p0, p1, n=6):
 def cap_A():
     W = 572 + gw('diag')
     g = Glyph('A', W, SB_DIAG, SB_DIAG, 0x41)
-    dw = diag_dx(DIAG, W / 2 - 80, CAP)
+    dw = diag_dx(DIAG, W / 2 - 80, CAP) * dboost('A')
     for op, c in vshape(0, W, CAP, 0, dw, 150):
         g.ops.append((op, mirror_y(c, CAP / 2)))
     # 26/10 "A regular dư nét 2 bên": the bar ends were a fixed 0.6*dw in, which pokes out of
@@ -1681,11 +1681,11 @@ def cap_K():
     W = (529 if CAPW else 556) + gw('multi')
     g = Glyph('K', W, SB_STRAIGHT, SB_DIAG, 0x4B)
     g.add(fstem(0, 0, V, CAP))
-    aw = diag_dx(DIAG_K_ARM, W - V - 60, CAP - 300)
+    aw = diag_dx(DIAG_K_ARM, W - V - 60, CAP - 300) * dboost('K')
     ax0, ax1 = V - aw / 2, W - aw / 2
     yc, yj = K_CROTCH * CAP, K_JOIN * CAP
     g.group([('add', stroke((ax0, yc), (ax1, CAP), aw)), ('sub', rect(-400, -400, V / 4, CAP + 400))])
-    lw = diag_dx(DIAG, W - V - 120, 380) * 0.86
+    lw = diag_dx(DIAG, W - V - 120, 380) * 0.86 * dboost('K')
     xj = ax0 + (yj - yc) / (CAP - yc) * (ax1 - ax0)
     g.add(stroke((xj, yj), (W - lw / 2, 0), lw))
     g.sub(rect(-200, -400, -12, CAP + 400), rect(V, CAP, W + 200, CAP + 400), rect(V, -400, W + 200, 0))
@@ -1713,7 +1713,7 @@ def cap_M():
     # more and the width is solved for the thickness, not taken from the nominal rule.
     fbm = 140 * WKC
     W1, dwW = _w_geom()
-    target = _vshape_mid(0, W1, CAP, 0, dwW, 128)
+    target = _vshape_mid(0, W1, CAP, 0, dwW * dboost('W'), 128)   # D2: M keeps W's (now heavier) diagonal
     lo, hi = 0.5 * DIAG, 2.0 * DIAG
     for _ in range(60):
         mid = (lo + hi) / 2
@@ -1813,9 +1813,9 @@ def cap_U():
 # D2 (19/11 'Các nét xéo chữ X, Y, V, W cảm giác mỏng hơn các chữ khác'): measured square to the stroke the caps
 # diagonals stood at 0.85 (V W) / 0.77-0.80 (X Y) of the stem (A K 0.84, Z 0.87). Each is widened so its true thickness
 # reaches DIAG_TARGET x the stem in every weight (factors from the measured outlines, outer edges unchanged).
-DIAG_BOOST = {'regular': {'V': 1.056, 'W': 1.050, 'X': 1.087, 'Y': 1.091},
-              'medium':  {'V': 1.050, 'W': 1.048, 'X': 1.065, 'Y': 1.070},
-              'bold':    {'V': 1.050, 'W': 1.048, 'X': 1.043, 'Y': 1.053}}
+DIAG_BOOST = {'regular': {'V': 1.056, 'W': 1.050, 'X': 1.087, 'Y': 1.091, 'A': 1.078, 'K': 1.070},
+              'medium':  {'V': 1.050, 'W': 1.048, 'X': 1.065, 'Y': 1.070, 'A': 1.061, 'K': 1.066},
+              'bold':    {'V': 1.050, 'W': 1.048, 'X': 1.043, 'Y': 1.053, 'A': 1.073, 'K': 1.071}}   # A K: 19/11 'nâng A K luôn'
 
 
 def dboost(ch):
