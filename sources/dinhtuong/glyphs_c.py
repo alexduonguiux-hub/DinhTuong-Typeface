@@ -716,11 +716,15 @@ def CLEAR_UP(ops, other_ops, gap):
     return shift_ops(ops, 0, hi)
 
 
+DOTB_K = 0.70
+
+
 def DOTB_L():
     """R10d (19/11 'giảm bề ngang dấu nặng cho bằng dấu nặng dưới chữ I'): the nặng is as long as under Ị (the I's
     advance - 40) on every letter; a narrower letter still shortens it to its own advance - 40"""
     g = G['I']
-    return min(__import__('marks_flat').STRIP_L, g.lsb + g.body + g.rsb - 40)
+    # R10d-b (19/11 'Cho dấu nặng hẹp lại thêm 30%'): 0.70 of that
+    return DOTB_K * min(__import__('marks_flat').STRIP_L, g.lsb + g.body + g.rsb - 40)
 
 
 def CLEAR_RIGHT(ops, other_ops, gap):

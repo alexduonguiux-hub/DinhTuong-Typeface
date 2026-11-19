@@ -535,17 +535,18 @@ def mk_hook_r9():
 
 # R11h (19/11, designer's revised drawing over Ô 'Subtract', 'update dấu hỏi mới'): a hook opening to the LEFT: a level
 # arm on top, the ring on the right, and the lower arm running down to the left, both arms cut on ONE vertical line. The
-# outline is the drawing's own (px: the cut at x 0, the box 65.40 x 100.57), scaled so its top arm (28.4 px thick) is
+# outline is the drawing's own (px: the upper cut at x 0, the lower at x 17, the box 65.40 x 92.96), scaled so its top arm (28.4 px thick) is
 # HOOK11_S_K x the mark strip T (Regular 53.7 = the drawing at cap 700). Alone it stands where the old hỏi's ink stood
 # (R10h-c); on the mũ its cut stands HOOK11_GAP px right of the mũ, its bottom HOOK11_DROP_K x its height under the mũ's
 # top, as on the drawing's Ô.
 HOOK11_S_K = 0.956
 HOOK11 = [('M', 14.9189, 0.619223), ('C', 41.32, -3.85534, 65.4031, 16.4891, 65.4033, 43.2667),
-          ('C', 65.4033, 60.3193, 55.3847, 75.7809, 39.8203, 82.7481), ('L', 0.0, 100.572), ('L', 0.0, 69.8946),
+          ('C', 65.4033, 60.3193, 55.3847, 75.7809, 39.8203, 82.7481), ('L', 17.0, 92.962), ('L', 17.0, 62.2852),
           ('L', 28.3799, 57.1915), ('C', 33.8694, 54.7342, 37.4033, 49.2811, 37.4033, 43.2667),
           ('C', 37.4031, 33.8225, 28.9091, 26.6475, 19.5977, 28.2257), ('L', 0.0, 31.546), ('L', 0.0, 3.14754), ('Z',)]
-HOOK11_W, HOOK11_H = 65.4033, 100.572
-HOOK11_GAP, HOOK11_DROP_K = 19.8, 0.46
+HOOK11_W, HOOK11_H = 65.4033, 92.962
+# R11h-d (19/11, revised drawing 'Subtract' 588:7: the lower arm ends at x 17, the hook 18 px nearer the mũ)
+HOOK11_GAP, HOOK11_DROP_K = 1.8, 0.416
 
 
 def hook11_sc():
