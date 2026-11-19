@@ -428,11 +428,27 @@ HOOK_S_K, HOOK_R_K, HOOK_L_K = 0.945, 0.296, 1.175
 HOOK_GAP_X, HOOK_UP_K = 9.0, 0.26    # R9h-b: hỏi beside the mũ (drawing Ẩ, Regular)
 
 
+_HOOK_C = {}
+
+
+def _hook_old_centre():
+    """x centre of the old (v94) lone hỏi's visible ink, this weight (cached)"""
+    if 'c' not in _HOOK_C:
+        import booleng
+        T = _st()
+        r = booleng.evaluate(mk_hook_v94(rx=max(73, 1.0 * T), ry=max(46, 0.9 * T), wv=T, wh=T))
+        xs = [seg[i] for c in r for seg in c if seg[0] != 'Z' for i in range(1, len(seg), 2)]
+        _HOOK_C['c'] = (min(xs) + max(xs)) / 2
+    return _HOOK_C['c']
+
+
 def mk_hook_r9():
     s = HOOK_S_K * _st()
     r = HOOK_R_K * s
     R, L = s + r, HOOK_L_K * s
-    xl = -(L + R) / 2                       # the mark's box is centred on x = 0, foot on y = 0 (as the old hỏi)
+    # R9h-c (19/11 'Dấu hỏi bị lệch chứ không canh giữa như cũ'): the box sits where the OLD hỏi's visible box sat
+    # (its ring centred on the axis, the cut-away left side put the ink 32-36 right of it), not centred on the axis
+    xl = _hook_old_centre() - (L + R) / 2
     xc, cy, k = xl + L, R, 0.5523
     return [('add', [('M', xc, cy + R),
                      ('C', xc + k * R, cy + R, xc + R, cy + k * R, xc + R, cy),
