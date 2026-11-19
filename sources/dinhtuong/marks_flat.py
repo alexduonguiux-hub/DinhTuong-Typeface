@@ -547,6 +547,10 @@ HOOK11 = [('M', 14.9189, 0.619223), ('C', 41.32, -3.85534, 65.4031, 16.4891, 65.
 HOOK11_W, HOOK11_H = 65.4033, 92.962
 # R11h-d (19/11, revised drawing 'Subtract' 588:7: the lower arm ends at x 17, the hook 18 px nearer the mũ)
 HOOK11_GAP, HOOK11_DROP_K = 1.8, 0.416
+# R11h-e (19/11 'canh dấu hỏi mới cho cảm nhận thị giác là giữa'): the lone hỏi's bowl swings right of its stem, so a
+# box-centred hook reads right-heavy; it moves 0.10 of its ink width left of the old visible centre (Regular 12 u,
+# Bold 15 u; reference sans put the hook's box on the axis +-0.05 W with the bowl's weight just right of it)
+HOOK11_OPT_K = 0.10
 
 
 def hook11_sc():
@@ -555,7 +559,7 @@ def hook11_sc():
 
 def mk_hook_r11():
     sc = hook11_sc()
-    dx = _hook_old_centre() - (HOOK11_W / 2) * sc
+    dx = _hook_old_centre() - (0.5 + HOOK11_OPT_K) * HOOK11_W * sc
     T = lambda x, y: (x * sc + dx, (HOOK11_H - y) * sc)
     path = []
     for seg in HOOK11:

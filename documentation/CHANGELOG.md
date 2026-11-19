@@ -14,18 +14,19 @@ added; every other glyph is byte-identical to 1.006 (`scripts/patch_release_glyp
 - **Q2, Q:** the tail is a straight bar with level cuts that starts inside the counter and ends 50 under the baseline
   (was a bar from outside the ring to 96 under it); its top rises with the ring's bottom stroke so it stays visible in
   Bold.
-- **R11h, hỏi:** redrawn from the designer's drawing over Ô ('update dấu hỏi mới'): a hook opening to the left, a
-  level arm on top, the ring on the right and the lower arm running down to the left, both arms cut on one vertical
-  line. The outline is the drawing's own, its top arm 0.96 x the mark strip (Regular 54; 124 x 190). Alone it stands
-  where the old hỏi's ink stood ('canh giữa như cũ'); on the mũ (Ổ ẩ …) its cut stands just right of the mũ and its
-  bottom 0.46 of its height under the mũ's top, as drawn.
+- **R11h, hỏi:** redrawn from the designer's drawing over Ô ('update lại dấu hỏi'): a hook opening to the left, a
+  level arm on top, the ring on the right and the lower arm running down, cut at x 17 of the drawing. The outline is
+  the drawing's own, its top arm 0.96 x the mark strip (Regular 124 x 176). Alone it is centred by eye, not by box: the
+  bowl swings right of the stem, so it stands 0.10 of its width left of the old hỏi's ink centre (Regular 12, Bold 15;
+  'canh dấu hỏi mới cho cảm nhận thị giác là giữa'). On the mũ (Ổ ẩ …) its cut stands just right of the mũ and its
+  bottom 0.42 of its height under the mũ's top, as drawn.
 - **R10y, ỵ:** its nặng stands beside the tail on the nặng line of every letter (centre 0.78 of the y's width, the
   references' median), not under the tail ('dấu nặng y ... bỏ bên hông như các font khác').
 - **R11a, marks on a:** they ride over a's head (0.89 of the way from the whole letter's centre to the head's, the
   references' median), not the whole letter, which put them 22-29 left of it ('dấu ă đang không canh giữa'); their
   height is unchanged.
-- **R10d, nặng:** as long as under Ị (the I's advance - 40: 200 / 218 / 236) on every letter (was 300; 'giảm bề ngang
-  dấu nặng cho bằng dấu nặng dưới chữ I').
+- **R10d, nặng:** one length on every letter, 0.70 of the I's advance - 40: 140 / 153 / 165 (was 300; 'giảm bề ngang
+  dấu nặng cho bằng dấu nặng dưới chữ I', then 'hẹp lại thêm 30%').
 - **D2, diagonals:** V W X Y A K (and M with W) and v w x y were 0.77-0.86 of the stem measured square to the stroke
   ('nét xéo chữ X, Y, V, W cảm giác mỏng hơn các chữ khác'); now 0.90 in every weight. Outer widths unchanged.
 - **D3, diagonals between stems:** N and M, the two inner diagonals of W and w, and K's upper arm are lighter than the
