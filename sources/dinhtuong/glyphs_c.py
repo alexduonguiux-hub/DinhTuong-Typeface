@@ -1855,7 +1855,9 @@ DIAG_BOOST = {'regular': {'V': 1.056, 'W': 1.050, 'X': 1.087, 'Y': 1.091, 'A': 1
 # medians of Inter, Liberation Sans, Carlito, DejaVu Sans, Poppins, Work Sans and FreeSans (Regular + Bold, medial ridge,
 # cap 700): N / V 0.93 (0.78-1.02), M / V 0.88 (0.76-1.01), K arm / K leg 0.94 (0.87-1.00). (Taking the H crossbar as the
 # base, as first tried, read too light: this face's crossbar is 0.78 of the stem against the references' 0.83.)
-D3_K = {'M': 0.88, 'N': 0.93, 'Karm': 0.94, 'Win': 0.88}
+# D3-c (19/11 'tăng nét xéo vừa chỉnh đậm lên chút nữa'): the designer takes them ~4 % over the reference medians,
+# still lighter than the primary diagonal and in the same order (N over M).
+D3_K = {'M': 0.92, 'N': 0.96, 'Karm': 0.97, 'Win': 0.92}
 
 
 def V_PERP():
