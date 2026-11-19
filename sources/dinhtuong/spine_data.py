@@ -6,11 +6,11 @@ if len(sys.argv) > 1 and sys.argv[1] == '--one':
     import concept_v1 as CV
     rec = []
     orig = CV.s_spine
-    def spy(W, T, ov, sx, sy, sm, ti, G=None, k=None):
-        path, yu, yl = orig(W, T, ov, sx, sy, sm, ti, G, k)
+    def spy(W, T, ov, sx, sy, sm, ti, G=None, k=None, dym=8):
+        path, yu, yl = orig(W, T, ov, sx, sy, sm, ti, G, k, dym=dym)
         top = [path[0][1:3], path[1][1:3], path[1][3:5], path[1][5:7]]
         bot = [path[3][5:7], path[3][3:5], path[3][1:3], path[2][1:3]]
-        rec.append(dict(args=[W, T, ov, sx, sy, sm, ti], k=k, top=top, bot=bot))
+        rec.append(dict(args=[W, T, ov, sx, sy, sm, ti], k=k, dym=dym, top=top, bot=bot))
         return path, yu, yl
     CV.s_spine = spy
     import lc96f
