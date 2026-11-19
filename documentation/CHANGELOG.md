@@ -14,10 +14,13 @@ added; every other glyph is byte-identical to 1.006 (`scripts/patch_release_glyp
 - **Q2, Q:** the tail is a straight bar with level cuts that starts inside the counter and ends 50 under the baseline
   (was a bar from outside the ring to 96 under it); its top rises with the ring's bottom stroke so it stays visible in
   Bold.
-- **R9h, hỏi:** one even band bent round a half circle and opening to the left, both arms cut on one vertical line
-  (drawing 'Show-06', Regular: band 53, 131 x 138). The same mark alone and stacked; it sits where the old hỏi's ink
-  sat ('canh giữa như cũ'). On the mũ (Ẩ ẩ …) it stands beside it as drawn, the same size as a lone hỏi: 9 right of the
-  mũ, its centre a little over the mũ's top, so it may stand higher than on ả ('Đặt giống như này').
+- **R10h, hỏi:** redrawn from the designer's drawing over Ô ('update dấu hỏi'): a ring with a short arm cut square at
+  the top left, the stroke running round the right side into a short foot left of the ring's centre (its top-left corner
+  rounded). The outline is the drawing's own, its stroke 0.91 x the mark strip (Regular 51; 141 x 170). The ring stands
+  on the mark axis; on the mũ (Ổ ẩ …) the foot stands just right of the mũ's right end, its bottom a little under the
+  mũ's top, as drawn.
+- **R10d, nặng:** as long as under Ị (the I's advance - 40: 200 / 218 / 236) on every letter (was 300; 'giảm bề ngang
+  dấu nặng cho bằng dấu nặng dưới chữ I').
 - **D2, diagonals:** V W X Y A K (and M with W) and v w x y were 0.77-0.86 of the stem measured square to the stroke
   ('nét xéo chữ X, Y, V, W cảm giác mỏng hơn các chữ khác'); now 0.90 in every weight. Outer widths unchanged.
 - **D3, diagonals between stems:** N and M, the two inner diagonals of W and w, and K's upper arm are lighter than the
