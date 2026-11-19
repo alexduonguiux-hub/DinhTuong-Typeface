@@ -57,6 +57,12 @@ CX = 0.88                  # F9 (02:49 'co ngang'): every round is an upright el
 # R2d: Regular body widths (before CX) of the lowercase diagonals; R2D=0 restores the v0.967 widths
 DIAG_W = ({'v': 551, 'y': 551, 'x': 541, 'w': 452, 'k': 505, 'z': 462} if os.environ.get('R2D', '1') == '1'
           else {'v': 470, 'y': 470, 'x': 450, 'w': 380, 'k': 470, 'z': 420})   # k z: reference medians 1.02 / 0.89 (designer 02:44)
+# D2 (19/11 'nét xéo ... mỏng hơn các chữ khác'): v w x measured 0.84-0.85 of the stem (y 0.89); each diagonal is
+# widened to ~0.90 x the stem in every weight (factors from the measured outlines; outer edges unchanged)
+DIAG_BOOST_LC = {'regular': {'v': 1.065, 'w': 1.058, 'x': 1.075, 'y': 1.01},
+                 'medium':  {'v': 1.064, 'w': 1.058, 'x': 1.081, 'y': 1.0},
+                 'bold':    {'v': 1.056, 'w': 1.053, 'x': 1.069, 'y': 1.0}}
+dboost = lambda w, ch: DIAG_BOOST_LC[w].get(ch, 1.0) if os.environ.get('D2', '1') == '1' else 1.0
 CUT_C = 0.80               # c: wider than the 0.45 rule (02:50 'c quá hẹp') but the cut still stands on the shoulder
 CUT_E = 0.95               # e: the lower tail runs nearly to the right edge (02:50 'đuôi e ngắn')
 HK = 0.55                  # F6: j f t hooks use 0.55 of the n's counter (g uses the full module, as drawn)
@@ -632,7 +638,7 @@ class LF(A.LC):
     def g_v(self):
         import glyphs_c as GL
         W = self.wd(round(DIAG_W['v'] * CX))
-        dw = 0.9 * self.v / math.cos(math.atan2(W / 2 - 50, XH))
+        dw = 0.9 * self.v / math.cos(math.atan2(W / 2 - 50, XH)) * dboost(self.w, 'v')
         return self.G('v', W, 14, 14, GL.vshape(0, W, XH, 0, dw, 110))
 
     def g_w(self):
@@ -641,6 +647,7 @@ class LF(A.LC):
         # D1 (1.004, designer 03/11 'B'): w carries v's diagonal weight 0.9 v (was 0.85 v, ~6 % lighter than v)
         dw = 0.9 * self.v / math.cos(math.atan2(W1 / 2 - 40, XH))
         W = 2 * W1 - dw
+        dw *= dboost(self.w, 'w')          # D2: outer width as before, the diagonals thicken inward
         return self.G('w', W, 12, 12, [('group', GL.vshape(0, W1, XH, 0, dw, 96)), ('group', GL.vshape(W - W1, W, XH, 0, dw, 96))])
 
     def g_x(self):
@@ -657,6 +664,7 @@ class LF(A.LC):
         if self.v != self.v_reg:
             for _ in range(40):
                 dw = c * self.v / math.cos(math.atan2(W - dw, XH))
+        dw *= dboost(self.w, 'x')
         return self.G('x', W, 12, 12, [('add', GL.pinch((dw / 2, XH), (W - dw / 2, 0), dw)), ('add', GL.pinch((W - dw / 2, XH), (dw / 2, 0), dw))])
 
     def g_z(self):
@@ -714,7 +722,7 @@ class LF(A.LC):
         ends flush inside the right arm: one V crotch above, one clean knee below, no ledge."""
         from concept_v1 import poly
         W = self.wd(round(DIAG_W['y'] * CX))
-        dw = 0.9 * self.v / math.cos(math.atan2(W / 2 - 50, XH))
+        dw = 0.9 * self.v / math.cos(math.atan2(W / 2 - 50, XH)) * dboost(self.w, 'y')
         fb = 110
         c = W / 2
 

@@ -1804,10 +1804,25 @@ def cap_U():
     return reg(g)
 
 
+# D2 (19/11 'Các nét xéo chữ X, Y, V, W cảm giác mỏng hơn các chữ khác'): measured square to the stroke the caps
+# diagonals stood at 0.85 (V W) / 0.77-0.80 (X Y) of the stem (A K 0.84, Z 0.87). Each is widened so its true thickness
+# reaches DIAG_TARGET x the stem in every weight (factors from the measured outlines, outer edges unchanged).
+DIAG_BOOST = {'regular': {'V': 1.056, 'W': 1.050, 'X': 1.128, 'Y': 1.160},
+              'medium':  {'V': 1.050, 'W': 1.048, 'X': 1.105, 'Y': 1.123},
+              'bold':    {'V': 1.050, 'W': 1.048, 'X': 1.070, 'Y': 1.096}}
+
+
+def dboost(ch):
+    import os as _o
+    if _o.environ.get('D2', '1') != '1':
+        return 1.0
+    return DIAG_BOOST.get(_o.environ.get('A2_WEIGHT', 'bold'), {}).get(ch, 1.0)
+
+
 def cap_V():
     W = 580 + gw('diag')
     g = Glyph('V', W, SB_DIAG, SB_DIAG, 0x56)
-    dw = diag_dx(DIAG, W / 2 - 60, CAP)
+    dw = diag_dx(DIAG, W / 2 - 60, CAP) * dboost('V')
     apply(g, vshape(0, W, CAP, 0, dw, 150))
     return reg(g)
 
@@ -1842,7 +1857,8 @@ def _w_geom():
 
 def cap_W():
     W1, dw = _w_geom()
-    W = 2 * W1 - dw
+    W = 2 * W1 - dw          # D2: the outer width as before; the diagonals thicken inward
+    dw *= dboost('W')
     g = Glyph('W', W, SB_DIAG, SB_DIAG, 0x57)
     g.group(vshape(0, W1, CAP, 0, dw, 128))
     g.group(vshape(W - W1, W, CAP, 0, dw, 128))
@@ -1852,7 +1868,7 @@ def cap_W():
 def cap_X():
     W = 564 + gw('diag')
     g = Glyph('X', W, SB_DIAG, SB_DIAG, 0x58)
-    dw = diag_dx(DIAG_X, W - 200, CAP) * 1.04
+    dw = diag_dx(DIAG_X, W - 200, CAP) * 1.04 * dboost('X')
     g.add(pinch((dw / 2, CAP), (W - dw / 2, 0), dw))
     g.add(pinch((W - dw / 2, CAP), (dw / 2, 0), dw))
     return reg(g)
@@ -1861,7 +1877,7 @@ def cap_X():
 def cap_Y():
     W = 572 + gw('diag')
     g = Glyph('Y', W, SB_DIAG, SB_DIAG, 0x59)
-    dw = diag_dx(DIAG_Y, W / 2 - 60, CAP - 300) * 0.95
+    dw = diag_dx(DIAG_Y, W / 2 - 60, CAP - 300) * 0.95 * dboost('Y')
     c = W / 2
     g.group(vshape(0, W, CAP, 236, dw, V))
     g.add(fstem(c - V / 2, 0, c + V / 2, 300, top=False))
