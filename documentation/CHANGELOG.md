@@ -16,8 +16,8 @@ byte-identical to 1.006 (`scripts/patch_release_glyphs.py`). Kerning is re-made 
   Bold.
 - **R9h, hỏi:** one even band bent round a half circle and opening to the left, both arms cut on one vertical line
   (drawing 'Show-06', Regular: band 53, 131 x 138). The same mark alone and stacked; it sits where the old hỏi's ink
-  sat ('canh giữa như cũ'). On the mũ (Ẩ ẩ …) it stands beside it, 9 right of the mũ as drawn, on the same line and at the
-  same size as a lone hỏi (ả = ẩ, Ả = Ẩ: 'Dấu hỏi không bằng nhau kìa').
+  sat ('canh giữa như cũ'). On the mũ (Ẩ ẩ …) it stands beside it as drawn, the same size as a lone hỏi: 9 right of the
+  mũ, its centre a little over the mũ's top, so it may stand higher than on ả ('Đặt giống như này').
 - **D2, diagonals:** V W X Y A K (and M with W) and v w x y were 0.77-0.86 of the stem measured square to the stroke
   ('nét xéo chữ X, Y, V, W cảm giác mỏng hơn các chữ khác'); now 0.90 in every weight. Outer widths unchanged.
 - **S1f, c Bold:** c's right side came out looser as the weight grew (rsb 30 / 39 / 61); Bold is now 47, the
