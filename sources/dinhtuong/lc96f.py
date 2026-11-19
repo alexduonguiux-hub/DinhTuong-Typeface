@@ -648,7 +648,14 @@ class LF(A.LC):
         dw = 0.9 * self.v / math.cos(math.atan2(W1 / 2 - 40, XH))
         W = 2 * W1 - dw
         dw *= dboost(self.w, 'w')          # D2: outer width as before, the diagonals thicken inward
-        return self.G('w', W, 12, 12, [('group', GL.vshape(0, W1, XH, 0, dw, 96)), ('group', GL.vshape(W - W1, W, XH, 0, dw, 96))])
+        # D3 (19/11 'kiểm tra nét xéo giữa của w thường luôn'): as W, the two inner diagonals are 0.88 of v's (square to
+        # the stroke), and the two v's overlap by exactly that inner stroke so the middle peak is one clean apex (the
+        # overlap by the unboosted width had left a step there); the outer width W is kept
+        vt = 0.9 * self.v * dboost(self.w, 'v')
+        for _ in range(6):
+            di = GL.D3_K['Win'] * vt / math.cos(math.atan2(W1 / 2 - 48, XH))
+            W1 = (W + di) / 2
+        return self.G('w', W, 12, 12, [('group', GL.vshape(0, W1, XH, 0, dw, 96, dw_r=di)), ('group', GL.vshape(W - W1, W, XH, 0, di, 96, dw_r=dw))])
 
     def g_x(self):
         import glyphs_c as GL

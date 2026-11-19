@@ -1700,12 +1700,17 @@ def cap_K():
     g = Glyph('K', W, SB_STRAIGHT, SB_DIAG, 0x4B)
     g.add(fstem(0, 0, V, CAP))
     yc, yj = K_CROTCH * CAP, K_JOIN * CAP
-    # D3 (19/11): the upper arm, square to the stroke, is the H's crossbar HM (a touch lighter than the leg, 0.90 stem)
-    aw = D3_K['Karm'] * HM * _m.hypot(W - V, CAP - yc) / (CAP - yc)
-    ax0, ax1 = V - aw / 2, W - aw / 2
-    g.group([('add', stroke((ax0, yc), (ax1, CAP), aw)), ('sub', rect(-400, -400, V / 4, CAP + 400))])
     lw = diag_dx(DIAG, W - V - 120, 380) * 0.86 * dboost('K')
+    # D3: the upper arm, square to the stroke, is 0.94 of the leg's (references)
+    aw = lw
+    for _ in range(8):
+        ax0, ax1 = V - aw / 2, W - aw / 2
+        xj = ax0 + (yj - yc) / (CAP - yc) * (ax1 - ax0)
+        leg_t = lw * yj / _m.hypot(W - lw / 2 - xj, yj)
+        aw = D3_K['Karm'] * leg_t * _m.hypot(W - V, CAP - yc) / (CAP - yc)
+    ax0, ax1 = V - aw / 2, W - aw / 2
     xj = ax0 + (yj - yc) / (CAP - yc) * (ax1 - ax0)
+    g.group([('add', stroke((ax0, yc), (ax1, CAP), aw)), ('sub', rect(-400, -400, V / 4, CAP + 400))])
     g.add(stroke((xj, yj), (W - lw / 2, 0), lw))
     g.sub(rect(-200, -400, -12, CAP + 400), rect(V, CAP, W + 200, CAP + 400), rect(V, -400, W + 200, 0))
     return reg(g)
@@ -1732,7 +1737,7 @@ def cap_M():
     # more and the width is solved for the thickness, not taken from the nominal rule.
     fbm = 140 * WKC
     W1, dwW = _w_geom()
-    target = D3_K['M'] * HM          # D3: M's diagonals carry the H's crossbar (references 1.00)
+    target = D3_K['M'] * V_PERP()          # D3: M's diagonals 0.88 of V's (references)
     lo, hi = 0.5 * DIAG, 2.0 * DIAG
     for _ in range(60):
         mid = (lo + hi) / 2
@@ -1751,7 +1756,7 @@ def cap_N():
     lo, hi = 1.0, W * 0.9
     for _ in range(60):
         mid = (lo + hi) / 2
-        lo, hi = (mid, hi) if mid * CAP / _m.hypot(W - mid, CAP) < D3_K['N'] * HM else (lo, mid)
+        lo, hi = (mid, hi) if mid * CAP / _m.hypot(W - mid, CAP) < D3_K['N'] * V_PERP() else (lo, mid)
     dw = (lo + hi) / 2
     g.add(fstem(0, 0, VN, CAP, top=False), fstem(W - VN, 0, W, CAP, bot=False))
     g.add(poly([(0, CAP), (dw, CAP), (W, 0), (W - dw, 0)]))
@@ -1843,14 +1848,20 @@ DIAG_BOOST = {'regular': {'V': 1.056, 'W': 1.050, 'X': 1.087, 'Y': 1.091, 'A': 1
               'bold':    {'V': 1.050, 'W': 1.048, 'X': 1.043, 'Y': 1.053, 'A': 1.073, 'K': 1.071}}   # A K: 19/11 'nâng A K luôn'
 
 
-# D3 rule (19/11 'nét xéo của M, N, và nét xéo trên của K sẽ mỏng hơn các nét còn lại một chút ... tương đương nét ngang
-# của H', then 'nghiên cứu các font khác ... viết thành rule'): a diagonal bounded by two stems (N, M) and K's upper arm
-# (which runs into the stem) is lighter than a diagonal that carries the letter alone (V A X Y, K's leg: D2, 0.90 of the
-# stem), and is set from the H's crossbar HM, square to the stroke. Medians over Inter, Liberation Sans, Carlito, DejaVu
-# Sans, Poppins, Work Sans and FreeSans (Regular + Bold, measured on the medial ridge, cap height 700):
-#   M / H bar 1.00 (0.85-1.16) · N / H bar 1.05 (0.93-1.23) · K arm / H bar 1.05 R, 1.08 B (0.98-1.34)
-#   and so N / V 0.93, M / V 0.88, K arm / K leg 0.94 in those references.
-D3_K = {'M': 1.00, 'N': 1.05, 'Karm': 1.05, 'Win': 1.00}   # Win: W's two inner diagonals, as M ('2 nét xéo trong của W cũng vậy')
+# D3 rule (19/11 'nét xéo của M, N, và nét xéo trên của K sẽ mỏng hơn các nét còn lại một chút', 'nghiên cứu các font
+# khác ... viết thành rule', '2 nét xéo trong của W cũng vậy', then 'các nét xéo vừa chỉnh hơi mỏng quá'): a diagonal held
+# between stems (N, M, W's two inner diagonals) and K's upper arm are lighter than the diagonal that carries a letter
+# alone. They are set from that primary diagonal, square to the stroke (V for N M W, K's own leg for its arm), by the
+# medians of Inter, Liberation Sans, Carlito, DejaVu Sans, Poppins, Work Sans and FreeSans (Regular + Bold, medial ridge,
+# cap 700): N / V 0.93 (0.78-1.02), M / V 0.88 (0.76-1.01), K arm / K leg 0.94 (0.87-1.00). (Taking the H crossbar as the
+# base, as first tried, read too light: this face's crossbar is 0.78 of the stem against the references' 0.83.)
+D3_K = {'M': 0.88, 'N': 0.93, 'Karm': 0.94, 'Win': 0.88}
+
+
+def V_PERP():
+    """D3: the primary diagonal's true thickness (V, square to the stroke, at mid-height)"""
+    Wv = 580 + gw('diag')
+    return _vshape_mid(0, Wv, CAP, 0, diag_dx(DIAG, Wv / 2 - 60, CAP) * dboost('V'), 150)
 
 
 def dboost(ch):
@@ -1901,8 +1912,12 @@ def cap_W():
     W = 2 * W1 - dw          # D2: the outer width as before; the diagonals thicken inward
     dw *= dboost('W')
     g = Glyph('W', W, SB_DIAG, SB_DIAG, 0x57)
-    # D3: the two inner diagonals carry M's weight (the H's crossbar), the outer two keep D2 (0.90 of the stem)
-    di = D3_K['Win'] * HM * _m.hypot(W1 / 2 - 64, CAP) / CAP
+    # D3: the two inner diagonals carry M's weight (0.88 of V's), the outer two keep D2 (0.90 of the stem).
+    # D3-b (19/11 'Mối giữa W lỗi'): the two V's overlap by exactly the INNER stroke, so their inner diagonals meet in one
+    # clean peak (overlapping by the outer width left a step there); the outer width W is kept, the halves re-solved
+    for _ in range(6):
+        di = D3_K['Win'] * V_PERP() * _m.hypot(W1 / 2 - 64, CAP) / CAP
+        W1 = (W + di) / 2
     g.group(vshape(0, W1, CAP, 0, dw, 128, dw_r=di))
     g.group(vshape(W - W1, W, CAP, 0, di, 128, dw_r=dw))
     return reg(g)
