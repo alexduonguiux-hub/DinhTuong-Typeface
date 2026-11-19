@@ -1113,6 +1113,12 @@ def STACK_TOP(first):
 def STACK_SYNC(ops, tone, first_ops, first, zone, centred=None):
     """R8w / R8w-h: the stacked tone at its lowest clear place, then raised to the stack's common top line."""
     mf = __import__('marks_flat')
+    if tone == 'hook' and first == 'circumflex' and mf.HOOK_MODE == 'r9':
+        # R9h-b (19/11, designer's Ẩ): the hỏi stands BESIDE the mũ, not over it: its left cut HOOK_GAP_X right of the
+        # mũ's right foot, its centre HOOK_UP_K x its own height over the mũ's top (Regular: 9 / 36 on the drawing)
+        x0, x1 = ops_xrange(ops); y0, y1 = ops_yrange(ops)
+        fx1 = ops_xrange(first_ops)[1]; ftop = ops_yrange(first_ops)[1]
+        return shift_ops(ops, fx1 + mf.HOOK_GAP_X - x0, ftop + mf.HOOK_UP_K * (y1 - y0) - (y0 + y1) / 2)
     if centred is not None:
         mx = sum(ops_xrange(first_ops)) / 2
         ops = shift_ops(centred, mx, zone)
@@ -1807,9 +1813,9 @@ def cap_U():
 # D2 (19/11 'Các nét xéo chữ X, Y, V, W cảm giác mỏng hơn các chữ khác'): measured square to the stroke the caps
 # diagonals stood at 0.85 (V W) / 0.77-0.80 (X Y) of the stem (A K 0.84, Z 0.87). Each is widened so its true thickness
 # reaches DIAG_TARGET x the stem in every weight (factors from the measured outlines, outer edges unchanged).
-DIAG_BOOST = {'regular': {'V': 1.056, 'W': 1.050, 'X': 1.128, 'Y': 1.160},
-              'medium':  {'V': 1.050, 'W': 1.048, 'X': 1.105, 'Y': 1.123},
-              'bold':    {'V': 1.050, 'W': 1.048, 'X': 1.070, 'Y': 1.096}}
+DIAG_BOOST = {'regular': {'V': 1.056, 'W': 1.050, 'X': 1.087, 'Y': 1.160},
+              'medium':  {'V': 1.050, 'W': 1.048, 'X': 1.065, 'Y': 1.123},
+              'bold':    {'V': 1.050, 'W': 1.048, 'X': 1.043, 'Y': 1.096}}
 
 
 def dboost(ch):

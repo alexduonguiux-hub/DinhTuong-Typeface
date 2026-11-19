@@ -425,6 +425,7 @@ def mk_tilde(**_):
 # (Regular T 56.2 -> 53.1). The same mark alone and stacked (the drawing has one size).
 HOOK_MODE = __import__('os').environ.get('HOOK_MODE', 'r9')
 HOOK_S_K, HOOK_R_K, HOOK_L_K = 0.945, 0.296, 1.175
+HOOK_GAP_X, HOOK_UP_K = 9.0, 0.26    # R9h-b: hỏi beside the mũ (drawing Ẩ, Regular)
 
 
 def mk_hook_r9():
