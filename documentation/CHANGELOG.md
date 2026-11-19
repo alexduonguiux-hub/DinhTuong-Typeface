@@ -20,6 +20,9 @@ added; every other glyph is byte-identical to 1.006 (`scripts/patch_release_glyp
   bowl swings right of the stem, so it stands 0.10 of its width left of the old hỏi's ink centre (Regular 12, Bold 15;
   'canh dấu hỏi mới cho cảm nhận thị giác là giữa'). On the mũ (Ổ ẩ …) its cut stands just right of the mũ and its
   bottom 0.42 of its height under the mũ's top, as drawn.
+- **A1, a:** the hood's free end runs further round the same curve, its vertical cut halfway from where it stood to
+  the bowl's left extreme (Regular 64 -> 32 from the bowl, every weight; 'dời đuôi chữ a ra thêm tới lằn đỏ ở giữa').
+  The marks over a follow the head; kerning is re-solved from the new outline.
 - **R10y, ỵ:** its nặng stands beside the tail on the nặng line of every letter (centre 0.78 of the y's width, the
   references' median), not under the tail ('dấu nặng y ... bỏ bên hông như các font khác').
 - **R11a, marks on a:** they ride over a's head (0.89 of the way from the whole letter's centre to the head's, the

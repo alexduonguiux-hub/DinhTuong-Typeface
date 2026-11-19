@@ -29,6 +29,7 @@ import os, json, math
 import lc96 as A
 import concept_v1 as CV
 from concept_v1 import rect, fstem, fbar, ell
+A_HEAD_K = 0.5        # A1: share of the hood-cut-to-bowl gap the a's hood end moves out (19/11)
 
 XH, ASC, DESC = A.XH, A.ASC, A.DESC
 OV = 12
@@ -370,6 +371,13 @@ class LF(A.LC):
             GA = []
             ta = self.tail(GA, cx, cy + ry, cx - r, 0.85 * v, 'l', 'up', tip_limit=max(cy, yb0 + AP_S), cry=ry,
                            ring=(cy, r + 0.85 * v, ry + h))
+            if A_HEAD_K:
+                # A1 (19/11 'dời đuôi chữ a ra thêm tới lằn đỏ ở giữa', the first red line being the bowl): the hood's
+                # cut moves out along the same stretched-cap curve to halfway between where it stood and the bowl's
+                # left extreme (x 0), in every weight
+                GA = []
+                ta = self.tail(GA, cx, cy + ry, cx - r, 0.85 * v, 'l', 'up', tip_limit=max(cy, yb0 + AP_S), cry=ry,
+                               ring=(cy, r + 0.85 * v, ry + h), ext=A_HEAD_K * ta['xt'])
             hood = ('group', [('add', ell(cx + 0.075 * v, cy, r + 0.925 * v, ry + h)), ('sub', ell(cx, cy, r, ry))] +
                     CV.arm_ink(ta) + [('sub', rect(cx, -3000, 6000, cy)), ('sub', ta['disk']),
                               ('sub', rect(-3000, -3000, ta['xt'], 6000)), ('sub', rect(-3000, -3000, cx, ta['tip']))])
