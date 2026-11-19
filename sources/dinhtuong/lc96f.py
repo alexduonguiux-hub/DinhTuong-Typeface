@@ -38,12 +38,16 @@ SPUR_D = 46                # F5b: where a bowl meets its stem: 46 u (0.5 h of th
 SPUR = 0.12                # bowl stem stands this much (x v) outside the ring
 CUT = 0.45                 # F7
 CUT_S = 0.72               # P2: s terminals a touch nearer the centre than c (0.45), so its apertures stay open
-S_UP_DX = {'regular': 0.0, 'medium': 0.0, 'bold': 0.0}   # F7t: top terminal of s moved outward
 M_JT2 = {'regular': 0.82, 'medium': 0.86, 'bold': 0.90}   # F10m: the m's second arch keeps this share of the F10c thinning
 JT = 0.25                  # F10 (02:51 'điểm giao'): at every joint the counter runs JT x v further into the
                            # stem, so the round stroke THINS into the joint instead of piling ink there
 CUT_A = 0.80               # a: the hood's free end reaches well round (a terminal on the left shoulder)
 AP_S = float(os.environ.get('S_APER', '0.3')) * 93   # 27/10 16:58 designer chose B: s keeps Regular's arm curve at Regular's reach; aperture = R5 tip clearance 0.3 h Regular
+# F7d (19/11, designer's Figma s, 'Nghiên cứu lại file vẽ figma mới cho chữ s'): the same R5d / R11b construction,
+# its free values fitted to the drawing at Regular (area mismatch 18% -> 4%): narrower (0.80, was 0.86), spine 1.17 h
+# (was 1.12), each terminal cut at a fixed inset from its own bowl's outer edge (top 27, bottom 30, Regular units, every
+# weight; was 47 / 34 by the R5d arm rule) with a slightly shorter face (0.91 / 0.93 of the R5e face). Strokes unchanged.
+S_FIG = dict(wk=0.80, ti=18, dym=8, smk=1.17, sxk=0.95, syk=1.0, ap=AP_S / 93, cu=27.0, cl=30.0, fu=0.91, fl=0.93, dspk=0.0)
 AP_E = 0.5 * 93             # F7c: the e's aperture (tail tip to bar) never under 0.5 h of the Regular (46 u)
 R_W = float(os.environ.get('R_W', '0.70'))   # F7c: r's vertical cut at this fraction of the n's width
 Z_PERP_K = 0.835   # R2d2: z diagonal thickness square to the stroke, in v (Regular's measured value)
@@ -549,26 +553,21 @@ class LF(A.LC):
         like S. Strokes unchanged: sides 0.95 v, tops h, spine 1.12 h; same width."""
         if os.environ.get('S_RAY') == '1':
             return self.g_s_ray()
-        W = 0.86 * 2 * CX * self.Rr + __import__('r2c').grow('s', self.v - self.v_reg)   # R2c
+        P = dict(S_FIG, **json.loads(os.environ.get('S_FIG', '{}')))
+        W = P['wk'] * 2 * CX * self.Rr + __import__('r2c').grow('s', self.v - self.v_reg)   # R2c
         # Aperture: F7c / QA 1.6 (openings in REGULAR units): each tip stays >= AP_E (0.5 h Regular = 46) off the
         # spine; when the R5 arc would come closer (Medium, Bold) the reach is kept and the arc steepens (R2b).
-        T, ov, sx, sy, sm, ti = XH, OV, 0.95 * self.v, self.h, 1.12 * self.h, 18
+        T, ov, sx, sy, sm, ti = XH, OV, P['sxk'] * self.v, P['syk'] * self.h, P['smk'] * self.h, P['ti']
+        ap = P['ap'] * 93
         G = []
-        ym = (T - sm) / 2 + 8
+        ym = (T - sm) / 2 + P['dym']
         xr_u = W - ti / 2 - sx
-        kw_u = dict(tip_limit=ym + sm + AP_S, cry=((T + ov - sy) - (ym + sm)) / 2,
-                    ring=((ym + T + ov) / 2, (W - ti) / 2, (T + ov - ym) / 2))
-        n_g = len(G)
-        tu = self.tail(G, W / 2, T + ov - sy, xr_u, sx, 'r', 'up', **kw_u)
-        # F7t (19/11 'phần thụt đuôi trên của s hơi thụt nhiều so với dưới làm cảm giác chữ bị ngã ra sau'): the top
-        # terminal stood 65 / 59 / 56 in from the glyph's right edge against 43 / 38 / 34 for the bottom one; its
-        # cut moves S_UP_DX outward (same face rule, R5e reach) so the two insets nearly match.
-        d_up = float(os.environ.get('S_UP_DX', S_UP_DX.get(self.w, 0.0)))
-        if d_up:
-            del G[n_g:]
-            tu = self.tail(G, W / 2, T + ov - sy, xr_u, sx, 'r', 'up', reach=tu['xt'] - W / 2 + d_up, **kw_u)
-        tl = self.tail(G, W / 2, -ov + sy, sx, sx, 'l', 'down', tip_limit=ym - AP_S, cry=(ym - (-ov + sy)) / 2,
-                       ring=((-ov + ym + sm) / 2, W / 2, (ym + sm + ov) / 2))
+        ru = None if P['cu'] is None else (W - ti) / 2 - P['cu']    # F7d: the cut stands cu in from the bowl's outer edge
+        rl = None if P['cl'] is None else W / 2 - P['cl']
+        tu = self.tail(G, W / 2, T + ov - sy, xr_u, sx, 'r', 'up', tip_limit=ym + sm + ap, cry=((T + ov - sy) - (ym + sm)) / 2,
+                       ring=((ym + T + ov) / 2, (W - ti) / 2, (T + ov - ym) / 2), reach=ru, face=P['fu'])
+        tl = self.tail(G, W / 2, -ov + sy, sx, sx, 'l', 'down', tip_limit=ym - ap, cry=(ym - (-ov + sy)) / 2,
+                       ring=((-ov + ym + sm) / 2, W / 2, (ym + sm + ov) / 2), reach=rl, face=P['fl'])
         up = [('add', CV.ebox(ti / 2, ym, W - ti / 2, T + ov)),
               ('sub', CV.ebox(ti / 2 + sx, ym + sm, W - ti / 2 - sx, T + ov - sy))] + CV.arm_ink(tu) + [
               ('sub', tu['disk']),
@@ -583,7 +582,7 @@ class LF(A.LC):
         if os.environ.get('S_SPINE', 'g2') == 'g2':
             # R11b (28/10 22:50 'phần uốn lượn ở giữa chữ s và S chưa mượt'): the same smooth spine as the caps S
             fw = (self.v - self.v_reg) / (round(0.93 * CV.W8['bold']['V']) - self.v_reg)
-            spine, y_up, y_lo = CV.s_spine(W, T, ov, sx, sy, sm, ti, G, k=CV.spine_k(fw))
+            spine, y_up, y_lo = CV.s_spine(W, T, ov, sx, sy, sm, ti, G, k=CV.spine_k(fw) + P['dspk'], dym=P['dym'])
             up.append(('sub', rect(-1, ym - 1, W / 2, y_up)))
             lo.append(('sub', rect(W / 2 - 4, y_lo, W + 1, ym + sm + 1)))   # covers the W/2-3 sliver of the ring top
             return self.G('s', W, 34, 34, [('group', up), ('group', lo), ('add', spine)], G)

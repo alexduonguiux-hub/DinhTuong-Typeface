@@ -123,8 +123,8 @@ def _g2_cubic(P0, d0, k0, P3, d3, k3):
     return [P0, P1, P2, P3]
 
 
-def s_spine_geom(W, T, ov, sx, sy, sm, ti, th_o):
-    ym = (T - sm) / 2 + 8
+def s_spine_geom(W, T, ov, sx, sy, sm, ti, th_o, dym=8):
+    ym = (T - sm) / 2 + dym
     U = (W / 2, (ym + T + ov) / 2, (W - ti) / 2, (T + ov - ym) / 2)                                # upper outer
     Uc = (W / 2, ((T + ov - sy) + (ym + sm)) / 2, (W - ti) / 2 - sx, ((T + ov - sy) - (ym + sm)) / 2)  # upper counter
     Lo = (W / 2, (-ov + ym + sm) / 2, W / 2, (ym + sm + ov) / 2)                                    # lower outer
@@ -153,14 +153,14 @@ def spine_k(f):
     return float(os.environ.get('SPINE_K0', 0.94)) - float(os.environ.get('SPINE_KB', 0.06)) * f
 
 
-def s_spine(W, T, ov, sx, sy, sm, ti, G=None, k=None):
+def s_spine(W, T, ov, sx, sy, sm, ti, G=None, k=None, dym=8):
     """R11b: the S spine between two cubic edges, each G2 (equal tangent AND curvature) with the rings it joins:
     the top edge leaves the upper counter at its left extreme and lands on the lower outer ring th_o above its right
     extreme; the bottom edge leaves the upper outer ring th_o below its left extreme and lands on the lower counter's
     right extreme. th_o is solved so the spine (perpendicular, at its middle) = SPINE_K x the side stroke.
     Returns (spine polygon path, y where the upper ring is cut, y where the lower ring is cut)."""
     def width(th):
-        top, bot = s_spine_geom(W, T, ov, sx, sy, sm, ti, th)
+        top, bot = s_spine_geom(W, T, ov, sx, sy, sm, ti, th, dym)
         A, B = _cpts(top, 240), _cpts(bot, 240)
         m = B[120]
         return min(math.hypot(x - m[0], y - m[1]) for x, y in A)
@@ -174,7 +174,7 @@ def s_spine(W, T, ov, sx, sy, sm, ti, G=None, k=None):
             lo_t = mid
         else:
             hi_t = mid
-    top, bot = s_spine_geom(W, T, ov, sx, sy, sm, ti, hi_t)
+    top, bot = s_spine_geom(W, T, ov, sx, sy, sm, ti, hi_t, dym)
     if G is not None:
         G += [('pt', p[0], p[1], 'join') for p in (top[0], top[3], bot[0], bot[3])]
     # the two edges as true cubics (no polyline): top edge forward, bottom edge reversed
