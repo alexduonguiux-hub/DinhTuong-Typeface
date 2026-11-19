@@ -229,6 +229,9 @@ def cap_P():
     return reg(g)
 
 
+Q_THIN = {'regular': 0.945, 'medium': 0.947, 'bold': 0.949}
+
+
 def cap_Q():
     W = 648
     g = Glyph('Q', W, SB_ROUND, SB_ROUND - 4, 0x51)
@@ -1822,6 +1825,10 @@ def cap_Q():
     # ring's bottom stroke (H over Regular's 100), so the part standing in the counter is as tall in every weight.
     yt = 199 + (H - 100)
     x0, x1 = W * 0.546, W * 0.773
+    # Q2c (19/11 'nét xéo của Q cho mỏng như nét xéo của X và K'): square to the stroke the tail stood at 0.94 of the
+    # stem (Regular 109), over X's diagonals (106) and K's leg (100); it takes their mean (Regular 103 / Medium 126 /
+    # Bold 148), the centre line unchanged (factors from the measured outlines)
+    tw *= Q_THIN.get(__import__('os').environ.get('A2_WEIGHT', 'bold'), 1.0)
     g.add(stroke((x0 - (x1 - x0) * (yt - 199) / 249, yt), (x1, -50), tw))
     return reg(g)
 

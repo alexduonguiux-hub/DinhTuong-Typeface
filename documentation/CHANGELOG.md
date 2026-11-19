@@ -14,6 +14,8 @@ added; every other glyph is byte-identical to 1.006 (`scripts/patch_release_glyp
 - **Q2, Q:** the tail is a straight bar with level cuts that starts inside the counter and ends 50 under the baseline
   (was a bar from outside the ring to 96 under it); its top rises with the ring's bottom stroke so it stays visible in
   Bold.
+  Square to the stroke the tail is as light as the other diagonals: the mean of X's diagonal and K's leg (Regular 103,
+  Medium 126, Bold 148; was 109 / 133 / 156; 'nét xéo của Q cho mỏng như nét xéo của X và K').
 - **R11h, hỏi:** redrawn from the designer's drawing over Ô Ổ ('update lại dấu hỏi', Subtract 591:63): a hook opening
   to the left, a level top arm cut square, a ring of one thickness on the right and the lower arm a straight band down to
   the left, cut square. The outline is the drawing's own at the drawing's scale (top arm 1.04 x the mark strip). Alone it
