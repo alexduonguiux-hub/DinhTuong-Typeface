@@ -20,7 +20,8 @@ added; every other glyph is byte-identical to 1.006 (`scripts/patch_release_glyp
   to the left, a level top arm cut square, a ring of one thickness on the right and the lower arm a straight band down to
   the left, cut square. The outline is the drawing's own at the drawing's scale (top arm 1.04 x the mark strip). Alone it
   is centred by eye, not by box: the bowl swings right of the stem, so it stands 0.10 of its width left of the old hỏi's
-  ink centre ('canh dấu hỏi mới cho cảm nhận thị giác là giữa'). On the mũ (Ổ ẩ …) its cut stands 6.8 px right of the mũ
+  ink centre ('canh dấu hỏi mới cho cảm nhận thị giác là giữa'), and 0.10 of its
+  height lower than the other tones' line (Regular 17, Bold 22; 'kéo dấu hỏi ở các dấu đơn thấp xuống chút'). On the mũ (Ổ ẩ …) its cut stands 6.8 px right of the mũ
   and its bottom 0.40 of its height under the mũ's top, as drawn.
 - **A1, a:** the hood's free end runs further round the same curve, its vertical cut halfway from where it stood to
   the bowl's left extreme (Regular 64 -> 32 from the bowl, every weight; 'dời đuôi chữ a ra thêm tới lằn đỏ ở giữa').

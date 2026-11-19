@@ -556,6 +556,9 @@ HOOK11_P0 = (25.252, 0.0)      # the path's first point (x from the top arm's cu
 # box-centred hook reads right-heavy; it moves 0.10 of its ink width left of the old visible centre (reference sans put
 # the hook's box on the axis +-0.05 W with the bowl's weight just right of it)
 HOOK11_OPT_K = 0.10
+# R11h-g (19/11 'kéo dấu hỏi ở các dấu đơn thấp xuống chút'): the lone hỏi (lowercase and caps) sits 0.10 of its own
+# height lower (Regular 17 u); the hỏi beside the mũ is placed by its own rule and does not move
+HOOK11_LOW_K = 0.10
 
 
 def hook11_sc():
@@ -565,7 +568,7 @@ def hook11_sc():
 def mk_hook_r11():
     sc = hook11_sc()
     dx = _hook_old_centre() - (0.5 + HOOK11_OPT_K) * HOOK11_W * sc
-    T = lambda x, y: (x * sc + dx, (HOOK11_H - y) * sc)
+    T = lambda x, y: (x * sc + dx, (HOOK11_H * (1 - HOOK11_LOW_K) - y) * sc)
     path = []
     for seg in HOOK11:
         if seg[0] == 'Z':
