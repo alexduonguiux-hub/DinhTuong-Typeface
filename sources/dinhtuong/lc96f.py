@@ -38,6 +38,7 @@ SPUR_D = 46                # F5b: where a bowl meets its stem: 46 u (0.5 h of th
 SPUR = 0.12                # bowl stem stands this much (x v) outside the ring
 CUT = 0.45                 # F7
 CUT_S = 0.72               # P2: s terminals a touch nearer the centre than c (0.45), so its apertures stay open
+M_JT2 = {'regular': 0.82, 'medium': 0.86, 'bold': 0.90}   # F10m: the m's second arch keeps this share of the F10c thinning
 JT = 0.25                  # F10 (02:51 'điểm giao'): at every joint the counter runs JT x v further into the
                            # stem, so the round stroke THINS into the joint instead of piling ink there
 CUT_A = 0.80               # a: the hood's free end reaches well round (a terminal on the left shoulder)
@@ -155,7 +156,7 @@ class LF(A.LC):
         return jt
 
     # F3 ----------------------------------------------------------------------------------------
-    def arch(self, xs, r, tl, tt=None):
+    def arch(self, xs, r, tl, tt=None, jt_k=1.0):
         """counter circle radius r touching the stem edge xs; outer = r + tl (sides) / r + tt (top).
         Returns (ops, cx, cy, guides)."""
         tt = self.h if tt is None else tt
@@ -164,7 +165,7 @@ class LF(A.LC):
         cy = XH + OV - (ry + tt)
         jt = self.jt                              # F10: the OUTER curve leaves the stem jt later, so the
         # shoulder thins as it joins the stem (no notch: the counter is untouched, the leg keeps its weight)
-        jt = self.arch_jt(r, tl, tt)
+        jt = jt_k * self.arch_jt(r, tl, tt)
         ring = ('group', [('add', ell(cx + jt / 2, cy, r + tl - jt / 2, ry + tt)), ('sub', ell(cx, cy, r, ry)),
                           ('sub', rect(-3000, -3000, 6000, cy))])
         leg = ('add', fstem(cx + r, 0, cx + r + tl, cy + 1, self.fl, top=False))
@@ -186,11 +187,18 @@ class LF(A.LC):
         # P4b (27/10 13:22 'glyph m phải dày tương đương n'): m's legs and roofs weigh EXACTLY what n's do
         # (v / h, F2 P1); m stays narrower only through its counters (0.84 of the n's)
         rm, tm = 0.84 * self.r, self.t
-        o1, cx1, _, G1 = self.arch(v, rm, tm, self.h)
+        o1, cx1, cy1, G1 = self.arch(v, rm, tm, self.h)
         x2 = cx1 + rm + tm
-        o2, cx2, _, G2 = self.arch(x2, rm, tm, self.h)
+        # F10m (19/11 'khớp nối m thường bị lỗi chỗ dày chỗ mỏng'): the F10 / F10c thinning (the outer curve shifted jt so
+        # the shoulder thins into a STEM) is for an arch that springs from a stem; the m's second arch springs from the
+        # first arch's shoulder, with no stem behind it, so the full thinning left its neck at 0.72-0.83 of the n's.
+        # Its thinning is scaled by M_JT2 so its neck (thinnest stroke of the arch, max inscribed circle) matches the n's:
+        # solved per weight (Regular 55.2 / 55.2, Medium 64.8 / 65.0, Bold 75.2 / 75.7 u; was 39.8 / 50.9 / 62.6).
+        k2 = float(os.environ.get('M_JT2', M_JT2.get(self.w, 1.0)))
+        o2, cx2, _, G2 = self.arch(x2, rm, tm, self.h, jt_k=k2)
         W = cx2 + rm + tm
-        return self.G('m', W, 52, 46, [self.stem(0, 0, XH, tr=False)] + o1 + o2, G1 + G2)
+        mid = []
+        return self.G('m', W, 52, 46, [self.stem(0, 0, XH, tr=False)] + o1 + o2 + mid, G1 + G2)
 
     def g_u(self):
         from lc96c import xform
