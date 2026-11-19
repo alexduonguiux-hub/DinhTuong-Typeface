@@ -2,8 +2,8 @@
 
 ## 1.007 (2026-11-19)
 s, the Bold S, Q and the hỏi redrawn from the designer's Figma drawings and review, heavier diagonals, and c's
-spacing in Bold. Only the glyphs listed below (and the accented letters built from them) change; every other glyph is
-byte-identical to 1.006 (`scripts/patch_release_glyphs.py`). Kerning is re-made for the changed glyphs only.
+spacing in Bold. Only the glyphs listed below (and the accented letters built from them) change, and four ligatures are
+added; every other glyph is byte-identical to 1.006 (`scripts/patch_release_glyphs.py`). Kerning is re-made for the changed glyphs only.
 - **F7d, s:** the same construction fitted to the drawing at Regular: narrower (381 / 399 / 417, was 411 / 429 / 446),
   terminals reaching further round (insets from the glyph edge 36 top / 21 bottom, were 64 / 43), so the letter no
   longer leans back ('phần thụt đuôi trên của s hơi thụt nhiều so với dưới làm cảm giác chữ bị ngã ra sau'). Strokes
@@ -27,6 +27,11 @@ byte-identical to 1.006 (`scripts/patch_release_glyphs.py`). Kerning is re-made 
   M 0.88 x V, K's arm 0.94 x its leg), taken ~4 % heavier by the designer ('đậm lên chút nữa'): N 0.96 x V, M and the
   W / w inner diagonals 0.92 x V, K's arm 0.97 x its leg. W and w now overlap their two halves by the inner
   stroke, so the middle peak is one clean apex.
+- **L1, ligatures tt ft tf ff:** standard ligatures (`liga`, on by default) whose crossbars run on unbroken ('khi gõ 2
+  chữ tt gõ liền kề thì cho nét ngang dính nhau'; fi / fl not wanted). t and f carry their bar at the same height, so
+  each ligature is the two letters at their natural spacing with the two flared bar ends that meet cut back to the
+  plain bar and joined. Kerned as their outer letters; GDEF carets between the two letters. Four new glyphs: t_t f_t
+  t_f f_f.
 - **S1f, c Bold:** c's right side came out looser as the weight grew (rsb 30 / 39 / 61); Bold is now 47, the
   designer's choice between Regular's proportion (33, read too tight) and the old 61. Regular and Medium unchanged.
 

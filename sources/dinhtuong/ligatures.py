@@ -9,7 +9,8 @@ The glyphs are written into each master (outline union, no components), appended
 features.fea gets
   * feature liga with the four substitutions;
   * kerning for the ligatures: a ligature's LEFT side kerns as its first letter, its RIGHT side as its last letter
-    (every 'pos t X' pair is copied for t_t and f_t, every 'pos X t' pair for t_t and t_f; the same for f).
+    (every 'pos t X' pair is copied for t_t and f_t, every 'pos X t' pair for t_t and t_f; the same for f);
+  * GDEF ligature carets between the two letters (at the first letter's advance).
 
 Usage: python3 ligatures.py Regular.ufo Medium.ufo Bold.ufo
 """
@@ -106,9 +107,9 @@ def build(font):
             del font[name]
         font.layers.defaultLayer.insertGlyph(g, name=name, overwrite=True)
         order = font.lib.get('public.glyphOrder', [])
-        if name not in order:
-            order.append(name)
-            font.lib['public.glyphOrder'] = order
+        order = [o for o in order if o not in [n for _, _, n in LIGS]]
+        order += sorted(n for _, _, n in LIGS if n in font or n == name)   # appended in name order (release patch)
+        font.lib['public.glyphOrder'] = order
         print(f'  {name}: width {g.width}, bar {lo:.0f}-{hi:.0f}, joined over {x0:.0f}..{x1:.0f}')
 
 
@@ -146,10 +147,18 @@ def features(font):
     print(f'  liga: {len(LIGS)} ligatures, {added} kerning pairs copied')
 
 
+def carets(font):
+    """GDEF ligature carets: the caret between the two letters stands where the first one ends (its advance)"""
+    fea = re.sub(r'\ntable GDEF \{.*?\} GDEF;\n', '\n', font.features.text, flags=re.S)
+    lines = '\n'.join(f'  LigatureCaretByPos {n} {font[a].width:g};' for a, b, n in LIGS)
+    font.features.text = fea.rstrip('\n') + f'\n\ntable GDEF {{\n{lines}\n}} GDEF;\n'
+
+
 if __name__ == '__main__':
     for path in sys.argv[1:]:
         f = ufoLib2.Font.open(path)
         print(path)
         build(f)
         features(f)
+        carets(f)
         f.save()
