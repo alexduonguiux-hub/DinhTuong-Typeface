@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.006 (2026-11-19)
+Lowercase m: the joint of the second arch was thin next to the thick stems ('khớp nối m thường bị lỗi chỗ dày chỗ
+mỏng'). Only `m` changes (all three weights); every other glyph and table is byte-identical to 1.005
+(`scripts/patch_release_glyphs.py`).
+- **F10m:** the second arch of m has no stem behind its shoulder, so the full F10c shoulder thinning left a thin neck.
+  It now keeps only part of it (`M_JT2` Regular 0.82, Medium 0.86, Bold 0.90). The neck (largest inscribed circle)
+  goes from 39.8 / 50.9 / 62.6 to 55.2 / 64.8 / 75.2, the same as the n joint. Width, sidebearings and kerning are
+  unchanged.
+
 ## 1.005 (2026-11-10)
 Vietnamese marks redrawn from the designer's samples (KÉ KẾ KỀ KÈ Ằ). Only the glyphs that carry these marks change
 (Regular 229, Medium 229, Bold 164); every other glyph and table is byte-identical to 1.004.1
