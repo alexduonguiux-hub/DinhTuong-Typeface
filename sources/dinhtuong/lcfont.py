@@ -234,6 +234,11 @@ def tune_spacing(rounds=3, k=0.85):
             kern.MASK.pop(rr.name, None)
             D = D0
     kern.MASK.clear()
+    if 'c' in BASE and os.environ.get('S1F', '1') == '1':
+        # S1f (19/11 'Kiểm tra lại kerning các cặp đi với c thường khi bold'): the 0.12 x-height measure reads c's open
+        # right side differently as the terminals thicken: c|n came out 17 looser than e|n in Regular but 23 in Medium
+        # and 45 in Bold (rsb 30 / 39 / 61). c's right side is brought back to Regular's c|n - e|n in every weight.
+        BASE['c'].rsb += {'medium': -6.0, 'bold': -28.0}.get(GL.WEIGHT, 0.0)
     for c in names:
         log[c] = (round(BASE[c].lsb), round(BASE[c].rsb))
     _TUNED.append(log)
