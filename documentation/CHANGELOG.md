@@ -39,6 +39,9 @@ added; every other glyph is byte-identical to 1.006 (`scripts/patch_release_glyp
   gap over the x-height: 'dời đồng bộ các dấu chữ thường cao lên 1 chút, khoảng 30%'). Capitals unchanged.
 - **K2, K narrower:** K is 0.923 of X wide in every weight (the reference median; it was 0.94 Regular, 0.97 Bold).
 - **K1, kerning:** KA WY XA XY XX WX (and their accented forms) open by 15 from the R16c point-contact overlap.
+- **K4, C before straight capitals:** C's open right side read loose before B D E F H K L M N P R ('kerning CD bị xa':
+  1.49 / 1.30 / 1.42 x the HH white, R / M / B, against the seven references' median 1.11-1.17); these pairs now kern to
+  that median (Regular -35, Medium -30, Bold -25; accented C follow by class).
 - **S1f, c Bold:** c's right side came out looser as the weight grew (rsb 30 / 39 / 61); Bold is now 47, the
   designer's choice between Regular's proportion (33, read too tight) and the old 61. Regular and Medium unchanged.
 
