@@ -1742,12 +1742,12 @@ def cap_Q():
     g = Glyph('Q', W, SB_ROUND, SB_ROUND - 4, 0x51)
     apply(g, ring(0, -OV_C, W, CAP + OV_C, V, H, FULL, FULL))
     tw = diag_dx(146 * WKC, 200, 290)
-    g.add(stroke((W * 0.62, 190), (W - 40, -96), tw))
-    # Q-cut (1.004, designer: 'xử lý ở bản này'): the tail's level top always runs into the ring's inner edge, as in
-    # Medium / Bold. Regular's thinner tail stopped 23 u short at y 190 and left a wedge of counter between the tail and
-    # the ring (one node more than Medium / Bold, so the variable font blended two different cuts at 550-650). The
-    # block lies inside the tail and the ring in every weight; it only fills that wedge.
-    g.add(rect(W * 0.62 + tw * 0.25, 160, W - V / 2, 190))
+    # Q2 (19/11, designer's Figma Q, 'Update luôn Q hoa'): the tail is a straight bar with LEVEL cuts that starts
+    # INSIDE the counter (top at y 199) and crosses the ring's lower right, ending 50 under the baseline (was a bar
+    # from 0.62 W at y 190 to W - 40 at y -96). Centre line 0.546 W -> 0.773 W (27 deg off vertical), measured on the
+    # drawing at Regular (its ring is the O); the bar keeps its weight's width (Regular 122 = the drawing). Its
+    # right edge meets the counter directly, so no wedge of counter is left beside it (the 1.004 Q-cut block is gone).
+    g.add(stroke((W * 0.546, 199), (W * 0.773, -50), tw))
     return reg(g)
 
 
