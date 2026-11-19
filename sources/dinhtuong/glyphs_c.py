@@ -1813,9 +1813,9 @@ def cap_U():
 # D2 (19/11 'Các nét xéo chữ X, Y, V, W cảm giác mỏng hơn các chữ khác'): measured square to the stroke the caps
 # diagonals stood at 0.85 (V W) / 0.77-0.80 (X Y) of the stem (A K 0.84, Z 0.87). Each is widened so its true thickness
 # reaches DIAG_TARGET x the stem in every weight (factors from the measured outlines, outer edges unchanged).
-DIAG_BOOST = {'regular': {'V': 1.056, 'W': 1.050, 'X': 1.087, 'Y': 1.160},
-              'medium':  {'V': 1.050, 'W': 1.048, 'X': 1.065, 'Y': 1.123},
-              'bold':    {'V': 1.050, 'W': 1.048, 'X': 1.043, 'Y': 1.096}}
+DIAG_BOOST = {'regular': {'V': 1.056, 'W': 1.050, 'X': 1.087, 'Y': 1.091},
+              'medium':  {'V': 1.050, 'W': 1.048, 'X': 1.065, 'Y': 1.070},
+              'bold':    {'V': 1.050, 'W': 1.048, 'X': 1.043, 'Y': 1.053}}
 
 
 def dboost(ch):

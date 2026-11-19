@@ -59,9 +59,9 @@ DIAG_W = ({'v': 551, 'y': 551, 'x': 541, 'w': 452, 'k': 505, 'z': 462} if os.env
           else {'v': 470, 'y': 470, 'x': 450, 'w': 380, 'k': 470, 'z': 420})   # k z: reference medians 1.02 / 0.89 (designer 02:44)
 # D2 (19/11 'nét xéo ... mỏng hơn các chữ khác'): v w x measured 0.84-0.85 of the stem (y 0.89); each diagonal is
 # widened to ~0.90 x the stem in every weight (factors from the measured outlines; outer edges unchanged)
-DIAG_BOOST_LC = {'regular': {'v': 1.065, 'w': 1.058, 'x': 1.075, 'y': 1.01},
-                 'medium':  {'v': 1.064, 'w': 1.058, 'x': 1.081, 'y': 1.0},
-                 'bold':    {'v': 1.056, 'w': 1.053, 'x': 1.069, 'y': 1.0}}
+DIAG_BOOST_LC = {'regular': {'v': 1.065, 'w': 1.058, 'x': 1.031, 'y': 1.01},
+                 'medium':  {'v': 1.064, 'w': 1.058, 'x': 1.034, 'y': 1.0},
+                 'bold':    {'v': 1.056, 'w': 1.053, 'x': 1.026, 'y': 1.0}}
 dboost = lambda w, ch: DIAG_BOOST_LC[w].get(ch, 1.0) if os.environ.get('D2', '1') == '1' else 1.0
 CUT_C = 0.80               # c: wider than the 0.45 rule (02:50 'c quá hẹp') but the cut still stands on the shoulder
 CUT_E = 0.95               # e: the lower tail runs nearly to the right edge (02:50 'đuôi e ngắn')
