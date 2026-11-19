@@ -41,6 +41,7 @@ TAIL_ANG = float(os.environ.get('TAIL_ANG', 50))
 KC = 0.56
 G2_EPS = float(os.environ.get('G2_EPS', '0.8'))   # R5g: the blend starts this far outside the round (no coincident edges)
 ARM_PAR = os.environ.get('ARM_PAR', '1') == '1'   # R5h: the arm keeps one thickness to the cut (no taper)
+S_EXT_CAP = (13.0, 8.0)   # F7d-b: S (caps) Bold terminals reach this much further than the R2b floor (top, bottom)
 G2_PRE = float(os.environ.get('G2_PRE', '25'))   # R5g: the arm leaves the round this many degrees before its extreme point
 SPINE = float(os.environ.get('SPINE', 1.10))   # R11: the S spine is the heaviest part (TypeDrawers: "esses need to be thickest in the spine")
 SWIDE = float(os.environ.get('SWIDE', 0.5))    # S/s widen with the stroke so their counters stay the same in every weight
@@ -431,10 +432,10 @@ class Build:
         return [('add', rrect(x0, y0, x1, y1, R)), ('sub', rrect(x0 + sx, y0 + sy, x1 - sx, y1 - sy, r))]
 
     # R5
-    def tail(self, G, cx, cedge, wall, stroke, side, vdir, tip_limit=None, cry=None, ring=None, face=None, reach=None):
+    def tail(self, G, cx, cedge, wall, stroke, side, vdir, tip_limit=None, cry=None, ring=None, face=None, reach=None, ext=0.0):
         """returns dict(xt, cy, rho, tip, disk) and records its guides in G."""
         if TAIL_MODE == 'R5d':
-            return self.tail_d(G, cx, cedge, wall, side, vdir, tip_limit, cry, ring, stroke, face=face, reach=reach)
+            return self.tail_d(G, cx, cedge, wall, side, vdir, tip_limit, cry, ring, stroke, face=face, reach=reach, ext=ext)
         c, sn = math.cos(math.radians(TAIL_PHI)), math.sin(math.radians(TAIL_PHI))
         inset = (1 - TAIL_KEEP) * stroke * self.k          # R2b: inset from the OUTER edge, regular units
         xt = wall + stroke - inset if side == 'r' else wall - stroke + inset
@@ -466,7 +467,7 @@ class Build:
         return dict(xt=xt, cy=cy, rho=rho, tip=tip, disk=quarter_disk(cx, cy, rho, side, vdir))
 
     # R5d
-    def tail_d(self, G, cx, cedge, wall, side, vdir, tip_limit=None, cry=None, ring=None, stroke=None, face=None, reach=None):
+    def tail_d(self, G, cx, cedge, wall, side, vdir, tip_limit=None, cry=None, ring=None, stroke=None, face=None, reach=None, ext=0.0):
         """R5d (27/10 16:18-16:28: designer's sample, 'cong vừa', 'Bold không làm hư đường cong Regular').
         The open quarter of the ring is drawn STRETCHED horizontally: the counter edge = the counter's own cap
         (radii rx, ry) stretched x ARM_LI, the outer edge = the ring's own cap (ring = (centre y, Rx, Ry)) stretched
@@ -496,6 +497,12 @@ class Build:
                 a_i = dx / u
         elif os.environ.get('REACH_GEN') == '1':     # only the generator writes the table (once, at exit)
             _REACH[_tail_key(vdir, side)] = dx
+        if ext:
+            # F7d-b (19/11 'phần đuôi trên và dưới của S và s bold phải dài ra thêm so với regular nhưng không dài hơn
+            # bụng chữ'): a heavier weight reaches EXT further round (the same stretched-cap curve, stretched further)
+            dx += ext
+            if dx > u * a_i:
+                a_i = dx / u
         tip = ci + sy * ry * math.sqrt(max(0.0, 1 - (dx / a_i) ** 2))
         arm_A = None
         if (face or reach) and ring is not None:
@@ -902,10 +909,16 @@ class Build:
         """R5 on both ends of an S: two stacked rings sharing the spine."""
         ym = (T - sm) / 2 + 8
         xr_u = W - ti / 2 - sx
-        tu = self.tail(G, W / 2, T + ov - sy, xr_u, sx, 'r', 'up', tip_limit=ym + sm + 0.3 * sy * self.k,
-                       cry=((T + ov - sy) - (ym + sm)) / 2, ring=((ym + T + ov) / 2, (W - ti) / 2, (T + ov - ym) / 2))
-        tl = self.tail(G, W / 2, -ov + sy, sx, sx, 'l', 'down', tip_limit=ym - 0.3 * sy * self.k,
-                       cry=(ym - (-ov + sy)) / 2, ring=((-ov + ym + sm) / 2, W / 2, (ym + sm + ov) / 2))
+        fw_ = self.dV / (W8['bold']['V'] - W8['regular']['V'])
+        eu, el = (S_EXT_CAP if T > 600 else (0.0, 0.0))
+        eu, el = float(os.environ.get('S_EXT_U', eu)) * fw_, float(os.environ.get('S_EXT_L', el)) * fw_
+        # F7d-w for the S: with the longer reach the aperture floor (0.3 sy over the spine's top line) clipped the Bold
+        # tip (arm 130 against 142); the floor eases with the weight on the S (Regular untouched)
+        apk = 0.3 * (1 - fw_) if T > 600 and (eu or el) else 0.3
+        tu = self.tail(G, W / 2, T + ov - sy, xr_u, sx, 'r', 'up', tip_limit=ym + sm + apk * sy * self.k,
+                       cry=((T + ov - sy) - (ym + sm)) / 2, ring=((ym + T + ov) / 2, (W - ti) / 2, (T + ov - ym) / 2), ext=eu)
+        tl = self.tail(G, W / 2, -ov + sy, sx, sx, 'l', 'down', tip_limit=ym - apk * sy * self.k,
+                       cry=(ym - (-ov + sy)) / 2, ring=((-ov + ym + sm) / 2, W / 2, (ym + sm + ov) / 2), ext=el)
         up = [('add', ebox(ti / 2, ym, W - ti / 2, T + ov)),
               ('sub', ebox(ti / 2 + sx, ym + sm, W - ti / 2 - sx, T + ov - sy))] + arm_ink(tu) + [
               ('sub', tu['disk']),
