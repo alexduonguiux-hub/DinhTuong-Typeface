@@ -1130,6 +1130,17 @@ def STACK_TOP(first):
 def STACK_SYNC(ops, tone, first_ops, first, zone, centred=None):
     """R8w / R8w-h: the stacked tone at its lowest clear place, then raised to the stack's common top line."""
     mf = __import__('marks_flat')
+    if tone == 'hook' and first == 'circumflex' and mf.HOOK_MODE == 'r10':
+        # R10h-b (designer's Ô): the foot stands just right of the mũ's right end, its bottom a little under the mũ's top
+        sc = mf.HOOK10_S_K * mf._st() / 27.0
+        H = (mf.HOOK10_BOX[3] - mf.HOOK10_BOX[1]) * sc
+        # where the hook now stands: its foot bottom and foot left edge, found from its own first point (the ring's
+        # right point, drawing (511.5, 213.05)), so control points never skew it
+        px, py = ops[0][1][0][1], ops[0][1][0][2]
+        foot_x = px + (mf.HOOK10_FOOT_X - 511.5) * sc
+        foot_y = py - (265.0 - 213.05) * sc
+        fx1 = ops_xrange(first_ops)[1]; ftop = ops_yrange(first_ops)[1]
+        return shift_ops(ops, fx1 + mf.HOOK10_GAP_X - foot_x, ftop - mf.HOOK10_DROP_K * H - foot_y)
     if tone == 'hook' and first == 'circumflex' and mf.HOOK_MODE == 'r9':
         # R9h-b (19/11, designer's Ẩ): the hỏi stands BESIDE the mũ, not over it: its left cut HOOK_GAP_X right of the
         # mũ's right foot, its centre HOOK_UP_K x its own height over the mũ's top (Regular: 9 / 36 on the drawing)

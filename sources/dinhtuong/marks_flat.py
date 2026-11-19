@@ -460,7 +460,34 @@ def mk_tilde(**_):
 # R = s + r, inner r). Measured on the drawing at Regular (cap 700 = 869 px): band s 53.1, inner r 15.7, arms 62.4 from
 # the cut to the ring's centre, mark 131 x 138. Proportions are kept in every weight; s = HOOK_S_K x the mark strip T
 # (Regular T 56.2 -> 53.1). The same mark alone and stacked (the drawing has one size).
-HOOK_MODE = __import__('os').environ.get('HOOK_MODE', 'r9')
+HOOK_MODE = __import__('os').environ.get('HOOK_MODE', 'r10')
+# R10h (19/11, designer's Figma 'Frame 34' over Ô, 'update dấu hỏi'): the hỏi is a ring with a short arm and a foot, as
+# drawn: the arm leaves the ring's top 9.6 deg down to the left and is cut square; the stroke runs round the right side
+# to the bottom and drops into a short foot left of the ring's centre (its top-left corner rounded). The outline is the
+# drawing's own (px, the ring centre at x 500.46, the foot's bottom at y 265), scaled so its stroke (27 px) is
+# HOOK10_S_K x the mark strip T (Regular 51 = the drawing at cap 700). The ring centre stands on the mark axis (as the
+# old ring hỏi), the foot on the mark line.
+HOOK10_S_K = 0.909
+HOOK10 = [('M', 511.5, 213.05), ('C', 511.5, 206.216, 505.353, 201.024, 498.615, 202.166), ('L', 468.256, 207.311),
+          ('L', 463.744, 180.69), ('L', 494.103, 175.545), ('C', 517.32, 171.609, 538.5, 189.502, 538.5, 213.05),
+          ('C', 538.5, 234.059, 521.469, 251.09, 500.46, 251.09), ('L', 499.0, 251.09), ('L', 499.0, 265.0),
+          ('L', 472.0, 265.0), ('L', 472.0, 245.063), ('C', 472.0, 233.48, 481.39, 224.091, 492.973, 224.09),
+          ('L', 500.46, 224.09), ('C', 506.557, 224.09, 511.5, 219.148, 511.5, 213.05), ('Z',)]
+HOOK10_BOX = (463.744, 175.0, 538.5, 265.0)            # drawing box (x0, top, x1, bottom), px
+HOOK10_FOOT_X = 472.0                                  # the foot's left edge, px
+HOOK10_GAP_X, HOOK10_DROP_K = 1.5, 0.119               # beside the mũ: foot 1.5 right of it, bottom 0.119 H under its top
+
+
+def mk_hook_r10():
+    sc = HOOK10_S_K * _st() / 27.0
+    T = lambda x, y: ((x - 500.46) * sc, (265.0 - y) * sc)
+    path = []
+    for seg in HOOK10:
+        if seg[0] == 'Z':
+            path.append(('Z',)); continue
+        pts = [T(seg[i], seg[i + 1]) for i in range(1, len(seg), 2)]
+        path.append((seg[0],) + tuple(v for p_ in pts for v in p_))
+    return [('add', path)]
 HOOK_S_K, HOOK_R_K, HOOK_L_K = 0.945, 0.296, 1.175
 HOOK_GAP_X, HOOK_UP_K = 9.0, 0.26    # R9h-b: hỏi beside the mũ (drawing Ẩ, Regular)
 
@@ -497,6 +524,8 @@ def mk_hook_r9():
 
 
 def mk_hook(**_):
+    if HOOK_MODE == 'r10':
+        return mk_hook_r10()
     if HOOK_MODE == 'r9':
         return mk_hook_r9()
     T = _st()
@@ -505,6 +534,8 @@ def mk_hook(**_):
 
 def mk_hook_stack(**_):
     """hỏi riding on a trăng / mũ: same thickness T, a tighter curl so stacks stay low."""
+    if HOOK_MODE == 'r10':
+        return mk_hook_r10()
     if HOOK_MODE == 'r9':
         return mk_hook_r9()
     T = _st()
