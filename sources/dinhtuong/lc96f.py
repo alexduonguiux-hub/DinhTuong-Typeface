@@ -29,7 +29,10 @@ import os, json, math
 import lc96 as A
 import concept_v1 as CV
 from concept_v1 import rect, fstem, fbar, ell
-A_HEAD_K = 0.5        # A1: share of the hood-cut-to-bowl gap the a's hood end moves out (19/11)
+# A1: share of the hood-cut-to-bowl gap the a's hood end moves out (19/11). A1-c ('chữ a bold cảm giác bị ngã về
+# trái'): the a stands upright when its upper half's ink centre is right of the lower half's by the same share of the
+# advance as in Regular (0.027); Medium / Bold reach that with a shorter move (measured: 0.5 left them at 0.016-0.017)
+A_HEAD_K = {'regular': 0.5, 'medium': 0.2, 'bold': 0.2}
 
 XH, ASC, DESC = A.XH, A.ASC, A.DESC
 OV = 12
@@ -377,7 +380,7 @@ class LF(A.LC):
                 # left extreme (x 0), in every weight
                 GA = []
                 ta = self.tail(GA, cx, cy + ry, cx - r, 0.85 * v, 'l', 'up', tip_limit=max(cy, yb0 + AP_S), cry=ry,
-                               ring=(cy, r + 0.85 * v, ry + h), ext=A_HEAD_K * ta['xt'], keep_face=ta['face'])
+                               ring=(cy, r + 0.85 * v, ry + h), ext=A_HEAD_K.get(self.w, 0.5) * ta['xt'], keep_face=ta['face'])
             hood = ('group', [('add', ell(cx + 0.075 * v, cy, r + 0.925 * v, ry + h)), ('sub', ell(cx, cy, r, ry))] +
                     CV.arm_ink(ta) + [('sub', rect(cx, -3000, 6000, cy)), ('sub', ta['disk']),
                               ('sub', rect(-3000, -3000, ta['xt'], 6000)), ('sub', rect(-3000, -3000, cx, ta['tip']))])

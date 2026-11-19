@@ -23,10 +23,12 @@ added; every other glyph is byte-identical to 1.006 (`scripts/patch_release_glyp
   ink centre ('canh dấu hỏi mới cho cảm nhận thị giác là giữa'), and 0.10 of its
   height lower than the other tones' line (Regular 17, Bold 22; 'kéo dấu hỏi ở các dấu đơn thấp xuống chút'). On the mũ (Ổ ẩ …) its cut stands 6.8 px right of the mũ
   and its bottom 0.40 of its height under the mũ's top, as drawn.
-- **A1, a:** the hood's free end runs further round the same curve, its vertical cut halfway from where it stood to
-  the bowl's left extreme (Regular 64 -> 32 from the bowl, every weight; 'dời đuôi chữ a ra thêm tới lằn đỏ ở giữa').
-  Where the clearance over the bowl holds the tip (Medium, Bold), the outer arm runs flatter so the cut keeps the face
-  it had ('bold đuôi a bị vuốt nhọn'). The marks over a follow the head; kerning is re-solved from the new outline.
+- **A1, a:** the hood's free end runs further round the same curve toward the bowl's left extreme: in Regular halfway
+  from where its vertical cut stood (64 -> 32 from the bowl; 'dời đuôi chữ a ra thêm tới lằn đỏ ở giữa'); in Medium and
+  Bold 0.2 of that gap, so the a stands as upright as in Regular (its upper half's ink centre right of the lower half's by
+  0.026-0.028 of the advance; 0.5 left them at 0.016, 'chữ a bold cảm giác bị ngã về trái'). Where the clearance over
+  the bowl holds the tip, the outer arm runs flatter so the cut keeps its face ('bold đuôi a bị vuốt nhọn'). The marks
+  over a follow the head; kerning is re-solved from the new outline.
 - **R10y, ỵ:** its nặng stands beside the tail on the nặng line of every letter (centre 0.78 of the y's width, the
   references' median), not under the tail ('dấu nặng y ... bỏ bên hông như các font khác').
 - **R11a, marks on a:** they ride over a's head (0.89 of the way from the whole letter's centre to the head's, the
