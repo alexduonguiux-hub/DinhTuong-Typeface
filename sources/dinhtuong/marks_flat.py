@@ -540,16 +540,21 @@ def mk_hook_r9():
 # (R10h-c); on the mũ its cut stands HOOK11_GAP px right of the mũ, its bottom HOOK11_DROP_K x its height under the mũ's
 # top, as on the drawing's Ô.
 HOOK11_S_K = 0.956
-HOOK11 = [('M', 14.9189, 0.619223), ('C', 41.32, -3.85534, 65.4031, 16.4891, 65.4033, 43.2667),
-          ('C', 65.4033, 60.3193, 55.3847, 75.7809, 39.8203, 82.7481), ('L', 17.0, 92.962), ('L', 17.0, 62.2852),
-          ('L', 28.3799, 57.1915), ('C', 33.8694, 54.7342, 37.4033, 49.2811, 37.4033, 43.2667),
-          ('C', 37.4031, 33.8225, 28.9091, 26.6475, 19.5977, 28.2257), ('L', 0.0, 31.546), ('L', 0.0, 3.14754), ('Z',)]
-HOOK11_W, HOOK11_H = 65.4033, 92.962
-# R11h-d (19/11, revised drawing 'Subtract' 588:7: the lower arm ends at x 17, the hook 18 px nearer the mũ)
-HOOK11_GAP, HOOK11_DROP_K = 1.8, 0.416
+# R11h-f (19/11 'update lại dấu hỏi', drawing 'Subtract' 591:63 over Ô Ổ): a level top arm cut square at x 0, a ring
+# of one thickness (31) round the centre (25.25, 41.25), the lower arm a straight band down-left, cut square at x 8.
+# Same drawing scale as before (sc below), so the mark is as heavy as drawn (top arm 31 px = 1.04 x the strip).
+HOOK11 = [('M', 25.252, 0.0), ('C', 48.0324, 0.0, 66.5, 18.4676, 66.5, 41.248),
+          ('C', 66.4998, 58.7639, 55.4371, 74.3696, 38.9092, 80.1689), ('L', 8.00098, 91.0137), ('L', 8.00098, 58.1602),
+          ('L', 28.6455, 50.917), ('C', 32.7515, 49.4761, 35.4998, 45.5995, 35.5, 41.248),
+          ('C', 35.5, 35.5884, 30.9116, 31.0, 25.252, 31.0), ('L', 0.0, 31.0), ('L', 0.0, 0.0), ('Z',)]
+HOOK11_W, HOOK11_H = 66.5, 91.0137
+# on the mũ, measured in the frame against the previous drawing (588:7 at x 473 y 200, cut 1.8 px right of the mũ, bottom
+# 0.416 H under its top -> mũ right 471.2, top 254.3): the new drawing at x 478 y 200 -> cut 6.8 px right, bottom 36.7 px under
+HOOK11_GAP, HOOK11_DROP_K = 6.8, 0.403
+HOOK11_P0 = (25.252, 0.0)      # the path's first point (x from the top arm's cut, y from the top)
 # R11h-e (19/11 'canh dấu hỏi mới cho cảm nhận thị giác là giữa'): the lone hỏi's bowl swings right of its stem, so a
-# box-centred hook reads right-heavy; it moves 0.10 of its ink width left of the old visible centre (Regular 12 u,
-# Bold 15 u; reference sans put the hook's box on the axis +-0.05 W with the bowl's weight just right of it)
+# box-centred hook reads right-heavy; it moves 0.10 of its ink width left of the old visible centre (reference sans put
+# the hook's box on the axis +-0.05 W with the bowl's weight just right of it)
 HOOK11_OPT_K = 0.10
 
 

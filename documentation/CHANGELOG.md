@@ -14,12 +14,12 @@ added; every other glyph is byte-identical to 1.006 (`scripts/patch_release_glyp
 - **Q2, Q:** the tail is a straight bar with level cuts that starts inside the counter and ends 50 under the baseline
   (was a bar from outside the ring to 96 under it); its top rises with the ring's bottom stroke so it stays visible in
   Bold.
-- **R11h, hỏi:** redrawn from the designer's drawing over Ô ('update lại dấu hỏi'): a hook opening to the left, a
-  level arm on top, the ring on the right and the lower arm running down, cut at x 17 of the drawing. The outline is
-  the drawing's own, its top arm 0.96 x the mark strip (Regular 124 x 176). Alone it is centred by eye, not by box: the
-  bowl swings right of the stem, so it stands 0.10 of its width left of the old hỏi's ink centre (Regular 12, Bold 15;
-  'canh dấu hỏi mới cho cảm nhận thị giác là giữa'). On the mũ (Ổ ẩ …) its cut stands just right of the mũ and its
-  bottom 0.42 of its height under the mũ's top, as drawn.
+- **R11h, hỏi:** redrawn from the designer's drawing over Ô Ổ ('update lại dấu hỏi', Subtract 591:63): a hook opening
+  to the left, a level top arm cut square, a ring of one thickness on the right and the lower arm a straight band down to
+  the left, cut square. The outline is the drawing's own at the drawing's scale (top arm 1.04 x the mark strip). Alone it
+  is centred by eye, not by box: the bowl swings right of the stem, so it stands 0.10 of its width left of the old hỏi's
+  ink centre ('canh dấu hỏi mới cho cảm nhận thị giác là giữa'). On the mũ (Ổ ẩ …) its cut stands 6.8 px right of the mũ
+  and its bottom 0.40 of its height under the mũ's top, as drawn.
 - **A1, a:** the hood's free end runs further round the same curve, its vertical cut halfway from where it stood to
   the bowl's left extreme (Regular 64 -> 32 from the bowl, every weight; 'dời đuôi chữ a ra thêm tới lằn đỏ ở giữa').
   Where the clearance over the bowl holds the tip (Medium, Bold), the outer arm runs flatter so the cut keeps the face

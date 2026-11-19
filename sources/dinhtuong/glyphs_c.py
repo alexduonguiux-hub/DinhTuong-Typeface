@@ -1147,8 +1147,8 @@ def STACK_SYNC(ops, tone, first_ops, first, zone, centred=None):
         # the hook's height under the mũ's top; positions from the hook's own first point (drawing (14.92, 0.62))
         sc = mf.hook11_sc()
         px, py = ops[0][1][0][1], ops[0][1][0][2]
-        cut_x = px - 14.9189 * sc
-        bot_y = py - (mf.HOOK11_H - 0.619223) * sc
+        cut_x = px - mf.HOOK11_P0[0] * sc
+        bot_y = py - (mf.HOOK11_H - mf.HOOK11_P0[1]) * sc
         fx1 = ops_xrange(first_ops)[1]; ftop = ops_yrange(first_ops)[1]
         return shift_ops(ops, fx1 + mf.HOOK11_GAP * sc - cut_x, ftop - mf.HOOK11_DROP_K * mf.HOOK11_H * sc - bot_y)
     if tone == 'hook' and first == 'circumflex' and mf.HOOK_MODE == 'r10':
