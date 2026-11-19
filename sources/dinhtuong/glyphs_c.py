@@ -713,6 +713,19 @@ def CLEAR_UP(ops, other_ops, gap):
     return shift_ops(ops, 0, hi)
 
 
+def CLEAR_RIGHT(ops, other_ops, gap):
+    """R9h-e: push ops right (never left) until their ink keeps gap from other_ops."""
+    import mark_qa as MQ
+    o = MQ.raster(other_ops)
+    if MQ.min_dist(o, MQ.raster(ops)) >= gap: return ops
+    lo, hi = 0.0, 300.0
+    for _ in range(16):
+        mid = (lo + hi) / 2
+        if MQ.min_dist(o, MQ.raster(shift_ops(ops, mid, 0))) >= gap: hi = mid
+        else: lo = mid
+    return shift_ops(ops, hi, 0)
+
+
 def CIRC_FOOT(base_ops, cx, zone, key=None):
     """R8k: the mũ's foot relative to the mark zone — the lowest height at which its ink keeps CIRC_R8K_GAP (40) from
     the letter's ink (sample Â 41, â 40). 0 when the R8k mũ is off."""
@@ -1121,7 +1134,10 @@ def STACK_SYNC(ops, tone, first_ops, first, zone, centred=None):
         # (ả = ẩ, Ả = Ẩ), not raised with the mũ
         x0, x1 = ops_xrange(ops); y0, y1 = ops_yrange(ops)
         fx1 = ops_xrange(first_ops)[1]
-        return shift_ops(ops, fx1 + mf.HOOK_GAP_X - x0, globals().get('_ZONE0', zone) - y0)
+        # R9h-e (19/11 'giờ dấu hỏi dính vào dấu â'): on that lower line it stands level with the mũ's right foot, so
+        # the drawing's 9 is too tight there: it moves right until its ink keeps W_GAP (30) from the mũ
+        ops = shift_ops(ops, fx1 + mf.HOOK_GAP_X - x0, globals().get('_ZONE0', zone) - y0)
+        return CLEAR_RIGHT(ops, first_ops, mf.W_GAP)
     if centred is not None:
         mx = sum(ops_xrange(first_ops)) / 2
         ops = shift_ops(centred, mx, zone)
