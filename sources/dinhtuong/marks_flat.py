@@ -480,7 +480,10 @@ HOOK10_GAP_X, HOOK10_DROP_K = 1.5, 0.119               # beside the mũ: foot 1.
 
 def mk_hook_r10():
     sc = HOOK10_S_K * _st() / 27.0
-    T = lambda x, y: ((x - 500.46) * sc, (265.0 - y) * sc)
+    # R10h-c (19/11 'dấu hỏi các dấu đơn hơi lệch trái'): the mark's box stands where the old ring hỏi's ink stood (its
+    # visible box 32-36 right of the axis, the place 'canh giữa như cũ' approved), not with the ring on the axis
+    dx = _hook_old_centre() - ((HOOK10_BOX[0] + HOOK10_BOX[2]) / 2 - 500.46) * sc
+    T = lambda x, y: ((x - 500.46) * sc + dx, (265.0 - y) * sc)
     path = []
     for seg in HOOK10:
         if seg[0] == 'Z':
