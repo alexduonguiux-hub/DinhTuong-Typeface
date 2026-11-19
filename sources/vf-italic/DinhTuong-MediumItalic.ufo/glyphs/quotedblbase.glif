@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<glyph name="quotedblbase" format="2">
+  <advance width="456"/>
+  <unicode hex="201E"/>
+  <outline>
+    <contour>
+      <point x="-23.36" y="-170" type="line"/>
+      <point x="41.63" y="-170" type="line"/>
+      <point x="157.43" y="26" type="line"/>
+      <point x="170.89" y="39"/>
+      <point x="180.99" y="56"/>
+      <point x="184.17" y="74" type="curve"/>
+      <point x="191.4" y="115"/>
+      <point x="163.71" y="148"/>
+      <point x="122.07" y="148" type="curve"/>
+      <point x="80.44" y="148"/>
+      <point x="41.11" y="115"/>
+      <point x="33.88" y="74" type="curve"/>
+      <point x="28.59" y="44"/>
+      <point x="42.29" y="18"/>
+      <point x="66.57" y="6" type="curve"/>
+    </contour>
+    <contour>
+      <point x="177.7" y="-170" type="line"/>
+      <point x="242.69" y="-170" type="line"/>
+      <point x="358.48" y="26" type="line"/>
+      <point x="371.94" y="39"/>
+      <point x="382.05" y="56"/>
+      <point x="385.22" y="74" type="curve"/>
+      <point x="392.45" y="115"/>
+      <point x="364.76" y="148"/>
+      <point x="323.13" y="148" type="curve"/>
+      <point x="281.5" y="148"/>
+      <point x="242.17" y="115"/>
+      <point x="234.94" y="74" type="curve"/>
+      <point x="229.65" y="44"/>
+      <point x="243.34" y="18"/>
+      <point x="267.63" y="6" type="curve"/>
+    </contour>
+  </outline>
+</glyph>

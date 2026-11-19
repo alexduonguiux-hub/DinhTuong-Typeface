@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<glyph name="Wgrave" format="2">
+  <advance width="875"/>
+  <unicode hex="1E80"/>
+  <outline>
+    <contour>
+      <point x="373.68" y="764" type="line"/>
+      <point x="678.31" y="764" type="line"/>
+      <point x="682.54" y="788" type="line"/>
+      <point x="385.85" y="833" type="line"/>
+    </contour>
+    <contour>
+      <point x="81.12" y="700" type="line"/>
+      <point x="89.48" y="661"/>
+      <point x="93.95" y="623"/>
+      <point x="96.07" y="589" type="curve" smooth="yes"/>
+      <point x="140.47" y="0" type="line"/>
+      <point x="270.45" y="0" type="line"/>
+      <point x="476.09" y="481" type="line"/>
+      <point x="511.1" y="0" type="line"/>
+      <point x="641.08" y="0" type="line"/>
+      <point x="902.14" y="611" type="line" smooth="yes"/>
+      <point x="914.19" y="639"/>
+      <point x="929.81" y="670"/>
+      <point x="947.28" y="700" type="curve"/>
+      <point x="823.4" y="700" type="line"/>
+      <point x="811.93" y="658"/>
+      <point x="795.39" y="616"/>
+      <point x="780.92" y="580" type="curve" smooth="yes"/>
+      <point x="601.48" y="144" type="line"/>
+      <point x="569.54" y="700" type="line"/>
+      <point x="458.86" y="700" type="line"/>
+      <point x="230.85" y="144" type="line"/>
+      <point x="203.49" y="605" type="line" smooth="yes"/>
+      <point x="201.67" y="635"/>
+      <point x="202.23" y="667"/>
+      <point x="205.0" y="700" type="curve"/>
+    </contour>
+  </outline>
+</glyph>

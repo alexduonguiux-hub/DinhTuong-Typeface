@@ -3,8 +3,9 @@ help:
 	@echo "# Build targets for Dinh Tuong"
 	@echo "###"
 	@echo
-	@echo "  make build:    Builds the static fonts (sources/config-static.yaml, from sources/ufo) and the variable font"
-	@echo "                 (sources/config.yaml, from sources/vf) with gftools builder into fonts/"
+	@echo "  make build:    Builds the static fonts (sources/config-static.yaml, from sources/ufo; the italic, 10° slant,"
+	@echo "                 from sources/ufo-italic by scripts/make_italic.py + sources/config-italic-static.yaml) and the"
+	@echo "                 variable fonts (sources/config.yaml, from sources/vf and sources/vf-italic) with gftools builder"
 	@echo "  make vf:       Remakes sources/vf from sources/ufo (point-compatible masters), builds and checks the variable font"
 	@echo "  make generate: Regenerates sources/ufo from the rule-based generators (sources/dinhtuong)"
 	@echo "  make compare:  Checks the fontmake build against the generators' reference binaries"
@@ -22,8 +23,8 @@ venv/touchfile: requirements.txt
 	. venv/bin/activate; pip install -Ur requirements.txt > venv-install.log 2>&1 || (python3 scripts/ci_log.py venv-install.log pip; exit 1)
 	touch venv/touchfile
 
-build.stamp: venv sources/config.yaml sources/config-static.yaml $(shell find sources/ufo sources/vf -type f)
-	rm -rf fonts; . venv/bin/activate; (gftools builder sources/config-static.yaml && gftools builder sources/config.yaml) > build.log 2>&1 || (python3 scripts/ci_log.py build.log build; exit 1)
+build.stamp: venv sources/config.yaml sources/config-static.yaml sources/config-italic-static.yaml $(shell find sources/ufo sources/vf -type f)
+	rm -rf fonts; . venv/bin/activate; (python3 scripts/make_italic.py && gftools builder sources/config-static.yaml && gftools builder sources/config-italic-static.yaml && gftools builder sources/config.yaml && python3 scripts/add_static_stat.py) > build.log 2>&1 || (python3 scripts/ci_log.py build.log build; exit 1)
 	touch build.stamp
 
 # Variable font (Google Fonts onboarding): sources/vf are the masters of sources/ufo made point-compatible (exact

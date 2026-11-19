@@ -1,0 +1,14 @@
+# Static italic build: Italic / Medium Italic / Bold Italic from sources/ufo-italic (scripts/make_italic.py).
+sources:
+  - ufo-italic/DinhTuong-Italic.ufo
+  - ufo-italic/DinhTuong-MediumItalic.ufo
+  - ufo-italic/DinhTuong-BoldItalic.ufo
+familyName: "Dinh Tuong"
+buildVariable: false
+buildStatic: true
+buildOTF: true
+buildTTF: true
+buildWebfont: false
+autohintTTF: false
+checkCompatibility: false
+outputDir: "../fonts"

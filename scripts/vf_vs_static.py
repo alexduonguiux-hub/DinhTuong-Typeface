@@ -1,4 +1,5 @@
-"""Check that the variable font at wght 400 / 500 / 700 draws exactly like the static Regular / Medium / Bold:
+"""Usage: vf_vs_static.py [--italic]
+Check that the variable font at wght 400 / 500 / 700 draws exactly like the static Regular / Medium / Bold:
 every character (HarfBuzz, shaped): advance, outline area (<= 0.5 %) and bbox (<= 2 u); kerning on ~11 800 pairs."""
 import uharfbuzz as hb, unicodedata, itertools, sys
 from fontTools.ttLib import TTFont
@@ -7,6 +8,10 @@ from fontTools.pens.boundsPen import BoundsPen
 import os
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 VF=os.path.join(ROOT,'fonts/variable/DinhTuong[wght].ttf'); ST=os.path.join(ROOT,'fonts/ttf/DinhTuong-%s.ttf')
+STYLES=[('Regular',400),('Medium',500),('Bold',700)]
+if len(sys.argv)>1 and sys.argv[1]=='--italic':   # the italic family: DinhTuong-Italic[wght] vs Italic / MediumItalic / BoldItalic
+    VF=os.path.join(ROOT,'fonts/variable/DinhTuong-Italic[wght].ttf')
+    STYLES=[('Italic',400),('MediumItalic',500),('BoldItalic',700)]
 def mk(path,var=None):
     f=hb.Font(hb.Face(open(path,'rb').read()))
     if var: f.set_variations(var)
@@ -23,12 +28,12 @@ def geom(font,gid):
 def shape(font,t):
     buf=hb.Buffer(); buf.add_str(t); buf.guess_segment_properties(); hb.shape(font,buf,{'kern':True})
     return buf.glyph_infos, buf.glyph_positions
-cm=TTFont(ST%'Regular').getBestCmap()
+cm=TTFont(ST%STYLES[0][0]).getBestCmap()
 chars=[chr(u) for u in sorted(cm) if unicodedata.category(chr(u))[0] in 'LNPSM']
 letters=[c for c in chars if unicodedata.category(c)[0]=='L']
 vn='aăâbcdđeêghiklmnoôơpqrstuưvxyAĂÂBCDĐEÊGHIKLMNOÔƠPQRSTUƯVXY'
 pairs=[a+b for a in vn for b in vn]+[a+b for a in letters for b in 'AVTYoaenvy.,']+[a+b for a in 'AVTYoaenvyLFP' for b in letters]
-for name,wv in [('Regular',400),('Medium',500),('Bold',700)]:
+for name,wv in STYLES:
     st=mk(ST%name); vf=mk(VF,{'wght':wv})
     adv=geo=0; worst_a=worst_b=0; wa=wb=''; bad=[]
     for c in chars:

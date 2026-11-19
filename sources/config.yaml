@@ -1,12 +1,16 @@
-# Google Fonts build (gftools builder): the variable font DinhTuong[wght].ttf, wght 400-700.
+# Google Fonts build (gftools builder): the variable fonts DinhTuong[wght].ttf and DinhTuong-Italic[wght].ttf, wght 400-700.
 # Sources: sources/vf, the three UFO masters made point-compatible (scripts/make_vf_sources.py: exact splits, the
-# outlines are those of sources/ufo) and their designspace. At 400 / 500 / 700 the variable font draws exactly like the
-# static Regular / Medium / Bold (scripts/vf_vs_static.py); the static fonts are built by sources/config-static.yaml.
+# outlines are those of sources/ufo) and their designspace; sources/vf-italic, the same masters sheared 10° (italic
+# concept A, scripts/make_italic.py). Built together so that both carry the family's STAT (wght + ital).
+# At 400 / 500 / 700 each variable font draws exactly like its static fonts (scripts/vf_vs_static.py [--italic]);
+# the static fonts are built by sources/config-static.yaml and sources/config-italic-static.yaml.
 sources:
   - vf/DinhTuong.designspace
+  - vf-italic/DinhTuong-Italic.designspace
 familyName: "Dinh Tuong"
 axisOrder:
   - wght
+  - ital
 buildVariable: true
 buildStatic: false
 buildWebfont: false

@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<glyph name="lcaron" format="2">
+  <advance width="446"/>
+  <unicode hex="013E"/>
+  <outline>
+    <contour>
+      <point x="130.07" y="740" type="line"/>
+      <point x="130.79" y="698"/>
+      <point x="124.4" y="656"/>
+      <point x="118.05" y="620" type="curve"/>
+      <point x="29.89" y="120" type="line"/>
+      <point x="23.54" y="84"/>
+      <point x="15.12" y="42"/>
+      <point x="-0.41" y="0" type="curve"/>
+      <point x="176.27" y="0" type="line"/>
+      <point x="175.56" y="42"/>
+      <point x="181.95" y="84"/>
+      <point x="188.29" y="120" type="curve"/>
+      <point x="276.46" y="620" type="line"/>
+      <point x="282.81" y="656"/>
+      <point x="291.23" y="698"/>
+      <point x="306.76" y="740" type="curve"/>
+    </contour>
+    <contour>
+      <point x="457.34" y="615" type="line"/>
+      <point x="473.85" y="628"/>
+      <point x="486.33" y="647"/>
+      <point x="490.04" y="668" type="curve"/>
+      <point x="497.09" y="708"/>
+      <point x="470.24" y="740"/>
+      <point x="429.62" y="740" type="curve"/>
+      <point x="390.02" y="740"/>
+      <point x="351.88" y="708"/>
+      <point x="344.83" y="668" type="curve"/>
+      <point x="339.89" y="640"/>
+      <point x="351.73" y="615"/>
+      <point x="374.16" y="604" type="curve"/>
+      <point x="289.48" y="452" type="line"/>
+      <point x="354.47" y="452" type="line"/>
+    </contour>
+  </outline>
+</glyph>
