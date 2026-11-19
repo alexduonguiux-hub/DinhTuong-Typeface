@@ -4,34 +4,34 @@
   <unicode hex="1EAB"/>
   <outline>
     <contour>
-      <point x="113" y="796" type="curve"/>
-      <point x="113" y="713" type="line"/>
-      <point x="136" y="731"/>
-      <point x="165" y="753"/>
-      <point x="196" y="753" type="curve" smooth="yes"/>
-      <point x="236" y="753"/>
-      <point x="269" y="713"/>
-      <point x="312" y="713" type="curve" smooth="yes"/>
-      <point x="341" y="713"/>
-      <point x="369" y="726"/>
-      <point x="393" y="741" type="curve"/>
-      <point x="393" y="825" type="line"/>
-      <point x="370" y="806"/>
-      <point x="341" y="784"/>
-      <point x="310" y="784" type="curve" smooth="yes"/>
-      <point x="270" y="784"/>
-      <point x="237" y="824"/>
-      <point x="194" y="824" type="curve" smooth="yes"/>
-      <point x="165" y="824"/>
-      <point x="137" y="811"/>
+      <point x="137" y="796" type="curve"/>
+      <point x="137" y="713" type="line"/>
+      <point x="160" y="731"/>
+      <point x="189" y="753"/>
+      <point x="220" y="753" type="curve" smooth="yes"/>
+      <point x="260" y="753"/>
+      <point x="293" y="713"/>
+      <point x="336" y="713" type="curve" smooth="yes"/>
+      <point x="365" y="713"/>
+      <point x="393" y="726"/>
+      <point x="417" y="741" type="curve"/>
+      <point x="417" y="825" type="line"/>
+      <point x="394" y="806"/>
+      <point x="365" y="784"/>
+      <point x="334" y="784" type="curve" smooth="yes"/>
+      <point x="294" y="784"/>
+      <point x="261" y="824"/>
+      <point x="218" y="824" type="curve" smooth="yes"/>
+      <point x="189" y="824"/>
+      <point x="161" y="811"/>
     </contour>
     <contour>
-      <point x="133" y="571" type="line"/>
-      <point x="253" y="622" type="line"/>
-      <point x="373" y="571" type="line"/>
-      <point x="373" y="648" type="line"/>
-      <point x="253" y="699" type="line"/>
-      <point x="133" y="648" type="line"/>
+      <point x="157" y="571" type="line"/>
+      <point x="277" y="622" type="line"/>
+      <point x="397" y="571" type="line"/>
+      <point x="397" y="648" type="line"/>
+      <point x="277" y="699" type="line"/>
+      <point x="157" y="648" type="line"/>
     </contour>
     <contour>
       <point x="333" y="0" type="line"/>
