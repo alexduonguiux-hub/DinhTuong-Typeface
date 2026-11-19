@@ -25,6 +25,9 @@ B = lcm.LC(W8)
 GL.v = B.v                                    # the horn plate is sized by the lowercase stem
 GL.OV_L = lcm.OV
 ZONE = _ZONE_X = lcm.XH + (GL.ZONE_UC - GL.CAP)        # 578: the caps mark zone moved to the x-height
+# R9r (19/11 'dời đồng bộ các dấu chữ thường cao lên 1 chút, khoảng 30%'): every lowercase top mark, its stack with
+# it, rises by 30 % of the lone mark's gap over the x-height (50): +15. The caps marks are unchanged.
+LC_RAISE = 0.30 * (_ZONE_X - lcm.XH)
 ACUTE_L = MF.ACUTE_L                         # v0.96c: one sắc length everywhere (= caps)
 SY = GL.CAP_SCALE                             # caps offsets, unchanged
 GAPS = GL.MARK_GAPS
@@ -93,11 +96,12 @@ def compose(ch):
     first = 'circumflex' if CIRC in marks else ('breve' if BREVE in marks else None)
     tone = next((TONES[m] for m in marks if m in TONES), None)
     top_h = 0
-    GL._ZONE0 = ZONE                                 # R9h-d: the lone mark line, for a hỏi beside the mũ
+    GL._ZONE0 = ZONE + LC_RAISE                      # R9h-d: the lone mark line, for a hỏi beside the mũ
     if first == 'circumflex':                        # R8k: the mũ (and every tone on it) sits 40 over the letter's ink
         ZONE = ZONE + GL.CIRC_FOOT(bg.ops + h_ops, cx, ZONE, ('L', base, round(cx, 1)))
     elif first == 'breve' and MF.R8W():             # R8w-ă: the trăng's top on the mũ's top line
         ZONE = ZONE + GL.BREVE_FOOT(bg.ops + h_ops, cx, ZONE, ('L', base, round(cx, 1)))
+    ZONE += LC_RAISE                                 # R9r: every lowercase mark (and its stack) a little higher
     if first:
         ops = GL.shift_ops(GL.mark_ops(first, True), cx, ZONE)
         g.ops += ops; g.parts.append((first, ops))

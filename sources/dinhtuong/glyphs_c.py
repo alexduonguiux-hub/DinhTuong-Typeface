@@ -1697,6 +1697,9 @@ def cap_K():
     stem's flare zone) and its bottom cut lies inside the stem; the leg springs from the arm's
     centre line at K_JOIN of the height."""
     W = (529 if CAPW else 556) + gw('multi')
+    # K2 (19/11 'giảm luôn bề ngang chữ K'): K is 0.923 of X wide (median of the seven reference families; it was 0.94
+    # Regular -> 0.97 Bold, widening with the weight)
+    W = min(W, K_X_RATIO * (564 + gw('diag')))
     g = Glyph('K', W, SB_STRAIGHT, SB_DIAG, 0x4B)
     g.add(fstem(0, 0, V, CAP))
     yc, yj = K_CROTCH * CAP, K_JOIN * CAP
@@ -1857,6 +1860,7 @@ DIAG_BOOST = {'regular': {'V': 1.056, 'W': 1.050, 'X': 1.087, 'Y': 1.091, 'A': 1
 # base, as first tried, read too light: this face's crossbar is 0.78 of the stem against the references' 0.83.)
 # D3-c (19/11 'tăng nét xéo vừa chỉnh đậm lên chút nữa'): the designer takes them ~4 % over the reference medians,
 # still lighter than the primary diagonal and in the same order (N over M).
+K_X_RATIO = 0.923      # K2: K / X width (reference median)
 D3_K = {'M': 0.92, 'N': 0.96, 'Karm': 0.97, 'Win': 0.92}
 
 

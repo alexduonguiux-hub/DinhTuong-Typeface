@@ -282,7 +282,44 @@ def _offq(A, B, cy, r, sx):
     return P0, (sx * h1, P0[1]), (P3[0], P3[1] - h2), P3
 
 
+# R9a (19/11, designer's Figma 'Frame 37', 'update dấu ă mới'): the trăng is a U-shaped crescent with LEVEL cuts on its
+# top line and arms that lean in a little (not the half-ellipse strip ending vertical). Measured on the drawing (116.45 x
+# 37 px): bottom 21.5 thick, each arm 28.4 wide at the top line, the inner bowl 15.5 deep; the two edges are one cubic
+# per half, given here as fractions of their own half-width / depth (right half; the left mirrors it).
+BREVE_R9_OUT = ((0.9080, 0.5405), (0.4856, 1.0))       # outer edge: end (1, 0) -> c1 -> c2 -> bottom (0, 1)
+BREVE_R9_IN = ((0.9103, 0.6452), (0.3946, 1.0))        # inner edge: end (1, 0) -> c1 -> c2 -> bottom (0, 1)
+BREVE_R9_K = (116.45, 37.0, 21.5, 28.38)               # drawing: width, height, bottom, arm width at the top
+BREVE_MODE = __import__('os').environ.get('BREVE_MODE', 'r9')
+
+
+def mk_breve_r9():
+    """the drawing at the old box width (280): Regular takes its proportions exactly (height 89, bottom 52, arms 68);
+    the bottom and arms grow with the mark strip T, and the height with the old rule's ratio (max(101, 1.6 T) / 101)
+    so the inner bowl stays open in Bold."""
+    half = 140.0
+    Wd, Hd, Bd, Ad = BREVE_R9_K
+    s = 2 * half / Wd
+    k = _st() / _st_reg()
+    H = Hd * s * max(101, 1.6 * _st()) / 101
+    t, a = Bd * s * k, Ad * s * k
+    hi, di = half - a, H - t
+    (o1, o2), (i1, i2) = BREVE_R9_OUT, BREVE_R9_IN
+    O = lambda X, Y: (X * half, H - Y * H)
+    I = lambda X, Y: (X * hi, H - Y * di)
+    mx = lambda p: (-p[0], p[1])
+    path = [('M', *O(1, 0)), ('C', *O(*o1), *O(*o2), *O(0, 1)), ('C', *mx(O(*o2)), *mx(O(*o1)), *mx(O(1, 0))),
+            ('L', *mx(I(1, 0))), ('C', *mx(I(*i1)), *mx(I(*i2)), *I(0, 1)), ('C', *I(*i2), *I(*i1), *I(1, 0)), ('Z',)]
+    return [('add', path)]
+
+
+def _st_reg():
+    """the Regular mark strip T (the drawing's weight)"""
+    return STRIP_T * 116 * (1 + MARK_LIGHT_K * max(0.0, 1 - 104 / 150))
+
+
 def mk_breve(**_):
+    if BREVE_MODE == 'r9':
+        return mk_breve_r9()
     """trăng v0.96b (27/10 12:41 'độ dày của dấu ă lại cho đều và chuẩn'): ONE steel strip bent on a half-ellipse
     centre line, drawn with the LETTERS' contrast (R2 / type principle 'horizontals lighter than verticals'):
     T where it runs vertical (the arms, = the sắc strip), T*H/V where it runs level (the bottom, like the bottom of
