@@ -47,7 +47,7 @@ AP_S = float(os.environ.get('S_APER', '0.3')) * 93   # 27/10 16:58 designer chos
 # its free values fitted to the drawing at Regular (area mismatch 18% -> 4%): narrower (0.80, was 0.86), spine 1.17 h
 # (was 1.12), each terminal cut at a fixed inset from its own bowl's outer edge (top 27, bottom 30, Regular units, every
 # weight; was 47 / 34 by the R5d arm rule) with a slightly shorter face (0.91 / 0.93 of the R5e face). Strokes unchanged.
-S_FIG = dict(wk=0.80, ti=18, dym=8, smk=1.17, sxk=0.95, syk=1.0, ap=AP_S / 93, cu=27.0, cl=30.0, fu=0.91, fl=0.93, dspk=0.0)
+S_FIG = dict(wk=0.80, ti=18, dym=8, smk=1.17, sxk=0.95, syk=1.0, ap=AP_S / 93, cu=27.0, cl=30.0, fu=0.91, fl=0.93, apb=0.0, dspk=0.0)
 AP_E = 0.5 * 93             # F7c: the e's aperture (tail tip to bar) never under 0.5 h of the Regular (46 u)
 R_W = float(os.environ.get('R_W', '0.70'))   # F7c: r's vertical cut at this fraction of the n's width
 Z_PERP_K = 0.835   # R2d2: z diagonal thickness square to the stroke, in v (Regular's measured value)
@@ -554,16 +554,26 @@ class LF(A.LC):
         if os.environ.get('S_RAY') == '1':
             return self.g_s_ray()
         P = dict(S_FIG, **json.loads(os.environ.get('S_FIG', '{}')))
+        fw = (self.v - self.v_reg) / (round(0.93 * CV.W8['bold']['V']) - self.v_reg)   # 0 Regular .. 1 Bold
+        # F7d-w (19/11 'độ cong và độ dày của glyph' khi bold lên): the R5h arm keeps the stroke to its cut, but the
+        # aperture floor (tip >= ap x 93 over the spine's top LINE) clipped the Medium / Bold tips, so their arms thinned
+        # to the cut (Bold 108 against 128); a longer face instead flattened the arm. The floor eases with the weight
+        # (Regular 0.3 h, unclipped anyway -> Bold 0): the line under-reads the gap, the spine falls away from the tip.
+        ap_k = P['ap'] + (P['apb'] - P['ap']) * fw
         W = P['wk'] * 2 * CX * self.Rr + __import__('r2c').grow('s', self.v - self.v_reg)   # R2c
         # Aperture: F7c / QA 1.6 (openings in REGULAR units): each tip stays >= AP_E (0.5 h Regular = 46) off the
         # spine; when the R5 arc would come closer (Medium, Bold) the reach is kept and the arc steepens (R2b).
         T, ov, sx, sy, sm, ti = XH, OV, P['sxk'] * self.v, P['syk'] * self.h, P['smk'] * self.h, P['ti']
-        ap = P['ap'] * 93
+        ap = ap_k * 93
         G = []
         ym = (T - sm) / 2 + P['dym']
         xr_u = W - ti / 2 - sx
-        ru = None if P['cu'] is None else (W - ti) / 2 - P['cu']    # F7d: the cut stands cu in from the bowl's outer edge
-        rl = None if P['cl'] is None else W / 2 - P['cl']
+        # F7d: Regular's cut stands cu / cl in from its bowl's outer edge. Every weight keeps that REACH (cut to the
+        # letter's axis, R2b), so a heavier s keeps Regular's arm and only grows inward (19/11 'độ cong và độ dày khi
+        # bold lên nhìn lỗi': a fixed inset from the outer edge squeezed the Bold counter and thinned the arm).
+        W0 = P['wk'] * 2 * CX * self.Rr
+        ru = None if P['cu'] is None else (W0 - ti) / 2 - P['cu']
+        rl = None if P['cl'] is None else W0 / 2 - P['cl']
         tu = self.tail(G, W / 2, T + ov - sy, xr_u, sx, 'r', 'up', tip_limit=ym + sm + ap, cry=((T + ov - sy) - (ym + sm)) / 2,
                        ring=((ym + T + ov) / 2, (W - ti) / 2, (T + ov - ym) / 2), reach=ru, face=P['fu'])
         tl = self.tail(G, W / 2, -ov + sy, sx, sx, 'l', 'down', tip_limit=ym - ap, cry=(ym - (-ov + sy)) / 2,
@@ -581,7 +591,6 @@ class LF(A.LC):
         G.append(('hline', ym, 'spine'))
         if os.environ.get('S_SPINE', 'g2') == 'g2':
             # R11b (28/10 22:50 'phần uốn lượn ở giữa chữ s và S chưa mượt'): the same smooth spine as the caps S
-            fw = (self.v - self.v_reg) / (round(0.93 * CV.W8['bold']['V']) - self.v_reg)
             spine, y_up, y_lo = CV.s_spine(W, T, ov, sx, sy, sm, ti, G, k=CV.spine_k(fw) + P['dspk'], dym=P['dym'])
             up.append(('sub', rect(-1, ym - 1, W / 2, y_up)))
             lo.append(('sub', rect(W / 2 - 4, y_lo, W + 1, ym + sm + 1)))   # covers the W/2-3 sliver of the ring top
