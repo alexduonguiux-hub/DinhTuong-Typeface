@@ -4,32 +4,32 @@
   <unicode hex="1EA9"/>
   <outline>
     <contour>
-      <point x="351" y="714" type="line"/>
-      <point x="413" y="714" type="line"/>
-      <point x="422" y="714"/>
-      <point x="429" y="707"/>
-      <point x="429" y="699" type="curve"/>
-      <point x="429" y="690"/>
-      <point x="422" y="683"/>
-      <point x="413" y="683" type="curve"/>
-      <point x="351" y="683" type="line"/>
-      <point x="351" y="630" type="line"/>
-      <point x="413" y="630" type="line"/>
-      <point x="451" y="630"/>
-      <point x="482" y="661"/>
-      <point x="482" y="699" type="curve"/>
-      <point x="482" y="737"/>
-      <point x="451" y="768"/>
-      <point x="413" y="768" type="curve"/>
-      <point x="351" y="768" type="line"/>
+      <point x="351" y="729" type="line"/>
+      <point x="413" y="729" type="line"/>
+      <point x="422" y="729"/>
+      <point x="429" y="722"/>
+      <point x="429" y="714" type="curve"/>
+      <point x="429" y="705"/>
+      <point x="422" y="698"/>
+      <point x="413" y="698" type="curve"/>
+      <point x="351" y="698" type="line"/>
+      <point x="351" y="645" type="line"/>
+      <point x="413" y="645" type="line"/>
+      <point x="451" y="645"/>
+      <point x="482" y="676"/>
+      <point x="482" y="714" type="curve"/>
+      <point x="482" y="752"/>
+      <point x="451" y="783"/>
+      <point x="413" y="783" type="curve"/>
+      <point x="351" y="783" type="line"/>
     </contour>
     <contour>
-      <point x="222" y="602" type="line"/>
-      <point x="342" y="551" type="line"/>
-      <point x="342" y="612" type="line"/>
-      <point x="222" y="663" type="line"/>
-      <point x="102" y="612" type="line"/>
-      <point x="102" y="551" type="line"/>
+      <point x="222" y="617" type="line"/>
+      <point x="342" y="566" type="line"/>
+      <point x="342" y="627" type="line"/>
+      <point x="222" y="678" type="line"/>
+      <point x="102" y="627" type="line"/>
+      <point x="102" y="566" type="line"/>
     </contour>
     <contour>
       <point x="430" y="42"/>

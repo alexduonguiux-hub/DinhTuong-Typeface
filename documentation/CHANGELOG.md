@@ -32,6 +32,13 @@ added; every other glyph is byte-identical to 1.006 (`scripts/patch_release_glyp
   each ligature is the two letters at their natural spacing with the two flared bar ends that meet cut back to the
   plain bar and joined. Kerned as their outer letters; GDEF carets between the two letters. Four new glyphs: t_t f_t
   t_f f_f.
+- **R9a, trăng:** redrawn from the designer's drawing ('update dấu ă mới'): a U-shaped crescent with level cuts on its top
+  line and arms that lean in a little. Same width (280); Regular takes the drawing's proportions (height 89, bottom 52,
+  arms 68 wide at the top), heavier weights grow with the mark strip.
+- **R9r, lowercase marks higher:** every lowercase top mark and its stack stands 15 higher (30 % of the lone mark's
+  gap over the x-height: 'dời đồng bộ các dấu chữ thường cao lên 1 chút, khoảng 30%'). Capitals unchanged.
+- **K2, K narrower:** K is 0.923 of X wide in every weight (the reference median; it was 0.94 Regular, 0.97 Bold).
+- **K1, kerning:** KA WY XA XY XX WX (and their accented forms) open by 15 from the R16c point-contact overlap.
 - **S1f, c Bold:** c's right side came out looser as the weight grew (rsb 30 / 39 / 61); Bold is now 47, the
   designer's choice between Regular's proportion (33, read too tight) and the old 61. Regular and Medium unchanged.
 
