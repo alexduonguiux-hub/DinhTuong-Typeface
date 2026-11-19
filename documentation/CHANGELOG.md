@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.008 (2026-11-19)
+New hỏi from the designer's Figma drawing, heavier diagonals, and c's spacing in Medium / Bold. 77 glyphs change in
+each weight; every other glyph is byte-identical to 1.007 (`scripts/patch_release_glyphs.py`). Kerning is re-made for
+the changed glyphs only.
+- **R9h, hỏi:** one even band bent round a half circle and opening to the left, both arms cut on one vertical line
+  (drawing 'Show-06', Regular: band 53, 131 x 138). The same mark alone and stacked; it sits where the old hỏi's ink
+  sat ('canh giữa như cũ'). On the mũ (Ẩ ẩ …) it stands beside it as drawn: 9 right of the mũ, its centre a little over
+  the mũ's top.
+- **D2, diagonals:** V W X Y A K (and M with W) and v w x y were 0.77-0.86 of the stem measured square to the stroke
+  ('nét xéo chữ X, Y, V, W cảm giác mỏng hơn các chữ khác'); now 0.90 in every weight. Outer widths unchanged.
+- **S1f, c:** c's right side came out looser as the weight grew (c|n 17 looser than e|n in Regular, 45 in Bold: rsb
+  30 / 39 / 61); Medium and Bold now match Regular (rsb 33).
+
 ## 1.007 (2026-11-19)
 s, the Bold S and Q redrawn from the designer's Figma drawings and review. Only these glyphs change (Regular 9, Medium
 15, Bold 15: s ś š ş ș ŝ, Q, §, and in Medium / Bold S Ś Š Ş Ș Ŝ $ too); every other glyph is byte-identical to 1.006
