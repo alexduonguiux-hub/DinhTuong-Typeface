@@ -30,19 +30,22 @@ def apply(g, ops):
     return g
 
 
-def vshape(x0, x1, top, bottom, dw, fb, trap=None):
+def vshape(x0, x1, top, bottom, dw, fb, trap=None, dw_r=None):
     """V with flat vertex. dw = horizontal stroke width, fb = flat bottom width.
-    trap = how much deeper than geometric the inner notch is cut (thins the vertex)."""
+    trap = how much deeper than geometric the inner notch is cut (thins the vertex).
+    dw_r (D3, W): the right stroke's own width (default dw: the symmetric V, unchanged)."""
     c = (x0 + x1) / 2
+    dw_r = dw if dw_r is None else dw_r
     outer = poly([(x0, top), (x1, top), (c + fb / 2, bottom), (c - fb / 2, bottom)])
-    # inner apex where inner edges (parallel, offset dw) meet at x=c
-    run = (c - fb / 2) - x0
-    t = (c - (x0 + dw)) / run
+    # inner apex where the inner edges (parallel to the outer ones, offset dw / dw_r) meet
+    dlx, drx = (c - fb / 2) - x0, (c + fb / 2) - x1
+    t = ((x1 - dw_r) - (x0 + dw)) / (dlx - drx)
+    xi = x0 + dw + t * dlx
     yi = top - t * (top - bottom)
     if trap is None:
         trap = TRAP if (top - bottom) > 600 else TRAP * 0.8
     yi = max(bottom + 0.35 * fb, yi - trap)
-    inner = poly([(x0 + dw, top + 1), (x1 - dw, top + 1), (c, yi)])
+    inner = poly([(x0 + dw, top + 1), (x1 - dw_r, top + 1), (xi, yi)])
     return [('add', outer), ('sub', inner)]
 
 
@@ -1847,7 +1850,7 @@ DIAG_BOOST = {'regular': {'V': 1.056, 'W': 1.050, 'X': 1.087, 'Y': 1.091, 'A': 1
 # Sans, Poppins, Work Sans and FreeSans (Regular + Bold, measured on the medial ridge, cap height 700):
 #   M / H bar 1.00 (0.85-1.16) · N / H bar 1.05 (0.93-1.23) · K arm / H bar 1.05 R, 1.08 B (0.98-1.34)
 #   and so N / V 0.93, M / V 0.88, K arm / K leg 0.94 in those references.
-D3_K = {'M': 1.00, 'N': 1.05, 'Karm': 1.05}
+D3_K = {'M': 1.00, 'N': 1.05, 'Karm': 1.05, 'Win': 1.00}   # Win: W's two inner diagonals, as M ('2 nét xéo trong của W cũng vậy')
 
 
 def dboost(ch):
@@ -1898,8 +1901,10 @@ def cap_W():
     W = 2 * W1 - dw          # D2: the outer width as before; the diagonals thicken inward
     dw *= dboost('W')
     g = Glyph('W', W, SB_DIAG, SB_DIAG, 0x57)
-    g.group(vshape(0, W1, CAP, 0, dw, 128))
-    g.group(vshape(W - W1, W, CAP, 0, dw, 128))
+    # D3: the two inner diagonals carry M's weight (the H's crossbar), the outer two keep D2 (0.90 of the stem)
+    di = D3_K['Win'] * HM * _m.hypot(W1 / 2 - 64, CAP) / CAP
+    g.group(vshape(0, W1, CAP, 0, dw, 128, dw_r=di))
+    g.group(vshape(W - W1, W, CAP, 0, di, 128, dw_r=dw))
     return reg(g)
 
 
