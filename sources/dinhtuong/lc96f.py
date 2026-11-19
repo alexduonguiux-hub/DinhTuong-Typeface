@@ -47,7 +47,7 @@ AP_S = float(os.environ.get('S_APER', '0.3')) * 93   # 27/10 16:58 designer chos
 # its free values fitted to the drawing at Regular (area mismatch 18% -> 4%): narrower (0.80, was 0.86), spine 1.17 h
 # (was 1.12), each terminal cut at a fixed inset from its own bowl's outer edge (top 27, bottom 30, Regular units, every
 # weight; was 47 / 34 by the R5d arm rule) with a slightly shorter face (0.91 / 0.93 of the R5e face). Strokes unchanged.
-S_FIG = dict(wk=0.80, ti=18, dym=8, smk=1.17, sxk=0.95, syk=1.0, ap=AP_S / 93, cu=27.0, cl=30.0, fu=0.91, fl=0.93, apb=0.0, dspk=0.0)
+S_FIG = dict(wk=0.80, ti=18, dym=8, smk=1.17, sxk=0.95, syk=1.0, ap=AP_S / 93, cu=27.0, cl=30.0, cub=15.0, clb=21.0, fu=0.91, fl=0.93, apb=0.0, dspk=0.0)
 AP_E = 0.5 * 93             # F7c: the e's aperture (tail tip to bar) never under 0.5 h of the Regular (46 u)
 R_W = float(os.environ.get('R_W', '0.70'))   # F7c: r's vertical cut at this fraction of the n's width
 Z_PERP_K = 0.835   # R2d2: z diagonal thickness square to the stroke, in v (Regular's measured value)
@@ -571,9 +571,13 @@ class LF(A.LC):
         # F7d: Regular's cut stands cu / cl in from its bowl's outer edge. Every weight keeps that REACH (cut to the
         # letter's axis, R2b), so a heavier s keeps Regular's arm and only grows inward (19/11 'độ cong và độ dày khi
         # bold lên nhìn lỗi': a fixed inset from the outer edge squeezed the Bold counter and thinned the arm).
-        W0 = P['wk'] * 2 * CX * self.Rr
-        ru = None if P['cu'] is None else (W0 - ti) / 2 - P['cu']
-        rl = None if P['cl'] is None else W0 / 2 - P['cl']
+        # F7d-b (19/11 'phần đuôi trên và dưới của S và s bold phải dài ra thêm so với regular nhưng không dài hơn bụng
+        # chữ'): the inset from the terminal's own bowl edge shrinks with the weight (Regular cu / cl -> Bold cub / clb),
+        # never below 0, so a heavier s reaches further round its bowl but never past it.
+        iu = max(0.0, P['cu'] + (P['cub'] - P['cu']) * fw) if P['cu'] is not None else None
+        il = max(0.0, P['cl'] + (P['clb'] - P['cl']) * fw) if P['cl'] is not None else None
+        ru = None if iu is None else (W - ti) / 2 - iu
+        rl = None if il is None else W / 2 - il
         tu = self.tail(G, W / 2, T + ov - sy, xr_u, sx, 'r', 'up', tip_limit=ym + sm + ap, cry=((T + ov - sy) - (ym + sm)) / 2,
                        ring=((ym + T + ov) / 2, (W - ti) / 2, (T + ov - ym) / 2), reach=ru, face=P['fu'])
         tl = self.tail(G, W / 2, -ov + sy, sx, sx, 'l', 'down', tip_limit=ym - ap, cry=(ym - (-ov + sy)) / 2,
