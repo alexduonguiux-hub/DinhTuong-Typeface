@@ -9,7 +9,6 @@ KCLASS_MAP = {'Đ': 'D', 'đ': 'd', 'Ð': 'D', 'Ø': 'O', 'ø': 'o', 'ı': 'i', 
               'Ł': 'L', 'ł': 'l', 'Ħ': 'H', 'ħ': 'h', 'ẞ': 'B', 'ȷ': 'j'}   # GF Latin Core: stroked letters kern as their base (guard checks the strokes)
 KCLASS_L_MAP = {'æ': 'e', 'œ': 'e', 'Æ': 'E', 'Œ': 'E'}   # F14: a ligature's RIGHT side is its last letter's
 MIN_MARK_GAP = 36
-KERN_ADJ = {'KA': 15, 'WY': 15, 'XA': 15, 'XY': 15, 'XX': 15, 'WX': 15}   # K1: designer's openings (units)
 
 
 HORN = '\u031b'
@@ -94,11 +93,6 @@ def run():
                         k[a + b] = kv
                     else:
                         k.pop(a + b, None)
-    # K1 (19/11 'tăng kerning của các cặp KA, WY, XA, XY, XX, WX lên một chút'): two diagonals meeting read too tight;
-    # the designer opens these pairs by KERN_ADJ (accented members follow through the classes and the guard below)
-    for pair, dv in KERN_ADJ.items():
-        if pair in k:
-            k[pair] = min(0, k[pair] + dv)
     # classes: every glyph joins the class of its base letter
     members, membersL = {}, {}
     for ch in G:

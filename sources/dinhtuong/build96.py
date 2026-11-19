@@ -273,6 +273,9 @@ K['exceptions'].update({'67': {'regular': -50, 'medium': -45, 'bold': -40}[W8], 
 # white opens into a V right above the contact. For these the feet / arm tips OVERLAP by R16C_OV (Regular 40, Medium 42,
 # Bold 44) inside the body band; marks of accented forms still keep >= 26 from the other letter. Only ever tightens.
 R16C_OV = {'regular': 40, 'medium': 42, 'bold': 44}[W8]
+# K1 (19/11 'tăng kerning của các cặp KA, WY, XA, XY, XX, WX lên một chút'): these six open by 15 from the R16c overlap
+# (accented forms follow their base pair)
+R16C_OPEN = {'KA': 15, 'WY': 15, 'XA': 15, 'XY': 15, 'XX': 15, 'WX': 15}
 R16C_L, R16C_R = set('AKRVWXY'), set('AVWXY')
 base_of = lambda c: unicodedata.normalize('NFD', c)[0]
 held = {a + b for a in R16C_L for b in R16C_R if a in G and b in G and kv(a, b) > 0}
@@ -288,7 +291,7 @@ for a in letters:
             mg = kern.raw_gap(G[a], G[b], y0, y1, kn)
             if mg < PAIR_MIN:
                 kn = max(kn, kn + PAIR_MIN - mg)
-        kn = int(round(kn))
+        kn = int(round(kn)) + R16C_OPEN.get(base_of(a) + base_of(b), 0)
         if kn < k:
             K['exceptions'][a + b] = kn
             r16c += 1
