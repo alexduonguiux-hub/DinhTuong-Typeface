@@ -241,7 +241,7 @@ if os.environ.get('K3', '1') == '1' and os.path.exists(K3F):
 # ... = 1.49 / 1.30 / 1.42 x HH white, R / M / B) against the seven references' median 1.11-1.17 (Inter, Liberation,
 # Carlito, DejaVu, Poppins, Work Sans, FreeSans): C (and its accented forms, by class) before B D E F H K L M N P R kerns
 # to that median (CI already holds it). Only ever tightens a pair.
-K4_C = {'regular': -35, 'medium': -15, 'bold': -25}[W8]
+K4_C = {'regular': -35, 'medium': -30, 'bold': -25}[W8]   # absolute values (Medium already held -15 from K3)
 for b in 'BDEFHKLMNPR':
     key = cls_of('classesL', 'C') + cls_of('classesR', b)
     if K['pairs'].get(key, 0) > K4_C:
