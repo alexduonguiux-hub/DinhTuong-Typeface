@@ -755,8 +755,9 @@ def BREVE_FOOT(base_ops, cx, zone, key=None):
     """R8w-ă (10/11 sample 'KỀ KÈ Ằ', one red top line): the trăng's top stands where the mũ's top would stand on the
     same letter (sample: both 157-158 over the cap line; trăng foot 51 over A), so a tone on the trăng and a tone on the
     mũ end on ONE line (the tones keep W_GAP over either mark)."""
+    mf = __import__('marks_flat')
     yc = CIRC_FOOT(base_ops, cx, zone, key)
-    return yc + ops_yrange(mark_ops('circumflex', True))[1] - ops_yrange(mark_ops('breve', True))[1]
+    return yc + ops_yrange(mark_ops('circumflex', True))[1] - ops_yrange(mark_ops('breve', True))[1] - mf.BREVE_DROP()
 
 
 ACUTE_R8I_BREVE_DX = 62   # R8i v2: on the trăng the sắc's centre is 62 right of the axis (sample Ắ +62)
@@ -1137,6 +1138,15 @@ def STACK_TOP(first):
 def STACK_SYNC(ops, tone, first_ops, first, zone, centred=None):
     """R8w / R8w-h: the stacked tone at its lowest clear place, then raised to the stack's common top line."""
     mf = __import__('marks_flat')
+    if tone == 'hook' and first == 'circumflex' and mf.HOOK_MODE == 'r11':
+        # R11h-b (designer's revised Ô): the cut stands HOOK11_GAP right of the mũ's right end, the bottom HOOK11_DROP_K x
+        # the hook's height under the mũ's top; positions from the hook's own first point (drawing (14.92, 0.62))
+        sc = mf.hook11_sc()
+        px, py = ops[0][1][0][1], ops[0][1][0][2]
+        cut_x = px - 14.9189 * sc
+        bot_y = py - (mf.HOOK11_H - 0.619223) * sc
+        fx1 = ops_xrange(first_ops)[1]; ftop = ops_yrange(first_ops)[1]
+        return shift_ops(ops, fx1 + mf.HOOK11_GAP * sc - cut_x, ftop - mf.HOOK11_DROP_K * mf.HOOK11_H * sc - bot_y)
     if tone == 'hook' and first == 'circumflex' and mf.HOOK_MODE == 'r10':
         # R10h-b (designer's Ô): the foot stands just right of the mũ's right end, its bottom a little under the mũ's top
         sc = mf.HOOK10_S_K * mf._st() / 27.0
@@ -1161,7 +1171,7 @@ def STACK_SYNC(ops, tone, first_ops, first, zone, centred=None):
     else:
         ops = shift_ops(ops, 0, zone - ops_yrange(ops)[0])            # start on the mark's foot, then lift clear
     ops = CLEAR_UP(ops, first_ops, mf.W_GAP)                      # R8w-ô2: hỏi beside the lower mũ too keeps W_GAP (40 lifted it over the line)
-    target = ops_yrange(first_ops)[1] + STACK_TOP(first)
+    target = ops_yrange(first_ops)[1] + STACK_TOP(first) + (mf.BREVE_DROP() if first == 'breve' else 0.0)   # R9a-b: tones keep their line
     top = ops_yrange(ops)[1]
     return shift_ops(ops, 0, target - top) if top < target else ops
 

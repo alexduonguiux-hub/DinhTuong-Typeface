@@ -28,6 +28,24 @@ ZONE = _ZONE_X = lcm.XH + (GL.ZONE_UC - GL.CAP)        # 578: the caps mark zone
 # R9r (19/11 'dời đồng bộ các dấu chữ thường cao lên 1 chút, khoảng 30%'): every lowercase top mark, its stack with
 # it, rises by 30 % of the lone mark's gap over the x-height (50): +15. The caps marks are unchanged.
 LC_RAISE = 0.30 * (_ZONE_X - lcm.XH)
+def A_AXIS(bg):
+    """R11a (19/11 'dấu ă đang không canh giữa'): a's head (the hood, over 0.6 x-height) stands 22-29 right of the
+    whole letter's centre; the references put the marks A_AXIS_T of the way from the whole letter's ink centre to the
+    head's (median of Inter, Liberation, Carlito, DejaVu, Work Sans, FreeSans; Poppins left out, its a is not double-
+    storey in the same way)"""
+    import booleng
+    pts = []
+    for c in booleng.evaluate(bg.ops):
+        for seg in c:
+            if seg[0] != 'Z':
+                pts += [(seg[i], seg[i + 1]) for i in range(1, len(seg), 2)]
+    xs = [x for x, y in pts]
+    head = [x for x, y in pts if y >= 0.6 * lcm.XH]
+    whole, top = (min(xs) + max(xs)) / 2, (min(head) + max(head)) / 2
+    return whole + A_AXIS_T * (top - whole)
+
+
+A_AXIS_T = 0.89
 YDOT_K = 0.78                                 # R10y: ỵ's nặng centre, fraction of the y's width (reference median)
 ACUTE_L = MF.ACUTE_L                         # v0.96c: one sắc length everywhere (= caps)
 SY = GL.CAP_SCALE                             # caps offsets, unchanged
@@ -83,6 +101,8 @@ def compose(ch):
     g = Glyph('lc_uni%04X' % ord(ch), bg.body, bg.lsb, bg.rsb, ord(ch))
     g.ops = list(bg.ops); g.parts = [('base', list(bg.ops))]
     cx = J_AXIS if base == 'j' else bg.body / 2
+    if base == 'a':
+        cx = A_AXIS(bg)                              # R11a: the marks on a ride over its head, not the whole letter
     # v0.970 (mark QA: ĺ's sắc sat ON the l's ascender): a letter with an ascender carries its marks over the ascender
     ZONE = (lcm.ASC + (_ZONE_X - lcm.XH)) if base in 'bdhkl' else _ZONE_X
     h_ops = []

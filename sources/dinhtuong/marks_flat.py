@@ -312,6 +312,13 @@ def mk_breve_r9():
     return [('add', path)]
 
 
+def BREVE_DROP():
+    """R9a-b (19/11 'dời nó thấp 1 chút'): the new trăng is lower than the old one (max(101, 1.6 T) tall); it drops by
+    the difference so its foot keeps the old trăng's gap over the letter (the tones on it stay where they were)"""
+    old = max(101, 1.6 * _st())
+    return old - BREVE_R9_K[1] * (280.0 / BREVE_R9_K[0]) * old / 101 if BREVE_MODE == 'r9' else 0.0
+
+
 def _st_reg():
     """the Regular mark strip T (the drawing's weight)"""
     return STRIP_T * 116 * (1 + MARK_LIGHT_K * max(0.0, 1 - 104 / 150))
@@ -460,7 +467,7 @@ def mk_tilde(**_):
 # R = s + r, inner r). Measured on the drawing at Regular (cap 700 = 869 px): band s 53.1, inner r 15.7, arms 62.4 from
 # the cut to the ring's centre, mark 131 x 138. Proportions are kept in every weight; s = HOOK_S_K x the mark strip T
 # (Regular T 56.2 -> 53.1). The same mark alone and stacked (the drawing has one size).
-HOOK_MODE = __import__('os').environ.get('HOOK_MODE', 'r10')
+HOOK_MODE = __import__('os').environ.get('HOOK_MODE', 'r11')
 # R10h (19/11, designer's Figma 'Frame 34' over Ô, 'update dấu hỏi'): the hỏi is a ring with a short arm and a foot, as
 # drawn: the arm leaves the ring's top 9.6 deg down to the left and is cut square; the stroke runs round the right side
 # to the bottom and drops into a short foot left of the ring's centre (its top-left corner rounded). The outline is the
@@ -526,7 +533,41 @@ def mk_hook_r9():
                      ('L', xl, cy + r), ('L', xl, cy + R), ('Z',)])]
 
 
+# R11h (19/11, designer's revised drawing over Ô 'Subtract', 'update dấu hỏi mới'): a hook opening to the LEFT: a level
+# arm on top, the ring on the right, and the lower arm running down to the left, both arms cut on ONE vertical line. The
+# outline is the drawing's own (px: the cut at x 0, the box 65.40 x 100.57), scaled so its top arm (28.4 px thick) is
+# HOOK11_S_K x the mark strip T (Regular 53.7 = the drawing at cap 700). Alone it stands where the old hỏi's ink stood
+# (R10h-c); on the mũ its cut stands HOOK11_GAP px right of the mũ, its bottom HOOK11_DROP_K x its height under the mũ's
+# top, as on the drawing's Ô.
+HOOK11_S_K = 0.956
+HOOK11 = [('M', 14.9189, 0.619223), ('C', 41.32, -3.85534, 65.4031, 16.4891, 65.4033, 43.2667),
+          ('C', 65.4033, 60.3193, 55.3847, 75.7809, 39.8203, 82.7481), ('L', 0.0, 100.572), ('L', 0.0, 69.8946),
+          ('L', 28.3799, 57.1915), ('C', 33.8694, 54.7342, 37.4033, 49.2811, 37.4033, 43.2667),
+          ('C', 37.4031, 33.8225, 28.9091, 26.6475, 19.5977, 28.2257), ('L', 0.0, 31.546), ('L', 0.0, 3.14754), ('Z',)]
+HOOK11_W, HOOK11_H = 65.4033, 100.572
+HOOK11_GAP, HOOK11_DROP_K = 19.8, 0.46
+
+
+def hook11_sc():
+    return HOOK11_S_K * _st() / 28.4
+
+
+def mk_hook_r11():
+    sc = hook11_sc()
+    dx = _hook_old_centre() - (HOOK11_W / 2) * sc
+    T = lambda x, y: (x * sc + dx, (HOOK11_H - y) * sc)
+    path = []
+    for seg in HOOK11:
+        if seg[0] == 'Z':
+            path.append(('Z',)); continue
+        pts = [T(seg[i], seg[i + 1]) for i in range(1, len(seg), 2)]
+        path.append((seg[0],) + tuple(v for p_ in pts for v in p_))
+    return [('add', path)]
+
+
 def mk_hook(**_):
+    if HOOK_MODE == 'r11':
+        return mk_hook_r11()
     if HOOK_MODE == 'r10':
         return mk_hook_r10()
     if HOOK_MODE == 'r9':
@@ -537,6 +578,8 @@ def mk_hook(**_):
 
 def mk_hook_stack(**_):
     """hỏi riding on a trăng / mũ: same thickness T, a tighter curl so stacks stay low."""
+    if HOOK_MODE == 'r11':
+        return mk_hook_r11()
     if HOOK_MODE == 'r10':
         return mk_hook_r10()
     if HOOK_MODE == 'r9':
