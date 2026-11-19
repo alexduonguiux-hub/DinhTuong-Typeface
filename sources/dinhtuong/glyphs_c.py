@@ -1696,9 +1696,10 @@ def cap_K():
     W = (529 if CAPW else 556) + gw('multi')
     g = Glyph('K', W, SB_STRAIGHT, SB_DIAG, 0x4B)
     g.add(fstem(0, 0, V, CAP))
-    aw = diag_dx(DIAG_K_ARM, W - V - 60, CAP - 300) * dboost('K')
-    ax0, ax1 = V - aw / 2, W - aw / 2
     yc, yj = K_CROTCH * CAP, K_JOIN * CAP
+    # D3 (19/11): the upper arm, square to the stroke, is the H's crossbar HM (a touch lighter than the leg, 0.90 stem)
+    aw = HM * _m.hypot(W - V, CAP - yc) / (CAP - yc)
+    ax0, ax1 = V - aw / 2, W - aw / 2
     g.group([('add', stroke((ax0, yc), (ax1, CAP), aw)), ('sub', rect(-400, -400, V / 4, CAP + 400))])
     lw = diag_dx(DIAG, W - V - 120, 380) * 0.86 * dboost('K')
     xj = ax0 + (yj - yc) / (CAP - yc) * (ax1 - ax0)
@@ -1728,7 +1729,7 @@ def cap_M():
     # more and the width is solved for the thickness, not taken from the nominal rule.
     fbm = 140 * WKC
     W1, dwW = _w_geom()
-    target = _vshape_mid(0, W1, CAP, 0, dwW * dboost('W'), 128)   # D2: M keeps W's (now heavier) diagonal
+    target = HM          # D3 (19/11): M's diagonals carry the H's crossbar, a touch lighter than W's (0.90 of the stem)
     lo, hi = 0.5 * DIAG, 2.0 * DIAG
     for _ in range(60):
         mid = (lo + hi) / 2
@@ -1742,7 +1743,13 @@ def cap_N():
     W = 540 + gw('straight')
     VN = round(156 * WKC)
     g = Glyph('N', W, SB_STRAIGHT, SB_STRAIGHT, 0x4E)
-    dw = diag_dx(DIAG, W - 190, CAP)
+    # D3 (19/11 'nét xéo của M, N, và nét xéo trên của K sẽ mỏng hơn các nét còn lại một chút ... tương đương nét ngang
+    # của H'): the diagonal, measured square to the stroke, is the H's crossbar HM (it was 0.84-0.88 of the stem)
+    lo, hi = 1.0, W * 0.9
+    for _ in range(60):
+        mid = (lo + hi) / 2
+        lo, hi = (mid, hi) if mid * CAP / _m.hypot(W - mid, CAP) < HM else (lo, mid)
+    dw = (lo + hi) / 2
     g.add(fstem(0, 0, VN, CAP, top=False), fstem(W - VN, 0, W, CAP, bot=False))
     g.add(poly([(0, CAP), (dw, CAP), (W, 0), (W - dw, 0)]))
     return reg(g)
