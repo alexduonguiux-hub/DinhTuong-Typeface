@@ -1130,14 +1130,10 @@ def STACK_SYNC(ops, tone, first_ops, first, zone, centred=None):
     if tone == 'hook' and first == 'circumflex' and mf.HOOK_MODE == 'r9':
         # R9h-b (19/11, designer's Ẩ): the hỏi stands BESIDE the mũ, not over it: its left cut HOOK_GAP_X right of the
         # mũ's right foot, its centre HOOK_UP_K x its own height over the mũ's top (Regular: 9 / 36 on the drawing)
-        # R9h-d (19/11 'Dấu hỏi không bằng nhau kìa'): beside the mũ the hỏi stands on the SAME line as a lone hỏi
-        # (ả = ẩ, Ả = Ẩ), not raised with the mũ
+        # (R9h-d / R9h-e tried the lone hỏi's line, 19/11; the designer then asked again for the drawing: 'Đặt giống như này')
         x0, x1 = ops_xrange(ops); y0, y1 = ops_yrange(ops)
-        fx1 = ops_xrange(first_ops)[1]
-        # R9h-e (19/11 'giờ dấu hỏi dính vào dấu â'): on that lower line it stands level with the mũ's right foot, so
-        # the drawing's 9 is too tight there: it moves right until its ink keeps W_GAP (30) from the mũ
-        ops = shift_ops(ops, fx1 + mf.HOOK_GAP_X - x0, globals().get('_ZONE0', zone) - y0)
-        return CLEAR_RIGHT(ops, first_ops, mf.W_GAP)
+        fx1 = ops_xrange(first_ops)[1]; ftop = ops_yrange(first_ops)[1]
+        return shift_ops(ops, fx1 + mf.HOOK_GAP_X - x0, ftop + mf.HOOK_UP_K * (y1 - y0) - (y0 + y1) / 2)
     if centred is not None:
         mx = sum(ops_xrange(first_ops)) / 2
         ops = shift_ops(centred, mx, zone)
