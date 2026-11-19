@@ -377,7 +377,7 @@ class LF(A.LC):
                 # left extreme (x 0), in every weight
                 GA = []
                 ta = self.tail(GA, cx, cy + ry, cx - r, 0.85 * v, 'l', 'up', tip_limit=max(cy, yb0 + AP_S), cry=ry,
-                               ring=(cy, r + 0.85 * v, ry + h), ext=A_HEAD_K * ta['xt'])
+                               ring=(cy, r + 0.85 * v, ry + h), ext=A_HEAD_K * ta['xt'], keep_face=ta['face'])
             hood = ('group', [('add', ell(cx + 0.075 * v, cy, r + 0.925 * v, ry + h)), ('sub', ell(cx, cy, r, ry))] +
                     CV.arm_ink(ta) + [('sub', rect(cx, -3000, 6000, cy)), ('sub', ta['disk']),
                               ('sub', rect(-3000, -3000, ta['xt'], 6000)), ('sub', rect(-3000, -3000, cx, ta['tip']))])

@@ -432,10 +432,10 @@ class Build:
         return [('add', rrect(x0, y0, x1, y1, R)), ('sub', rrect(x0 + sx, y0 + sy, x1 - sx, y1 - sy, r))]
 
     # R5
-    def tail(self, G, cx, cedge, wall, stroke, side, vdir, tip_limit=None, cry=None, ring=None, face=None, reach=None, ext=0.0):
+    def tail(self, G, cx, cedge, wall, stroke, side, vdir, tip_limit=None, cry=None, ring=None, face=None, reach=None, ext=0.0, keep_face=None):
         """returns dict(xt, cy, rho, tip, disk) and records its guides in G."""
         if TAIL_MODE == 'R5d':
-            return self.tail_d(G, cx, cedge, wall, side, vdir, tip_limit, cry, ring, stroke, face=face, reach=reach, ext=ext)
+            return self.tail_d(G, cx, cedge, wall, side, vdir, tip_limit, cry, ring, stroke, face=face, reach=reach, ext=ext, keep_face=keep_face)
         c, sn = math.cos(math.radians(TAIL_PHI)), math.sin(math.radians(TAIL_PHI))
         inset = (1 - TAIL_KEEP) * stroke * self.k          # R2b: inset from the OUTER edge, regular units
         xt = wall + stroke - inset if side == 'r' else wall - stroke + inset
@@ -467,7 +467,7 @@ class Build:
         return dict(xt=xt, cy=cy, rho=rho, tip=tip, disk=quarter_disk(cx, cy, rho, side, vdir))
 
     # R5d
-    def tail_d(self, G, cx, cedge, wall, side, vdir, tip_limit=None, cry=None, ring=None, stroke=None, face=None, reach=None, ext=0.0):
+    def tail_d(self, G, cx, cedge, wall, side, vdir, tip_limit=None, cry=None, ring=None, stroke=None, face=None, reach=None, ext=0.0, keep_face=None):
         """R5d (27/10 16:18-16:28: designer's sample, 'cong vừa', 'Bold không làm hư đường cong Regular').
         The open quarter of the ring is drawn STRETCHED horizontally: the counter edge = the counter's own cap
         (radii rx, ry) stretched x ARM_LI, the outer edge = the ring's own cap (ring = (centre y, Rx, Ry)) stretched
@@ -570,6 +570,15 @@ class Build:
                 tip = p0_[1] - sy * t_ / max(abs(to_[0]), 0.25)
                 if tip_limit is not None and (tip - tip_limit) * sy < 0:
                     tip = tip_limit                          # clearance wins (reported by QA)
+                    if keep_face and (p0_[1] - tip) * sy < keep_face:
+                        # A1-b (19/11 'bold đuôi a bị vuốt nhọn'): an arm carried further round (ext) whose tip is
+                        # held by the clearance keeps the cut face it had before: the OUTER arm is stretched (flatter)
+                        # so it meets the cut keep_face above the tip
+                        c_ = min(0.999, max(0.05, (tip + sy * keep_face - co_) * sy / Ry_))
+                        A_ = arm_A = dx / math.sqrt(1 - c_ * c_)
+                        th_o = math.asin(min(1.0, dx / A_))
+                        p0_ = (cx + sx * A_ * math.sin(th_o), co_ + sy * Ry_ * math.cos(th_o))
+                        to_ = _unit(sx * A_ * math.cos(th_o), -sy * Ry_ * math.sin(th_o))
                 top0 = ci if (ci - yc) * sy < 0 else yc
                 if (tip - top0) * sy < 0:
                     tip = top0                               # never past the counter's centre line (the disk ends there)
@@ -629,7 +638,8 @@ class Build:
         G.append(('circle', cx, ci, a_i, ry, 'tail'))
         G.append(('vline', xt, 'cut'))
         G.append(('pt', xt, tip, 'tip'))
-        return dict(xt=xt, cy=cy, rho=a_i, tip=tip, disk=disk, add=add)
+        face_ = abs(p0[1] - tip) if ring is not None else None
+        return dict(xt=xt, cy=cy, rho=a_i, tip=tip, disk=disk, add=add, face=face_)
 
     # R9b
     def joint(self, G, xw, ye, stem_side, vdir, stroke, span=None):
