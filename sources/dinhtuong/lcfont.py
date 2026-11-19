@@ -151,7 +151,7 @@ def compose(ch):
         g.ops += ops; g.parts.append((tone, ops))
     if DOTB in marks:
         adv = bg.lsb + bg.body + bg.rsb
-        db = MF.mk_dotbelow(length=min(MF.STRIP_L, adv - 40))
+        db = MF.mk_dotbelow(length=min(GL.DOTB_L(), adv - 40))   # R10d: as long as under Ị
         ops = GL.shift_ops(db, cx, -52 if base != 'y' else lcm.DESC - 40)
         g.ops += ops; g.parts.append(('dotbelow', ops))
     return g

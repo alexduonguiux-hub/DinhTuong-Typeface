@@ -716,6 +716,13 @@ def CLEAR_UP(ops, other_ops, gap):
     return shift_ops(ops, 0, hi)
 
 
+def DOTB_L():
+    """R10d (19/11 'giảm bề ngang dấu nặng cho bằng dấu nặng dưới chữ I'): the nặng is as long as under Ị (the I's
+    advance - 40) on every letter; a narrower letter still shortens it to its own advance - 40"""
+    g = G['I']
+    return min(__import__('marks_flat').STRIP_L, g.lsb + g.body + g.rsb - 40)
+
+
 def CLEAR_RIGHT(ops, other_ops, gap):
     """R9h-e: push ops right (never left) until their ink keeps gap from other_ops."""
     import mark_qa as MQ
@@ -1075,7 +1082,7 @@ def compose(ch, gaps=None):
     if DOTB in marks:
         adv = bg.lsb + bg.body + bg.rsb
         try:
-            db = mk_dotbelow(length=min(__import__('marks_flat').STRIP_L, adv - 40))   # v0.95 QA: Ị
+            db = mk_dotbelow(length=min(DOTB_L(), adv - 40))   # v0.95 QA: Ị; R10d: every nặng as long as Ị's
         except TypeError:
             db = mk_dotbelow()
         ops = shift_ops(db, cx + (gaps['y_dot_dx'] if base == 'y' else 0), -72 if base == 'y' else -52)
