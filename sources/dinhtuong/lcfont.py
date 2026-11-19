@@ -28,6 +28,7 @@ ZONE = _ZONE_X = lcm.XH + (GL.ZONE_UC - GL.CAP)        # 578: the caps mark zone
 # R9r (19/11 'dời đồng bộ các dấu chữ thường cao lên 1 chút, khoảng 30%'): every lowercase top mark, its stack with
 # it, rises by 30 % of the lone mark's gap over the x-height (50): +15. The caps marks are unchanged.
 LC_RAISE = 0.30 * (_ZONE_X - lcm.XH)
+YDOT_K = 0.78                                 # R10y: ỵ's nặng centre, fraction of the y's width (reference median)
 ACUTE_L = MF.ACUTE_L                         # v0.96c: one sắc length everywhere (= caps)
 SY = GL.CAP_SCALE                             # caps offsets, unchanged
 GAPS = GL.MARK_GAPS
@@ -152,7 +153,15 @@ def compose(ch):
     if DOTB in marks:
         adv = bg.lsb + bg.body + bg.rsb
         db = MF.mk_dotbelow(length=min(GL.DOTB_L(), adv - 40))   # R10d: as long as under Ị
-        ops = GL.shift_ops(db, cx, -52 if base != 'y' else lcm.DESC - 40)
+        if base == 'y':
+            # R10y (19/11 'dấu nặng y không bỏ dưới đít đuôi, mà bỏ bên hông như các font khác'): the nặng stands on the
+            # nặng line of every letter, beside the tail: its centre at YDOT_K of the y's width (references: Inter 0.77-0.79,
+            # Liberation 0.79, DejaVu 0.75, Work Sans 0.81, FreeSans 0.78), then right until it keeps W_GAP from the y
+            x0, x1 = GL.ops_xrange(bg.ops)
+            ops = GL.shift_ops(db, x0 + YDOT_K * (x1 - x0), -52)
+            ops = GL.CLEAR_RIGHT(ops, bg.ops, MF.W_GAP)
+        else:
+            ops = GL.shift_ops(db, cx, -52)
         g.ops += ops; g.parts.append(('dotbelow', ops))
     return g
 
