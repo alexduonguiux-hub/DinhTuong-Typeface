@@ -1747,7 +1747,11 @@ def cap_Q():
     # from 0.62 W at y 190 to W - 40 at y -96). Centre line 0.546 W -> 0.773 W (27 deg off vertical), measured on the
     # drawing at Regular (its ring is the O); the bar keeps its weight's width (Regular 122 = the drawing). Its
     # right edge meets the counter directly, so no wedge of counter is left beside it (the 1.004 Q-cut block is gone).
-    g.add(stroke((W * 0.546, 199), (W * 0.773, -50), tw))
+    # Q2b (19/11 'Q Bold đuôi trên của nét móc nên dài lên để không bị bụng che mất'): the tail's top rises with the
+    # ring's bottom stroke (H over Regular's 100), so the part standing in the counter is as tall in every weight.
+    yt = 199 + (H - 100)
+    x0, x1 = W * 0.546, W * 0.773
+    g.add(stroke((x0 - (x1 - x0) * (yt - 199) / 249, yt), (x1, -50), tw))
     return reg(g)
 
 
