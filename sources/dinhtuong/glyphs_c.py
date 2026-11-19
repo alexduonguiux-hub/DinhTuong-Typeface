@@ -1698,7 +1698,7 @@ def cap_K():
     g.add(fstem(0, 0, V, CAP))
     yc, yj = K_CROTCH * CAP, K_JOIN * CAP
     # D3 (19/11): the upper arm, square to the stroke, is the H's crossbar HM (a touch lighter than the leg, 0.90 stem)
-    aw = HM * _m.hypot(W - V, CAP - yc) / (CAP - yc)
+    aw = D3_K['Karm'] * HM * _m.hypot(W - V, CAP - yc) / (CAP - yc)
     ax0, ax1 = V - aw / 2, W - aw / 2
     g.group([('add', stroke((ax0, yc), (ax1, CAP), aw)), ('sub', rect(-400, -400, V / 4, CAP + 400))])
     lw = diag_dx(DIAG, W - V - 120, 380) * 0.86 * dboost('K')
@@ -1729,7 +1729,7 @@ def cap_M():
     # more and the width is solved for the thickness, not taken from the nominal rule.
     fbm = 140 * WKC
     W1, dwW = _w_geom()
-    target = HM          # D3 (19/11): M's diagonals carry the H's crossbar, a touch lighter than W's (0.90 of the stem)
+    target = D3_K['M'] * HM          # D3: M's diagonals carry the H's crossbar (references 1.00)
     lo, hi = 0.5 * DIAG, 2.0 * DIAG
     for _ in range(60):
         mid = (lo + hi) / 2
@@ -1748,7 +1748,7 @@ def cap_N():
     lo, hi = 1.0, W * 0.9
     for _ in range(60):
         mid = (lo + hi) / 2
-        lo, hi = (mid, hi) if mid * CAP / _m.hypot(W - mid, CAP) < HM else (lo, mid)
+        lo, hi = (mid, hi) if mid * CAP / _m.hypot(W - mid, CAP) < D3_K['N'] * HM else (lo, mid)
     dw = (lo + hi) / 2
     g.add(fstem(0, 0, VN, CAP, top=False), fstem(W - VN, 0, W, CAP, bot=False))
     g.add(poly([(0, CAP), (dw, CAP), (W, 0), (W - dw, 0)]))
@@ -1838,6 +1838,16 @@ def cap_U():
 DIAG_BOOST = {'regular': {'V': 1.056, 'W': 1.050, 'X': 1.087, 'Y': 1.091, 'A': 1.078, 'K': 1.070},
               'medium':  {'V': 1.050, 'W': 1.048, 'X': 1.065, 'Y': 1.070, 'A': 1.061, 'K': 1.066},
               'bold':    {'V': 1.050, 'W': 1.048, 'X': 1.043, 'Y': 1.053, 'A': 1.073, 'K': 1.071}}   # A K: 19/11 'nâng A K luôn'
+
+
+# D3 rule (19/11 'nét xéo của M, N, và nét xéo trên của K sẽ mỏng hơn các nét còn lại một chút ... tương đương nét ngang
+# của H', then 'nghiên cứu các font khác ... viết thành rule'): a diagonal bounded by two stems (N, M) and K's upper arm
+# (which runs into the stem) is lighter than a diagonal that carries the letter alone (V A X Y, K's leg: D2, 0.90 of the
+# stem), and is set from the H's crossbar HM, square to the stroke. Medians over Inter, Liberation Sans, Carlito, DejaVu
+# Sans, Poppins, Work Sans and FreeSans (Regular + Bold, measured on the medial ridge, cap height 700):
+#   M / H bar 1.00 (0.85-1.16) · N / H bar 1.05 (0.93-1.23) · K arm / H bar 1.05 R, 1.08 B (0.98-1.34)
+#   and so N / V 0.93, M / V 0.88, K arm / K leg 0.94 in those references.
+D3_K = {'M': 1.00, 'N': 1.05, 'Karm': 1.05}
 
 
 def dboost(ch):
