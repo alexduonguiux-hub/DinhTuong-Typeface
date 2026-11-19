@@ -38,6 +38,7 @@ SPUR_D = 46                # F5b: where a bowl meets its stem: 46 u (0.5 h of th
 SPUR = 0.12                # bowl stem stands this much (x v) outside the ring
 CUT = 0.45                 # F7
 CUT_S = 0.72               # P2: s terminals a touch nearer the centre than c (0.45), so its apertures stay open
+S_UP_DX = {'regular': 0.0, 'medium': 0.0, 'bold': 0.0}   # F7t: top terminal of s moved outward
 M_JT2 = {'regular': 0.82, 'medium': 0.86, 'bold': 0.90}   # F10m: the m's second arch keeps this share of the F10c thinning
 JT = 0.25                  # F10 (02:51 'điểm giao'): at every joint the counter runs JT x v further into the
                            # stem, so the round stroke THINS into the joint instead of piling ink there
@@ -555,8 +556,17 @@ class LF(A.LC):
         G = []
         ym = (T - sm) / 2 + 8
         xr_u = W - ti / 2 - sx
-        tu = self.tail(G, W / 2, T + ov - sy, xr_u, sx, 'r', 'up', tip_limit=ym + sm + AP_S, cry=((T + ov - sy) - (ym + sm)) / 2,
-                       ring=((ym + T + ov) / 2, (W - ti) / 2, (T + ov - ym) / 2))
+        kw_u = dict(tip_limit=ym + sm + AP_S, cry=((T + ov - sy) - (ym + sm)) / 2,
+                    ring=((ym + T + ov) / 2, (W - ti) / 2, (T + ov - ym) / 2))
+        n_g = len(G)
+        tu = self.tail(G, W / 2, T + ov - sy, xr_u, sx, 'r', 'up', **kw_u)
+        # F7t (19/11 'phần thụt đuôi trên của s hơi thụt nhiều so với dưới làm cảm giác chữ bị ngã ra sau'): the top
+        # terminal stood 65 / 59 / 56 in from the glyph's right edge against 43 / 38 / 34 for the bottom one; its
+        # cut moves S_UP_DX outward (same face rule, R5e reach) so the two insets nearly match.
+        d_up = float(os.environ.get('S_UP_DX', S_UP_DX.get(self.w, 0.0)))
+        if d_up:
+            del G[n_g:]
+            tu = self.tail(G, W / 2, T + ov - sy, xr_u, sx, 'r', 'up', reach=tu['xt'] - W / 2 + d_up, **kw_u)
         tl = self.tail(G, W / 2, -ov + sy, sx, sx, 'l', 'down', tip_limit=ym - AP_S, cry=(ym - (-ov + sy)) / 2,
                        ring=((-ov + ym + sm) / 2, W / 2, (ym + sm + ov) / 2))
         up = [('add', CV.ebox(ti / 2, ym, W - ti / 2, T + ov)),
