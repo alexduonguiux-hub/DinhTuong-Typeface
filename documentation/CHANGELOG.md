@@ -1,9 +1,12 @@
 # Changelog
 
 ## 1.008 (2026-11-20)
-d, b, p, q and g follow the designer's d (Figma 'Frame 35', 602:230). Only these glyphs (and the letters built from them:
-ď đ ₫ ğ ĝ ġ ģ þ, and ß, whose right side is b's) change; every other glyph is byte-identical to 1.007
+d, b, p, q and g follow the designer's d (Figma 'Frame 35', 602:230), and Q's tail leans further. Only these glyphs (and the
+letters built from them: ď đ ₫ ğ ĝ ġ ģ þ, and ß, whose right side is b's) change; every other glyph is byte-identical to 1.007
 (`scripts/patch_release_glyphs.py`).
+- **Q2d, Q's tail:** leans 35 deg off vertical (was 27-29; 'nét nghiêng trong Q cho nghiêng thêm'), turned about the
+  point where it enters the counter, so the part inside the counter keeps its place; square to the stroke it keeps Q2c's
+  thickness (103 / 125 / 149).
 - **F5d, bowl joints:** the bowl's outer curve meets the stem 63 u inside the x-height and the baseline (was 46): its
   far side, the far stroke and the counter stay where they were, only the side toward the stem is drawn in (one upright
   ellipse through the far extreme and the two joints; Regular 467 wide, was 479). The counter is unchanged, a whole

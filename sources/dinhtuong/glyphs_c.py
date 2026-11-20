@@ -229,6 +229,7 @@ def cap_P():
     return reg(g)
 
 
+Q_ANG = 35.0       # Q2d: the tail's lean off vertical, degrees
 Q_THIN = {'regular': 0.945, 'medium': 0.947, 'bold': 0.949}
 
 
@@ -1829,7 +1830,17 @@ def cap_Q():
     # stem (Regular 109), over X's diagonals (106) and K's leg (100); it takes their mean (Regular 103 / Medium 126 /
     # Bold 148), the centre line unchanged (factors from the measured outlines)
     tw *= Q_THIN.get(__import__('os').environ.get('A2_WEIGHT', 'bold'), 1.0)
-    g.add(stroke((x0 - (x1 - x0) * (yt - 199) / 249, yt), (x1, -50), tw))
+    # Q2d (20/11 'nét nghiêng trong Q cho nghiêng thêm'): the tail leans Q_ANG off vertical (was 27-29), turned about the
+    # point where its centre line enters the counter (the ring's inner bottom, y = H), so the part standing in the
+    # counter keeps its place and its clearance from the counter's left side; its horizontal width grows by
+    # cos(old) / cos(new) so the stroke keeps Q2c's thickness square to it
+    import math as _m
+    a0 = _m.atan((x1 - x0) / 249)
+    yp = H
+    xp = x0 + (x1 - x0) * (199 - yp) / 249
+    ta = _m.tan(_m.radians(Q_ANG))
+    tw *= _m.cos(a0) / _m.cos(_m.radians(Q_ANG))
+    g.add(stroke((xp - (yt - yp) * ta, yt), (xp + (yp + 50) * ta, -50), tw))
     return reg(g)
 
 

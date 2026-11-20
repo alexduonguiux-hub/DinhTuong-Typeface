@@ -15896,12 +15896,11 @@ feature kern {
     pos Q slash 30;
     pos Q three 15;
     pos Q question -20;
-    pos [Q] @kR_A -65;
+    pos [Q] @kR_A -45;
     pos [Q] @kR_C -20;
     pos [Q] @kR_G -20;
     pos [Q] @kR_I -25;
     pos [Q] @kR_J -45;
-    pos [Q] @kR_N -20;
     pos [Q] @kR_O -20;
     pos Q Q -20;
     pos [Q] @kR_S -25;
@@ -15909,10 +15908,9 @@ feature kern {
     pos [Q] @kR_U -30;
     pos Q V -65;
     pos [Q] @kR_W -60;
-    pos Q X -65;
+    pos Q X -45;
     pos [Q] @kR_Y -75;
     pos [Q] @kR_Z -50;
-    pos Q bracketright -35;
     pos Q quoteright 20;
     pos Q quotedblright 20;
     pos @kL_R [exclam] -20;

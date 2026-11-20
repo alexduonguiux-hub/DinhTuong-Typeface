@@ -14634,7 +14634,7 @@ feature kern {
     pos Q X -55;
     pos [Q] @kR_Y -65;
     pos [Q] @kR_Z -40;
-    pos Q bracketright -40;
+    pos Q bracketright -25;
     pos @kL_R [parenright] -20;
     pos @kL_R @kR_B -20;
     pos @kL_R @kR_C -35;
