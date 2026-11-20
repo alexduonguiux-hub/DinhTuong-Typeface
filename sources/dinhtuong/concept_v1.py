@@ -26,7 +26,10 @@ Usage: python3 concept_v1.py  -> out/concept_v1/{proof_<w>.png, guides_<w>.png, 
 """
 import math, os, json, sys
 
-C_APER_CAP = 0.20 * 700   # W1-o: the capital C's aperture between its tips
+D7_REG_V = 116.0   # D7-b: 1.007's Regular caps stem
+# D7-b: the share of the arm's growth C G c e keep: Bold's as 1.007's (its growth over 1.007's Regular 116 against over
+# 1.008's Regular 98), the same share in every weight so Regular is untouched and the weights step evenly
+D7_F = (1 - D7_REG_V / 157.0) / (1 - 98.0 / 157.0)
 W8 = {'bold':    dict(V=157, H=131, HM=116, v=140, h=116, FL=9, fl=8),
       'medium':  dict(V=118, H=100, HM=89,  v=105, h=88,  FL=8, fl=7),
       'regular': dict(V=98,  H=84,  HM=76,  v=88,  h=74,  FL=7, fl=6)}
@@ -434,10 +437,10 @@ class Build:
         return [('add', rrect(x0, y0, x1, y1, R)), ('sub', rrect(x0 + sx, y0 + sy, x1 - sx, y1 - sy, r))]
 
     # R5
-    def tail(self, G, cx, cedge, wall, stroke, side, vdir, tip_limit=None, cry=None, ring=None, face=None, reach=None, ext=0.0, keep_face=None):
+    def tail(self, G, cx, cedge, wall, stroke, side, vdir, tip_limit=None, cry=None, ring=None, face=None, reach=None, ext=0.0, keep_face=None, floor=True):
         """returns dict(xt, cy, rho, tip, disk) and records its guides in G."""
         if TAIL_MODE == 'R5d':
-            return self.tail_d(G, cx, cedge, wall, side, vdir, tip_limit, cry, ring, stroke, face=face, reach=reach, ext=ext, keep_face=keep_face)
+            return self.tail_d(G, cx, cedge, wall, side, vdir, tip_limit, cry, ring, stroke, face=face, reach=reach, ext=ext, keep_face=keep_face, floor=floor)
         c, sn = math.cos(math.radians(TAIL_PHI)), math.sin(math.radians(TAIL_PHI))
         inset = (1 - TAIL_KEEP) * stroke * self.k          # R2b: inset from the OUTER edge, regular units
         xt = wall + stroke - inset if side == 'r' else wall - stroke + inset
@@ -469,7 +472,7 @@ class Build:
         return dict(xt=xt, cy=cy, rho=rho, tip=tip, disk=quarter_disk(cx, cy, rho, side, vdir))
 
     # R5d
-    def tail_d(self, G, cx, cedge, wall, side, vdir, tip_limit=None, cry=None, ring=None, stroke=None, face=None, reach=None, ext=0.0, keep_face=None):
+    def tail_d(self, G, cx, cedge, wall, side, vdir, tip_limit=None, cry=None, ring=None, stroke=None, face=None, reach=None, ext=0.0, keep_face=None, floor=True):
         """R5d (27/10 16:18-16:28: designer's sample, 'cong vừa', 'Bold không làm hư đường cong Regular').
         The open quarter of the ring is drawn STRETCHED horizontally: the counter edge = the counter's own cap
         (radii rx, ry) stretched x ARM_LI, the outer edge = the ring's own cap (ring = (centre y, Rx, Ry)) stretched
@@ -483,6 +486,10 @@ class Build:
         # top sits on this weight's counter (the extra weight is added parallel to it): same cut, same reach,
         # same angle at the cut in every weight; the heavier weight's face is simply thicker.
         dv = (stroke or 0) * (1 - self.k)                  # how much the side stroke grew over Regular
+        if not floor:
+            # D7-b: C G c e keep D7_F of that growth, so Bold's arm stands on its counter as 1.007's did (the lighter
+            # 1.008 Regular's bigger counter ran Bold's arms round until C closed)
+            dv = (stroke or 0) * (1 - self.k) * D7_F
         rx = abs(wall - cx) + dv                           # REGULAR's counter radii
         ry = (rx if cry is None else cry + dv * W8['regular']['H'] / W8['regular']['V'])
         ci = cedge - sy * ry
@@ -493,7 +500,10 @@ class Build:
         # 27/10 16:49 ('chữ s thường vẫn bị ngắn đuôi khi bold lên'), R2b strictly: the REACH (cut to axis) is
         # measured in Regular and is a floor in every heavier weight. The cut never slides back; when a clearance
         # limit applies, the same stretched-cap curve is stretched further (flatter, blunter tip) to keep the reach.
-        if self.w != 'regular':
+        # D7-b (20/11 'lỗi quá thì giữ như v1.007 rồi điều chỉnh weight lại theo chuẩn v1.008'): C G c e take no reach
+        # floor (floor=False): each weight's arm is Regular's curve on its own counter, as 1.007 drew them; the
+        # floor ran the lighter family's Bold arms 30 u further round and closed C (76 against 1.007's 150)
+        if self.w != 'regular' and floor:
             # W1-b (20/11 'S bold lại bị lỗi'): the floor is Regular's reach taken on THIS weight's counter (scaled by
             # its counter / Regular's), not in plain units - with the lighter Regular (V 98) the Bold counter is much
             # smaller than Regular's and the unscaled floor ran the S's arms out past the bowls
@@ -914,23 +924,8 @@ class Build:
     def g_C(self):
         G, W, V, H = [], 2 * self.R_O, self.V, self.H
         R = W / 2
-        # W1-o (20/11 'Các chữ C, khi bold lên thì dời nó dãn 2 đầu này ra theo hướng mũi tên để không bị dính lại'):
-        # the tips keep C_APER_CAP apart (Bold had closed to 76; 1.007 Bold 150) by moving each cut back along its own
-        # arm (a shorter reach, as c's W1-m), so the face keeps the stroke's thickness; Regular and Medium are wider
-        cyc = CAP / 2
-
-        def _open(vdir, sy, cedge, ring):
-            ext = 0.0
-            for _ in range(80):
-                Gt = []
-                t = self.tail(Gt, W / 2, cedge, W - V, V, 'r', vdir, ring=ring, ext=ext)
-                if (t['tip'] - (cyc + sy * C_APER_CAP / 2)) * sy >= -0.5:
-                    break
-                ext -= 3.0
-            G.extend(Gt)
-            return t
-        tu = _open('up', 1, CAP + OV_C - H, (CAP + OV_C - R, R, R))
-        tl = _open('down', -1, -OV_C + H, (-OV_C + R, R, R))
+        tu = self.tail(G, W / 2, CAP + OV_C - H, W - V, V, 'r', 'up', ring=(CAP + OV_C - R, R, R), floor=False)
+        tl = self.tail(G, W / 2, -OV_C + H, W - V, V, 'r', 'down', ring=(-OV_C + R, R, R), floor=False)
         ops = self.ring(0, -OV_C, W, CAP + OV_C, V, H) + arm_ink(tu) + arm_ink(tl) + band(tu['disk'], y0=tl['tip']) + \
             band(tl['disk'], y1=tu['tip']) + [('sub', rect(tu['xt'], -OV_C - 1, W + 1, CAP + OV_C + 1)),
                                                ('sub', rect(W / 2, tl['cy'] - 1, tu['xt'] + 1, tu['cy'] + 1))]   # R5d: the aperture between the arms

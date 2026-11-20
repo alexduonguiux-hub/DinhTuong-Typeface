@@ -2605,9 +2605,6 @@ G_FLUSH_IN = float(__import__('os').environ.get('G_FLUSH_IN', '0'))             
                                                         # 'B': the lower right moves IN to the arm's cut (quarter oval + post)
 
 
-G_APER = 0.20 * 700
-
-
 def cap_G():
     W = RING_O + gw('round')
     g = Glyph('G', W, SB_ROUND, SB_ROUND, 0x47)
@@ -2616,20 +2613,7 @@ def cap_G():
     kw = {}
     if G_FLUSH == 'A':
         kw = dict(reach=(W - G_FLUSH_IN) - W / 2)
-    # W1-o (20/11 'cho cả G nhé'; 'G bold lên bị mất shape thành cung tròn'): the arm's tip keeps G_APER over the bar,
-    # the cut moving back along the arm (shorter reach, as C), never far enough to re-join the arm to the round
-    # elsewhere (that turned the Bold arm into a plain arc)
-    ap = float(__import__('os').environ.get('G_APER', G_APER))
-    # the stretch below (R12b-D) is solved on the UNSHORTENED cut (xt0), so opening the aperture never widens the
-    # round (solving it on the shortened cut widened Bold's round again and again until its arm was a plain arc);
-    # the cut-back is then solved on the stretched round itself
-    tu0 = tail(W / 2, CAP + OV_C - H, W - V, V, 'r', 'up', tip_limit=yb + HM + 0.5 * H, ring=(CAP + OV_C - W / 2, W / 2, W / 2), **kw)
-    tu, ext = tu0, 0.0
-    for _ in range(80):
-        if tu['tip'] >= yb + HM + ap - 0.5 or 'reach' in kw:
-            break
-        ext -= 3.0
-        tu = tail(W / 2, CAP + OV_C - H, W - V, V, 'r', 'up', tip_limit=yb + HM + 0.5 * H, ring=(CAP + OV_C - W / 2, W / 2, W / 2), ext=ext, **kw)
+    tu = tail(W / 2, CAP + OV_C - H, W - V, V, 'r', 'up', tip_limit=yb + HM + 0.5 * H, ring=(CAP + OV_C - W / 2, W / 2, W / 2), floor=False, **kw)   # D7-b
     if tu.get('add'):
         g.add(tu['add'])                                  # R5d: the stretched arm
     # v0.962 (R5b): the tail's compass disk only cuts ABOVE the bar — with a flatter arc its centre falls below
@@ -2654,16 +2638,16 @@ def cap_G():
         # 28/10 15:33 (back to D): the stretch is SOLVED (a few passes) so the cut lands exactly on the unstretched
         # round's right edge W in every weight — one pass left it 10 past W in Regular and short of W in Medium / Bold
         # (Medium narrower than Regular). Bar = HM like E F H ('vẫn cân bằng độ dày nét ngang').
-        d = W - tu0['xt']
+        d = W - tu['xt']
         cap_G._inner = True
         try:
             save = globals()['RING_O']
             for _ in range(6):
                 globals()['RING_O'] = save + d
                 g2 = cap_G()
-                if abs(g2._xt0 - W) < 0.5:
+                if abs(g2.body - W) < 0.5:
                     break
-                d += W - g2._xt0
+                d += W - g2.body
         finally:
             globals()['RING_O'] = save; cap_G._inner = False
         return g2
@@ -2671,14 +2655,13 @@ def cap_G():
         # R12b-C (28/10 13:46, designer's Bold sample): ONE vertical cut for the whole right side. The lower bowl is the
         # ring's own round cut at the arm's cut x (like C's lower terminal); a post one stem V wide joins the bar to
         # the lower round. Corner where the round meets the cut, as on C.
-        xt = tu0['xt']                                                    # W1-o: the lower right keeps the UNSHORTENED cut (G's width unchanged); only the arm above moves back
+        xt = tu['xt']
         g.sub(rect(xt, -OV_C - 2, W + 2, yb + HM))
         ri = (W - 2 * V) / 2; ci = -OV_C + H + ri                       # the counter's lower corner (circle, radius ri)
         dx = min(ri, abs((xt - V) - W / 2))
         y_in = ci - (ri * ri - dx * dx) ** 0.5
         g.add(rect(xt - V, y_in - 6, xt, yb + HM))
         g.body = xt
-    g._xt0 = tu0['xt']
     return reg(g)
 
 

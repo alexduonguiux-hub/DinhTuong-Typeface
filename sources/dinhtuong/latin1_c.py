@@ -454,7 +454,11 @@ def _circled(ch, inner_ops):
 
 
 def S_copy_reg():
-    _circled('©', [('group', scaled('C', 0.56))])
+    # D7-b (QA): © scales C's FINISHED outline (one contour), not its construction - re-running the boolean at 0.56
+    # split Medium's arm differently from Regular / Bold (a kink in the variable font)
+    import booleng
+    c_out = [('add', p) for p in booleng.evaluate(G['C'].ops)]
+    _circled('©', [('group', tf_ops(c_out, lambda x, y: (x * 0.56, y * 0.56)))])
     _circled('®', [('group', scaled('R', 0.56))])
 
 

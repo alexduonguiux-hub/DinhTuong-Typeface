@@ -621,13 +621,10 @@ class LF(A.LC):
             # nhọn khi bold lên'): the two tips keep C_APER apart by moving each CUT back along the same arm (a shorter
             # reach, ext < 0), never by holding the tip and flattening the arm into a wedge
             def _tail_open(vdir, sy):
-                ext = 0.0
-                for _ in range(60):
-                    Gt = []
-                    t = self.tail(Gt, Rx, cy + sy * ryi, 2 * Rx - self.ts, self.ts, 'r', vdir, cry=ryi, ring=(cy, Rx, R), ext=ext)
-                    if (t['tip'] - (cy + sy * C_APER / 2)) * sy >= -0.5:
-                        return t, Gt
-                    ext -= 3.0
+                # D7-b ('giữ như v1.007 rồi điều chỉnh weight lại theo chuẩn v1.008'): 1.007's tail on this weight's ring:
+                # Regular's arm curve on its own counter, no reach floor and no aperture cut-back (W1-m withdrawn)
+                Gt = []
+                t = self.tail(Gt, Rx, cy + sy * ryi, 2 * Rx - self.ts, self.ts, 'r', vdir, cry=ryi, ring=(cy, Rx, R), floor=False)
                 return t, Gt
             tu, Gu = _tail_open('up', 1)
             tl, Gl = _tail_open('down', -1)
