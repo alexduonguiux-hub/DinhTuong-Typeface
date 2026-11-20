@@ -2,7 +2,7 @@
 
 ## 1.008 (2026-11-20)
 d, b, p, q and g follow the designer's d (Figma 'Frame 35', 602:230). Only these glyphs (and the letters built from them:
-ď đ ǥ ğ ĝ ġ ģ þ, and ß, whose right side is b's) change; every other glyph is byte-identical to 1.007
+ď đ ₫ ğ ĝ ġ ģ þ, and ß, whose right side is b's) change; every other glyph is byte-identical to 1.007
 (`scripts/patch_release_glyphs.py`).
 - **F5d, bowl joints:** the bowl's outer curve meets the stem 63 u inside the x-height and the baseline (was 46): its
   far side, the far stroke and the counter stay where they were, only the side toward the stem is drawn in (one upright
