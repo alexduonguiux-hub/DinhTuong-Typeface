@@ -38,6 +38,7 @@ XH, ASC, DESC = A.XH, A.ASC, A.DESC
 OV = 12
 TA = 1.00                  # P1: an arch's leg weighs what a stem weighs
 TS = 1.00                  # P1: a ring's vertical sides weigh what a stem weighs; tops/bottoms = h (caps contrast)
+BOWL_D, BOWL_FL = 63.0, 0.71   # F5d (20/11, drawing 602:230): bowl joint depth; the short flare under it
 SPUR_D = 46                # F5b: where a bowl meets its stem: 46 u (0.5 h of the Regular) under the x-height
 SPUR = 0.12                # bowl stem stands this much (x v) outside the ring
 CUT = 0.45                 # F7
@@ -317,16 +318,70 @@ class LF(A.LC):
         if side == 'r':
             cx = Rx
             xr = cx + dx + v                         # F5b: the stem stands where the bowl meets it SPUR_D under the x-height
-            stem = self.stem(xr - v, y0, y1, top=top, bot=bot)
+            x_in = xr - v
             W = xr
         else:
             cx = Rx
             xl = cx - dx - v
-            stem = self.stem(xl, y0, y1, top=top, bot=bot)
+            x_in = xl + v
             W = 2 * Rx
-        counter = self.bowl_counter(side, cx, cy, Rx, R, xr - v if side == 'r' else xl + v)
+        if BOWL_D:
+            # F5d: the stem's end at the bowl's level (top=False / bot=False) is the one the bowl meets
+            y_b = 'top' if not top else ('bot' if not bot else None)
+            outer = self.bowl_outer(side, cx, cy, Rx, R, x_in)
+            stem = self.bowl_stem(side, x_in, y0, y1, y_b)
+            ops = [('group', [outer, stem, self.bowl_counter(side, cx, cy, Rx, R, x_in)])]
+            return ops, W, cx, cy
+        stem = self.stem(xr - v if side == 'r' else xl, y0, y1, top=top, bot=bot)
+        counter = self.bowl_counter(side, cx, cy, Rx, R, x_in)
         ops = [('group', [ring[0], stem, counter])]
         return ops, W, cx, cy
+
+    def bowl_outer(self, side, cx, cy, Rx, R, x_in):
+        """F5d (20/11, designer's d 'Frame 35' 602:230, 'update glyph của các chữ d, b, p, q', and g): the bowl's outer
+        curve meets the stem's inner edge BOWL_D inside the x-height and the baseline (drawing 63 u, was SPUR_D 46): its
+        far side stays where it was (the far stroke and the counter unchanged), only the side toward the stem is drawn
+        in - one upright ellipse through the far extreme and the two joints."""
+        y = (XH - BOWL_D) - cy
+        s = math.sqrt(max(0.0, 1 - (y / R) ** 2))
+        if side == 'r':
+            x_far = cx - Rx
+            rx = (x_in - x_far) / (1 + s)
+            return ('add', ell(x_far + rx, cy, rx, R))
+        x_far = cx + Rx
+        rx = (x_far - x_in) / (1 + s)
+        return ('add', ell(x_far - rx, cy, rx, R))
+
+    def bowl_stem(self, side, x0_in, y0, y1, y_b, other=True):
+        """F5d: the stem; its free end flares on both sides (R4). At the bowl's level the far side flares as every free
+        end does, and the side toward the bowl flares too, the same amount over a short run that ends under the joint
+        (BOWL_FL x BOWL_D: drawing 45 of 63) - the foot of d stands on both sides, as drawn."""
+        import flare_spec as _FS
+        v = self.v
+        x0 = x0_in if side == 'r' else x0_in - v
+        x1 = x0 + v
+        bowl_left = side == 'r'                      # the bowl is on the stem's left
+        tl = tr = bl = br = True
+        if not other:                                # the other end joins something (g's descender): no flare there
+            if y_b == 'top':
+                bl = br = False
+            else:
+                tl = tr = False
+        if y_b == 'bot':
+            bl, br = (not bowl_left), bowl_left
+        elif y_b == 'top':
+            tl, tr = (not bowl_left), bowl_left
+        st = fstem2(x0, y0, x1, y1, self.fl, tl=tl, tr=tr, bl=bl, br=br)
+        if y_b is None:
+            return ('add', st)
+        f = _FS.amt(self.fl); Ls = BOWL_FL * BOWL_D
+        xe = x0 if bowl_left else x1                 # the stem's edge on the bowl's side
+        sx = -1 if bowl_left else 1                  # outward, toward the bowl
+        ye, sy = (y0, 1) if y_b == 'bot' else (y1, -1)
+        w = v / 2
+        fl = [('M', xe + sx * f, ye), ('L', xe - sx * w, ye), ('L', xe - sx * w, ye + sy * Ls), ('L', xe, ye + sy * Ls),
+              ('C', xe, ye + sy * Ls * 0.7, xe + sx * f * 0.15, ye + sy * Ls * 0.35, xe + sx * f, ye), ('Z',)]
+        return ('group', [('add', st), ('add', fl)])
 
     def spur_dx(self):
         """F5b (12:26 'khu vực cắt giao chưa rõ ràng' at Medium/Bold): the bowl's outer curve meets the stem's inner
@@ -482,8 +537,12 @@ class LF(A.LC):
                        ([('sub', rect(-3000, -3000, 0.30 * Rx, 3000))] if os.environ.get('G_CUT', 'old') == 'old' else []))]
                 G = [(g[0], g[1], g[2] + dy) + tuple(g[3:]) if g[0] == 'pt' else g for g in GR]   # inner points moved with the inner edge
         counter = self.bowl_counter('r', Rx, cy, Rx, R, xr - v)       # F10d
-        st = self.stem(xr - v, yj - 1, XH, top=False, bot=False)
-        ops = [('group', [ring[0], st, counter])] + hk
+        if BOWL_D:                                   # F5d: the bowl and the stem's top as d's (20/11, 'à chữ g nữa')
+            st = self.bowl_stem('r', xr - v, yj - 1, XH, 'top', other=False)
+            ops = [('group', [self.bowl_outer('r', Rx, cy, Rx, R, xr - v), st, counter])] + hk
+        else:
+            st = self.stem(xr - v, yj - 1, XH, top=False, bot=False)
+            ops = [('group', [ring[0], st, counter])] + hk
         return self.G('g', xr, 36, 52, ops, locals().get('G', []))
 
     def g_j(self):

@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.008 (2026-11-20)
+d, b, p, q and g follow the designer's d (Figma 'Frame 35', 602:230). Only these glyphs (and the letters built from them:
+ď đ ǥ ğ ĝ ġ ģ þ, and ß, whose right side is b's) change; every other glyph is byte-identical to 1.007
+(`scripts/patch_release_glyphs.py`).
+- **F5d, bowl joints:** the bowl's outer curve meets the stem 63 u inside the x-height and the baseline (was 46): its
+  far side, the far stroke and the counter stay where they were, only the side toward the stem is drawn in (one upright
+  ellipse through the far extreme and the two joints; Regular 467 wide, was 479). The counter is unchanged, a whole
+  upright ellipse just touching the stem. Medium and Bold use the same depth.
+- **F5d, stem end at the bowl:** that end now flares on both sides, as drawn: the far side like every free end (7 / 8 / 9
+  over 120), the bowl's side by the same amount over a short run that ends under the joint (0.71 of its depth, 45 u).
+  The other end of the stem is unchanged.
+
 ## 1.007 (2026-11-19)
 s, the Bold S, Q and the hỏi redrawn from the designer's Figma drawings and review, heavier diagonals, and c's
 spacing in Bold. Only the glyphs listed below (and the accented letters built from them) change, and four ligatures are
