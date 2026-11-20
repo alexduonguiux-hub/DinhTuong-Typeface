@@ -31,10 +31,14 @@ glyph changes (the strokes changed), so 1.008 is a full build from the generator
   ink centres 0.021 / 0.028 / 0.026 of the advance). Regular as approved.
 - **c, e (W1-j):** apertures in every weight: c's tips >= 0.25 x-height apart (Bold 34 -> 138), e's tail >= 0.15
   x-height under the bar (Bold 30 -> 81); Regular and Medium were wider and do not change.
+  A tip held by these keeps its cut face at least h thick (W1-k, 'đuôi của c và e lại bị vuốt nhọn': e Bold 112 -> 122).
 
 ### Kerning
-- **R16c-b:** the diagonal capital pairs (AA AX KX KV..KY RA RX VV..YY) no longer overlap at the feet / arm tips (they did
-  by 37-47 u); they stand just apart (8 u), KA WY XA XY XX WX 15 more as before.
+- **R16c-c:** the diagonal capital pairs that touch (AA AX KX KV..KY RA RX VV..YY): in Regular they stand just apart (3 u;
+  they overlapped by 40 in 1.007); Medium and Bold keep the 1.007 overlap (42 / 44, 'các weight kế tiếp chấp nhận bị
+  dính'); KA WY XA XY XX WX 15 more open as before.
+- **R16e:** the pairs whose diagonals run parallel (VA AV WA AW YA AY and their accented forms) keep their 1.007 values in
+  every weight (Regular -85 / -75 / -95, Medium -90 / -85 / -100, Bold -90 / -85 / -105), set after R16d.
 
 ### Marks
 - **W1-i:** a mũ is never placed between the stems of a flat-topped letter (Û Ĥ Ŭ in the lighter Regular had it inside the

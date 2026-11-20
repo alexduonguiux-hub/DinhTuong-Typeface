@@ -286,9 +286,8 @@ K['exceptions'].update({'67': {'regular': -50, 'medium': -45, 'bold': -40}[W8], 
 # white opens into a V right above the contact. For these the feet / arm tips OVERLAP by R16C_OV (Regular 40, Medium 42,
 # Bold 44) inside the body band; marks of accented forms still keep >= 26 from the other letter. Only ever tightens.
 R16C_OV = {'regular': 40, 'medium': 42, 'bold': 44}[W8]
-# R16c-b (20/11 'các cặp chữ hoa xéo ... đang bị chồng chân ... -> vừa đủ tách ra thôi'): no overlap any more; the feet
-# / arm tips stand 8 apart (-R16C_OV, just separated), the V of white above them stays as tight as that allows
-R16C_OV = -8
+R16C_OV = -3 if W8 == 'regular' else R16C_OV   # R16c-c (20/11 'các cặp bị dính thì regular vừa đủ tách ra một chút
+# xíu thôi, các weight kế tiếp chấp nhận bị dính'): Regular 3 apart, Medium / Bold overlap as in 1.007 (42 / 44)
 # K1 (19/11 'tăng kerning của các cặp KA, WY, XA, XY, XX, WX lên một chút'): these six open by 15 from the R16c overlap
 # (accented forms follow their base pair)
 R16C_OPEN = {'KA': 15, 'WY': 15, 'XA': 15, 'XY': 15, 'XX': 15, 'WX': 15}
@@ -312,6 +311,25 @@ for a in letters:
             K['exceptions'][a + b] = kn
             r16c += 1
 print('R16c point-contact pairs', len(held), sorted(held), 'exceptions', r16c)
+# R16e (20/11 'back lại kerning cũ cho các cặp xéo song song như VA, AV, WA, AW, YA'): the pairs whose diagonals run
+# parallel keep their 1.007 values in every weight (the lighter 1.008 shapes had opened them by 5); accented forms
+# follow their base pair as far as their marks keep PAIR_MIN from the other letter
+R16E = {'VA': (-85, -90, -90), 'AV': (-85, -90, -90), 'WA': (-75, -85, -85), 'AW': (-75, -85, -85),
+        'YA': (-95, -100, -105), 'AY': (-95, -100, -105)}
+r16e = 0
+R16E_SET = {}
+for a in letters:
+    for b in letters:
+        pb = base_of(a) + base_of(b)
+        if pb not in R16E or not (a.isupper() and b.isupper()) or (toned(a) and toned(b)):
+            continue
+        kn = R16E[pb][{'regular': 0, 'medium': 1, 'bold': 2}[W8]]
+        for y0, y1 in ((kern.CAP + 1, 1240), (-400, -1)):
+            mg = kern.raw_gap(G[a], G[b], y0, y1, kn)
+            if mg < PAIR_MIN:
+                kn = max(kn, kn + PAIR_MIN - mg)
+        K['exceptions'][a + b] = int(round(kn)); R16E_SET[a + b] = int(round(kn)); r16e += 1
+print('R16e parallel diagonal pairs (1.007 values):', r16e)
 # R16d (01/11 'Kerning chữ F và các chữ còn lại hơi khít' -> QA, option A): every base pair (A-Z a-z 0-9 . , : ; ! ? -)
 # is measured as S1c white over the CAP band for any pair with a capital (lowercase pairs over the x-height), normalised
 # by HH / Hn / nH / nn / 00, against Inter, Poppins, Liberation, Carlito. A pair tighter than the tightest reference
@@ -333,6 +351,7 @@ for a in G:
         K['exceptions'][a + b] = kv(a, b) + dlt
         r16d += 1
 print('R16d base pairs', len(K16D), 'exceptions', r16d)
+K['exceptions'].update(R16E_SET)   # R16e last: the 1.007 values already had R16d in them
 kf = os.path.join(OUTD, f'kern_v096_{W8}.json')
 json.dump(K, open(kf, 'w'), ensure_ascii=False, indent=0)
 print('new letters', len(NEWK), 'collision exceptions added', added)

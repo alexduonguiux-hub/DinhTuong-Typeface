@@ -32,7 +32,7 @@ from concept_v1 import rect, fstem, fbar, ell
 # A1: share of the hood-cut-to-bowl gap the a's hood end moves out (19/11). A1-c ('chữ a bold cảm giác bị ngã về
 # trái'): the a stands upright when its upper half's ink centre is right of the lower half's by the same share of the
 # advance as in Regular (0.027); Medium / Bold reach that with a shorter move (measured: 0.5 left them at 0.016-0.017)
-C_APER, E_APER = 0.25 * 530, 0.15 * 530   # W1-j: c's aperture between the tips, e's between tail and bar (x-height shares)
+C_APER, E_APER = 0.25 * 530, 0.15 * 530   # W1-j (W1-k: a tip held by these keeps its cut face >= h, 'đuôi c và e lại bị vuốt nhọn'): c's aperture between the tips, e's between tail and bar (x-height shares)
 A_HEAD_K = {'regular': 0.5, 'medium': 0.0, 'bold': -0.4}
 
 XH, ASC, DESC = A.XH, A.ASC, A.DESC
@@ -583,9 +583,9 @@ class LF(A.LC):
             # W1-j (20/11 'các chữ c, e bold nên dời đuôi xa ra để không dính nhau'): the two tips keep C_APER apart
             # (Bold had 34): each tip stays C_APER / 2 off the centre line; Regular / Medium are wider and unchanged
             tu = self.tail(G, Rx, cy + ryi, 2 * Rx - self.ts, self.ts, 'r', 'up', cry=ryi, ring=(cy, Rx, R),
-                           tip_limit=cy + C_APER / 2)
+                           tip_limit=cy + C_APER / 2, keep_face=self.tt)
             tl = self.tail(G, Rx, cy - ryi, 2 * Rx - self.ts, self.ts, 'r', 'down', cry=ryi, ring=(cy, Rx, R),
-                           tip_limit=cy - C_APER / 2)
+                           tip_limit=cy - C_APER / 2, keep_face=self.tt)
             ops = ring + CV.arm_ink(tu) + CV.arm_ink(tl) + CV.band(tu['disk'], y0=cy) + CV.band(tl['disk'], y1=cy) + [
                 ('sub', rect(tu['xt'], -3000, 6000, 6000)), ('sub', rect(Rx, tl['tip'], tu['xt'] + 1, tu['tip']))]
             return self.G('c', tu['xt'], 36, 30, [('group', ops)], G)     # ink ends at the cut; same right side as F7b
@@ -619,7 +619,7 @@ class LF(A.LC):
             G = []
             tl = self.tail(G, Rx, cy - ryi, 2 * Rx - self.ts, self.ts, 'r', 'down', tip_limit=lo - max(AP_S, E_APER), cry=ryi,   # W1-j: the tail keeps E_APER under the bar (Bold had 30)
                            ring=(cy, Rx, R), face=float(os.environ.get('E_FACE', '1.12')),
-                           reach=float(os.environ.get('E_REACH', '192')) + (Rx - CX * R))   # R5e: lone tail: approved F7 reach, optical face
+                           reach=float(os.environ.get('E_REACH', '192')) + (Rx - CX * R), keep_face=self.tt)   # R5e: lone tail: approved F7 reach, optical face
             cut = CV.arm_ink(tl) + CV.band(tl['disk'], y1=lo) + [('sub', rect(tl['xt'], -3000, 6000, lo)),
                                                                   ('sub', rect(Rx, tl['tip'], 6000, lo))]
             return self.G('e', 2 * Rx, 36, 24, [('group', ring + cut), bar], G)
