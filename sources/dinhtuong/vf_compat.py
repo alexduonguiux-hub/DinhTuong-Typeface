@@ -245,7 +245,7 @@ def misaligned(A, lim=0.25):
         S0 = A[0][ci]
         for m in range(1, len(A)):
             S = A[m][ci]
-            if math.dist(centre(S0)[0], centre(S)[0]) > 0.25 * max(centre(S0)[1]):
+            if math.dist(centre(S0)[0], centre(S)[0]) > 0.25 * max(max(centre(S0)[1]), max(centre(S)[1])):   # X1: either contour's size (Extra Bold's dots grow 38 u off Regular's centre)
                 return True
             if math.dist(rel(S0[0][0], S0), rel(S[0][0], S)) > lim:
                 return True
@@ -254,6 +254,38 @@ def misaligned(A, lim=0.25):
 
 def fix_glyph(gl):
     """gl: [Glyph R, M, B]. Returns list of new contour-segment lists per master, or None (VF4)."""
+    # X1 (1.009): the same chains of segments only started elsewhere (Extra Bold's dots / tilde / ogonek began one or two
+    # segments later than the other weights) are ROTATED to master 0's start on the RAW segments - exact, nothing redrawn
+    RAW = [[segments(c) for c in g.contours] for g in gl]
+    if len({len(x) for x in RAW}) == 1:
+        R_ = [RAW[0]]
+        for a in RAW[1:]:
+            na = []
+            for ci, S in enumerate(a):
+                S0 = RAW[0][ci]
+                best = None
+                if len(S) == len(S0):
+                    for k in range(len(S)):
+                        T = S[k:] + S[:k]
+                        if sig(T) != sig(S0):
+                            continue
+                        d = math.dist(rel(T[0][0], T), rel(S0[0][0], S0))
+                        if best is None or d < best[0]:
+                            best = (d, T)
+                na.append(best[1] if best else S)
+            R_.append(na)
+        def _norm_c(r):                              # contour centres relative to the whole glyph's box
+            pts = [s[0] for S in r for s in S]
+            x0, x1 = min(p[0] for p in pts), max(p[0] for p in pts); y0, y1 = min(p[1] for p in pts), max(p[1] for p in pts)
+            return [((centre(S)[0][0] - x0) / ((x1 - x0) or 1), (centre(S)[0][1] - y0) / ((y1 - y0) or 1)) for S in r]
+        def _order_ok(r):                            # each contour is nearest (relative position) to the same-index one
+            c0, c1 = _norm_c(R_[0]), _norm_c(r)
+            return all(min(range(len(r)), key=lambda j: math.dist(c0[ci], c1[j]) + (0 if (signed_area(R_[0][ci]) > 0) == (signed_area(r[j]) > 0) else 9)) == ci
+                       for ci in range(len(r)))
+        def _start_ok(r):
+            return all(math.dist(rel(a[0][0], a), rel(b[0][0], b)) <= 0.25 for a, b in zip(R_[0], r))
+        if all([sig(x) for x in R_[0]] == [sig(x) for x in r] and _order_ok(r) and _start_ok(r) for r in R_[1:]):
+            return R_, 'r'
     A = [[simplify(segments(c)) for c in g.contours] for g in gl]
     if len({len(x) for x in A}) != 1:
         return None, 'contour count'
@@ -262,29 +294,6 @@ def fix_glyph(gl):
         return A, 'a'
     # contour order: match to master 0 by centre
     ref = A[0]
-    # X1 (1.009): a contour that is the same chain of segments only started elsewhere (Extra Bold's dots began on the
-    # top node, the others one segment later) is ROTATED to master 0's start - exact, no re-splitting
-    if all(len(a) == len(ref) for a in A[1:]):
-        R_ = [list(A[0])]
-        for a in A[1:]:
-            na = []
-            for ci, S in enumerate(a):
-                S0 = ref[ci] if ci < len(ref) else S
-                if sig(S) != sig(S0) and len(S) == len(S0):
-                    best = None
-                    for k in range(len(S)):
-                        T = S[k:] + S[:k]
-                        if sig(T) != sig(S0):
-                            continue
-                        d = math.dist(rel(T[0][0], T), rel(S0[0][0], S0))
-                        if best is None or d < best[0]:
-                            best = (d, T)
-                    if best:
-                        S = best[1]
-                na.append(S)
-            R_.append(na)
-        if all([sig(x) for x in R_[0]] == [sig(x) for x in r] for r in R_[1:]) and not misaligned(R_):
-            return R_, 'a'
     for m in range(1, len(A)):
         used = set(); order = []
         for s in ref:
