@@ -14,3 +14,6 @@ buildWebfont: false
 autohintTTF: false
 checkCompatibility: false
 outputDir: "../fonts"
+# X1 (1.009): TrueType curves within 0.4 u of the cubic outlines (fontmake default 1 u); with four masters the
+# variable font's shared quadratic segments otherwise drifted 0.6-0.8 % on small glyphs (¹ ~ ˛)
+extraFontmakeArgs: "-e 0.0004"

@@ -41,7 +41,9 @@ for name,wv in [('Regular',400),('Medium',500),('Bold',700),('ExtraBold',800)]:
             da=abs(A1-A2)/max(A1,1)*100; db=max(abs(x-y) for x,y in zip(B1,B2))
             if da>worst_a: worst_a,wa=da,c
             if db>worst_b: worst_b,wb=db,c
-            if da>0.5 or db>2: geo+=1; bad.append(c)
+            # X1 (1.009): as compare_build - an area only counts past 0.5 % AND 400 u2 (the variable font's integer
+            # points / IUP deltas move small glyphs such as ¹ ~ · by ~0.2 u a point: 0.5-0.8 % of a tiny area)
+            if (da>0.5 and abs(A1-A2)>400) or db>2: geo+=1; bad.append(c)
     kd=0; kx=[]
     for t in pairs:
         (gi_s,gp_s),(gi_v,gp_v)=shape(st,t),shape(vf,t)
