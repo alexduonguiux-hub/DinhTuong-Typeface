@@ -62,6 +62,8 @@ for w in ['Regular', 'Medium', 'Bold']:
                 cs[g] = pen.getCharString(private=cs[g].private, globalSubrs=cs[g].globalSubrs)
             base['hmtx'][g] = fm['hmtx'][g]
         base['GPOS'] = fm['GPOS']
+        if 'GDEF' in fm:
+            base['GDEF'] = fm['GDEF']                 # L1 (1.007): ligature carets, compiled from the same features.fea
         if 'GSUB' in fm and 'GSUB' in base:
             base['GSUB'] = fm['GSUB']                 # ccmp / tnum compiled from the same features.fea
         for rec in base['name'].names:

@@ -282,7 +282,51 @@ def _offq(A, B, cy, r, sx):
     return P0, (sx * h1, P0[1]), (P3[0], P3[1] - h2), P3
 
 
+# R9a (19/11, designer's Figma 'Frame 37', 'update dấu ă mới'): the trăng is a U-shaped crescent with LEVEL cuts on its
+# top line and arms that lean in a little (not the half-ellipse strip ending vertical). Measured on the drawing (116.45 x
+# 37 px): bottom 21.5 thick, each arm 28.4 wide at the top line, the inner bowl 15.5 deep; the two edges are one cubic
+# per half, given here as fractions of their own half-width / depth (right half; the left mirrors it).
+BREVE_R9_OUT = ((0.9080, 0.5405), (0.4856, 1.0))       # outer edge: end (1, 0) -> c1 -> c2 -> bottom (0, 1)
+BREVE_R9_IN = ((0.9103, 0.6452), (0.3946, 1.0))        # inner edge: end (1, 0) -> c1 -> c2 -> bottom (0, 1)
+BREVE_R9_K = (116.45, 37.0, 21.5, 28.38)               # drawing: width, height, bottom, arm width at the top
+BREVE_MODE = __import__('os').environ.get('BREVE_MODE', 'r9')
+
+
+def mk_breve_r9():
+    """the drawing at the old box width (280): Regular takes its proportions exactly (height 89, bottom 52, arms 68);
+    the bottom and arms grow with the mark strip T, and the height with the old rule's ratio (max(101, 1.6 T) / 101)
+    so the inner bowl stays open in Bold."""
+    half = 140.0
+    Wd, Hd, Bd, Ad = BREVE_R9_K
+    s = 2 * half / Wd
+    k = _st() / _st_reg()
+    H = Hd * s * max(101, 1.6 * _st()) / 101
+    t, a = Bd * s * k, Ad * s * k
+    hi, di = half - a, H - t
+    (o1, o2), (i1, i2) = BREVE_R9_OUT, BREVE_R9_IN
+    O = lambda X, Y: (X * half, H - Y * H)
+    I = lambda X, Y: (X * hi, H - Y * di)
+    mx = lambda p: (-p[0], p[1])
+    path = [('M', *O(1, 0)), ('C', *O(*o1), *O(*o2), *O(0, 1)), ('C', *mx(O(*o2)), *mx(O(*o1)), *mx(O(1, 0))),
+            ('L', *mx(I(1, 0))), ('C', *mx(I(*i1)), *mx(I(*i2)), *I(0, 1)), ('C', *I(*i2), *I(*i1), *I(1, 0)), ('Z',)]
+    return [('add', path)]
+
+
+def BREVE_DROP():
+    """R9a-b (19/11 'dời nó thấp 1 chút'): the new trăng is lower than the old one (max(101, 1.6 T) tall); it drops by
+    the difference so its foot keeps the old trăng's gap over the letter (the tones on it stay where they were)"""
+    old = max(101, 1.6 * _st())
+    return old - BREVE_R9_K[1] * (280.0 / BREVE_R9_K[0]) * old / 101 if BREVE_MODE == 'r9' else 0.0
+
+
+def _st_reg():
+    """the Regular mark strip T (the drawing's weight)"""
+    return STRIP_T * 116 * (1 + MARK_LIGHT_K * max(0.0, 1 - 104 / 150))
+
+
 def mk_breve(**_):
+    if BREVE_MODE == 'r9':
+        return mk_breve_r9()
     """trăng v0.96b (27/10 12:41 'độ dày của dấu ă lại cho đều và chuẩn'): ONE steel strip bent on a half-ellipse
     centre line, drawn with the LETTERS' contrast (R2 / type principle 'horizontals lighter than verticals'):
     T where it runs vertical (the arms, = the sắc strip), T*H/V where it runs level (the bottom, like the bottom of
@@ -423,7 +467,37 @@ def mk_tilde(**_):
 # R = s + r, inner r). Measured on the drawing at Regular (cap 700 = 869 px): band s 53.1, inner r 15.7, arms 62.4 from
 # the cut to the ring's centre, mark 131 x 138. Proportions are kept in every weight; s = HOOK_S_K x the mark strip T
 # (Regular T 56.2 -> 53.1). The same mark alone and stacked (the drawing has one size).
-HOOK_MODE = __import__('os').environ.get('HOOK_MODE', 'r9')
+HOOK_MODE = __import__('os').environ.get('HOOK_MODE', 'r11')
+# R10h (19/11, designer's Figma 'Frame 34' over Ô, 'update dấu hỏi'): the hỏi is a ring with a short arm and a foot, as
+# drawn: the arm leaves the ring's top 9.6 deg down to the left and is cut square; the stroke runs round the right side
+# to the bottom and drops into a short foot left of the ring's centre (its top-left corner rounded). The outline is the
+# drawing's own (px, the ring centre at x 500.46, the foot's bottom at y 265), scaled so its stroke (27 px) is
+# HOOK10_S_K x the mark strip T (Regular 51 = the drawing at cap 700). The ring centre stands on the mark axis (as the
+# old ring hỏi), the foot on the mark line.
+HOOK10_S_K = 0.909
+HOOK10 = [('M', 511.5, 213.05), ('C', 511.5, 206.216, 505.353, 201.024, 498.615, 202.166), ('L', 468.256, 207.311),
+          ('L', 463.744, 180.69), ('L', 494.103, 175.545), ('C', 517.32, 171.609, 538.5, 189.502, 538.5, 213.05),
+          ('C', 538.5, 234.059, 521.469, 251.09, 500.46, 251.09), ('L', 499.0, 251.09), ('L', 499.0, 265.0),
+          ('L', 472.0, 265.0), ('L', 472.0, 245.063), ('C', 472.0, 233.48, 481.39, 224.091, 492.973, 224.09),
+          ('L', 500.46, 224.09), ('C', 506.557, 224.09, 511.5, 219.148, 511.5, 213.05), ('Z',)]
+HOOK10_BOX = (463.744, 175.0, 538.5, 265.0)            # drawing box (x0, top, x1, bottom), px
+HOOK10_FOOT_X = 472.0                                  # the foot's left edge, px
+HOOK10_GAP_X, HOOK10_DROP_K = 1.5, 0.119               # beside the mũ: foot 1.5 right of it, bottom 0.119 H under its top
+
+
+def mk_hook_r10():
+    sc = HOOK10_S_K * _st() / 27.0
+    # R10h-c (19/11 'dấu hỏi các dấu đơn hơi lệch trái'): the mark's box stands where the old ring hỏi's ink stood (its
+    # visible box 32-36 right of the axis, the place 'canh giữa như cũ' approved), not with the ring on the axis
+    dx = _hook_old_centre() - ((HOOK10_BOX[0] + HOOK10_BOX[2]) / 2 - 500.46) * sc
+    T = lambda x, y: ((x - 500.46) * sc + dx, (265.0 - y) * sc)
+    path = []
+    for seg in HOOK10:
+        if seg[0] == 'Z':
+            path.append(('Z',)); continue
+        pts = [T(seg[i], seg[i + 1]) for i in range(1, len(seg), 2)]
+        path.append((seg[0],) + tuple(v for p_ in pts for v in p_))
+    return [('add', path)]
 HOOK_S_K, HOOK_R_K, HOOK_L_K = 0.945, 0.296, 1.175
 HOOK_GAP_X, HOOK_UP_K = 9.0, 0.26    # R9h-b: hỏi beside the mũ (drawing Ẩ, Regular)
 
@@ -459,7 +533,56 @@ def mk_hook_r9():
                      ('L', xl, cy + r), ('L', xl, cy + R), ('Z',)])]
 
 
+# R11h (19/11, designer's revised drawing over Ô 'Subtract', 'update dấu hỏi mới'): a hook opening to the LEFT: a level
+# arm on top, the ring on the right, and the lower arm running down to the left, both arms cut on ONE vertical line. The
+# outline is the drawing's own (px: the upper cut at x 0, the lower at x 17, the box 65.40 x 92.96), scaled so its top arm (28.4 px thick) is
+# HOOK11_S_K x the mark strip T (Regular 53.7 = the drawing at cap 700). Alone it stands where the old hỏi's ink stood
+# (R10h-c); on the mũ its cut stands HOOK11_GAP px right of the mũ, its bottom HOOK11_DROP_K x its height under the mũ's
+# top, as on the drawing's Ô.
+HOOK11_S_K = 0.956
+# R11h-f (19/11 'update lại dấu hỏi', drawing 'Subtract' 591:63 over Ô Ổ): a level top arm cut square at x 0, a ring
+# of one thickness (31) round the centre (25.25, 41.25), the lower arm a straight band down-left, cut square at x 8.
+# Same drawing scale as before (sc below), so the mark is as heavy as drawn (top arm 31 px = 1.04 x the strip).
+HOOK11 = [('M', 25.252, 0.0), ('C', 48.0324, 0.0, 66.5, 18.4676, 66.5, 41.248),
+          ('C', 66.4998, 58.7639, 55.4371, 74.3696, 38.9092, 80.1689), ('L', 8.00098, 91.0137), ('L', 8.00098, 58.1602),
+          ('L', 28.6455, 50.917), ('C', 32.7515, 49.4761, 35.4998, 45.5995, 35.5, 41.248),
+          ('C', 35.5, 35.5884, 30.9116, 31.0, 25.252, 31.0), ('L', 0.0, 31.0), ('L', 0.0, 0.0), ('Z',)]
+HOOK11_W, HOOK11_H = 66.5, 91.0137
+# on the mũ, measured in the frame against the previous drawing (588:7 at x 473 y 200, cut 1.8 px right of the mũ, bottom
+# 0.416 H under its top -> mũ right 471.2, top 254.3): the new drawing at x 478 y 200 -> cut 6.8 px right, bottom 36.7 px under
+HOOK11_GAP, HOOK11_DROP_K = 6.8, 0.403
+HOOK11_P0 = (25.252, 0.0)      # the path's first point (x from the top arm's cut, y from the top)
+# R11h-e (19/11 'canh dấu hỏi mới cho cảm nhận thị giác là giữa'): the lone hỏi's bowl swings right of its stem, so a
+# box-centred hook reads right-heavy; it moves 0.10 of its ink width left of the old visible centre (reference sans put
+# the hook's box on the axis +-0.05 W with the bowl's weight just right of it)
+HOOK11_OPT_K = 0.10
+# R11h-g (19/11 'kéo dấu hỏi ở các dấu đơn thấp xuống chút'): the lone hỏi (lowercase and caps) sits 0.10 of its own
+# height lower (Regular 17 u); the hỏi beside the mũ is placed by its own rule and does not move
+HOOK11_LOW_K = 0.10
+
+
+def hook11_sc():
+    return HOOK11_S_K * _st() / 28.4
+
+
+def mk_hook_r11():
+    sc = hook11_sc()
+    dx = _hook_old_centre() - (0.5 + HOOK11_OPT_K) * HOOK11_W * sc
+    T = lambda x, y: (x * sc + dx, (HOOK11_H * (1 - HOOK11_LOW_K) - y) * sc)
+    path = []
+    for seg in HOOK11:
+        if seg[0] == 'Z':
+            path.append(('Z',)); continue
+        pts = [T(seg[i], seg[i + 1]) for i in range(1, len(seg), 2)]
+        path.append((seg[0],) + tuple(v for p_ in pts for v in p_))
+    return [('add', path)]
+
+
 def mk_hook(**_):
+    if HOOK_MODE == 'r11':
+        return mk_hook_r11()
+    if HOOK_MODE == 'r10':
+        return mk_hook_r10()
     if HOOK_MODE == 'r9':
         return mk_hook_r9()
     T = _st()
@@ -468,6 +591,10 @@ def mk_hook(**_):
 
 def mk_hook_stack(**_):
     """hỏi riding on a trăng / mũ: same thickness T, a tighter curl so stacks stay low."""
+    if HOOK_MODE == 'r11':
+        return mk_hook_r11()
+    if HOOK_MODE == 'r10':
+        return mk_hook_r10()
     if HOOK_MODE == 'r9':
         return mk_hook_r9()
     T = _st()

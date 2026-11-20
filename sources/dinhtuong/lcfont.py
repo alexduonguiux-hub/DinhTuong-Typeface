@@ -25,6 +25,28 @@ B = lcm.LC(W8)
 GL.v = B.v                                    # the horn plate is sized by the lowercase stem
 GL.OV_L = lcm.OV
 ZONE = _ZONE_X = lcm.XH + (GL.ZONE_UC - GL.CAP)        # 578: the caps mark zone moved to the x-height
+# R9r (19/11 'dời đồng bộ các dấu chữ thường cao lên 1 chút, khoảng 30%'): every lowercase top mark, its stack with
+# it, rises by 30 % of the lone mark's gap over the x-height (50): +15. The caps marks are unchanged.
+LC_RAISE = 0.30 * (_ZONE_X - lcm.XH)
+def A_AXIS(bg):
+    """R11a (19/11 'dấu ă đang không canh giữa'): a's head (the hood, over 0.6 x-height) stands 22-29 right of the
+    whole letter's centre; the references put the marks A_AXIS_T of the way from the whole letter's ink centre to the
+    head's (median of Inter, Liberation, Carlito, DejaVu, Work Sans, FreeSans; Poppins left out, its a is not double-
+    storey in the same way)"""
+    import booleng
+    pts = []
+    for c in booleng.evaluate(bg.ops):
+        for seg in c:
+            if seg[0] != 'Z':
+                pts += [(seg[i], seg[i + 1]) for i in range(1, len(seg), 2)]
+    xs = [x for x, y in pts]
+    head = [x for x, y in pts if y >= 0.6 * lcm.XH]
+    whole, top = (min(xs) + max(xs)) / 2, (min(head) + max(head)) / 2
+    return whole + A_AXIS_T * (top - whole)
+
+
+A_AXIS_T = 0.89
+YDOT_K = 0.78                                 # R10y: ỵ's nặng centre, fraction of the y's width (reference median)
 ACUTE_L = MF.ACUTE_L                         # v0.96c: one sắc length everywhere (= caps)
 SY = GL.CAP_SCALE                             # caps offsets, unchanged
 GAPS = GL.MARK_GAPS
@@ -79,6 +101,10 @@ def compose(ch):
     g = Glyph('lc_uni%04X' % ord(ch), bg.body, bg.lsb, bg.rsb, ord(ch))
     g.ops = list(bg.ops); g.parts = [('base', list(bg.ops))]
     cx = J_AXIS if base == 'j' else bg.body / 2
+    cx_h = cx                                        # the axis the mark HEIGHT is measured on (clearance search)
+    if base == 'a':
+        cx = A_AXIS(bg)                              # R11a: the marks on a ride over its head, not the whole letter
+        # (their height stays the one measured on the old axis: on the head the clearance search lifted â / ă 15 over ê ô)
     # v0.970 (mark QA: ĺ's sắc sat ON the l's ascender): a letter with an ascender carries its marks over the ascender
     ZONE = (lcm.ASC + (_ZONE_X - lcm.XH)) if base in 'bdhkl' else _ZONE_X
     h_ops = []
@@ -93,11 +119,12 @@ def compose(ch):
     first = 'circumflex' if CIRC in marks else ('breve' if BREVE in marks else None)
     tone = next((TONES[m] for m in marks if m in TONES), None)
     top_h = 0
-    GL._ZONE0 = ZONE                                 # R9h-d: the lone mark line, for a hỏi beside the mũ
+    GL._ZONE0 = ZONE + LC_RAISE                      # R9h-d: the lone mark line, for a hỏi beside the mũ
     if first == 'circumflex':                        # R8k: the mũ (and every tone on it) sits 40 over the letter's ink
-        ZONE = ZONE + GL.CIRC_FOOT(bg.ops + h_ops, cx, ZONE, ('L', base, round(cx, 1)))
+        ZONE = ZONE + GL.CIRC_FOOT(bg.ops + h_ops, cx_h, ZONE, ('L', base, round(cx_h, 1)))
     elif first == 'breve' and MF.R8W():             # R8w-ă: the trăng's top on the mũ's top line
-        ZONE = ZONE + GL.BREVE_FOOT(bg.ops + h_ops, cx, ZONE, ('L', base, round(cx, 1)))
+        ZONE = ZONE + GL.BREVE_FOOT(bg.ops + h_ops, cx_h, ZONE, ('L', base, round(cx_h, 1)))
+    ZONE += LC_RAISE                                 # R9r: every lowercase mark (and its stack) a little higher
     if first:
         ops = GL.shift_ops(GL.mark_ops(first, True), cx, ZONE)
         g.ops += ops; g.parts.append((first, ops))
@@ -147,8 +174,16 @@ def compose(ch):
         g.ops += ops; g.parts.append((tone, ops))
     if DOTB in marks:
         adv = bg.lsb + bg.body + bg.rsb
-        db = MF.mk_dotbelow(length=min(MF.STRIP_L, adv - 40))
-        ops = GL.shift_ops(db, cx, -52 if base != 'y' else lcm.DESC - 40)
+        db = MF.mk_dotbelow(length=min(GL.DOTB_L(), adv - 40))   # R10d: as long as under Ị
+        if base == 'y':
+            # R10y (19/11 'dấu nặng y không bỏ dưới đít đuôi, mà bỏ bên hông như các font khác'): the nặng stands on the
+            # nặng line of every letter, beside the tail: its centre at YDOT_K of the y's width (references: Inter 0.77-0.79,
+            # Liberation 0.79, DejaVu 0.75, Work Sans 0.81, FreeSans 0.78), then right until it keeps W_GAP from the y
+            x0, x1 = GL.ops_xrange(bg.ops)
+            ops = GL.shift_ops(db, x0 + YDOT_K * (x1 - x0), -52)
+            ops = GL.CLEAR_RIGHT(ops, bg.ops, MF.W_GAP)
+        else:
+            ops = GL.shift_ops(db, cx, -52)
         g.ops += ops; g.parts.append(('dotbelow', ops))
     return g
 

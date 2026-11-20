@@ -36,10 +36,10 @@
       <point x="43" y="0" type="curve"/>
     </contour>
     <contour>
-      <point x="102" y="-118" type="line"/>
-      <point x="402" y="-118" type="line"/>
-      <point x="402" y="-62" type="line"/>
-      <point x="102" y="-62" type="line"/>
+      <point x="182" y="-118" type="line"/>
+      <point x="322" y="-118" type="line"/>
+      <point x="322" y="-62" type="line"/>
+      <point x="182" y="-62" type="line"/>
     </contour>
   </outline>
 </glyph>

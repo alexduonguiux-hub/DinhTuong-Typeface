@@ -29,6 +29,10 @@ import os, json, math
 import lc96 as A
 import concept_v1 as CV
 from concept_v1 import rect, fstem, fbar, ell
+# A1: share of the hood-cut-to-bowl gap the a's hood end moves out (19/11). A1-c ('chữ a bold cảm giác bị ngã về
+# trái'): the a stands upright when its upper half's ink centre is right of the lower half's by the same share of the
+# advance as in Regular (0.027); Medium / Bold reach that with a shorter move (measured: 0.5 left them at 0.016-0.017)
+A_HEAD_K = {'regular': 0.5, 'medium': 0.2, 'bold': 0.2}
 
 XH, ASC, DESC = A.XH, A.ASC, A.DESC
 OV = 12
@@ -370,6 +374,13 @@ class LF(A.LC):
             GA = []
             ta = self.tail(GA, cx, cy + ry, cx - r, 0.85 * v, 'l', 'up', tip_limit=max(cy, yb0 + AP_S), cry=ry,
                            ring=(cy, r + 0.85 * v, ry + h))
+            if A_HEAD_K:
+                # A1 (19/11 'dời đuôi chữ a ra thêm tới lằn đỏ ở giữa', the first red line being the bowl): the hood's
+                # cut moves out along the same stretched-cap curve to halfway between where it stood and the bowl's
+                # left extreme (x 0), in every weight
+                GA = []
+                ta = self.tail(GA, cx, cy + ry, cx - r, 0.85 * v, 'l', 'up', tip_limit=max(cy, yb0 + AP_S), cry=ry,
+                               ring=(cy, r + 0.85 * v, ry + h), ext=A_HEAD_K.get(self.w, 0.5) * ta['xt'], keep_face=ta['face'])
             hood = ('group', [('add', ell(cx + 0.075 * v, cy, r + 0.925 * v, ry + h)), ('sub', ell(cx, cy, r, ry))] +
                     CV.arm_ink(ta) + [('sub', rect(cx, -3000, 6000, cy)), ('sub', ta['disk']),
                               ('sub', rect(-3000, -3000, ta['xt'], 6000)), ('sub', rect(-3000, -3000, cx, ta['tip']))])
@@ -648,7 +659,14 @@ class LF(A.LC):
         dw = 0.9 * self.v / math.cos(math.atan2(W1 / 2 - 40, XH))
         W = 2 * W1 - dw
         dw *= dboost(self.w, 'w')          # D2: outer width as before, the diagonals thicken inward
-        return self.G('w', W, 12, 12, [('group', GL.vshape(0, W1, XH, 0, dw, 96)), ('group', GL.vshape(W - W1, W, XH, 0, dw, 96))])
+        # D3 (19/11 'kiểm tra nét xéo giữa của w thường luôn'): as W, the two inner diagonals are 0.88 of v's (square to
+        # the stroke), and the two v's overlap by exactly that inner stroke so the middle peak is one clean apex (the
+        # overlap by the unboosted width had left a step there); the outer width W is kept
+        vt = 0.9 * self.v * dboost(self.w, 'v')
+        for _ in range(6):
+            di = GL.D3_K['Win'] * vt / math.cos(math.atan2(W1 / 2 - 48, XH))
+            W1 = (W + di) / 2
+        return self.G('w', W, 12, 12, [('group', GL.vshape(0, W1, XH, 0, dw, 96, dw_r=di)), ('group', GL.vshape(W - W1, W, XH, 0, di, 96, dw_r=dw))])
 
     def g_x(self):
         import glyphs_c as GL

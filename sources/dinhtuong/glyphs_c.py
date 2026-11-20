@@ -30,19 +30,22 @@ def apply(g, ops):
     return g
 
 
-def vshape(x0, x1, top, bottom, dw, fb, trap=None):
+def vshape(x0, x1, top, bottom, dw, fb, trap=None, dw_r=None):
     """V with flat vertex. dw = horizontal stroke width, fb = flat bottom width.
-    trap = how much deeper than geometric the inner notch is cut (thins the vertex)."""
+    trap = how much deeper than geometric the inner notch is cut (thins the vertex).
+    dw_r (D3, W): the right stroke's own width (default dw: the symmetric V, unchanged)."""
     c = (x0 + x1) / 2
+    dw_r = dw if dw_r is None else dw_r
     outer = poly([(x0, top), (x1, top), (c + fb / 2, bottom), (c - fb / 2, bottom)])
-    # inner apex where inner edges (parallel, offset dw) meet at x=c
-    run = (c - fb / 2) - x0
-    t = (c - (x0 + dw)) / run
+    # inner apex where the inner edges (parallel to the outer ones, offset dw / dw_r) meet
+    dlx, drx = (c - fb / 2) - x0, (c + fb / 2) - x1
+    t = ((x1 - dw_r) - (x0 + dw)) / (dlx - drx)
+    xi = x0 + dw + t * dlx
     yi = top - t * (top - bottom)
     if trap is None:
         trap = TRAP if (top - bottom) > 600 else TRAP * 0.8
     yi = max(bottom + 0.35 * fb, yi - trap)
-    inner = poly([(x0 + dw, top + 1), (x1 - dw, top + 1), (c, yi)])
+    inner = poly([(x0 + dw, top + 1), (x1 - dw_r, top + 1), (xi, yi)])
     return [('add', outer), ('sub', inner)]
 
 
@@ -224,6 +227,9 @@ def cap_P():
     g.add(rrect(V / 2, yb, W, CAP, (0, RO, RO, 0)))
     g.sub(rrect(V - 1, yb + sy, W - V, CAP - sy, (0, RI, RI, 0)))
     return reg(g)
+
+
+Q_THIN = {'regular': 0.945, 'medium': 0.947, 'bold': 0.949}
 
 
 def cap_Q():
@@ -713,6 +719,17 @@ def CLEAR_UP(ops, other_ops, gap):
     return shift_ops(ops, 0, hi)
 
 
+DOTB_K = 0.70
+
+
+def DOTB_L():
+    """R10d (19/11 'giảm bề ngang dấu nặng cho bằng dấu nặng dưới chữ I'): the nặng is as long as under Ị (the I's
+    advance - 40) on every letter; a narrower letter still shortens it to its own advance - 40"""
+    g = G['I']
+    # R10d-b (19/11 'Cho dấu nặng hẹp lại thêm 30%'): 0.70 of that
+    return DOTB_K * min(__import__('marks_flat').STRIP_L, g.lsb + g.body + g.rsb - 40)
+
+
 def CLEAR_RIGHT(ops, other_ops, gap):
     """R9h-e: push ops right (never left) until their ink keeps gap from other_ops."""
     import mark_qa as MQ
@@ -745,8 +762,9 @@ def BREVE_FOOT(base_ops, cx, zone, key=None):
     """R8w-ă (10/11 sample 'KỀ KÈ Ằ', one red top line): the trăng's top stands where the mũ's top would stand on the
     same letter (sample: both 157-158 over the cap line; trăng foot 51 over A), so a tone on the trăng and a tone on the
     mũ end on ONE line (the tones keep W_GAP over either mark)."""
+    mf = __import__('marks_flat')
     yc = CIRC_FOOT(base_ops, cx, zone, key)
-    return yc + ops_yrange(mark_ops('circumflex', True))[1] - ops_yrange(mark_ops('breve', True))[1]
+    return yc + ops_yrange(mark_ops('circumflex', True))[1] - ops_yrange(mark_ops('breve', True))[1] - mf.BREVE_DROP()
 
 
 ACUTE_R8I_BREVE_DX = 62   # R8i v2: on the trăng the sắc's centre is 62 right of the axis (sample Ắ +62)
@@ -1072,7 +1090,7 @@ def compose(ch, gaps=None):
     if DOTB in marks:
         adv = bg.lsb + bg.body + bg.rsb
         try:
-            db = mk_dotbelow(length=min(__import__('marks_flat').STRIP_L, adv - 40))   # v0.95 QA: Ị
+            db = mk_dotbelow(length=min(DOTB_L(), adv - 40))   # v0.95 QA: Ị; R10d: every nặng as long as Ị's
         except TypeError:
             db = mk_dotbelow()
         ops = shift_ops(db, cx + (gaps['y_dot_dx'] if base == 'y' else 0), -72 if base == 'y' else -52)
@@ -1127,6 +1145,26 @@ def STACK_TOP(first):
 def STACK_SYNC(ops, tone, first_ops, first, zone, centred=None):
     """R8w / R8w-h: the stacked tone at its lowest clear place, then raised to the stack's common top line."""
     mf = __import__('marks_flat')
+    if tone == 'hook' and first == 'circumflex' and mf.HOOK_MODE == 'r11':
+        # R11h-b (designer's revised Ô): the cut stands HOOK11_GAP right of the mũ's right end, the bottom HOOK11_DROP_K x
+        # the hook's height under the mũ's top; positions from the hook's own first point (drawing (14.92, 0.62))
+        sc = mf.hook11_sc()
+        px, py = ops[0][1][0][1], ops[0][1][0][2]
+        cut_x = px - mf.HOOK11_P0[0] * sc
+        bot_y = py - (mf.HOOK11_H - mf.HOOK11_P0[1]) * sc
+        fx1 = ops_xrange(first_ops)[1]; ftop = ops_yrange(first_ops)[1]
+        return shift_ops(ops, fx1 + mf.HOOK11_GAP * sc - cut_x, ftop - mf.HOOK11_DROP_K * mf.HOOK11_H * sc - bot_y)
+    if tone == 'hook' and first == 'circumflex' and mf.HOOK_MODE == 'r10':
+        # R10h-b (designer's Ô): the foot stands just right of the mũ's right end, its bottom a little under the mũ's top
+        sc = mf.HOOK10_S_K * mf._st() / 27.0
+        H = (mf.HOOK10_BOX[3] - mf.HOOK10_BOX[1]) * sc
+        # where the hook now stands: its foot bottom and foot left edge, found from its own first point (the ring's
+        # right point, drawing (511.5, 213.05)), so control points never skew it
+        px, py = ops[0][1][0][1], ops[0][1][0][2]
+        foot_x = px + (mf.HOOK10_FOOT_X - 511.5) * sc
+        foot_y = py - (265.0 - 213.05) * sc
+        fx1 = ops_xrange(first_ops)[1]; ftop = ops_yrange(first_ops)[1]
+        return shift_ops(ops, fx1 + mf.HOOK10_GAP_X - foot_x, ftop - mf.HOOK10_DROP_K * H - foot_y)
     if tone == 'hook' and first == 'circumflex' and mf.HOOK_MODE == 'r9':
         # R9h-b (19/11, designer's Ẩ): the hỏi stands BESIDE the mũ, not over it: its left cut HOOK_GAP_X right of the
         # mũ's right foot, its centre HOOK_UP_K x its own height over the mũ's top (Regular: 9 / 36 on the drawing)
@@ -1140,7 +1178,7 @@ def STACK_SYNC(ops, tone, first_ops, first, zone, centred=None):
     else:
         ops = shift_ops(ops, 0, zone - ops_yrange(ops)[0])            # start on the mark's foot, then lift clear
     ops = CLEAR_UP(ops, first_ops, mf.W_GAP)                      # R8w-ô2: hỏi beside the lower mũ too keeps W_GAP (40 lifted it over the line)
-    target = ops_yrange(first_ops)[1] + STACK_TOP(first)
+    target = ops_yrange(first_ops)[1] + STACK_TOP(first) + (mf.BREVE_DROP() if first == 'breve' else 0.0)   # R9a-b: tones keep their line
     top = ops_yrange(ops)[1]
     return shift_ops(ops, 0, target - top) if top < target else ops
 
@@ -1694,14 +1732,23 @@ def cap_K():
     stem's flare zone) and its bottom cut lies inside the stem; the leg springs from the arm's
     centre line at K_JOIN of the height."""
     W = (529 if CAPW else 556) + gw('multi')
+    # K2 (19/11 'giảm luôn bề ngang chữ K'): K is 0.923 of X wide (median of the seven reference families; it was 0.94
+    # Regular -> 0.97 Bold, widening with the weight)
+    W = min(W, K_X_RATIO * (564 + gw('diag')))
     g = Glyph('K', W, SB_STRAIGHT, SB_DIAG, 0x4B)
     g.add(fstem(0, 0, V, CAP))
-    aw = diag_dx(DIAG_K_ARM, W - V - 60, CAP - 300) * dboost('K')
-    ax0, ax1 = V - aw / 2, W - aw / 2
     yc, yj = K_CROTCH * CAP, K_JOIN * CAP
-    g.group([('add', stroke((ax0, yc), (ax1, CAP), aw)), ('sub', rect(-400, -400, V / 4, CAP + 400))])
     lw = diag_dx(DIAG, W - V - 120, 380) * 0.86 * dboost('K')
+    # D3: the upper arm, square to the stroke, is 0.94 of the leg's (references)
+    aw = lw
+    for _ in range(8):
+        ax0, ax1 = V - aw / 2, W - aw / 2
+        xj = ax0 + (yj - yc) / (CAP - yc) * (ax1 - ax0)
+        leg_t = lw * yj / _m.hypot(W - lw / 2 - xj, yj)
+        aw = D3_K['Karm'] * leg_t * _m.hypot(W - V, CAP - yc) / (CAP - yc)
+    ax0, ax1 = V - aw / 2, W - aw / 2
     xj = ax0 + (yj - yc) / (CAP - yc) * (ax1 - ax0)
+    g.group([('add', stroke((ax0, yc), (ax1, CAP), aw)), ('sub', rect(-400, -400, V / 4, CAP + 400))])
     g.add(stroke((xj, yj), (W - lw / 2, 0), lw))
     g.sub(rect(-200, -400, -12, CAP + 400), rect(V, CAP, W + 200, CAP + 400), rect(V, -400, W + 200, 0))
     return reg(g)
@@ -1728,7 +1775,7 @@ def cap_M():
     # more and the width is solved for the thickness, not taken from the nominal rule.
     fbm = 140 * WKC
     W1, dwW = _w_geom()
-    target = _vshape_mid(0, W1, CAP, 0, dwW * dboost('W'), 128)   # D2: M keeps W's (now heavier) diagonal
+    target = D3_K['M'] * V_PERP()          # D3: M's diagonals 0.88 of V's (references)
     lo, hi = 0.5 * DIAG, 2.0 * DIAG
     for _ in range(60):
         mid = (lo + hi) / 2
@@ -1742,7 +1789,13 @@ def cap_N():
     W = 540 + gw('straight')
     VN = round(156 * WKC)
     g = Glyph('N', W, SB_STRAIGHT, SB_STRAIGHT, 0x4E)
-    dw = diag_dx(DIAG, W - 190, CAP)
+    # D3 (19/11 'nét xéo của M, N, và nét xéo trên của K sẽ mỏng hơn các nét còn lại một chút ... tương đương nét ngang
+    # của H'): the diagonal, measured square to the stroke, is the H's crossbar HM (it was 0.84-0.88 of the stem)
+    lo, hi = 1.0, W * 0.9
+    for _ in range(60):
+        mid = (lo + hi) / 2
+        lo, hi = (mid, hi) if mid * CAP / _m.hypot(W - mid, CAP) < D3_K['N'] * V_PERP() else (lo, mid)
+    dw = (lo + hi) / 2
     g.add(fstem(0, 0, VN, CAP, top=False), fstem(W - VN, 0, W, CAP, bot=False))
     g.add(poly([(0, CAP), (dw, CAP), (W, 0), (W - dw, 0)]))
     return reg(g)
@@ -1772,6 +1825,10 @@ def cap_Q():
     # ring's bottom stroke (H over Regular's 100), so the part standing in the counter is as tall in every weight.
     yt = 199 + (H - 100)
     x0, x1 = W * 0.546, W * 0.773
+    # Q2c (19/11 'nét xéo của Q cho mỏng như nét xéo của X và K'): square to the stroke the tail stood at 0.94 of the
+    # stem (Regular 109), over X's diagonals (106) and K's leg (100); it takes their mean (Regular 103 / Medium 126 /
+    # Bold 148), the centre line unchanged (factors from the measured outlines)
+    tw *= Q_THIN.get(__import__('os').environ.get('A2_WEIGHT', 'bold'), 1.0)
     g.add(stroke((x0 - (x1 - x0) * (yt - 199) / 249, yt), (x1, -50), tw))
     return reg(g)
 
@@ -1833,6 +1890,25 @@ DIAG_BOOST = {'regular': {'V': 1.056, 'W': 1.050, 'X': 1.087, 'Y': 1.091, 'A': 1
               'bold':    {'V': 1.050, 'W': 1.048, 'X': 1.043, 'Y': 1.053, 'A': 1.073, 'K': 1.071}}   # A K: 19/11 'nâng A K luôn'
 
 
+# D3 rule (19/11 'nét xéo của M, N, và nét xéo trên của K sẽ mỏng hơn các nét còn lại một chút', 'nghiên cứu các font
+# khác ... viết thành rule', '2 nét xéo trong của W cũng vậy', then 'các nét xéo vừa chỉnh hơi mỏng quá'): a diagonal held
+# between stems (N, M, W's two inner diagonals) and K's upper arm are lighter than the diagonal that carries a letter
+# alone. They are set from that primary diagonal, square to the stroke (V for N M W, K's own leg for its arm), by the
+# medians of Inter, Liberation Sans, Carlito, DejaVu Sans, Poppins, Work Sans and FreeSans (Regular + Bold, medial ridge,
+# cap 700): N / V 0.93 (0.78-1.02), M / V 0.88 (0.76-1.01), K arm / K leg 0.94 (0.87-1.00). (Taking the H crossbar as the
+# base, as first tried, read too light: this face's crossbar is 0.78 of the stem against the references' 0.83.)
+# D3-c (19/11 'tăng nét xéo vừa chỉnh đậm lên chút nữa'): the designer takes them ~4 % over the reference medians,
+# still lighter than the primary diagonal and in the same order (N over M).
+K_X_RATIO = 0.923      # K2: K / X width (reference median)
+D3_K = {'M': 0.92, 'N': 0.96, 'Karm': 0.97, 'Win': 0.92}
+
+
+def V_PERP():
+    """D3: the primary diagonal's true thickness (V, square to the stroke, at mid-height)"""
+    Wv = 580 + gw('diag')
+    return _vshape_mid(0, Wv, CAP, 0, diag_dx(DIAG, Wv / 2 - 60, CAP) * dboost('V'), 150)
+
+
 def dboost(ch):
     import os as _o
     if _o.environ.get('D2', '1') != '1':
@@ -1881,8 +1957,14 @@ def cap_W():
     W = 2 * W1 - dw          # D2: the outer width as before; the diagonals thicken inward
     dw *= dboost('W')
     g = Glyph('W', W, SB_DIAG, SB_DIAG, 0x57)
-    g.group(vshape(0, W1, CAP, 0, dw, 128))
-    g.group(vshape(W - W1, W, CAP, 0, dw, 128))
+    # D3: the two inner diagonals carry M's weight (0.88 of V's), the outer two keep D2 (0.90 of the stem).
+    # D3-b (19/11 'Mối giữa W lỗi'): the two V's overlap by exactly the INNER stroke, so their inner diagonals meet in one
+    # clean peak (overlapping by the outer width left a step there); the outer width W is kept, the halves re-solved
+    for _ in range(6):
+        di = D3_K['Win'] * V_PERP() * _m.hypot(W1 / 2 - 64, CAP) / CAP
+        W1 = (W + di) / 2
+    g.group(vshape(0, W1, CAP, 0, dw, 128, dw_r=di))
+    g.group(vshape(W - W1, W, CAP, 0, di, 128, dw_r=dw))
     return reg(g)
 
 

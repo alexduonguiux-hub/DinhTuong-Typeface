@@ -2,8 +2,8 @@
 
 ## 1.007 (2026-11-19)
 s, the Bold S, Q and the hỏi redrawn from the designer's Figma drawings and review, heavier diagonals, and c's
-spacing in Bold. Only the glyphs listed below (and the accented letters built from them) change; every other glyph is
-byte-identical to 1.006 (`scripts/patch_release_glyphs.py`). Kerning is re-made for the changed glyphs only.
+spacing in Bold. Only the glyphs listed below (and the accented letters built from them) change, and four ligatures are
+added; every other glyph is byte-identical to 1.006 (`scripts/patch_release_glyphs.py`). Kerning is re-made for the changed glyphs only.
 - **F7d, s:** the same construction fitted to the drawing at Regular: narrower (381 / 399 / 417, was 411 / 429 / 446),
   terminals reaching further round (insets from the glyph edge 36 top / 21 bottom, were 64 / 43), so the letter no
   longer leans back ('phần thụt đuôi trên của s hơi thụt nhiều so với dưới làm cảm giác chữ bị ngã ra sau'). Strokes
@@ -14,12 +14,54 @@ byte-identical to 1.006 (`scripts/patch_release_glyphs.py`). Kerning is re-made 
 - **Q2, Q:** the tail is a straight bar with level cuts that starts inside the counter and ends 50 under the baseline
   (was a bar from outside the ring to 96 under it); its top rises with the ring's bottom stroke so it stays visible in
   Bold.
-- **R9h, hỏi:** one even band bent round a half circle and opening to the left, both arms cut on one vertical line
-  (drawing 'Show-06', Regular: band 53, 131 x 138). The same mark alone and stacked; it sits where the old hỏi's ink
-  sat ('canh giữa như cũ'). On the mũ (Ẩ ẩ …) it stands beside it as drawn, the same size as a lone hỏi: 9 right of the
-  mũ, its centre a little over the mũ's top, so it may stand higher than on ả ('Đặt giống như này').
+  Square to the stroke the tail is as light as the other diagonals: the mean of X's diagonal and K's leg (Regular 103,
+  Medium 126, Bold 148; was 109 / 133 / 156; 'nét xéo của Q cho mỏng như nét xéo của X và K').
+- **R11h, hỏi:** redrawn from the designer's drawing over Ô Ổ ('update lại dấu hỏi', Subtract 591:63): a hook opening
+  to the left, a level top arm cut square, a ring of one thickness on the right and the lower arm a straight band down to
+  the left, cut square. The outline is the drawing's own at the drawing's scale (top arm 1.04 x the mark strip). Alone it
+  is centred by eye, not by box: the bowl swings right of the stem, so it stands 0.10 of its width left of the old hỏi's
+  ink centre ('canh dấu hỏi mới cho cảm nhận thị giác là giữa'), and 0.10 of its
+  height lower than the other tones' line (Regular 17, Bold 22; 'kéo dấu hỏi ở các dấu đơn thấp xuống chút'). On the mũ (Ổ ẩ …) its cut stands 6.8 px right of the mũ
+  and its bottom 0.40 of its height under the mũ's top, as drawn.
+- **A1, a:** the hood's free end runs further round the same curve toward the bowl's left extreme: in Regular halfway
+  from where its vertical cut stood (64 -> 32 from the bowl; 'dời đuôi chữ a ra thêm tới lằn đỏ ở giữa'); in Medium and
+  Bold 0.2 of that gap, so the a stands as upright as in Regular (its upper half's ink centre right of the lower half's by
+  0.026-0.028 of the advance; 0.5 left them at 0.016, 'chữ a bold cảm giác bị ngã về trái'). Where the clearance over
+  the bowl holds the tip, the outer arm runs flatter so the cut keeps its face ('bold đuôi a bị vuốt nhọn'). The marks
+  over a follow the head; kerning is re-solved from the new outline.
+- **R10y, ỵ:** its nặng stands beside the tail on the nặng line of every letter (centre 0.78 of the y's width, the
+  references' median), not under the tail ('dấu nặng y ... bỏ bên hông như các font khác').
+- **R11a, marks on a:** they ride over a's head (0.89 of the way from the whole letter's centre to the head's, the
+  references' median), not the whole letter, which put them 22-29 left of it ('dấu ă đang không canh giữa'); their
+  height is unchanged.
+- **R10d, nặng:** one length on every letter, 0.70 of the I's advance - 40: 140 / 153 / 165 (was 300; 'giảm bề ngang
+  dấu nặng cho bằng dấu nặng dưới chữ I', then 'hẹp lại thêm 30%').
 - **D2, diagonals:** V W X Y A K (and M with W) and v w x y were 0.77-0.86 of the stem measured square to the stroke
   ('nét xéo chữ X, Y, V, W cảm giác mỏng hơn các chữ khác'); now 0.90 in every weight. Outer widths unchanged.
+- **D3, diagonals between stems:** N and M, the two inner diagonals of W and w, and K's upper arm are lighter than the
+  diagonal that carries a letter alone ('nét xéo của M, N, và nét xéo trên của K sẽ mỏng hơn ...'; '2 nét xéo trong của W
+  cũng vậy'; 'kiểm tra nét xéo giữa của w thường'). They follow the primary diagonal, square to the stroke, by the medians
+  of seven reference families (Inter, Liberation Sans, Carlito, DejaVu Sans, Poppins, Work Sans, FreeSans: N 0.93 x V,
+  M 0.88 x V, K's arm 0.94 x its leg), taken ~4 % heavier by the designer ('đậm lên chút nữa'): N 0.96 x V, M and the
+  W / w inner diagonals 0.92 x V, K's arm 0.97 x its leg. W and w now overlap their two halves by the inner
+  stroke, so the middle peak is one clean apex.
+- **L1, ligatures tt ft tf ff:** standard ligatures (`liga`, on by default) whose crossbars run on unbroken ('khi gõ 2
+  chữ tt gõ liền kề thì cho nét ngang dính nhau'; fi / fl not wanted). t and f carry their bar at the same height, so
+  each ligature is the two letters at their natural spacing with the two flared bar ends that meet cut back to the
+  plain bar and joined. Kerned as their outer letters; GDEF carets between the two letters. Four new glyphs: t_t f_t
+  t_f f_f.
+- **R9a, trăng:** redrawn from the designer's drawing ('update dấu ă mới'): a U-shaped crescent with level cuts on its top
+  line and arms that lean in a little. Same width (280); Regular takes the drawing's proportions (height 89, bottom 52,
+  arms 68 wide at the top), heavier weights grow with the mark strip. It stands 12-14 lower than the old trăng's top
+  line would put it, so its foot keeps the old gap over the letter ('dời nó thấp 1 chút'); the tones on it keep their
+  line (ắ = ấ).
+- **R9r, lowercase marks higher:** every lowercase top mark and its stack stands 15 higher (30 % of the lone mark's
+  gap over the x-height: 'dời đồng bộ các dấu chữ thường cao lên 1 chút, khoảng 30%'). Capitals unchanged.
+- **K2, K narrower:** K is 0.923 of X wide in every weight (the reference median; it was 0.94 Regular, 0.97 Bold).
+- **K1, kerning:** KA WY XA XY XX WX (and their accented forms) open by 15 from the R16c point-contact overlap.
+- **K4, C before straight capitals:** C's open right side read loose before B D E F H K L M N P R ('kerning CD bị xa':
+  1.49 / 1.30 / 1.42 x the HH white, R / M / B, against the seven references' median 1.11-1.17); these pairs now kern to
+  that median (Regular -35, Medium -30, Bold -25; accented C follow by class).
 - **S1f, c Bold:** c's right side came out looser as the weight grew (rsb 30 / 39 / 61); Bold is now 47, the
   designer's choice between Regular's proportion (33, read too tight) and the old 61. Regular and Medium unchanged.
 
