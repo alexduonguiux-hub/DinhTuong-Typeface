@@ -26,6 +26,7 @@ Usage: python3 concept_v1.py  -> out/concept_v1/{proof_<w>.png, guides_<w>.png, 
 """
 import math, os, json, sys
 
+C_APER_CAP = 0.20 * 700   # W1-o: the capital C's aperture between its tips
 W8 = {'bold':    dict(V=157, H=131, HM=116, v=140, h=116, FL=9, fl=8),
       'medium':  dict(V=118, H=100, HM=89,  v=105, h=88,  FL=8, fl=7),
       'regular': dict(V=98,  H=84,  HM=76,  v=88,  h=74,  FL=7, fl=6)}
@@ -913,8 +914,23 @@ class Build:
     def g_C(self):
         G, W, V, H = [], 2 * self.R_O, self.V, self.H
         R = W / 2
-        tu = self.tail(G, W / 2, CAP + OV_C - H, W - V, V, 'r', 'up', ring=(CAP + OV_C - R, R, R))
-        tl = self.tail(G, W / 2, -OV_C + H, W - V, V, 'r', 'down', ring=(-OV_C + R, R, R))
+        # W1-o (20/11 'Các chữ C, khi bold lên thì dời nó dãn 2 đầu này ra theo hướng mũi tên để không bị dính lại'):
+        # the tips keep C_APER_CAP apart (Bold had closed to 76; 1.007 Bold 150) by moving each cut back along its own
+        # arm (a shorter reach, as c's W1-m), so the face keeps the stroke's thickness; Regular and Medium are wider
+        cyc = CAP / 2
+
+        def _open(vdir, sy, cedge, ring):
+            ext = 0.0
+            for _ in range(80):
+                Gt = []
+                t = self.tail(Gt, W / 2, cedge, W - V, V, 'r', vdir, ring=ring, ext=ext)
+                if (t['tip'] - (cyc + sy * C_APER_CAP / 2)) * sy >= -0.5:
+                    break
+                ext -= 3.0
+            G.extend(Gt)
+            return t
+        tu = _open('up', 1, CAP + OV_C - H, (CAP + OV_C - R, R, R))
+        tl = _open('down', -1, -OV_C + H, (-OV_C + R, R, R))
         ops = self.ring(0, -OV_C, W, CAP + OV_C, V, H) + arm_ink(tu) + arm_ink(tl) + band(tu['disk'], y0=tl['tip']) + \
             band(tl['disk'], y1=tu['tip']) + [('sub', rect(tu['xt'], -OV_C - 1, W + 1, CAP + OV_C + 1)),
                                                ('sub', rect(W / 2, tl['cy'] - 1, tu['xt'] + 1, tu['cy'] + 1))]   # R5d: the aperture between the arms

@@ -28,6 +28,10 @@
     less far toward the bowl (Medium 0, Bold -0.4 of the gap), so the letter stands upright.
   - **c (W1-m):** the tips stay >= 0.20 x-height apart in every weight (the lower tail drawn shorter, its face keeping the
     stroke's thickness); **e (W1-n):** the tail keeps its full reach.
+  - **C, G (W1-o):** the tips keep 0.20 of the cap height apart (C: between its two tips, Bold 76 -> 146; G: the arm's
+    tip over the bar, Bold 67 -> 140; 'khi bold lên thì dời nó dãn 2 đầu này ra ... để không bị dính lại', 'cho cả
+    G nhé'): each cut moves back along its own arm, so the face keeps the stroke's thickness. G's width and its lower
+    right stay where they were (the stretch is solved on the unshortened cut); only the arm above moves back.
   - **1 (R15e):** the flag follows the stem (V / 116 of the sample): Regular depth 109 -> 92, Bold 147.
   - **₫ (R15f):** the rule under it is the đ bar's thickness (0.9 h: 67 / 79 / 104), not 110 in every weight.
 
