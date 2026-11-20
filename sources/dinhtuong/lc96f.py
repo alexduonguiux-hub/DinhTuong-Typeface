@@ -34,7 +34,7 @@ from concept_v1 import rect, fstem, fbar, ell
 # advance as in Regular (0.027); Medium / Bold reach that with a shorter move (measured: 0.5 left them at 0.016-0.017)
 C_APER, E_APER = 0.20 * 530, 0.0   # W1-n (20/11 'gì mà đuôi e thụt vào làm gì vậy'): e keeps its full reach (no aperture cut-back)   # W1-j / W1-m: c's aperture between the tips, e's between tail and bar (x-height shares)
 A_HEAD_K = {'regular': 0.5, 'medium': 0.0, 'bold': -0.4}
-A_CUT = os.environ.get('A_CUT', 'radial')   # A2 (20/11 'Riêng chữ a thì thay vì cắt dọc đuôi thì cắt theo tâm như chữ e và c mới')
+A_CUT = os.environ.get('A_CUT', 'vertical')   # D7: 1.007's vertical cut by default   # A2 (20/11 'Riêng chữ a thì thay vì cắt dọc đuôi thì cắt theo tâm như chữ e và c mới')
 
 
 def _a_radial_cut(cx, cy, ta, oell):
@@ -75,7 +75,7 @@ XH, ASC, DESC = A.XH, A.ASC, A.DESC
 OV = 12
 TA = 1.00                  # P1: an arch's leg weighs what a stem weighs
 TS = 1.00                  # P1: a ring's vertical sides weigh what a stem weighs; tops/bottoms = h (caps contrast)
-BOWL_D, BOWL_FL = 63.0, 0.71   # F5d (20/11, drawing 602:230): bowl joint depth; the short flare under it
+BOWL_D, BOWL_FL = (63.0 if os.environ.get('F5D', '0') == '1' else 0.0), 0.71   # D7: 1.007's bowls unless F5D=1   # F5d (20/11, drawing 602:230): bowl joint depth; the short flare under it
 SPUR_D = 46                # F5b: where a bowl meets its stem: 46 u (0.5 h of the Regular) under the x-height
 SPUR = 0.12                # bowl stem stands this much (x v) outside the ring
 CUT = 0.45                 # F7
@@ -974,7 +974,7 @@ def _l5_g_a(self):
 
 if os.environ.get('L5', '0') == '1':   # 20/11 'đưa c, e, a về lại bản cũ': off
     LF.g_c, LF.g_e, LF.g_a = _l5_g_c, _l5_g_e, _l5_g_a
-if os.environ.get('L5CE', '1') == '1':  # L5b (20/11 'update lại thử các chữ này', Frame 40 615:434 again): c and e
+if os.environ.get('L5CE', '0') == '1':   # D7: off (1.007's c and e)  # L5b (20/11 'update lại thử các chữ này', Frame 40 615:434 again): c and e
     LF.g_c, LF.g_e = _l5_g_c, _l5_g_e   # from the drawing (the cuts above); a keeps its own form with the A2 cut
 
 if __name__ == '__main__':

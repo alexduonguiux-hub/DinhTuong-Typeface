@@ -1870,7 +1870,10 @@ def cap_Q():
     xp = x0 + (x1 - x0) * (199 - yp) / 249
     ta = _m.tan(_m.radians(Q_ANG))
     tw *= _m.cos(a0) / _m.cos(_m.radians(Q_ANG))
-    g.add(stroke((xp - (yt - yp) * ta, yt), (xp + (yp + 50) * ta, -50), tw))
+    if __import__('os').environ.get('Q2D', '0') == '1':    # D7: Q2d only on request; 1.007's tail otherwise
+        g.add(stroke((xp - (yt - yp) * ta, yt), (xp + (yp + 50) * ta, -50), tw))
+    else:
+        g.add(stroke((x0 - (x1 - x0) * (yt - 199) / 249, yt), (x1, -50), tw / (_m.cos(a0) / _m.cos(_m.radians(Q_ANG)))))
     return reg(g)
 
 
@@ -2882,6 +2885,9 @@ def _cg3_ring():
 # Weights: the width follows the round capitals' R2c growth from the drawing's weight, plus CG3_OPEN of the stroke
 # growth on each side (the counter opens with the weight); corners and heights are fixed, so nothing stretches.
 # =====================================================================
+# D7 (20/11 'trả về bản 1.007 nhưng tối ưu Weight lại cho giống weight của 1.008'): the 1.007 C and G stay (their
+# definitions above); the C5 / C6 drawings below are kept for reference and switched on only with CG=5 / CG=6
+_cap_C_1007, _cap_G_1007 = cap_C, cap_G
 CG5_RO, CG5_RI, CG5_WC, CG5_WG, CG5_BAR_Y, CG5_BAR_X, CG5_VD = 0.344, 0.220, 467.5 + 20.0, 502.5 + 50.0, 0.558, 0.463, 116.0   # G bar raised (20/11 revision: top 156 px, left end 93 px); C5-c (20/11 'tăng bề ngang chữ C và G lên 1 chút, chữ G phải rộng hơn C 1 chút'): C +20, G +50
 
 
@@ -2976,7 +2982,7 @@ def _cg6_cut(W, y_low=None):
     return poly([(xc, cy + CG6_T * xc), (X, cy + CG6_T * X), (X, lo(X)), (xc, lo(xc))])
 
 
-if _os.environ.get('CG6', '1') == '1':
+if _os.environ.get('CG', '1007') == '6':
     def cap_C():
         W, outer, inner = _cg6(CG6_WC, rw=106.5 / 217.0)
         g = Glyph('C', W, SB_ROUND, 52, 0x43)
@@ -2990,3 +2996,7 @@ if _os.environ.get('CG6', '1') == '1':
         g.group([('add', outer), ('sub', inner), ('sub', _cg6_cut(W, y_low=ybt))])
         g.add(fbar(CG6_BAR_X * W, ybt - HM, W - V / 2, ybt, left=True, right=False))
         return reg(g)
+
+
+if _os.environ.get('CG', '1007') == '1007':
+    cap_C, cap_G = _cap_C_1007, _cap_G_1007

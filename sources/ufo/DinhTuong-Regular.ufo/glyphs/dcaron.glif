@@ -1,13 +1,20 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <glyph name="dcaron" format="2">
-  <advance width="668"/>
+  <advance width="667"/>
   <unicode hex="010F"/>
   <outline>
     <contour>
       <point x="507" y="0" type="line"/>
-      <point x="501" y="42"/>
-      <point x="500" y="84"/>
-      <point x="500" y="120" type="curve"/>
+      <point x="501" y="32"/>
+      <point x="500" y="63"/>
+      <point x="500" y="92" type="curve"/>
+      <point x="500" y="217" type="line"/>
+      <point x="500" y="233"/>
+      <point x="504" y="249"/>
+      <point x="504" y="265" type="curve"/>
+      <point x="504" y="281"/>
+      <point x="500" y="297"/>
+      <point x="500" y="313" type="curve"/>
       <point x="500" y="620" type="line"/>
       <point x="500" y="656"/>
       <point x="501" y="698"/>
@@ -16,22 +23,21 @@
       <point x="408" y="698"/>
       <point x="409" y="656"/>
       <point x="409" y="620" type="curve"/>
-      <point x="409" y="469" type="line"/>
-      <point x="368" y="514"/>
-      <point x="312" y="542"/>
-      <point x="249" y="542" type="curve"/>
-      <point x="119" y="542"/>
+      <point x="409" y="485" type="line"/>
+      <point x="368" y="521"/>
+      <point x="316" y="542"/>
+      <point x="260" y="542" type="curve"/>
+      <point x="123" y="542"/>
       <point x="16" y="420"/>
       <point x="16" y="265" type="curve"/>
       <point x="16" y="110"/>
-      <point x="119" y="-12"/>
-      <point x="249" y="-12" type="curve"/>
-      <point x="312" y="-12"/>
-      <point x="368" y="16"/>
-      <point x="409" y="61" type="curve"/>
-      <point x="409" y="45" type="line"/>
-      <point x="409" y="31"/>
-      <point x="408" y="16"/>
+      <point x="123" y="-12"/>
+      <point x="260" y="-12" type="curve"/>
+      <point x="316" y="-12"/>
+      <point x="368" y="9"/>
+      <point x="409" y="45" type="curve"/>
+      <point x="409" y="33"/>
+      <point x="408" y="14"/>
       <point x="402" y="0" type="curve"/>
     </contour>
     <contour>

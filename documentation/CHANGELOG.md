@@ -1,8 +1,8 @@
 # Changelog
 
 ## 1.008 (2026-11-20)
-A lighter family with evenly spaced weights, new C and G, d b p q g after the designer's d, and a full QA pass. Every
-glyph changes (the strokes changed), so 1.008 is a full build from the generators, not a patch on 1.007.
+1.007's letters on lighter, evenly spaced weights, and a full QA pass. Every glyph changes (the strokes changed), so
+1.008 is a full build from the generators, not a patch on 1.007.
 
 ### Weights
 - **W1, lighter, evenly spaced:** Regular was as heavy as other families' Medium-SemiBold (n stem 0.204 x-height against
@@ -16,28 +16,20 @@ glyph changes (the strokes changed), so 1.008 is a full build from the generator
   e no longer run past their bowls.
 
 ### Letters
-- **C6 / G6, C and G round-cornered** (Figma 615:434, latest revision): a ring whose four corners are rounded C 0.491 /
-  G 0.468 of the width (a share of the width in every weight, so Bold is as round as Regular), its counter inset by the
-  stem at the sides and H at top and bottom with concentric corners; both ends cut by straight lines that meet on the
-  centre line at the outer left edge, 16.5 deg off level; G's upper cut runs down to a bar HM thick (top 0.488 of the cap
-  height) from 0.563 of the width, its left end flared. Drawing widths C 542.5, G 577.5 (G wider than C); heavier
-  weights grow outward and open the counter a little.
-- **1 (R15e):** the flag's sizes follow the stem (the sample's, drawn on a 116 u stem, times V / 116): it was the same size
-  in every weight, too heavy on the lighter Regular ('móc trên regular của số 1 bị dày quá': depth 109 -> 92) and too
-  small on Bold (-> 147).
-- **₫ (R15f):** the rule under it is the đ bar's thickness (0.9 h: 67 / 79 / 104), not 110 in every weight.
-- **F5d, d b p q g** (Figma 602:230): the bowl meets the stem 63 u inside the x-height and the baseline (was 46); the
-  stem's end at the bowl flares on both sides, the bowl's side over a short run under the joint.
-- **Q2d, Q's tail** leans 35 deg (was 27-29), turned about where it enters the counter, as light as X's diagonal.
-- **S (W1-c):** the cuts stand where the approved 1.007 S had them, measured from the other bowl's outer edge (top 52 ->
-  35, bottom 25 -> 14, Regular -> Bold), so no terminal runs past a bowl in any weight.
-- **a (A1-d):** Medium and Bold hoods keep the cut face at least as thick as the hood's own stroke (Bold 100 -> 122, no
-  taper) and move less far toward the bowl (Medium 0, Bold -0.4 of the gap) so the letter stands upright.
-- **a (A2):** the hood's free end is cut on the radius through the hood's centre and the old cut's outer corner, not
-  vertically ('cắt theo tâm như chữ e và c mới').
-- **c, e (L5b, Figma 615:434):** the o ring with both ends of c cut by one straight line from the outer ellipse at 31.4 deg
-  to the inner at 37.2 deg (mirrored below); e's bar 0.914 h thick, its top 0.226 R over the centre, its tail cut from
-  -32.1 deg (outer) to -30.6 deg (inner). The counters keep the drawing's size; heavier weights grow outward.
+- **D7, 1.007's letters on the 1.008 weights** ('trả về bản 1.007 nhưng tối ưu Weight lại cho giống weight của 1.008'):
+  C, G, Q, d b p q g, a, c and e keep their 1.007 drawings; only the strokes change (W1). The Figma revisions tried
+  during 1.008 stay in the generator behind switches, off by default: CG=5 / CG=6 (squared / round-cornered C and G),
+  Q2D=1 (Q's tail at 35 deg), F5D=1 (d b p q g bowl joints), L5CE=1 (c and e from Frame 40), A_CUT=radial (a's hood cut
+  on the radius).
+- Kept because the lighter strokes need them:
+  - **S (W1-c):** the cuts stand where the 1.007 S had them, measured from the other bowl's outer edge (top 52 -> 35,
+    bottom 25 -> 14, Regular -> Bold), so no terminal runs past a bowl in any weight.
+  - **a (A1-d):** Medium and Bold hoods keep the cut face at least as thick as the hood's own stroke (no taper) and move
+    less far toward the bowl (Medium 0, Bold -0.4 of the gap), so the letter stands upright.
+  - **c (W1-m):** the tips stay >= 0.20 x-height apart in every weight (the lower tail drawn shorter, its face keeping the
+    stroke's thickness); **e (W1-n):** the tail keeps its full reach.
+  - **1 (R15e):** the flag follows the stem (V / 116 of the sample): Regular depth 109 -> 92, Bold 147.
+  - **₫ (R15f):** the rule under it is the đ bar's thickness (0.9 h: 67 / 79 / 104), not 110 in every weight.
 
 ### Spacing
 - **W1-l:** lowercase sidebearings close by up to 15 % from Regular to Bold (the heavier weights read wider set than
