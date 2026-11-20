@@ -14,6 +14,7 @@ features.fea gets
 
 Usage: python3 ligatures.py Regular.ufo Medium.ufo Bold.ufo
 """
+import math
 import re
 import sys
 
@@ -85,7 +86,7 @@ def build(font):
         # the bar's own thickness, measured past the flared end (R4b flares every free bar end over ~40 u)
         lo_a, hi_a = bar_span(ga, ax1 - FLARE - 8)
         lo_b, hi_b = bar_span(gb, bx0 + FLARE + 8)
-        lo, hi = max(lo_a, lo_b), min(hi_a, hi_b)
+        lo, hi = math.ceil(max(lo_a, lo_b)), math.floor(min(hi_a, hi_b))   # W1-d (QA: a 1 u step where the flare's last unit was measured): whole units inside the plain bar
         rec = RecordingPen()
         ga.draw(rec)
         gb.draw(TransformPen(rec, (1, 0, 0, 1, sh, 0)))

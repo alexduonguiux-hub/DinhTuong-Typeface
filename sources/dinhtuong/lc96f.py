@@ -32,7 +32,8 @@ from concept_v1 import rect, fstem, fbar, ell
 # A1: share of the hood-cut-to-bowl gap the a's hood end moves out (19/11). A1-c ('chữ a bold cảm giác bị ngã về
 # trái'): the a stands upright when its upper half's ink centre is right of the lower half's by the same share of the
 # advance as in Regular (0.027); Medium / Bold reach that with a shorter move (measured: 0.5 left them at 0.016-0.017)
-A_HEAD_K = {'regular': 0.5, 'medium': 0.2, 'bold': 0.2}
+C_APER, E_APER = 0.25 * 530, 0.15 * 530   # W1-j: c's aperture between the tips, e's between tail and bar (x-height shares)
+A_HEAD_K = {'regular': 0.5, 'medium': 0.0, 'bold': -0.4}
 
 XH, ASC, DESC = A.XH, A.ASC, A.DESC
 OV = 12
@@ -435,7 +436,7 @@ class LF(A.LC):
                 # left extreme (x 0), in every weight
                 GA = []
                 ta = self.tail(GA, cx, cy + ry, cx - r, 0.85 * v, 'l', 'up', tip_limit=max(cy, yb0 + AP_S), cry=ry,
-                               ring=(cy, r + 0.85 * v, ry + h), ext=A_HEAD_K.get(self.w, 0.5) * ta['xt'], keep_face=ta['face'])
+                               ring=(cy, r + 0.85 * v, ry + h), ext=A_HEAD_K.get(self.w, 0.5) * ta['xt'], keep_face=max(ta['face'], self.h))   # A1-d: never thinner at the cut than the hood's own stroke ('móc a Bold đang bị vuốt nhỏ dần')
             hood = ('group', [('add', ell(cx + 0.075 * v, cy, r + 0.925 * v, ry + h)), ('sub', ell(cx, cy, r, ry))] +
                     CV.arm_ink(ta) + [('sub', rect(cx, -3000, 6000, cy)), ('sub', ta['disk']),
                               ('sub', rect(-3000, -3000, ta['xt'], 6000)), ('sub', rect(-3000, -3000, cx, ta['tip']))])
@@ -579,8 +580,12 @@ class LF(A.LC):
         if os.environ.get('AE_CUT', 'R5') == 'R5':     # F7e: both ends = the caps C (R5d) on the lowercase ring
             G, R = [], self.Rr
             ryi = R - self.tt
-            tu = self.tail(G, Rx, cy + ryi, 2 * Rx - self.ts, self.ts, 'r', 'up', cry=ryi, ring=(cy, Rx, R))
-            tl = self.tail(G, Rx, cy - ryi, 2 * Rx - self.ts, self.ts, 'r', 'down', cry=ryi, ring=(cy, Rx, R))
+            # W1-j (20/11 'các chữ c, e bold nên dời đuôi xa ra để không dính nhau'): the two tips keep C_APER apart
+            # (Bold had 34): each tip stays C_APER / 2 off the centre line; Regular / Medium are wider and unchanged
+            tu = self.tail(G, Rx, cy + ryi, 2 * Rx - self.ts, self.ts, 'r', 'up', cry=ryi, ring=(cy, Rx, R),
+                           tip_limit=cy + C_APER / 2)
+            tl = self.tail(G, Rx, cy - ryi, 2 * Rx - self.ts, self.ts, 'r', 'down', cry=ryi, ring=(cy, Rx, R),
+                           tip_limit=cy - C_APER / 2)
             ops = ring + CV.arm_ink(tu) + CV.arm_ink(tl) + CV.band(tu['disk'], y0=cy) + CV.band(tl['disk'], y1=cy) + [
                 ('sub', rect(tu['xt'], -3000, 6000, 6000)), ('sub', rect(Rx, tl['tip'], tu['xt'] + 1, tu['tip']))]
             return self.G('c', tu['xt'], 36, 30, [('group', ops)], G)     # ink ends at the cut; same right side as F7b
@@ -596,7 +601,7 @@ class LF(A.LC):
         from concept_v1 import poly
         xo = lambda y: Rx + Rx * math.sqrt(max(0, 1 - ((y - cy) / R) ** 2)) - 1   # the ring's outer edge at height y
         lo, hi = yb - hb / 2, yb + hb / 2
-        edge = [(xo(lo), lo)] + ([(2 * Rx - 1, cy)] if lo < cy < hi else []) + [(xo(hi), hi)]   # QA: the bar's end follows the ring
+        edge = [(xo(lo) + 1, lo)] + ([(2 * Rx - 1, cy)] if lo < cy < hi else []) + [(xo(hi), hi)]   # QA: the bar's end follows the ring
         bar = ('add', poly([(self.ts - 2, lo)] + edge + [(self.ts - 2, hi)]))
         a_lo = math.degrees(math.atan2(min(lo, cy) - cy, Rx))
         # F7c (03:13 'e dính đuôi và thân ở Bold'; principle: openings in REGULAR units): the tail ends on the
@@ -612,7 +617,7 @@ class LF(A.LC):
         cut = [wedge(Rx, cy, -th, a_lo), ('sub', rect(Rx, cy - 1, 6000, lo))]
         if os.environ.get('AE_CUT', 'R5') == 'R5':     # F7e: the caps tail R5d on e's lower end (vertical cut, Regular's arm)
             G = []
-            tl = self.tail(G, Rx, cy - ryi, 2 * Rx - self.ts, self.ts, 'r', 'down', tip_limit=lo - AP_S, cry=ryi,
+            tl = self.tail(G, Rx, cy - ryi, 2 * Rx - self.ts, self.ts, 'r', 'down', tip_limit=lo - max(AP_S, E_APER), cry=ryi,   # W1-j: the tail keeps E_APER under the bar (Bold had 30)
                            ring=(cy, Rx, R), face=float(os.environ.get('E_FACE', '1.12')),
                            reach=float(os.environ.get('E_REACH', '192')) + (Rx - CX * R))   # R5e: lone tail: approved F7 reach, optical face
             cut = CV.arm_ink(tl) + CV.band(tl['disk'], y1=lo) + [('sub', rect(tl['xt'], -3000, 6000, lo)),
@@ -829,6 +834,94 @@ class LF(A.LC):
 
 
 LC = LF
+
+
+# =====================================================================================================================
+# L5 (20/11, designer's 'Frame 40' 615:434, 'cập nhật c, e, a mới'). Measured on the drawing (x-height 211.6 px = 530 u,
+# drawn at the 1.007 Regular: stems 44 px = 110, round sides 43.2 px = 108, tops 37.2 px = 93):
+#   c: the o ring; both ends cut by ONE straight line from the outer ellipse at 31.4 deg to the inner at 37.2 deg
+#      (ellipse parameter angles, mirrored below): a cut square-ish to the stroke, not vertical;
+#   e: the o ring; the bar 0.914 h thick, its top 0.226 R over the centre; the lower end cut by one straight line from
+#      the outer ellipse at -32.1 deg to the inner at -30.6 deg; the ring is open between the bar and that cut;
+#   a: the hood is a CIRCLE ring (not an ellipse) whose counter just touches the stem, its free end cut on the radius
+#      at 159.5 deg; the stem runs from the hood's centre line to the baseline, its foot flared on the right only; the
+#      bowl an upright ellipse (left at 0, right 0.58 v inside the stem, top 0.637 x-height), its counter an ellipse
+#      inset by 0.93 v (left), 1.075 h (top), h (bottom), reaching the stem's inner edge.
+# Weights: the counters keep the drawing's size at the drawing's weight and every stroke is this weight's (v, h), so a
+# heavier weight grows outward (the counters open a touch: 0.2 of the stem growth) and no end gets long or pointed.
+# =====================================================================================================================
+L5_VD, L5_HD = 110.0, 93.0
+
+
+def _l5_ell_pt(cx, cy, rx, ry, deg):
+    t = math.radians(deg)
+    return (cx + rx * math.cos(t), cy + ry * math.sin(t))
+
+
+def _l5_cut_region(cx, P_o, P_i, sy, x_far=3000.0):
+    """the region right of the axis x = cx, on the far side (sy = +1: below, -1: above) of the line P_i -> P_o"""
+    from concept_v1 import poly
+    (xo, yo), (xi, yi) = P_o, P_i
+    s = (yo - yi) / (xo - xi)
+    yc = yi + s * (cx - xi)
+    yf = yi + s * (x_far - xi)
+    return poly([(cx, yc), (x_far, yf), (x_far, yf - sy * 4000), (cx, yc - sy * 4000)])
+
+
+def _l5_g_c(self):
+    Rx = self.rx_round(); R = self.Rr
+    ring, cy = self.ring(Rx, rx=Rx)
+    rxi, ryi = Rx - self.ts, R - self.tt
+    To, Ti = _l5_ell_pt(Rx, cy, Rx, R, 31.4), _l5_ell_pt(Rx, cy, rxi, ryi, 37.2)
+    Bo, Bi = _l5_ell_pt(Rx, cy, Rx, R, -31.4), _l5_ell_pt(Rx, cy, rxi, ryi, -37.2)
+    from concept_v1 import poly
+    s_t = (To[1] - Ti[1]) / (To[0] - Ti[0]); s_b = (Bo[1] - Bi[1]) / (Bo[0] - Bi[0])
+    X = 3000.0
+    region = poly([(Rx, Ti[1] + s_t * (Rx - Ti[0])), (X, Ti[1] + s_t * (X - Ti[0])),
+                   (X, Bi[1] + s_b * (X - Bi[0])), (Rx, Bi[1] + s_b * (Rx - Bi[0]))])
+    return self.G('c', To[0], 36, 30, [('group', ring + [('sub', region)])])
+
+
+def _l5_g_e(self):
+    from concept_v1 import poly
+    R = self.Rr; Rx = self.rx_round()
+    ring, cy = self.ring(Rx, rx=Rx)
+    rxi, ryi = Rx - self.ts, R - self.tt
+    hb = 0.914 * self.h
+    hi = cy + 0.226 * R
+    lo = hi - hb
+    xo = lambda y: Rx + Rx * math.sqrt(max(0, 1 - ((y - cy) / R) ** 2))
+    bar = ('add', poly([(self.ts - 2, lo), (xo(lo) - 1, lo)] + ([(2 * Rx - 1, cy)] if lo < cy < hi else []) +
+                       [(xo(hi) - 1, hi), (self.ts - 2, hi)]))
+    Bo, Bi = _l5_ell_pt(Rx, cy, Rx, R, -32.1), _l5_ell_pt(Rx, cy, rxi, ryi, -30.6)
+    s_b = (Bo[1] - Bi[1]) / (Bo[0] - Bi[0])
+    X = 3000.0
+    region = poly([(Rx, lo), (X, lo), (X, Bi[1] + s_b * (X - Bi[0])), (Rx, Bi[1] + s_b * (Rx - Bi[0]))])
+    return self.G('e', 2 * Rx, 36, 24, [('group', ring + [('sub', region)]), bar])
+
+
+def _l5_g_a(self):
+    v, h = self.v, self.h
+    dv = v - L5_VD
+    stem_l = 333.9 + 0.2 * dv                       # the stem's inner edge (drawing 133.55 px)
+    stem_r = stem_l + v
+    Ri = 100.8 + 0.1 * dv                           # the hood's counter (40.3 px), a circle touching the stem
+    Ro = Ri + v
+    hx, hy = stem_l - Ri, XH + OV - Ro
+    hood = ('group', [('add', ell(hx, hy, Ro, Ro)), ('sub', ell(hx, hy, Ri, Ri)),
+                      ('sub', rect(-3000, -3000, 6000, hy)), wedge(hx, hy, 159.5, 270.0)])
+    st = ('add', fstem2(stem_l, 0, stem_r, hy + 1, self.fl, tl=False, tr=False, bl=False, br=True))
+    top = 0.637 * XH                                 # the bowl's top (82 px under the hood's top)
+    bx1 = stem_l + 0.58 * v                          # the bowl's outer right edge, inside the stem (159 px)
+    brx, bry, bcx, bcy = bx1 / 2, (top + OV) / 2, bx1 / 2, (top - OV) / 2
+    il, it, ib = 0.93 * v, top - 1.075 * h, -OV + h  # the bowl counter: inset left / top / bottom
+    bowl = ('group', [('add', ell(bcx, bcy, brx, bry)), st,
+                      ('sub', ell((il + stem_l) / 2, (it + ib) / 2, (stem_l - il) / 2, (it - ib) / 2))])
+    return self.G('a', stem_r, 34, 50, [hood, bowl])
+
+
+if os.environ.get('L5', '0') == '1':   # 20/11 'đưa c, e, a về lại bản cũ': off
+    LF.g_c, LF.g_e, LF.g_a = _l5_g_c, _l5_g_e, _l5_g_a
 
 if __name__ == '__main__':
     import booleng

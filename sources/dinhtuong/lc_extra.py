@@ -40,7 +40,10 @@ def g_thorn(B):
 def dbar_y(B):
     """the đ bar's level (lcfont): centred between x-height and ascender, >= 0.5 h Regular over the bowl."""
     yb = max((XH + ASC) / 2 - B.h * 0.45, XH + OV + 0.5 * 93)
-    return min(yb, ASC - 0.9 * B.h - 40)
+    yb = min(yb, ASC - 0.9 * B.h - 40)
+    if abs(yb + 0.9 * B.h - 700) < 4:                # W1-e (QA alignment): a top edge within 4 u of the cap height sits ON it
+        yb = 700 - 0.9 * B.h
+    return yb
 
 
 def g_eth_arc(B):

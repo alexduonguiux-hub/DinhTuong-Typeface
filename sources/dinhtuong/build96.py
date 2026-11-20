@@ -91,6 +91,8 @@ def core_lc(c):
         bg = LF.BASE['h']
         yb = max((LF.lcm.XH + LF.lcm.ASC) / 2 - lh * 0.45, LF.lcm.XH + getattr(LF.lcm, 'OV', 0) + 0.5 * 93)
         yb = min(yb, LF.lcm.ASC - 0.9 * lh - 40)
+        if abs(yb + 0.9 * lh - 700) < 4:             # W1-e (QA alignment): a top edge within 4 u of the cap height sits ON it
+            yb = 700 - 0.9 * lh
         o = [('add', GL.rect(-25, yb, lv + 120, yb + 0.9 * lh))]
         nm = 'bar'
     else:
@@ -284,6 +286,9 @@ K['exceptions'].update({'67': {'regular': -50, 'medium': -45, 'bold': -40}[W8], 
 # white opens into a V right above the contact. For these the feet / arm tips OVERLAP by R16C_OV (Regular 40, Medium 42,
 # Bold 44) inside the body band; marks of accented forms still keep >= 26 from the other letter. Only ever tightens.
 R16C_OV = {'regular': 40, 'medium': 42, 'bold': 44}[W8]
+# R16c-b (20/11 'các cặp chữ hoa xéo ... đang bị chồng chân ... -> vừa đủ tách ra thôi'): no overlap any more; the feet
+# / arm tips stand 8 apart (-R16C_OV, just separated), the V of white above them stays as tight as that allows
+R16C_OV = -8
 # K1 (19/11 'tăng kerning của các cặp KA, WY, XA, XY, XX, WX lên một chút'): these six open by 15 from the R16c overlap
 # (accented forms follow their base pair)
 R16C_OPEN = {'KA': 15, 'WY': 15, 'XA': 15, 'XY': 15, 'XX': 15, 'WX': 15}

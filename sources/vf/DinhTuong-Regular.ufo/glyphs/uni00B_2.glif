@@ -1,57 +1,60 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <glyph name="uni00B2" format="2">
-  <advance width="316"/>
+  <advance width="314"/>
   <unicode hex="00B2"/>
   <outline>
     <contour>
       <point x="30" y="330" type="curve"/>
-      <point x="115.33333333333333" y="330.0"/>
-      <point x="200.66666666666666" y="330.0"/>
-      <point x="286" y="330" type="curve"/>
-      <point x="286.0" y="349.0"/>
-      <point x="286.0" y="368.0"/>
-      <point x="286" y="387" type="curve"/>
-      <point x="262" y="384"/>
-      <point x="239" y="383"/>
-      <point x="219" y="383" type="curve"/>
-      <point x="184.66666666666666" y="383.0"/>
-      <point x="150.33333333333331" y="383.0"/>
-      <point x="116" y="383" type="curve"/>
-      <point x="157.66666666666666" y="420.0"/>
-      <point x="199.33333333333331" y="457.0"/>
-      <point x="241" y="494" type="curve"/>
-      <point x="271" y="520"/>
-      <point x="286" y="555"/>
-      <point x="286" y="595" type="curve"/>
-      <point x="286" y="648"/>
-      <point x="256" y="694"/>
-      <point x="212" y="715" type="curve"/>
-      <point x="163" y="738"/>
-      <point x="100" y="728"/>
-      <point x="50" y="697" type="curve"/>
-      <point x="50.0" y="675.3333333333334"/>
-      <point x="50.0" y="653.6666666666666"/>
-      <point x="50" y="632" type="curve"/>
-      <point x="85" y="654"/>
-      <point x="143" y="689"/>
-      <point x="186" y="666" type="curve"/>
-      <point x="209" y="654"/>
-      <point x="224" y="627"/>
-      <point x="224" y="594" type="curve"/>
-      <point x="224" y="578"/>
-      <point x="220" y="559"/>
-      <point x="210" y="545" type="curve"/>
-      <point x="208.30770948493753" y="542.8846368561719"/>
-      <point x="206.25743807145375" y="540.9482641615544"/>
-      <point x="204.3035415187776" y="539.0394299964047" type="curve"/>
-      <point x="201.63909025165518" y="536.4364285206644"/>
-      <point x="199.15385474246875" y="533.8846368561719"/>
-      <point x="198" y="531" type="curve"/>
-      <point x="142.0" y="481.0"/>
-      <point x="86.0" y="431.0"/>
-      <point x="30" y="381" type="curve"/>
-      <point x="30.0" y="364.0"/>
-      <point x="30.0" y="347.0"/>
+      <point x="114.66666666666667" y="330.0"/>
+      <point x="199.33333333333334" y="330.0"/>
+      <point x="284" y="330" type="curve"/>
+      <point x="284.0" y="346.3333333333333"/>
+      <point x="284.0" y="362.6666666666667"/>
+      <point x="284" y="379" type="curve"/>
+      <point x="260" y="375"/>
+      <point x="237" y="375"/>
+      <point x="217" y="375" type="curve"/>
+      <point x="179.33333333333334" y="375.0"/>
+      <point x="141.66666666666669" y="375.0"/>
+      <point x="104" y="375" type="curve"/>
+      <point x="149.0" y="414.3333333333333"/>
+      <point x="194.0" y="453.6666666666667"/>
+      <point x="239" y="493" type="curve"/>
+      <point x="246.9022228293114" y="499.8485931187365"/>
+      <point x="253.76369356455461" y="507.39102096685184"/>
+      <point x="259.5844122057297" y="515.5176268115806" type="curve"/>
+      <point x="275.86147073524324" y="538.2428686820988"/>
+      <point x="284.0" y="565.5362971057485"/>
+      <point x="284" y="595" type="curve"/>
+      <point x="284" y="648"/>
+      <point x="254" y="694"/>
+      <point x="211" y="715" type="curve"/>
+      <point x="162" y="738"/>
+      <point x="98" y="729"/>
+      <point x="50" y="691" type="curve"/>
+      <point x="50.0" y="671.6666666666666"/>
+      <point x="50.0" y="652.3333333333334"/>
+      <point x="50" y="633" type="curve"/>
+      <point x="74" y="651"/>
+      <point x="124" y="688"/>
+      <point x="169" y="681" type="curve"/>
+      <point x="203" y="675"/>
+      <point x="232" y="640"/>
+      <point x="232" y="594" type="curve"/>
+      <point x="232.0" y="587.4615622253148"/>
+      <point x="231.40787855216854" y="580.8047001610632"/>
+      <point x="230.1421293566803" y="574.2739327067213" type="curve"/>
+      <point x="227.7297469337279" y="561.8269892905994"/>
+      <point x="222.87046035283035" y="549.838075441038"/>
+      <point x="215" y="540" type="curve"/>
+      <point x="211" y="535"/>
+      <point x="208" y="528"/>
+      <point x="202" y="525" type="curve"/>
+      <point x="144.66666666666666" y="474.0"/>
+      <point x="87.33333333333333" y="423.0"/>
+      <point x="30" y="372" type="curve"/>
+      <point x="30.0" y="358.0"/>
+      <point x="30.0" y="344.0"/>
     </contour>
   </outline>
 </glyph>

@@ -662,17 +662,23 @@ def p_parenright():
     g = _g(')', q['xi'], 50, 49); g.ops += rot180_ops(_paren_ops(), q['xi'] / 2, q['cy']); return _reg(g)
 
 
+def _brk_y():
+    """W1-e (QA alignment: Medium's bar edge fell 1 u above the cap height): an edge within 4 u of the cap height sits ON it"""
+    y = CAP + 90 - HM
+    return CAP if abs(y - CAP) < 4 else y
+
+
 def p_bracketleft():
     W = 240 + gw('one')                             # R2c
     g = _g('[', W, 50, 20)
-    g.add(rect(0, -140, V, CAP + 90), rect(0, CAP + 90 - HM, W, CAP + 90), rect(0, -140, W, -140 + HM))
+    g.add(rect(0, -140, V, CAP + 90), rect(0, _brk_y(), W, CAP + 90), rect(0, -140, W, -140 + HM))
     return _reg(g)
 
 
 def p_bracketright():
     W = 240 + gw('one')                             # R2c
     g = _g(']', W, 20, 50)
-    g.add(rect(W - V, -140, W, CAP + 90), rect(0, CAP + 90 - HM, W, CAP + 90), rect(0, -140, W, -140 + HM))
+    g.add(rect(W - V, -140, W, CAP + 90), rect(0, _brk_y(), W, CAP + 90), rect(0, -140, W, -140 + HM))
     return _reg(g)
 
 

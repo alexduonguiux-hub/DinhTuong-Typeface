@@ -1,19 +1,61 @@
 # Changelog
 
 ## 1.008 (2026-11-20)
-d, b, p, q and g follow the designer's d (Figma 'Frame 35', 602:230), and Q's tail leans further. Only these glyphs (and the
-letters built from them: ď đ ₫ ğ ĝ ġ ģ þ, and ß, whose right side is b's) change; every other glyph is byte-identical to 1.007
-(`scripts/patch_release_glyphs.py`).
-- **Q2d, Q's tail:** leans 35 deg off vertical (was 27-29; 'nét nghiêng trong Q cho nghiêng thêm'), turned about the
-  point where it enters the counter, so the part inside the counter keeps its place; square to the stroke it keeps Q2c's
-  thickness (103 / 125 / 149).
-- **F5d, bowl joints:** the bowl's outer curve meets the stem 63 u inside the x-height and the baseline (was 46): its
-  far side, the far stroke and the counter stay where they were, only the side toward the stem is drawn in (one upright
-  ellipse through the far extreme and the two joints; Regular 467 wide, was 479). The counter is unchanged, a whole
-  upright ellipse just touching the stem. Medium and Bold use the same depth.
-- **F5d, stem end at the bowl:** that end now flares on both sides, as drawn: the far side like every free end (7 / 8 / 9
-  over 120), the bowl's side by the same amount over a short run that ends under the joint (0.71 of its depth, 45 u).
-  The other end of the stem is unchanged.
+A lighter family with evenly spaced weights, new C and G, d b p q g after the designer's d, and a full QA pass. Every
+glyph changes (the strokes changed), so 1.008 is a full build from the generators, not a patch on 1.007.
+
+### Weights
+- **W1, lighter, evenly spaced:** Regular was as heavy as other families' Medium-SemiBold (n stem 0.204 x-height against
+  the references' 0.160-0.180; Inter, Liberation Sans, DejaVu Sans, Carlito, Poppins, FreeSans). The stroke tables are
+  set so Regular / Medium / SemiBold / Bold sit at even steps on the 400 / 500 / 600 / 700 axis:
+  caps stem V 98 / 118 / (137) / 157 (was 116 / 142 / (155) / 168), every other stroke in the same ratios;
+  n stem / x-height 0.172 / 0.208 / 0.242 / 0.275 (Inter 0.161 / 0.197 / 0.233 / 0.268). Sidebearings open as the
+  stems thin (existing rule, now on the new stems). Medium used to sit halfway to Bold, so SemiBold was almost Bold.
+- Rules written in 1.007 Regular units now take the new Regular as their base: the round capitals' growth (R2c) is
+  measured from V 98; the tails' Regular reach is a floor taken on each weight's own counter (W1-b), so the Bold S, c,
+  e no longer run past their bowls.
+
+### Letters
+- **C5 / G5, C and G squared** (Figma 615:434): the left side one stem with large rounded corners (0.344 of the cap
+  height), the counter's corners concentric with them (C5-b); straight top and bottom arms H thick running to the
+  advance edge, their ends cut vertically and flared; G with a square lower-right corner, a post up from the baseline
+  and a bar HM thick lying on its top 0.558 of the cap height up, its left end flared. Heavier weights grow outward and
+  open the counter a little (0.3 of the stroke growth each side).
+- **F5d, d b p q g** (Figma 602:230): the bowl meets the stem 63 u inside the x-height and the baseline (was 46); the
+  stem's end at the bowl flares on both sides, the bowl's side over a short run under the joint.
+- **Q2d, Q's tail** leans 35 deg (was 27-29), turned about where it enters the counter, as light as X's diagonal.
+- **S (W1-c):** the cuts stand where the approved 1.007 S had them, measured from the other bowl's outer edge (top 52 ->
+  35, bottom 25 -> 14, Regular -> Bold), so no terminal runs past a bowl in any weight.
+- **a (A1-d):** Medium and Bold hoods keep the cut face at least as thick as the hood's own stroke (Bold 100 -> 122, no
+  taper) and move less far toward the bowl (Medium 0, Bold -0.4 of the gap) so the letter stands upright (upper / lower
+  ink centres 0.021 / 0.028 / 0.026 of the advance). Regular as approved.
+- **c, e (W1-j):** apertures in every weight: c's tips >= 0.25 x-height apart (Bold 34 -> 138), e's tail >= 0.15
+  x-height under the bar (Bold 30 -> 81); Regular and Medium were wider and do not change.
+
+### Kerning
+- **R16c-b:** the diagonal capital pairs (AA AX KX KV..KY RA RX VV..YY) no longer overlap at the feet / arm tips (they did
+  by 37-47 u); they stand just apart (8 u), KA WY XA XY XX WX 15 more as before.
+
+### Marks
+- **W1-i:** a mũ is never placed between the stems of a flat-topped letter (Û Ĥ Ŭ in the lighter Regular had it inside the
+  letter): the letter's top is closed across the strokes that reach it before the clearance is measured. Ŵ Ŷ now carry
+  it at Ê's height.
+- **W1-f:** the trăng and the hỏi beside the mũ keep at least the 1.007 clearance (28 u) from the letter / the mũ.
+
+### Fixes found by QA on the lighter weights
+- Figure 2 (and ², ½): the diagonal lands inside the lighter base bar (a needle at its top).
+- ¶: the bowl ends on the stem's edge (it stood 6 u past the lighter Bold stem).
+- đ ð ₫ ħ bars and the [ ] bars: an edge within 4 u of the cap height sits on it.
+- e: the bar meets the ring's outer edge without a step; t_t / t_f / f_f / f_t bars joined on whole units.
+- @: the variable font's start points chosen leftmost-then-lowest in every master (it interpolated underweight).
+- `scripts/compare_build.py`: glyphs carrying the S spine are held to 1.5 % ink area (the spine repair runs on the UFOs
+  after the reference binaries; it moves s Regular 1.03 %); advances, bounds and kerning are still checked exactly.
+
+### QA
+Font Bakery PASS (no new results); variable font = static fonts at every master, no area shrink or uneven step between
+them; build = reference (with the spine tolerance above); no level point within 2 u of a guideline; advance and ink
+width never decrease Regular -> Bold; no mark lower than its letter's top; mark-to-mark and mark-to-letter >= 28
+(1.007's level; Ỏ Bold 24 as in 1.007).
 
 ## 1.007 (2026-11-19)
 s, the Bold S, Q and the hỏi redrawn from the designer's Figma drawings and review, heavier diagonals, and c's

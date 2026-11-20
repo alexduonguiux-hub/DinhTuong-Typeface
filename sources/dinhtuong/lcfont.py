@@ -77,6 +77,8 @@ _d = BASE['d']
 dd = Glyph('lc_dcroat', _d.body, _d.lsb, _d.rsb + 10, 0x111)   # F13 (v0.962): bar 25 past the stem, rsb + 10 (was 50 / + 20): đĩ = đi
 yb = max((lcm.XH + lcm.ASC) / 2 - B.h * 0.45, lcm.XH + getattr(lcm, 'OV', 0) + 0.5 * 93)   # QA: the bar clears the bowl by >= 0.5 h (Regular units)
 yb = min(yb, lcm.ASC - 0.9 * B.h - 40)
+if abs(yb + 0.9 * B.h - 700) < 4:                # W1-e (QA alignment): a top edge within 4 u of the cap height sits ON it
+    yb = 700 - 0.9 * B.h
 dd.ops = list(_d.ops) + [('add', GL.rect(_d.body - B.v - 120, yb, _d.body + 25, yb + 0.9 * B.h))]
 BASE['đ'] = dd
 import flare                                  # R4b: every free end flares like the stems (diagonals, bar ends)

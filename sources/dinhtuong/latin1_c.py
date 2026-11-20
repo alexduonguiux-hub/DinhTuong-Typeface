@@ -512,7 +512,7 @@ def S_pilcrow():
     e = gw('bowl')                                   # R2c
     ops = [('add', rect(250 + e, DESC + 40, 250 + e + t, CAP)), ('add', rect(490 + e - t, DESC + 40, 490 + e, CAP)),
            ('add', rect(250 + e, CAP - t, 490 + e, CAP)),
-           ('add', rrect(0, CAP - 420, 340 + e, CAP, (FULL, 0, 0, FULL)))]
+           ('add', rrect(0, CAP - 420, 250 + e + t, CAP, (FULL, 0, 0, FULL)))]   # W1-h (QA: Bold's bowl stood 6 past the lighter stem): the bowl ends on the stem's right edge (was 340 + e = Bold's old stem)
     make('¶', ops, 40, 40)
 
 

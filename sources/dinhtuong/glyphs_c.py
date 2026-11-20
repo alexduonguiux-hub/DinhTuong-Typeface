@@ -751,7 +751,16 @@ def CIRC_FOOT(base_ops, cx, zone, key=None):
     if not mf.R8I(): return 0.0
     if key is not None and key in _CFOOT: return _CFOOT[key]
     import mark_qa as MQ
+    import numpy as _np
     b = MQ.raster(base_ops)
+    # W1-i (QA: in the lighter Regular the mũ fitted BETWEEN U's and H's stems and the search took that as 'clear', so
+    # Û Ĥ Ŭ had the mark inside the letter): the letter's top is closed across every stroke that reaches within 6 u
+    # of it (U H: stem to stem; O A: only the apex), so the mũ keeps its gap from that line, never from the ink alone
+    rows = _np.where(b.any(1))[0]
+    if len(rows):
+        r0 = rows[0]
+        cols = _np.where(b[r0:r0 + 6].any(0))[0]
+        b = b.copy(); b[r0:r0 + 2, cols.min():cols.max() + 1] = True
     lo, hi = -250.0, 250.0
     for _ in range(18):
         mid = (lo + hi) / 2
@@ -765,7 +774,16 @@ def BREVE_FOOT(base_ops, cx, zone, key=None):
     mũ end on ONE line (the tones keep W_GAP over either mark)."""
     mf = __import__('marks_flat')
     yc = CIRC_FOOT(base_ops, cx, zone, key)
-    return yc + ops_yrange(mark_ops('circumflex', True))[1] - ops_yrange(mark_ops('breve', True))[1] - mf.BREVE_DROP()
+    y = yc + ops_yrange(mark_ops('circumflex', True))[1] - ops_yrange(mark_ops('breve', True))[1] - mf.BREVE_DROP()
+    # W1-f (QA: Ă 20 from the A's apex in the lighter Regular): never closer to the letter than the approved trăng
+    # stood in 1.007 (28: Ă), so the R9a lowering is kept wherever it leaves that much room
+    import mark_qa as MQ
+    b = MQ.raster(base_ops); br = mark_ops('breve', True)
+    for _ in range(8):
+        d = MQ.min_dist(b, MQ.raster(shift_ops(br, cx, zone + y)))
+        if d >= HOOK11_MIN - 0.5: break
+        y += HOOK11_MIN - d + 0.5
+    return y
 
 
 ACUTE_R8I_BREVE_DX = 62   # R8i v2: on the trăng the sắc's centre is 62 right of the axis (sample Ắ +62)
@@ -1143,6 +1161,9 @@ def STACK_TOP(first):
     return _STACK_TOP[first]
 
 
+HOOK11_MIN = 28.0
+
+
 def STACK_SYNC(ops, tone, first_ops, first, zone, centred=None):
     """R8w / R8w-h: the stacked tone at its lowest clear place, then raised to the stack's common top line."""
     mf = __import__('marks_flat')
@@ -1154,7 +1175,16 @@ def STACK_SYNC(ops, tone, first_ops, first, zone, centred=None):
         cut_x = px - mf.HOOK11_P0[0] * sc
         bot_y = py - (mf.HOOK11_H - mf.HOOK11_P0[1]) * sc
         fx1 = ops_xrange(first_ops)[1]; ftop = ops_yrange(first_ops)[1]
-        return shift_ops(ops, fx1 + mf.HOOK11_GAP * sc - cut_x, ftop - mf.HOOK11_DROP_K * mf.HOOK11_H * sc - bot_y)
+        out = shift_ops(ops, fx1 + mf.HOOK11_GAP * sc - cut_x, ftop - mf.HOOK11_DROP_K * mf.HOOK11_H * sc - bot_y)
+        # W1-f (QA: with the lighter Regular the hỏi came 24 from the mũ, the approved stacks keep >= 28): the drawn place,
+        # moved right just enough to keep HOOK11_MIN from the mũ
+        import mark_qa as MQ
+        fm = MQ.raster(first_ops)
+        for _ in range(6):
+            d = MQ.min_dist(fm, MQ.raster(out))
+            if d >= HOOK11_MIN - 0.5: break
+            out = shift_ops(out, HOOK11_MIN - d + 0.5, 0)
+        return out
     if tone == 'hook' and first == 'circumflex' and mf.HOOK_MODE == 'r10':
         # R10h-b (designer's Ô): the foot stands just right of the mũ's right end, its bottom a little under the mũ's top
         sc = mf.HOOK10_S_K * mf._st() / 27.0
@@ -1300,9 +1330,9 @@ WEIGHT = _os.environ.get('A2_WEIGHT', 'bold')
 # stem table per weight (Bold = the approved master). Regular/Medium keep the same
 # contrast ratio (h/v ~0.83) and diagonal-lightening rules; sidebearings open up as
 # stems get thinner so the colour stays even.
-_WT = {'bold':    dict(V=168, H=140, HM=124, v=150, h=124, SB=(42, 30, 14), F=(9, 8)),
-       'medium':  dict(V=142, H=120, HM=106, v=128, h=106, SB=(46, 33, 16), F=(8, 7)),
-       'regular': dict(V=116, H=100, HM=90,  v=104, h=88,  SB=(50, 36, 18), F=(7, 6))}[WEIGHT]
+_WT = {'bold':    dict(V=157, H=131, HM=116, v=140, h=116, SB=(44, 31, 15), F=(9, 8)),
+       'medium':  dict(V=118, H=100, HM=89,  v=105, h=88,  SB=(50, 36, 18), F=(8, 7)),
+       'regular': dict(V=98,  H=84,  HM=76,  v=88,  h=74,  SB=(53, 38, 19), F=(7, 6))}[WEIGHT]
 V, H, HM = _WT['V'], _WT['H'], _WT['HM']      # caps: stem, horizontal, middle bar
 v, h = _WT['v'], _WT['h']                     # lowercase
 WK = v / 150                                  # stroke scale vs Bold, for literal stroke sizes
@@ -1314,7 +1344,7 @@ DIAG_X = round(V * 0.88); DIAG_MULTI = round(V * 0.84); DIAG_Z = round(V * 0.92)
 diag = round(v * 0.90); diag_k_arm = round(v * 0.86); diag_y = round(v * 0.88)
 diag_x = round(v * 0.88); diag_multi = round(v * 0.84); diag_z = round(v * 0.92)
 import r2c as _r2c
-DV_C = V - 116                                # R2c: the caps' stroke growth over Regular
+DV_C = V - __import__('concept_v1').W8['regular']['V']   # R2c: the caps' stroke growth over Regular (W1: Regular is 98 now)
 # R16 (28/10 18:26 'đánh giá lại kích thước các chữ in hoa — đã đồng bộ và cân bằng thị giác chưa'; designer kept the
 # narrow upright-ellipse O): widths re-proportioned on the five reference fonts, measured as ratios so the narrow O is
 # respected (CAPW=0 restores v0.980):
@@ -2792,3 +2822,108 @@ MARK_GAPS['side'] = {'acute': (184, 70), 'grave': (152, 70), 'hook': (152, 70)} 
 import marks_flat as _mf
 _mf.apply({'side': {'acute': (116 + _mf.STRIP_T * V, 56), 'grave': (182 + 0.27 * V, 56), 'hook': (116 + _mf.STRIP_T * V, 56)},   # v0.95c one-thickness marks;   # v0.95 R8d thin strips
            'stack_gap': 36, 'horn_tone_dx': 0})   # v0.95 "Ơ Ư sắc huyền không ngay giữa": tones centred on the letter (caps horn post is clear); v0.94: R8b marks are heavier -> side tones a touch wider; tones on horned letters clear the post   # 26/10 "2 dấu gần hơn": mark-mark gap ~30
+
+
+# =====================================================================
+# C3 / G3 (20/11, designer's 'Frame 39' 608:311, 'update lại glyph chữ C và G'): C and G are ONE ring cut by a
+# vertical line - no stretched arms. Measured on the drawing (cap 700 + overshoot = 282.5 px):
+#   * the ring: a stadium as wide as 0.91 of its height, two half-ellipses joined by straight sides 0.161 of the height;
+#     the counter is the same figure inset by one stroke (V at the sides, H top and bottom), on the same centres;
+#   * the cut: C at 0.541 of the half-width right of the axis (198 px), G at 0.626 (209 px), the same line above
+#     and below;
+#   * G: a bar HM thick centred 0.527 of the height under the top, its left end flared (R4) at 0.409 of the width;
+#     from the bar down a post one stem V wide, its outer edge on the cut, running into the ring's bottom.
+# The ring grows with the weight like every round capital (R2c, gw('round')).
+# =====================================================================
+CG3_W, CG3_S, CG3_KC, CG3_KG = 0.910, 0.161, 0.785, 0.910
+CG3_BAR_Y, CG3_BAR_X = 0.527, -0.266
+CG3_OPEN = 0.30
+# C3-b (20/11 'tăng weight thì nên giãn lòng ... để không bị nét nhọn móc trên của C và G dài ra'): the COUNTER is
+# the drawing's in every weight (Regular's ring minus Regular's stem); a heavier weight adds its stroke OUTSIDE it, so
+# the cut (0.785 / 0.910 of the counter's half-width right of the axis) and the bar's left end (0.266 left of it) sit
+# on the same counter and the upper terminal keeps the drawn shape instead of running out long and pointed.
+
+
+def _cg3_ring():
+    T = CAP + 2 * OV_C
+    # C3-c (20/11 'các weight đậm hơn bị hư dáng ... C và G'): the outer ring keeps the drawing's proportion and grows
+    # like every round capital (R2c, gw('round')); the counter is the ring inset by the stroke, and the cut and the bar
+    # are placed on the COUNTER (C3-b), so the terminal keeps the drawn face without the ring going squat
+    # C3-d (QA: C / G got NARROWER from Regular to Bold - the cut sits on the counter, which shrank faster than the ring
+    # grew): the counter 'widens' with the weight (designer: 'tăng weight thì nên giãn lòng'): the ring grows by
+    # CG3_OPEN of the stroke growth on each side beyond the round capitals' R2c growth, so the cut moves out as the
+    # weight grows and the ink widens Regular -> Bold like every capital
+    Vr = __import__('concept_v1').W8['regular']['V']
+    rx, ry = (CG3_W * T + gw('round')) / 2 + CG3_OPEN * (V - Vr), (T - CG3_S * T) / 2
+    rxi = rx - V
+    W = 2 * rx
+    cx, cyt, cyb = W / 2, CAP + OV_C - ry, -OV_C + ry
+    def stadium(rx_, ry_):
+        k = 0.5523
+        return [('M', cx, cyb - ry_),
+                ('C', cx + k * rx_, cyb - ry_, cx + rx_, cyb - k * ry_, cx + rx_, cyb),
+                ('L', cx + rx_, cyt),
+                ('C', cx + rx_, cyt + k * ry_, cx + k * rx_, cyt + ry_, cx, cyt + ry_),
+                ('C', cx - k * rx_, cyt + ry_, cx - rx_, cyt + k * ry_, cx - rx_, cyt),
+                ('L', cx - rx_, cyb),
+                ('C', cx - rx_, cyb - k * ry_, cx - k * rx_, cyb - ry_, cx, cyb - ry_), ('Z',)]
+    return W, rxi, cx, cyb, stadium(rx, ry), stadium(rxi, ry - H)
+
+
+
+# =====================================================================
+# C5 / G5 (20/11, designer's revised 'Frame 40' 615:434, 'update lại xíu'): C and G become SQUARED. Measured on the
+# drawing (cap 280 px = 700 u, drawn at the 1.007 Regular: side 46.4 px = 116, arms 40 px = 100):
+#   * the left side one stem V, its outer corners rounded 0.344 of the cap height (96.4 px), the counter's 0.220 (61.6);
+#   * the top and bottom are straight arms H thick running right to the advance edge (C 187 px = 468 u, G 201 px =
+#     503 u at the drawing's weight), their free ends cut vertically and flared (R4: away from the guideline, F11c);
+#   * G: the bottom-right corner square, a post one stem wide up from the baseline to a bar HM thick that lies on the
+#     post's top 0.486 of the cap height up (136 px), the bar's left end flared (R4) at 0.512 of the width (103 px).
+# Weights: the width follows the round capitals' R2c growth from the drawing's weight, plus CG3_OPEN of the stroke
+# growth on each side (the counter opens with the weight); corners and heights are fixed, so nothing stretches.
+# =====================================================================
+CG5_RO, CG5_RI, CG5_WC, CG5_WG, CG5_BAR_Y, CG5_BAR_X, CG5_VD = 0.344, 0.220, 467.5, 502.5, 0.558, 0.463, 116.0   # G bar raised (20/11 revision: top 156 px, left end 93 px)
+
+
+def _cg5(wd):
+    r2 = __import__('r2c')
+    W = wd + r2.grow('round', V - CG5_VD) + 2 * CG3_OPEN * (V - CG5_VD)
+    Ro, Ri = CG5_RO * CAP, CG5_RI * CAP
+    outer = rrect(0, 0, W, CAP, (Ro, 0, 0, Ro))
+    return W, Ro, Ri, outer
+
+
+def _cg5_arm_flare(W, y0, y1):
+    import flare_spec as _FS
+    return fbar(W - 2 * _FS.L, y0, W, y1, left=False, right=True)
+
+
+def _cg5_counter(Ro, x1):
+    """C5-b (20/11 'độ dày bo góc trong không đồng tâm'): the counter's left corners are CONCENTRIC with the outer
+    ones (centres (Ro, CAP - Ro) and (Ro, Ro)), radii Ro - V across and Ro - H up / down, so the stroke keeps its
+    thickness round the corner (was a smaller circle of its own)"""
+    k = 0.5523
+    ax, ay = Ro - V, Ro - H
+    yt, yb = CAP - Ro, Ro
+    return [('M', x1, CAP - H), ('L', Ro, CAP - H),
+            ('C', Ro - k * ax, CAP - H, V, yt + k * ay, V, yt), ('L', V, yb),
+            ('C', V, yb - k * ay, Ro - k * ax, H, Ro, H), ('L', x1, H), ('Z',)]
+
+
+def cap_C():
+    W, Ro, Ri, outer = _cg5(CG5_WC)
+    g = Glyph('C', W, SB_ROUND, 52, 0x43)
+    g.group([('add', outer), ('sub', _cg5_counter(Ro, W + 50))])
+    g.add(_cg5_arm_flare(W, CAP - H, CAP), _cg5_arm_flare(W, 0, H))
+    return reg(g)
+
+
+def cap_G():
+    W, Ro, Ri, outer = _cg5(CG5_WG)
+    yb1 = CG5_BAR_Y * CAP
+    g = Glyph('G', W, SB_ROUND, SB_STRAIGHT, 0x47)
+    g.group([('add', outer), ('sub', _cg5_counter(Ro, W - V)),
+             ('sub', rect(W / 2, yb1, W + 50, CAP - H))])
+    g.add(_cg5_arm_flare(W, CAP - H, CAP))
+    g.add(fbar(CG5_BAR_X * W, yb1 - HM, W, yb1, left=True, right=False))
+    return reg(g)
