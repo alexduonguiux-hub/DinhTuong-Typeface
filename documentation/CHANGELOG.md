@@ -29,9 +29,14 @@ glyph changes (the strokes changed), so 1.008 is a full build from the generator
 - **a (A1-d):** Medium and Bold hoods keep the cut face at least as thick as the hood's own stroke (Bold 100 -> 122, no
   taper) and move less far toward the bowl (Medium 0, Bold -0.4 of the gap) so the letter stands upright (upper / lower
   ink centres 0.021 / 0.028 / 0.026 of the advance). Regular as approved.
-- **c, e (W1-j):** apertures in every weight: c's tips >= 0.25 x-height apart (Bold 34 -> 138), e's tail >= 0.15
-  x-height under the bar (Bold 30 -> 81); Regular and Medium were wider and do not change.
-  A tip held by these keeps its cut face at least h thick (W1-k, 'đuôi của c và e lại bị vuốt nhọn': e Bold 112 -> 122).
+- **c (W1-j / W1-m):** the tips stay >= 0.20 x-height apart in every weight (Bold 34 -> 116): the lower tail is drawn
+  shorter until they are, so its face keeps the stroke's thickness (no taper, 'đuôi của c và e lại bị vuốt nhọn').
+  Regular and Medium were wider and do not change.
+- **e (W1-n):** the tail keeps its full reach in every weight (no aperture cut-back, 'gì mà đuôi e thụt vào làm gì vậy').
+
+### Spacing
+- **W1-l:** lowercase sidebearings close by up to 15 % from Regular to Bold (the heavier weights read wider set than
+  Regular once the stems thinned: 'Bold lên kerning lại rộng ra').
 
 ### Kerning
 - **R16c-c:** the diagonal capital pairs that touch (AA AX KX KV..KY RA RX VV..YY): in Regular they stand just apart (3 u;
