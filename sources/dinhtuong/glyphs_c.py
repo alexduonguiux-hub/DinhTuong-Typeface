@@ -2927,3 +2927,66 @@ def cap_G():
     g.add(_cg5_arm_flare(W, CAP - H, CAP))
     g.add(fbar(CG5_BAR_X * W, yb1 - HM, W, yb1, left=True, right=False))
     return reg(g)
+
+
+# =====================================================================
+# C6 / G6 (20/11, designer's revised 'Frame 40' 615:434, 'update lại thử các chữ này'): C and G become ROUND-CORNERED
+# rings. Measured on the drawing (2.5 u / px; the letters stand 287 px = cap + 2 OV_C; drawn at side 45 px = 112.5,
+# top / bottom 40 px = 100):
+#   * outer: a rectangle whose four corners are rounded C 106.5 / 217, G 108 / 231 of the width (C6-b: a share of the
+#     width in every weight, so Bold stays as round as Regular); C 217 px = 542.5 u wide, G 231 px = 577.5 u;
+#   * counter: the outer inset by the stem at the sides and H at top and bottom, its corners CONCENTRIC with the outer
+#     (radii Ro - V across, Ro - H up / down: C5-b);
+#   * the ends are cut by two straight lines that meet on the centre line at the outer left edge (the cut 'theo tâm'),
+#     16.5 deg off level (40 / 135 px), mirrored above and below;
+#   * G: the upper cut runs down to a bar HM thick whose top stands 0.488 of the cap height up (147 px under the top),
+#     from 0.563 of the width (130 px, its left end flared, R4) to the right side.
+# Weights: the width follows R2c growth from the drawing's weight plus CG3_OPEN of the stroke growth each side; the
+# corner radius and the cut angle stay, so nothing gets long or pointed.
+# =====================================================================
+CG6_RO, CG6_WC, CG6_WG, CG6_VD, CG6_T, CG6_BAR_Y, CG6_BAR_X = 0.373, 542.5, 577.5, 112.5, 40.0 / 135.0, 0.488, 0.563
+
+
+def _cg6_rr(x0, y0, x1, y1, ax, ay):
+    """a rectangle with four elliptic corners (radii ax across, ay up / down) as one closed path"""
+    k = 0.5523
+    return [('M', x0 + ax, y0), ('L', x1 - ax, y0),
+            ('C', x1 - ax + k * ax, y0, x1, y0 + ay - k * ay, x1, y0 + ay), ('L', x1, y1 - ay),
+            ('C', x1, y1 - ay + k * ay, x1 - ax + k * ax, y1, x1 - ax, y1), ('L', x0 + ax, y1),
+            ('C', x0 + ax - k * ax, y1, x0, y1 - ay + k * ay, x0, y1 - ay), ('L', x0, y0 + ay),
+            ('C', x0, y0 + ay - k * ay, x0 + ax - k * ax, y0, x0 + ax, y0), ('Z',)]
+
+
+def _cg6(wd, rw):
+    r2 = __import__('r2c')
+    W = wd + r2.grow('round', V - CG6_VD) + 2 * CG3_OPEN * (V - CG6_VD)
+    y0, y1 = -OV_C, CAP + OV_C
+    Ro = min(rw * W, W / 2)                  # C6-b ('bold lên chữ C và G bị vuông chứ không smooth như regular'): the corner keeps its share of the WIDTH
+    outer = _cg6_rr(0, y0, W, y1, Ro, Ro)
+    inner = _cg6_rr(V, y0 + H, W - V, y1 - H, max(Ro - V, 1.0), max(Ro - H, 1.0))
+    return W, outer, inner
+
+
+def _cg6_cut(W, y_low=None):
+    """the region cut away at the right: between the two lines through (0, CAP / 2) at +-CG6_T, from the middle out
+    (y_low: the G's lower limit instead of the lower line)"""
+    from concept_v1 import poly
+    cy, X, xc = CAP / 2, W + 400.0, W / 2
+    lo = (lambda x: cy - CG6_T * x) if y_low is None else (lambda x: y_low)
+    return poly([(xc, cy + CG6_T * xc), (X, cy + CG6_T * X), (X, lo(X)), (xc, lo(xc))])
+
+
+if _os.environ.get('CG6', '1') == '1':
+    def cap_C():
+        W, outer, inner = _cg6(CG6_WC, rw=106.5 / 217.0)
+        g = Glyph('C', W, SB_ROUND, 52, 0x43)
+        g.group([('add', outer), ('sub', inner), ('sub', _cg6_cut(W))])
+        return reg(g)
+
+    def cap_G():
+        W, outer, inner = _cg6(CG6_WG, rw=108.0 / 231.0)
+        ybt = CG6_BAR_Y * CAP
+        g = Glyph('G', W, SB_ROUND, SB_STRAIGHT, 0x47)
+        g.group([('add', outer), ('sub', inner), ('sub', _cg6_cut(W, y_low=ybt))])
+        g.add(fbar(CG6_BAR_X * W, ybt - HM, W - V / 2, ybt, left=True, right=False))
+        return reg(g)

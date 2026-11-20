@@ -16,12 +16,12 @@ glyph changes (the strokes changed), so 1.008 is a full build from the generator
   e no longer run past their bowls.
 
 ### Letters
-- **C5 / G5, C and G squared** (Figma 615:434): the left side one stem with large rounded corners (0.344 of the cap
-  height), the counter's corners concentric with them (C5-b); straight top and bottom arms H thick running to the
-  advance edge, their ends cut vertically and flared; G with a square lower-right corner, a post up from the baseline
-  and a bar HM thick lying on its top 0.558 of the cap height up, its left end flared. Heavier weights grow outward and
-  open the counter a little (0.3 of the stroke growth each side).
-- **C5-c:** C 20 u and G 50 u wider in every weight, so G stands a little wider than C (Regular ink 464 / 529, O 560).
+- **C6 / G6, C and G round-cornered** (Figma 615:434, latest revision): a ring whose four corners are rounded C 0.491 /
+  G 0.468 of the width (a share of the width in every weight, so Bold is as round as Regular), its counter inset by the
+  stem at the sides and H at top and bottom with concentric corners; both ends cut by straight lines that meet on the
+  centre line at the outer left edge, 16.5 deg off level; G's upper cut runs down to a bar HM thick (top 0.488 of the cap
+  height) from 0.563 of the width, its left end flared. Drawing widths C 542.5, G 577.5 (G wider than C); heavier
+  weights grow outward and open the counter a little.
 - **1 (R15e):** the flag's sizes follow the stem (the sample's, drawn on a 116 u stem, times V / 116): it was the same size
   in every weight, too heavy on the lighter Regular ('móc trên regular của số 1 bị dày quá': depth 109 -> 92) and too
   small on Bold (-> 147).
@@ -32,12 +32,12 @@ glyph changes (the strokes changed), so 1.008 is a full build from the generator
 - **S (W1-c):** the cuts stand where the approved 1.007 S had them, measured from the other bowl's outer edge (top 52 ->
   35, bottom 25 -> 14, Regular -> Bold), so no terminal runs past a bowl in any weight.
 - **a (A1-d):** Medium and Bold hoods keep the cut face at least as thick as the hood's own stroke (Bold 100 -> 122, no
-  taper) and move less far toward the bowl (Medium 0, Bold -0.4 of the gap) so the letter stands upright (upper / lower
-  ink centres 0.021 / 0.028 / 0.026 of the advance). Regular as approved.
-- **c (W1-j / W1-m):** the tips stay >= 0.20 x-height apart in every weight (Bold 34 -> 116): the lower tail is drawn
-  shorter until they are, so its face keeps the stroke's thickness (no taper, 'đuôi của c và e lại bị vuốt nhọn').
-  Regular and Medium were wider and do not change.
-- **e (W1-n):** the tail keeps its full reach in every weight (no aperture cut-back, 'gì mà đuôi e thụt vào làm gì vậy').
+  taper) and move less far toward the bowl (Medium 0, Bold -0.4 of the gap) so the letter stands upright.
+- **a (A2):** the hood's free end is cut on the radius through the hood's centre and the old cut's outer corner, not
+  vertically ('cắt theo tâm như chữ e và c mới').
+- **c, e (L5b, Figma 615:434):** the o ring with both ends of c cut by one straight line from the outer ellipse at 31.4 deg
+  to the inner at 37.2 deg (mirrored below); e's bar 0.914 h thick, its top 0.226 R over the centre, its tail cut from
+  -32.1 deg (outer) to -30.6 deg (inner). The counters keep the drawing's size; heavier weights grow outward.
 
 ### Spacing
 - **W1-l:** lowercase sidebearings close by up to 15 % from Regular to Bold (the heavier weights read wider set than

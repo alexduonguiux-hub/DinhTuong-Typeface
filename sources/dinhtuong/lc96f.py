@@ -34,6 +34,42 @@ from concept_v1 import rect, fstem, fbar, ell
 # advance as in Regular (0.027); Medium / Bold reach that with a shorter move (measured: 0.5 left them at 0.016-0.017)
 C_APER, E_APER = 0.20 * 530, 0.0   # W1-n (20/11 'gì mà đuôi e thụt vào làm gì vậy'): e keeps its full reach (no aperture cut-back)   # W1-j / W1-m: c's aperture between the tips, e's between tail and bar (x-height shares)
 A_HEAD_K = {'regular': 0.5, 'medium': 0.0, 'bold': -0.4}
+A_CUT = os.environ.get('A_CUT', 'radial')   # A2 (20/11 'Riêng chữ a thì thay vì cắt dọc đuôi thì cắt theo tâm như chữ e và c mới')
+
+
+def _a_radial_cut(cx, cy, ta, oell):
+    """A2: the hood's free end is cut along the radius through the hood's centre (cx, cy) and the old vertical cut's
+    OUTER corner (x = xt on the hood's outer ellipse), instead of vertically; everything beyond that line goes (so the
+    outer edge turns straight into the cut with no step)"""
+    from concept_v1 import poly
+    ex, ey, erx, ery = oell
+    xt = ta['xt'] + 0.5
+    u = (xt - ex) / erx
+    yo = ey + ery * math.sqrt(max(0.0, 1 - u * u))
+    if ta.get('face'):
+        yo = max(yo, ta['tip'] + ta['face'] - 0.5)    # the old cut's outer corner (p0)
+    add = ta.get('add')                              # the stretched arm (R5d) may stand outside the ellipse there
+    if add:
+        pts, cur = [], None
+        for seg in add:
+            if seg[0] in ('M', 'L'):
+                cur = (seg[1], seg[2]); pts.append(cur)
+            elif seg[0] == 'C':
+                p0, (x1, y1, x2, y2, x3, y3) = cur, seg[1:7]
+                for i in range(1, 25):
+                    t = i / 24; m = 1 - t
+                    pts.append((m ** 3 * p0[0] + 3 * m * m * t * x1 + 3 * m * t * t * x2 + t ** 3 * x3,
+                                m ** 3 * p0[1] + 3 * m * m * t * y1 + 3 * m * t * t * y2 + t ** 3 * y3))
+                cur = (x3, y3)
+        for (ax, ay), (bx, by) in zip(pts, pts[1:] + pts[:1]):
+            if (ax - xt) * (bx - xt) < 0:
+                yo = max(yo, ay + (xt - ax) * (by - ay) / (bx - ax))
+    dx, dy = xt - cx, yo - cy
+    n = math.hypot(dx, dy); dx, dy = dx / n, dy / n
+    K = 3000.0
+    nx, ny = -dy, dx                                 # the side away from the hood's body
+    return [('sub', poly([(cx, cy), (cx + dx * K, cy + dy * K), (cx + dx * K + nx * K, cy + dy * K + ny * K),
+                          (cx + nx * K, cy + ny * K)])), ('sub', rect(-3000, -3000, cx, cy))]
 
 XH, ASC, DESC = A.XH, A.ASC, A.DESC
 OV = 12
@@ -438,8 +474,9 @@ class LF(A.LC):
                 ta = self.tail(GA, cx, cy + ry, cx - r, 0.85 * v, 'l', 'up', tip_limit=max(cy, yb0 + AP_S), cry=ry,
                                ring=(cy, r + 0.85 * v, ry + h), ext=A_HEAD_K.get(self.w, 0.5) * ta['xt'], keep_face=max(ta['face'], self.h))   # A1-d: never thinner at the cut than the hood's own stroke ('móc a Bold đang bị vuốt nhỏ dần')
             hood = ('group', [('add', ell(cx + 0.075 * v, cy, r + 0.925 * v, ry + h)), ('sub', ell(cx, cy, r, ry))] +
-                    CV.arm_ink(ta) + [('sub', rect(cx, -3000, 6000, cy)), ('sub', ta['disk']),
-                              ('sub', rect(-3000, -3000, ta['xt'], 6000)), ('sub', rect(-3000, -3000, cx, ta['tip']))])
+                    CV.arm_ink(ta) + [('sub', rect(cx, -3000, 6000, cy)), ('sub', ta['disk'])] +
+                    (_a_radial_cut(cx, cy, ta, (cx + 0.075 * v, cy, r + 0.925 * v, ry + h)) if A_CUT == 'radial' else
+                     [('sub', rect(-3000, -3000, ta['xt'], 6000)), ('sub', rect(-3000, -3000, cx, ta['tip']))]))
                                                                      # (small forms may turn it further: lcsym R0b)
         yb = 0.62 * XH
         bx1 = W - 0.5 * v
@@ -937,6 +974,8 @@ def _l5_g_a(self):
 
 if os.environ.get('L5', '0') == '1':   # 20/11 'đưa c, e, a về lại bản cũ': off
     LF.g_c, LF.g_e, LF.g_a = _l5_g_c, _l5_g_e, _l5_g_a
+if os.environ.get('L5CE', '1') == '1':  # L5b (20/11 'update lại thử các chữ này', Frame 40 615:434 again): c and e
+    LF.g_c, LF.g_e = _l5_g_c, _l5_g_e   # from the drawing (the cuts above); a keeps its own form with the A2 cut
 
 if __name__ == '__main__':
     import booleng
