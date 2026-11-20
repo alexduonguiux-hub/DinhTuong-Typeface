@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<glyph name="jacute" format="2">
+  <advance width="287"/>
+  <outline>
+    <contour>
+      <point x="20" y="609" type="line"/>
+      <point x="320" y="609" type="line"/>
+      <point x="320" y="693" type="line"/>
+      <point x="20" y="638" type="line"/>
+    </contour>
+    <contour>
+      <point x="-13" y="-210" type="line"/>
+      <point x="-5" y="-202"/>
+      <point x="3" y="-200"/>
+      <point x="10" y="-200" type="curve" smooth="yes"/>
+      <point x="38" y="-200" type="line" smooth="yes"/>
+      <point x="153" y="-200"/>
+      <point x="244" y="-117"/>
+      <point x="245" y="-10" type="curve" smooth="yes"/>
+      <point x="245" y="410" type="line" smooth="yes"/>
+      <point x="245" y="446"/>
+      <point x="247" y="488"/>
+      <point x="255" y="530" type="curve"/>
+      <point x="85" y="530" type="line"/>
+      <point x="93" y="488"/>
+      <point x="95" y="446"/>
+      <point x="95" y="410" type="curve" smooth="yes"/>
+      <point x="95" y="-9" type="line" smooth="yes"/>
+      <point x="95" y="-46"/>
+      <point x="69" y="-75"/>
+      <point x="37" y="-75" type="curve" smooth="yes"/>
+      <point x="10" y="-75" type="line" smooth="yes"/>
+      <point x="3" y="-75"/>
+      <point x="-5" y="-74"/>
+      <point x="-13" y="-65" type="curve"/>
+    </contour>
+  </outline>
+</glyph>

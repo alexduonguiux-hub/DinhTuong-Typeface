@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <designspace format="5.0">
   <axes>
-    <axis tag="wght" name="Weight" minimum="400" maximum="700" default="400"/>
+    <axis tag="wght" name="Weight" minimum="400" maximum="800" default="400"/>
   </axes>
   <sources>
     <source filename="DinhTuong-Regular.ufo" familyname="Dinh Tuong" stylename="Regular">
@@ -17,6 +17,11 @@
     <source filename="DinhTuong-Bold.ufo" familyname="Dinh Tuong" stylename="Bold">
       <location>
         <dimension name="Weight" xvalue="700"/>
+      </location>
+    </source>
+    <source filename="DinhTuong-ExtraBold.ufo" familyname="Dinh Tuong" stylename="ExtraBold">
+      <location>
+        <dimension name="Weight" xvalue="800"/>
       </location>
     </source>
   </sources>
@@ -39,6 +44,11 @@
     <instance familyname="Dinh Tuong" stylename="Bold">
       <location>
         <dimension name="Weight" xvalue="700"/>
+      </location>
+    </instance>
+    <instance familyname="Dinh Tuong" stylename="ExtraBold">
+      <location>
+        <dimension name="Weight" xvalue="800"/>
       </location>
     </instance>
   </instances>

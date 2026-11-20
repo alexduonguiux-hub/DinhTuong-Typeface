@@ -12,3 +12,5 @@ buildStatic: false
 buildWebfont: false
 autohintTTF: false
 outputDir: "../fonts"
+# X1 (1.009): TrueType curves within 0.4 u of the cubic outlines, as the static build (sources/config-static.yaml)
+extraFontmakeArgs: "-e 0.0004"
