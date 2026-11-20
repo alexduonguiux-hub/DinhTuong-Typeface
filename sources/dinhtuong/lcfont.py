@@ -77,6 +77,8 @@ _d = BASE['d']
 dd = Glyph('lc_dcroat', _d.body, _d.lsb, _d.rsb + 10, 0x111)   # F13 (v0.962): bar 25 past the stem, rsb + 10 (was 50 / + 20): đĩ = đi
 yb = max((lcm.XH + lcm.ASC) / 2 - B.h * 0.45, lcm.XH + getattr(lcm, 'OV', 0) + 0.5 * 93)   # QA: the bar clears the bowl by >= 0.5 h (Regular units)
 yb = min(yb, lcm.ASC - 0.9 * B.h - 40)
+if abs(yb + 0.9 * B.h - 700) < 4:                # W1-e (QA alignment): a top edge within 4 u of the cap height sits ON it
+    yb = 700 - 0.9 * B.h
 dd.ops = list(_d.ops) + [('add', GL.rect(_d.body - B.v - 120, yb, _d.body + 25, yb + 0.9 * B.h))]
 BASE['đ'] = dd
 import flare                                  # R4b: every free end flares like the stems (diagonals, bar ends)
@@ -189,6 +191,7 @@ def compose(ch):
 
 
 _TUNED = []
+LC_SB_TIGHT = 0.15                 # W1-l: Bold's lowercase sides x 0.85 (Inter's white Bold / Regular)
 S1E_RO = 1.48   # S1e: ro white / nn white at 0.30 x-height depth (median of Inter, Liberation, Calibri, Poppins, DejaVu R/B)
 
 
@@ -204,6 +207,15 @@ def tune_spacing(rounds=3, k=0.85):
     Composed letters inherit the sides of their base. Runs once per process."""
     if _TUNED or os.environ.get('LC_TUNE', '1') != '1':
         return
+    # W1-l (20/11 'cách tính kerning giữa các weight có gì sai sai, bold lên kerning lại rộng ra'): the lowercase white
+    # between letters was ONE size in every weight (n|n white / x-height 0.201 R = M = B, as in 1.007) while the strokes
+    # grow, so Bold read loose; Inter's white tightens 0.301 -> 0.287 -> 0.255 (x 0.95 / 0.85). Every lowercase side
+    # starts at LC_SB_TIGHT of its Regular-rule value in Bold (linear in the stem), and S1b then sets every side against
+    # that n|n as before, so the kerning follows
+    _fw = (B.v - B.v_reg) / (round(0.93 * lcm.CV.W8['bold']['V']) - B.v_reg)
+    _f = 1.0 - LC_SB_TIGHT * _fw
+    for _g in BASE.values():
+        _g.lsb *= _f; _g.rsb *= _f
     import kern, json as _json
     import numpy as _np
     T = _json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'spacing_targets.json')))

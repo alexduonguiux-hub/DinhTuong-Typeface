@@ -141,7 +141,14 @@ def _fig1_wedge2():
         36.5° off vertical) down to the tip 141 u left of the stem, and a level underside 109 u under the cap line back
         to the stem wall (crisp inner corner). Flag sizes are the same in every weight (v0.963 rule)."""
     sv = 0.9 * V
-    top_l, reach, drop = 63.0, 141.0, 109.0
+    # R15e (20/11 'Số 1 bị lỗi'): the flag was the same size in every weight, so once the stems thinned (W1) it stood
+    # too big on Regular and too small on Bold. Its sizes are the sample's (drawn on a 116 u stem) times V / 116.
+    k1 = V / 116.0
+    # R15g (20/11 'nét móc của số 1 khi bold lên vẫn lỗi dày lên quá nhiều'): the flag grows with the SQUARE ROOT of the
+    # stem from Regular (Regular unchanged: depth 92; Bold 145: 112, was 136)
+    vr_ = __import__('concept_v1').W8['regular']['V']
+    k1 = vr_ / 116.0 * (V / vr_) ** 0.5
+    top_l, reach, drop = 63.0 * k1, 141.0 * k1, 109.0 * k1
     W = reach + sv
     g = _g('1', W, SBF - 6, SBF + 20)
     xs = W - sv
@@ -316,7 +323,7 @@ def fig4():
 
 @figweight
 def fig5():
-    W = 500 + gw('round')
+    W = 500 + 0.5 * gw('round')                # R15i (20/11 'số 5 bold bị rộng quá'): half the round figures' R2c growth (Bold grew 33 u of ink, 6 / 9 19)
     g = _g('5', W, SBF - 24, SBF)              # straight stem at x0: ink-left = SBF
     # R15h (28/10 18:30 'nâng vòng bụng số 5 một chút'): bowl top 0.645 cap (was 0.614; Inter / Liberation / DejaVu
     # 0.634-0.665) -- a shorter neck, the bowl carries more of the figure
@@ -662,17 +669,23 @@ def p_parenright():
     g = _g(')', q['xi'], 50, 49); g.ops += rot180_ops(_paren_ops(), q['xi'] / 2, q['cy']); return _reg(g)
 
 
+def _brk_y():
+    """W1-e (QA alignment: Medium's bar edge fell 1 u above the cap height): an edge within 4 u of the cap height sits ON it"""
+    y = CAP + 90 - HM
+    return CAP if abs(y - CAP) < 4 else y
+
+
 def p_bracketleft():
     W = 240 + gw('one')                             # R2c
     g = _g('[', W, 50, 20)
-    g.add(rect(0, -140, V, CAP + 90), rect(0, CAP + 90 - HM, W, CAP + 90), rect(0, -140, W, -140 + HM))
+    g.add(rect(0, -140, V, CAP + 90), rect(0, _brk_y(), W, CAP + 90), rect(0, -140, W, -140 + HM))
     return _reg(g)
 
 
 def p_bracketright():
     W = 240 + gw('one')                             # R2c
     g = _g(']', W, 20, 50)
-    g.add(rect(W - V, -140, W, CAP + 90), rect(0, CAP + 90 - HM, W, CAP + 90), rect(0, -140, W, -140 + HM))
+    g.add(rect(W - V, -140, W, CAP + 90), rect(0, _brk_y(), W, CAP + 90), rect(0, -140, W, -140 + HM))
     return _reg(g)
 
 
@@ -893,7 +906,10 @@ def p_dong():
     base = lcg('đ')                             # R0b: the current đ
     g = _g('₫', base.body, base.lsb, base.rsb)
     g.ops = list(base.ops)
-    g.add(fbar(60, -200, base.body - 10, -200 + 110, left=True, right=True))
+    # R15f (20/11 'này cũng lỗi không đồng bộ weight'): the rule under ₫ was 110 thick in every weight; it is now the đ
+    # bar's thickness (0.9 h), centred where the old rule was
+    t = 0.9 * h
+    g.add(fbar(60, -145 - t / 2, base.body - 10, -145 + t / 2, left=True, right=True))
     return _reg(g)
 
 
@@ -922,6 +938,9 @@ def p_ampersand():
     return _reg(g)
 
 
+AT_OPEN = 0.60
+
+
 def p_at():
     """@ in one continuous stroke: the inner a's stem runs out along a foot into the right side
     of the outer ring, which then goes round (top, left, bottom) and ends with a flat cut."""
@@ -938,12 +957,33 @@ def p_at():
     yj = oy                                     # the foot sits on the a's baseline
     foot_t = 104 * K_
     g.group(ring(0, bot, W, top, 132 * K_, 118 * K_, FULL, FULL) +
-            [('sub', rect(W * 0.52, bot - 1, W + 1, yj))])             # open the lower right
+            [('sub', rect(W * AT_OPEN, bot - 1, W + 1, yj))])             # open the lower right (R17c, 20/11 'đuôi @ nên vòng qua thêm xíu nữa': 0.52 -> AT_OPEN)
     g.group(ainner)
     sx0 = ox + (a.body - round(0.93 * V)) * s   # a's stem, left edge (F2: v = 0.93 V)
     # foot: stem -> ring. It leaves the stem's RIGHT edge (QA 13:20: started at the left edge it closed the a's
     # bowl/stem notch into a pin-hole); it starts at the stem's middle so it swallows the stem's foot flare
-    g.add(rect(sx0 + round(0.93 * V) * s / 2, yj, W, yj + foot_t))
+    # W1-q (QA, Bold 145: a 2-9 u jog where the foot's top met the ring in Medium): the foot ends where the ring's outer
+    # edge stands at the foot's top, so the ring runs straight down into the foot's end (no step, no jaggy segment)
+    def _x_at(path, y):
+        xs, cur = [], None
+        for op in path:
+            if op[0] in ('M', 'L'):
+                nxt = (op[1], op[2]); seg = [cur, nxt] if cur else []
+            elif op[0] == 'C':
+                p0 = cur; (x1, y1, x2, y2, x3, y3) = op[1:7]
+                seg = [p0] + [((1 - t) ** 3 * p0[0] + 3 * (1 - t) ** 2 * t * x1 + 3 * (1 - t) * t * t * x2 + t ** 3 * x3,
+                               (1 - t) ** 3 * p0[1] + 3 * (1 - t) ** 2 * t * y1 + 3 * (1 - t) * t * t * y2 + t ** 3 * y3)
+                              for t in [i / 48 for i in range(1, 49)]]
+                nxt = (x3, y3)
+            else:
+                continue
+            for (ax, ay), (bx, by) in zip(seg, seg[1:]):
+                if (ay - y) * (by - y) <= 0 and ay != by:
+                    xs.append(ax + (y - ay) * (bx - ax) / (by - ay))
+            cur = nxt
+        return max(xs) if xs else W
+    x_end = min(W, _x_at(rrect(0, bot, W, top, FULL), yj + foot_t))
+    g.add(rect(sx0 + round(0.93 * V) * s / 2, yj, x_end, yj + foot_t))
     return _reg(g)
 
 

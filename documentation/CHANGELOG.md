@@ -1,5 +1,82 @@
 # Changelog
 
+## 1.008 (2026-11-20)
+1.007's letters on lighter, evenly spaced weights, and a full QA pass. Every glyph changes (the strokes changed), so
+1.008 is a full build from the generators, not a patch on 1.007.
+
+### Weights
+- **W1, lighter, evenly spaced:** Regular was as heavy as other families' Medium-SemiBold (n stem 0.204 x-height against
+  the references' 0.160-0.180; Inter, Liberation Sans, DejaVu Sans, Carlito, Poppins, FreeSans). The stroke tables are
+  set so Regular / Medium / SemiBold / Bold sit at even steps on the 400 / 500 / 600 / 700 axis:
+  caps stem V 98 / 114 / (129) / 145 (was 116 / 142 / (155) / 168), every other stroke in the same ratios;
+  n stem / x-height 0.172 / 0.199 / 0.226 / 0.252 (Inter 0.161 / 0.197 / 0.233 / 0.268). W1-q ('phần bold nên cho mỏng
+  hơn'): Bold 145, not the first 157; Medium a third of the way. Sidebearings open as the
+  stems thin (existing rule, now on the new stems). Medium used to sit halfway to Bold, so SemiBold was almost Bold.
+- Rules written in 1.007 Regular units now take the new Regular as their base: the round capitals' growth (R2c) is
+  measured from V 98; the tails' Regular reach is a floor taken on each weight's own counter (W1-b), so the Bold S, c,
+  e no longer run past their bowls.
+
+### Letters
+- **D7, 1.007's letters on the 1.008 weights** ('trả về bản 1.007 nhưng tối ưu Weight lại cho giống weight của 1.008'):
+  C, G, Q, d b p q g, a, c and e keep their 1.007 drawings; only the strokes change (W1). The Figma revisions tried
+  during 1.008 stay in the generator behind switches, off by default: CG=5 / CG=6 (squared / round-cornered C and G),
+  Q2D=1 (Q's tail at 35 deg), F5D=1 (d b p q g bowl joints), L5CE=1 (c and e from Frame 40), A_CUT=radial (a's hood cut
+  on the radius).
+- Kept because the lighter strokes need them:
+  - **S (W1-c):** the cuts stand where the 1.007 S had them, measured from the other bowl's outer edge (top 52 -> 35,
+    bottom 25 -> 14, Regular -> Bold), so no terminal runs past a bowl in any weight.
+  - **a (A1-d):** Medium and Bold hoods keep the cut face at least as thick as the hood's own stroke (no taper) and move
+    less far toward the bowl (Medium 0, Bold -0.4 of the gap), so the letter stands upright.
+  - **e (W1-n):** the tail keeps its full reach.
+  - **C, G, c (D7-b):** the arms stand on their counters as 1.007's did ('lỗi quá thì giữ như v1.007 rồi điều chỉnh
+    weight lại theo chuẩn v1.008'): with the lighter Regular's bigger counter the Bold arms had run further round and
+    closed C (gap 76). They keep 0.695 of the arm's growth over Regular (Bold's share as in 1.007) and take no reach
+    floor; Regular unchanged. Gaps C 270 / 234 / 166, c 202 / 168 / 102, G 138 / 104 / 67 (1.007: 300 / 228 / 150,
+    220 / 154 / 90, 131 / 78 / 73). No aperture rule and no cut-back.
+  - **d g q b p (D7-c):** the bowl's ring never stands past the stem's outer edge ('g lỗi', 'g regular vẫn lòi'): with
+    the lighter stem the Regular ring's extreme showed as a nub on the stem's far side.
+  - **@ (QA):** the foot ends where the ring's outer edge stands at the foot's top (a 2-9 u jog in Medium).
+  - **1 (R15e / R15g):** the flag follows the stem, growing with the square root of the stem from Regular ('nét móc của số
+    1 khi bold lên vẫn lỗi dày lên quá nhiều'): depth Regular 92 (was 109 in every weight), Bold 112.
+  - **5 (R15i):** half the round figures' growth ('số 5 bold bị rộng quá'): Bold ink 492 (was 509; 6 515).
+  - **@ (R17c):** the outer ring's tail runs on to 0.60 of the width before its cut (was 0.52, 'đuôi @ nên vòng qua thêm
+    xíu nữa').
+  - **₫ (R15f):** the rule under it is the đ bar's thickness (0.9 h: 67 / 79 / 104), not 110 in every weight.
+
+### Spacing
+- **W1-l:** lowercase sidebearings close by up to 15 % from Regular to Bold (the heavier weights read wider set than
+  Regular once the stems thinned: 'Bold lên kerning lại rộng ra').
+
+### Kerning
+- **R16c-c:** the diagonal capital pairs that touch (AA AX KX KV..KY RA RX VV..YY): in Regular they stand just apart (3 u;
+  they overlapped by 40 in 1.007); Medium and Bold keep the 1.007 overlap (42 / 44, 'các weight kế tiếp chấp nhận bị
+  dính'); KA WY XA XY XX WX 15 more open as before.
+- **R16f:** every pair after r ŕ ř ŗ is held 29 u apart, last ('chỉnh kerning các cặp r luôn'; the lighter Bold had
+  rc r3 at 23, rz rS 24); only ever opens.
+- **R16e:** the pairs whose diagonals run parallel (VA AV WA AW YA AY and their accented forms) keep their 1.007 values in
+  every weight (Regular -85 / -75 / -95, Medium -90 / -85 / -100, Bold -90 / -85 / -105), set after R16d.
+
+### Marks
+- **W1-i:** a mũ is never placed between the stems of a flat-topped letter (Û Ĥ Ŭ in the lighter Regular had it inside the
+  letter): the letter's top is closed across the strokes that reach it before the clearance is measured. Ŵ Ŷ now carry
+  it at Ê's height.
+- **W1-f:** the trăng and the hỏi beside the mũ keep at least the 1.007 clearance (28 u) from the letter / the mũ.
+
+### Fixes found by QA on the lighter weights
+- Figure 2 (and ², ½): the diagonal lands inside the lighter base bar (a needle at its top).
+- ¶: the bowl ends on the stem's edge (it stood 6 u past the lighter Bold stem).
+- đ ð ₫ ħ bars and the [ ] bars: an edge within 4 u of the cap height sits on it.
+- e: the bar meets the ring's outer edge without a step; t_t / t_f / f_f / f_t bars joined on whole units.
+- @: the variable font's start points chosen leftmost-then-lowest in every master (it interpolated underweight).
+- `scripts/compare_build.py`: glyphs carrying the S spine are held to 1.5 % ink area (the spine repair runs on the UFOs
+  after the reference binaries; it moves s Regular 1.03 %); advances, bounds and kerning are still checked exactly.
+
+### QA
+Font Bakery PASS (no new results); variable font = static fonts at every master, no area shrink or uneven step between
+them; build = reference (with the spine tolerance above); no level point within 2 u of a guideline; advance and ink
+width never decrease Regular -> Bold; no mark lower than its letter's top; mark-to-mark and mark-to-letter >= 28
+(1.007's level; Ỏ Bold 24 as in 1.007).
+
 ## 1.007 (2026-11-19)
 s, the Bold S, Q and the hỏi redrawn from the designer's Figma drawings and review, heavier diagonals, and c's
 spacing in Bold. Only the glyphs listed below (and the accented letters built from them) change, and four ligatures are

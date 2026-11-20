@@ -91,6 +91,8 @@ def core_lc(c):
         bg = LF.BASE['h']
         yb = max((LF.lcm.XH + LF.lcm.ASC) / 2 - lh * 0.45, LF.lcm.XH + getattr(LF.lcm, 'OV', 0) + 0.5 * 93)
         yb = min(yb, LF.lcm.ASC - 0.9 * lh - 40)
+        if abs(yb + 0.9 * lh - 700) < 4:             # W1-e (QA alignment): a top edge within 4 u of the cap height sits ON it
+            yb = 700 - 0.9 * lh
         o = [('add', GL.rect(-25, yb, lv + 120, yb + 0.9 * lh))]
         nm = 'bar'
     else:
@@ -284,6 +286,8 @@ K['exceptions'].update({'67': {'regular': -50, 'medium': -45, 'bold': -40}[W8], 
 # white opens into a V right above the contact. For these the feet / arm tips OVERLAP by R16C_OV (Regular 40, Medium 42,
 # Bold 44) inside the body band; marks of accented forms still keep >= 26 from the other letter. Only ever tightens.
 R16C_OV = {'regular': 40, 'medium': 42, 'bold': 44}[W8]
+R16C_OV = -3 if W8 == 'regular' else R16C_OV   # R16c-c (20/11 'các cặp bị dính thì regular vừa đủ tách ra một chút
+# xíu thôi, các weight kế tiếp chấp nhận bị dính'): Regular 3 apart, Medium / Bold overlap as in 1.007 (42 / 44)
 # K1 (19/11 'tăng kerning của các cặp KA, WY, XA, XY, XX, WX lên một chút'): these six open by 15 from the R16c overlap
 # (accented forms follow their base pair)
 R16C_OPEN = {'KA': 15, 'WY': 15, 'XA': 15, 'XY': 15, 'XX': 15, 'WX': 15}
@@ -307,6 +311,25 @@ for a in letters:
             K['exceptions'][a + b] = kn
             r16c += 1
 print('R16c point-contact pairs', len(held), sorted(held), 'exceptions', r16c)
+# R16e (20/11 'back lại kerning cũ cho các cặp xéo song song như VA, AV, WA, AW, YA'): the pairs whose diagonals run
+# parallel keep their 1.007 values in every weight (the lighter 1.008 shapes had opened them by 5); accented forms
+# follow their base pair as far as their marks keep PAIR_MIN from the other letter
+R16E = {'VA': (-85, -90, -90), 'AV': (-85, -90, -90), 'WA': (-75, -85, -85), 'AW': (-75, -85, -85),
+        'YA': (-95, -100, -105), 'AY': (-95, -100, -105)}
+r16e = 0
+R16E_SET = {}
+for a in letters:
+    for b in letters:
+        pb = base_of(a) + base_of(b)
+        if pb not in R16E or not (a.isupper() and b.isupper()) or (toned(a) and toned(b)):
+            continue
+        kn = R16E[pb][{'regular': 0, 'medium': 1, 'bold': 2}[W8]]
+        for y0, y1 in ((kern.CAP + 1, 1240), (-400, -1)):
+            mg = kern.raw_gap(G[a], G[b], y0, y1, kn)
+            if mg < PAIR_MIN:
+                kn = max(kn, kn + PAIR_MIN - mg)
+        K['exceptions'][a + b] = int(round(kn)); R16E_SET[a + b] = int(round(kn)); r16e += 1
+print('R16e parallel diagonal pairs (1.007 values):', r16e)
 # R16d (01/11 'Kerning chữ F và các chữ còn lại hơi khít' -> QA, option A): every base pair (A-Z a-z 0-9 . , : ; ! ? -)
 # is measured as S1c white over the CAP band for any pair with a capital (lowercase pairs over the x-height), normalised
 # by HH / Hn / nH / nn / 00, against Inter, Poppins, Liberation, Carlito. A pair tighter than the tightest reference
@@ -328,6 +351,22 @@ for a in G:
         K['exceptions'][a + b] = kv(a, b) + dlt
         r16d += 1
 print('R16d base pairs', len(K16D), 'exceptions', r16d)
+K['exceptions'].update(R16E_SET)   # R16e last: the 1.007 values already had R16d in them
+# R16f (20/11 'chỉnh kerning các cặp r luôn'): after the lighter Bold (W1-q) the r's arm came 1-3 u inside the 26 u
+# guard (rc r3 23, rz rS 24 against the final outlines). Last, every pair after r / ŕ ř ŗ is held R16F_MIN apart
+# (the guard plus the 3 u the final outlines lose against the build's profiles), nearest 5 up; only ever opens.
+R16F_MIN = PAIR_MIN + 3
+r16f = 0
+for a in [c for c in G if len(c) == 1 and base_of(c) == 'r']:
+    for b in pool:
+        if toned(a) and toned(b):
+            continue
+        k = kv(a, b)
+        gap = kern.raw_gap(G[a], G[b], -400, 1240, k)
+        if gap < R16F_MIN:
+            K['exceptions'][a + b] = int(math.ceil((k + R16F_MIN - gap) / 5.0)) * 5
+            r16f += 1
+print('R16f r pairs opened', r16f)
 kf = os.path.join(OUTD, f'kern_v096_{W8}.json')
 json.dump(K, open(kf, 'w'), ensure_ascii=False, indent=0)
 print('new letters', len(NEWK), 'collision exceptions added', added)

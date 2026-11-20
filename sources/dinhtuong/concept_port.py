@@ -14,7 +14,7 @@ import concept_v1 as CV
 from geo import Glyph
 
 B = CV.Build(GL.WEIGHT)
-LETTERS = ['n', 'h', 'm', 'u', 'r', 'o', 'a', 'c', 'e', 'g', 'q', 'd', 'b', 'p', 's', 'H', 'O', 'S', 'C']
+LETTERS = ['n', 'h', 'm', 'u', 'r', 'o', 'a', 'c', 'e', 'g', 'q', 'd', 'b', 'p', 's', 'H', 'O', 'S'] + (['C'] if __import__('os').environ.get('CG', '1007') == '1007' else [])   # D7: 1.007's C   # C3 (20/11): C is glyphs_c's ring cut (drawing 608:311), not concept_v1's armed C
 FIGS = {'two': '2', 'three': '3', 'question': '?'}
 
 

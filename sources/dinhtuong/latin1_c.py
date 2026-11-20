@@ -454,7 +454,11 @@ def _circled(ch, inner_ops):
 
 
 def S_copy_reg():
-    _circled('©', [('group', scaled('C', 0.56))])
+    # D7-b (QA): © scales C's FINISHED outline (one contour), not its construction - re-running the boolean at 0.56
+    # split Medium's arm differently from Regular / Bold (a kink in the variable font)
+    import booleng
+    c_out = [('add', p) for p in booleng.evaluate(G['C'].ops)]
+    _circled('©', [('group', tf_ops(c_out, lambda x, y: (x * 0.56, y * 0.56)))])
     _circled('®', [('group', scaled('R', 0.56))])
 
 
@@ -512,7 +516,7 @@ def S_pilcrow():
     e = gw('bowl')                                   # R2c
     ops = [('add', rect(250 + e, DESC + 40, 250 + e + t, CAP)), ('add', rect(490 + e - t, DESC + 40, 490 + e, CAP)),
            ('add', rect(250 + e, CAP - t, 490 + e, CAP)),
-           ('add', rrect(0, CAP - 420, 340 + e, CAP, (FULL, 0, 0, FULL)))]
+           ('add', rrect(0, CAP - 420, 250 + e + t, CAP, (FULL, 0, 0, FULL)))]   # W1-h (QA: Bold's bowl stood 6 past the lighter stem): the bowl ends on the stem's right edge (was 340 + e = Bold's old stem)
     make('¶', ops, 40, 40)
 
 

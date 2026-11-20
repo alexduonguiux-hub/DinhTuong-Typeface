@@ -77,7 +77,10 @@ def restart(S):
     """start on the node nearest the lower-left corner of the contour's box"""
     xs = [s[0][0] for s in S]; ys = [s[0][1] for s in S]
     x0, y0 = min(xs), min(ys)
-    k = min(range(len(S)), key=lambda i: math.hypot(S[i][0][0] - x0, S[i][0][1] - y0))
+    # W1-g (QA: '@' started on (107, 222) in Regular and on (30, 243) in Medium - two nodes 0.5 u apart in distance
+    # from the corner): the leftmost node wins (within 4 u), then the lowest - a near tie no longer flips the start
+    xmin = min(xs)
+    k = min(range(len(S)), key=lambda i: (round((S[i][0][0] - xmin) / 4.0), S[i][0][1]))
     return S[k:] + S[:k]
 
 

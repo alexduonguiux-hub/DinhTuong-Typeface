@@ -26,9 +26,13 @@ Usage: python3 concept_v1.py  -> out/concept_v1/{proof_<w>.png, guides_<w>.png, 
 """
 import math, os, json, sys
 
-W8 = {'bold':    dict(V=168, H=140, HM=124, v=150, h=124, FL=9, fl=8),
-      'medium':  dict(V=142, H=120, HM=106, v=128, h=106, FL=8, fl=7),
-      'regular': dict(V=116, H=100, HM=90,  v=104, h=88,  FL=7, fl=6)}
+D7_REG_V = 116.0   # D7-b: 1.007's Regular caps stem
+# D7-b: the share of the arm's growth C G c e keep: Bold's as 1.007's (its growth over 1.007's Regular 116 against over
+# 1.008's Regular 98), the same share in every weight so Regular is untouched and the weights step evenly
+D7_F = None   # set after W8 (needs Bold's V)
+W8 = {'bold':    dict(V=145, H=121, HM=107, v=129, h=107, FL=9, fl=8),   # W1-q (20/11 'phần bold nên cho mỏng hơn', Bold 145): was V 157
+      'medium':  dict(V=114, H=96,  HM=86,  v=102, h=85,  FL=8, fl=7),   # W1-q: Regular + 1/3 of the way to Bold (was V 118)
+      'regular': dict(V=98,  H=84,  HM=76,  v=88,  h=74,  FL=7, fl=6)}
 
 CAP, XH, ASC, DESC = 700, 530, 760, -200
 OV_C, OV_L = 8, 6
@@ -41,10 +45,12 @@ TAIL_ANG = float(os.environ.get('TAIL_ANG', 50))
 KC = 0.56
 G2_EPS = float(os.environ.get('G2_EPS', '0.8'))   # R5g: the blend starts this far outside the round (no coincident edges)
 ARM_PAR = os.environ.get('ARM_PAR', '1') == '1'   # R5h: the arm keeps one thickness to the cut (no taper)
+S_CUT_IN = ((52.0, 35.0), (25.0, 14.0))   # W1-c: S cut insets (top, bottom), Regular -> Bold
 S_EXT_CAP = (13.0, 8.0)   # F7d-b: S (caps) Bold terminals reach this much further than the R2b floor (top, bottom)
 G2_PRE = float(os.environ.get('G2_PRE', '25'))   # R5g: the arm leaves the round this many degrees before its extreme point
 SPINE = float(os.environ.get('SPINE', 1.10))   # R11: the S spine is the heaviest part (TypeDrawers: "esses need to be thickest in the spine")
 SWIDE = float(os.environ.get('SWIDE', 0.5))    # S/s widen with the stroke so their counters stay the same in every weight
+D7_F = (1 - D7_REG_V / W8['bold']['V']) / (1 - W8['regular']['V'] / W8['bold']['V'])
 JOINT = {'regular': 0.88, 'medium': 0.84, 'bold': 0.80}   # R9b joint thickness / stroke (heavier -> thinner)
 DENSE = 0.96          # R10 dense letters (a e g s) carry a touch less weight
 JSTYLE = os.environ.get('JSTYLE', 'outer')   # 'inner' = R9b notch in the counter corner; 'outer' = R9c notch on the outer edge
@@ -432,10 +438,10 @@ class Build:
         return [('add', rrect(x0, y0, x1, y1, R)), ('sub', rrect(x0 + sx, y0 + sy, x1 - sx, y1 - sy, r))]
 
     # R5
-    def tail(self, G, cx, cedge, wall, stroke, side, vdir, tip_limit=None, cry=None, ring=None, face=None, reach=None, ext=0.0, keep_face=None):
+    def tail(self, G, cx, cedge, wall, stroke, side, vdir, tip_limit=None, cry=None, ring=None, face=None, reach=None, ext=0.0, keep_face=None, floor=True):
         """returns dict(xt, cy, rho, tip, disk) and records its guides in G."""
         if TAIL_MODE == 'R5d':
-            return self.tail_d(G, cx, cedge, wall, side, vdir, tip_limit, cry, ring, stroke, face=face, reach=reach, ext=ext, keep_face=keep_face)
+            return self.tail_d(G, cx, cedge, wall, side, vdir, tip_limit, cry, ring, stroke, face=face, reach=reach, ext=ext, keep_face=keep_face, floor=floor)
         c, sn = math.cos(math.radians(TAIL_PHI)), math.sin(math.radians(TAIL_PHI))
         inset = (1 - TAIL_KEEP) * stroke * self.k          # R2b: inset from the OUTER edge, regular units
         xt = wall + stroke - inset if side == 'r' else wall - stroke + inset
@@ -467,7 +473,7 @@ class Build:
         return dict(xt=xt, cy=cy, rho=rho, tip=tip, disk=quarter_disk(cx, cy, rho, side, vdir))
 
     # R5d
-    def tail_d(self, G, cx, cedge, wall, side, vdir, tip_limit=None, cry=None, ring=None, stroke=None, face=None, reach=None, ext=0.0, keep_face=None):
+    def tail_d(self, G, cx, cedge, wall, side, vdir, tip_limit=None, cry=None, ring=None, stroke=None, face=None, reach=None, ext=0.0, keep_face=None, floor=True):
         """R5d (27/10 16:18-16:28: designer's sample, 'cong vừa', 'Bold không làm hư đường cong Regular').
         The open quarter of the ring is drawn STRETCHED horizontally: the counter edge = the counter's own cap
         (radii rx, ry) stretched x ARM_LI, the outer edge = the ring's own cap (ring = (centre y, Rx, Ry)) stretched
@@ -481,6 +487,10 @@ class Build:
         # top sits on this weight's counter (the extra weight is added parallel to it): same cut, same reach,
         # same angle at the cut in every weight; the heavier weight's face is simply thicker.
         dv = (stroke or 0) * (1 - self.k)                  # how much the side stroke grew over Regular
+        if not floor:
+            # D7-b: C G c e keep D7_F of that growth, so Bold's arm stands on its counter as 1.007's did (the lighter
+            # 1.008 Regular's bigger counter ran Bold's arms round until C closed)
+            dv = (stroke or 0) * (1 - self.k) * D7_F
         rx = abs(wall - cx) + dv                           # REGULAR's counter radii
         ry = (rx if cry is None else cry + dv * W8['regular']['H'] / W8['regular']['V'])
         ci = cedge - sy * ry
@@ -491,8 +501,14 @@ class Build:
         # 27/10 16:49 ('chữ s thường vẫn bị ngắn đuôi khi bold lên'), R2b strictly: the REACH (cut to axis) is
         # measured in Regular and is a floor in every heavier weight. The cut never slides back; when a clearance
         # limit applies, the same stretched-cap curve is stretched further (flatter, blunter tip) to keep the reach.
-        if self.w != 'regular':
-            dx = max(dx, _reach_regular().get(_tail_key(vdir, side), 0.0))
+        # D7-b (20/11 'lỗi quá thì giữ như v1.007 rồi điều chỉnh weight lại theo chuẩn v1.008'): C G c e take no reach
+        # floor (floor=False): each weight's arm is Regular's curve on its own counter, as 1.007 drew them; the
+        # floor ran the lighter family's Bold arms 30 u further round and closed C (76 against 1.007's 150)
+        if self.w != 'regular' and floor:
+            # W1-b (20/11 'S bold lại bị lỗi'): the floor is Regular's reach taken on THIS weight's counter (scaled by
+            # its counter / Regular's), not in plain units - with the lighter Regular (V 98) the Bold counter is much
+            # smaller than Regular's and the unscaled floor ran the S's arms out past the bowls
+            dx = max(dx, _reach_regular().get(_tail_key(vdir, side), 0.0) * abs(wall - cx) / max(rx, 1.0))
             if dx > u * a_i:
                 a_i = dx / u
         elif os.environ.get('REACH_GEN') == '1':     # only the generator writes the table (once, at exit)
@@ -570,6 +586,10 @@ class Build:
                 tip = p0_[1] - sy * t_ / max(abs(to_[0]), 0.25)
                 if tip_limit is not None and (tip - tip_limit) * sy < 0:
                     tip = tip_limit                          # clearance wins (reported by QA)
+                    if keep_face == 'even':
+                        # A1-d (20/11 'đuôi của a bị vuốt nhọn chứ không đều'): the arm stays ONE band to its cut - the
+                        # face is the band's own thickness across the cut (t / |cos| of its direction), never less
+                        keep_face = t_ / max(abs(to_[0]), 0.25)
                     if keep_face and (p0_[1] - tip) * sy < keep_face:
                         # A1-b (19/11 'bold đuôi a bị vuốt nhọn'): an arm carried further round (ext) whose tip is
                         # held by the clearance keeps the cut face it had before: the OUTER arm is stretched (flatter)
@@ -905,8 +925,8 @@ class Build:
     def g_C(self):
         G, W, V, H = [], 2 * self.R_O, self.V, self.H
         R = W / 2
-        tu = self.tail(G, W / 2, CAP + OV_C - H, W - V, V, 'r', 'up', ring=(CAP + OV_C - R, R, R))
-        tl = self.tail(G, W / 2, -OV_C + H, W - V, V, 'r', 'down', ring=(-OV_C + R, R, R))
+        tu = self.tail(G, W / 2, CAP + OV_C - H, W - V, V, 'r', 'up', ring=(CAP + OV_C - R, R, R), floor=False)
+        tl = self.tail(G, W / 2, -OV_C + H, W - V, V, 'r', 'down', ring=(-OV_C + R, R, R), floor=False)
         ops = self.ring(0, -OV_C, W, CAP + OV_C, V, H) + arm_ink(tu) + arm_ink(tl) + band(tu['disk'], y0=tl['tip']) + \
             band(tl['disk'], y1=tu['tip']) + [('sub', rect(tu['xt'], -OV_C - 1, W + 1, CAP + OV_C + 1)),
                                                ('sub', rect(W / 2, tl['cy'] - 1, tu['xt'] + 1, tu['cy'] + 1))]   # R5d: the aperture between the arms
@@ -925,10 +945,18 @@ class Build:
         # F7d-w for the S: with the longer reach the aperture floor (0.3 sy over the spine's top line) clipped the Bold
         # tip (arm 130 against 142); the floor eases with the weight on the S (Regular untouched)
         apk = 0.3 * (1 - fw_) if T > 600 and (eu or el) else 0.3
+        kw_u, kw_l = dict(ext=eu), dict(ext=el)
+        if T > 600 and S_CUT_IN:
+            # W1-c (20/11 'S bold lại bị lỗi', 'bản thử vẫn lỗi'): the S's cuts stand where the approved 1.007 S had
+            # them, measured in from the OTHER bowl's outer edge (top cut from the lower bowl's right, bottom cut from
+            # the upper bowl's left): Regular 52 / 25 -> Bold 35 / 14 - so no weight runs a terminal past a bowl
+            (iu0, iu1), (il0, il1) = S_CUT_IN
+            iu, il = iu0 + (iu1 - iu0) * fw_, il0 + (il1 - il0) * fw_
+            kw_u, kw_l = dict(reach=W - iu - W / 2), dict(reach=W / 2 - (ti / 2 + il))
         tu = self.tail(G, W / 2, T + ov - sy, xr_u, sx, 'r', 'up', tip_limit=ym + sm + apk * sy * self.k,
-                       cry=((T + ov - sy) - (ym + sm)) / 2, ring=((ym + T + ov) / 2, (W - ti) / 2, (T + ov - ym) / 2), ext=eu)
+                       cry=((T + ov - sy) - (ym + sm)) / 2, ring=((ym + T + ov) / 2, (W - ti) / 2, (T + ov - ym) / 2), **kw_u)
         tl = self.tail(G, W / 2, -ov + sy, sx, sx, 'l', 'down', tip_limit=ym - apk * sy * self.k,
-                       cry=(ym - (-ov + sy)) / 2, ring=((-ov + ym + sm) / 2, W / 2, (ym + sm + ov) / 2), ext=el)
+                       cry=(ym - (-ov + sy)) / 2, ring=((-ov + ym + sm) / 2, W / 2, (ym + sm + ov) / 2), **kw_l)
         up = [('add', ebox(ti / 2, ym, W - ti / 2, T + ov)),
               ('sub', ebox(ti / 2 + sx, ym + sm, W - ti / 2 - sx, T + ov - sy))] + arm_ink(tu) + [
               ('sub', tu['disk']),
@@ -1007,7 +1035,7 @@ class Build:
         kw2 = dict(reach=0.84 * rxo) if os.environ.get('FIG2', 'r15e') == 'r15e' else {}   # R15e: the sample's tail reaches 0.84 of the ring's half-width
         t = self.tail(G, cx, top - H, V, V, 'l', 'up', tip_limit=cy + 0.3 * H * self.k, cry=ryi, ring=(cy, rxo, ryo), **kw2)
         dz = 0.90 * V
-        A = (0.0, 90.0 if os.environ.get('FIG2', 'r15e') == 'r15e' else 36.0)   # R15e: the diagonal's inner edge meets the bar's left end 90 up (sample)
+        A = (0.0, min(90.0, H - 5.0) if os.environ.get('FIG2', 'r15e') == 'r15e' else 36.0)   # W1-d: 90 was 5 inside Regular's old bar (H 95); the lighter bar is lower, so the landing stays 5 inside it (QA: a needle at the bar's top)   # R15e: the diagonal's inner edge meets the bar's left end 90 up (sample)
         Ti, ti = self._etan(A, cx, cy, rxi, ryi)
         ux, uy = Ti[0] - A[0], Ti[1] - A[1]
         ul = math.hypot(ux, uy)
