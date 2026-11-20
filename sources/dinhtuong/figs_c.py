@@ -144,6 +144,10 @@ def _fig1_wedge2():
     # R15e (20/11 'Số 1 bị lỗi'): the flag was the same size in every weight, so once the stems thinned (W1) it stood
     # too big on Regular and too small on Bold. Its sizes are the sample's (drawn on a 116 u stem) times V / 116.
     k1 = V / 116.0
+    # R15g (20/11 'nét móc của số 1 khi bold lên vẫn lỗi dày lên quá nhiều'): the flag grows with the SQUARE ROOT of the
+    # stem from Regular (Regular unchanged: depth 92; Bold 145: 112, was 136)
+    vr_ = __import__('concept_v1').W8['regular']['V']
+    k1 = vr_ / 116.0 * (V / vr_) ** 0.5
     top_l, reach, drop = 63.0 * k1, 141.0 * k1, 109.0 * k1
     W = reach + sv
     g = _g('1', W, SBF - 6, SBF + 20)
@@ -319,7 +323,7 @@ def fig4():
 
 @figweight
 def fig5():
-    W = 500 + gw('round')
+    W = 500 + 0.5 * gw('round')                # R15i (20/11 'số 5 bold bị rộng quá'): half the round figures' R2c growth (Bold grew 33 u of ink, 6 / 9 19)
     g = _g('5', W, SBF - 24, SBF)              # straight stem at x0: ink-left = SBF
     # R15h (28/10 18:30 'nâng vòng bụng số 5 một chút'): bowl top 0.645 cap (was 0.614; Inter / Liberation / DejaVu
     # 0.634-0.665) -- a shorter neck, the bowl carries more of the figure
@@ -934,6 +938,9 @@ def p_ampersand():
     return _reg(g)
 
 
+AT_OPEN = 0.60
+
+
 def p_at():
     """@ in one continuous stroke: the inner a's stem runs out along a foot into the right side
     of the outer ring, which then goes round (top, left, bottom) and ends with a flat cut."""
@@ -950,7 +957,7 @@ def p_at():
     yj = oy                                     # the foot sits on the a's baseline
     foot_t = 104 * K_
     g.group(ring(0, bot, W, top, 132 * K_, 118 * K_, FULL, FULL) +
-            [('sub', rect(W * 0.52, bot - 1, W + 1, yj))])             # open the lower right
+            [('sub', rect(W * AT_OPEN, bot - 1, W + 1, yj))])             # open the lower right (R17c, 20/11 'đuôi @ nên vòng qua thêm xíu nữa': 0.52 -> AT_OPEN)
     g.group(ainner)
     sx0 = ox + (a.body - round(0.93 * V)) * s   # a's stem, left edge (F2: v = 0.93 V)
     # foot: stem -> ring. It leaves the stem's RIGHT edge (QA 13:20: started at the left edge it closed the a's

@@ -352,6 +352,21 @@ for a in G:
         r16d += 1
 print('R16d base pairs', len(K16D), 'exceptions', r16d)
 K['exceptions'].update(R16E_SET)   # R16e last: the 1.007 values already had R16d in them
+# R16f (20/11 'chỉnh kerning các cặp r luôn'): after the lighter Bold (W1-q) the r's arm came 1-3 u inside the 26 u
+# guard (rc r3 23, rz rS 24 against the final outlines). Last, every pair after r / ŕ ř ŗ is held R16F_MIN apart
+# (the guard plus the 3 u the final outlines lose against the build's profiles), nearest 5 up; only ever opens.
+R16F_MIN = PAIR_MIN + 3
+r16f = 0
+for a in [c for c in G if len(c) == 1 and base_of(c) == 'r']:
+    for b in pool:
+        if toned(a) and toned(b):
+            continue
+        k = kv(a, b)
+        gap = kern.raw_gap(G[a], G[b], -400, 1240, k)
+        if gap < R16F_MIN:
+            K['exceptions'][a + b] = int(math.ceil((k + R16F_MIN - gap) / 5.0)) * 5
+            r16f += 1
+print('R16f r pairs opened', r16f)
 kf = os.path.join(OUTD, f'kern_v096_{W8}.json')
 json.dump(K, open(kf, 'w'), ensure_ascii=False, indent=0)
 print('new letters', len(NEWK), 'collision exceptions added', added)

@@ -36,7 +36,11 @@
   - **d g q b p (D7-c):** the bowl's ring never stands past the stem's outer edge ('g lỗi', 'g regular vẫn lòi'): with
     the lighter stem the Regular ring's extreme showed as a nub on the stem's far side.
   - **@ (QA):** the foot ends where the ring's outer edge stands at the foot's top (a 2-9 u jog in Medium).
-  - **1 (R15e):** the flag follows the stem (V / 116 of the sample): Regular depth 109 -> 92, Bold 147.
+  - **1 (R15e / R15g):** the flag follows the stem, growing with the square root of the stem from Regular ('nét móc của số
+    1 khi bold lên vẫn lỗi dày lên quá nhiều'): depth Regular 92 (was 109 in every weight), Bold 112.
+  - **5 (R15i):** half the round figures' growth ('số 5 bold bị rộng quá'): Bold ink 492 (was 509; 6 515).
+  - **@ (R17c):** the outer ring's tail runs on to 0.60 of the width before its cut (was 0.52, 'đuôi @ nên vòng qua thêm
+    xíu nữa').
   - **₫ (R15f):** the rule under it is the đ bar's thickness (0.9 h: 67 / 79 / 104), not 110 in every weight.
 
 ### Spacing
@@ -47,6 +51,8 @@
 - **R16c-c:** the diagonal capital pairs that touch (AA AX KX KV..KY RA RX VV..YY): in Regular they stand just apart (3 u;
   they overlapped by 40 in 1.007); Medium and Bold keep the 1.007 overlap (42 / 44, 'các weight kế tiếp chấp nhận bị
   dính'); KA WY XA XY XX WX 15 more open as before.
+- **R16f:** every pair after r ŕ ř ŗ is held 29 u apart, last ('chỉnh kerning các cặp r luôn'; the lighter Bold had
+  rc r3 at 23, rz rS 24); only ever opens.
 - **R16e:** the pairs whose diagonals run parallel (VA AV WA AW YA AY and their accented forms) keep their 1.007 values in
   every weight (Regular -85 / -75 / -95, Medium -90 / -85 / -100, Bold -90 / -85 / -105), set after R16d.
 
