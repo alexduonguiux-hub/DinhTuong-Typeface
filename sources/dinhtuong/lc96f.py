@@ -32,7 +32,10 @@ from concept_v1 import rect, fstem, fbar, ell
 # A1: share of the hood-cut-to-bowl gap the a's hood end moves out (19/11). A1-c ('chữ a bold cảm giác bị ngã về
 # trái'): the a stands upright when its upper half's ink centre is right of the lower half's by the same share of the
 # advance as in Regular (0.027); Medium / Bold reach that with a shorter move (measured: 0.5 left them at 0.016-0.017)
-A_HEAD_K = {'regular': 0.5, 'medium': 0.2, 'bold': 0.2}
+A_W_K = 0.90             # A2: a / d ink width
+A_HEAD_K = {'regular': 0.23, 'medium': 0.08, 'bold': 0.14}
+# A2-b: on the wider a (A2) the same upright rule (upper half's ink centre 0.026 of the advance right of the lower
+# half's) asks for a shorter move: 0.5 / 0.2 / 0.2 left it at 0.017 / 0.023 / 0.024
 
 XH, ASC, DESC = A.XH, A.ASC, A.DESC
 OV = 12
@@ -414,6 +417,13 @@ class LF(A.LC):
         its counter running JT into the stem (F10). Stem from the baseline (flared) into the hood."""
         v, h = self.v, self.h
         W = self.wd(round(470 * CX))
+        if A_W_K:
+            # A2 (20/11 'tăng bề ngang chữ a'): a's ink is A_W_K of d's in every weight (was 0.83-0.86; Inter, Liberation,
+            # DejaVu, Carlito, Poppins, FreeSans median 0.95): the bowl, the hood's counter and the stem keep their rules,
+            # only the width they are laid out on grows (the flare is outside both)
+            import flare_spec as _FS
+            W_d = CX * self.Rr + self.spur_dx() + v
+            W = A_W_K * (W_d + _FS.F) - _FS.F
         r = (W - v - 0.85 * v) / 2                   # hood counter: between the hood's left side and the stem
         ry = r / CX
         xs = W - v                                   # stem's left edge

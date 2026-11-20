@@ -1,9 +1,13 @@
 # Changelog
 
 ## 1.008 (2026-11-20)
-d, b, p, q and g follow the designer's d (Figma 'Frame 35', 602:230). Only these glyphs (and the letters built from them:
-ď đ ₫ ğ ĝ ġ ģ þ, and ß, whose right side is b's) change; every other glyph is byte-identical to 1.007
-(`scripts/patch_release_glyphs.py`).
+d, b, p, q and g follow the designer's d (Figma 'Frame 35', 602:230), and a is wider. Only these glyphs (and the letters
+built from them: ď đ ₫ ğ ĝ ġ ģ þ, à á ả ã ạ ă â … ä å ā ą, æ, ª, @, and ß, whose right side is b's) change; every other
+glyph is byte-identical to 1.007 (`scripts/patch_release_glyphs.py`).
+- **A2, a wider:** a's ink is 0.90 of d's in every weight (Regular 421 -> 457, Medium 451 -> 480, Bold 481 -> 502; was
+  0.83-0.86, the references' median 0.95; 'tăng bề ngang chữ a'). Bowl, hood and stem keep their rules on the wider
+  frame. The hood's free end moves a shorter way toward the bowl (0.23 / 0.08 / 0.14 of the gap) so the a stays as
+  upright as before (upper half's ink centre 0.026-0.027 of the advance right of the lower half's).
 - **F5d, bowl joints:** the bowl's outer curve meets the stem 63 u inside the x-height and the baseline (was 46): its
   far side, the far stroke and the counter stay where they were, only the side toward the stem is drawn in (one upright
   ellipse through the far extreme and the two joints; Regular 467 wide, was 479). The counter is unchanged, a whole
