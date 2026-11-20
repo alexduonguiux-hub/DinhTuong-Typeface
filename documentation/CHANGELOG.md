@@ -21,6 +21,11 @@ glyph changes (the strokes changed), so 1.008 is a full build from the generator
   advance edge, their ends cut vertically and flared; G with a square lower-right corner, a post up from the baseline
   and a bar HM thick lying on its top 0.558 of the cap height up, its left end flared. Heavier weights grow outward and
   open the counter a little (0.3 of the stroke growth each side).
+- **C5-c:** C 20 u and G 50 u wider in every weight, so G stands a little wider than C (Regular ink 464 / 529, O 560).
+- **1 (R15e):** the flag's sizes follow the stem (the sample's, drawn on a 116 u stem, times V / 116): it was the same size
+  in every weight, too heavy on the lighter Regular ('móc trên regular của số 1 bị dày quá': depth 109 -> 92) and too
+  small on Bold (-> 147).
+- **₫ (R15f):** the rule under it is the đ bar's thickness (0.9 h: 67 / 79 / 104), not 110 in every weight.
 - **F5d, d b p q g** (Figma 602:230): the bowl meets the stem 63 u inside the x-height and the baseline (was 46); the
   stem's end at the bowl flares on both sides, the bowl's side over a short run under the joint.
 - **Q2d, Q's tail** leans 35 deg (was 27-29), turned about where it enters the counter, as light as X's diagonal.

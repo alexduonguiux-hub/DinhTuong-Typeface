@@ -2882,7 +2882,7 @@ def _cg3_ring():
 # Weights: the width follows the round capitals' R2c growth from the drawing's weight, plus CG3_OPEN of the stroke
 # growth on each side (the counter opens with the weight); corners and heights are fixed, so nothing stretches.
 # =====================================================================
-CG5_RO, CG5_RI, CG5_WC, CG5_WG, CG5_BAR_Y, CG5_BAR_X, CG5_VD = 0.344, 0.220, 467.5, 502.5, 0.558, 0.463, 116.0   # G bar raised (20/11 revision: top 156 px, left end 93 px)
+CG5_RO, CG5_RI, CG5_WC, CG5_WG, CG5_BAR_Y, CG5_BAR_X, CG5_VD = 0.344, 0.220, 467.5 + 20.0, 502.5 + 50.0, 0.558, 0.463, 116.0   # G bar raised (20/11 revision: top 156 px, left end 93 px); C5-c (20/11 'tăng bề ngang chữ C và G lên 1 chút, chữ G phải rộng hơn C 1 chút'): C +20, G +50
 
 
 def _cg5(wd):

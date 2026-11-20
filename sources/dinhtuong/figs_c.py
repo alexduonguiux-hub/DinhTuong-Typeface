@@ -141,7 +141,10 @@ def _fig1_wedge2():
         36.5° off vertical) down to the tip 141 u left of the stem, and a level underside 109 u under the cap line back
         to the stem wall (crisp inner corner). Flag sizes are the same in every weight (v0.963 rule)."""
     sv = 0.9 * V
-    top_l, reach, drop = 63.0, 141.0, 109.0
+    # R15e (20/11 'Số 1 bị lỗi'): the flag was the same size in every weight, so once the stems thinned (W1) it stood
+    # too big on Regular and too small on Bold. Its sizes are the sample's (drawn on a 116 u stem) times V / 116.
+    k1 = V / 116.0
+    top_l, reach, drop = 63.0 * k1, 141.0 * k1, 109.0 * k1
     W = reach + sv
     g = _g('1', W, SBF - 6, SBF + 20)
     xs = W - sv
@@ -899,7 +902,10 @@ def p_dong():
     base = lcg('đ')                             # R0b: the current đ
     g = _g('₫', base.body, base.lsb, base.rsb)
     g.ops = list(base.ops)
-    g.add(fbar(60, -200, base.body - 10, -200 + 110, left=True, right=True))
+    # R15f (20/11 'này cũng lỗi không đồng bộ weight'): the rule under ₫ was 110 thick in every weight; it is now the đ
+    # bar's thickness (0.9 h), centred where the old rule was
+    t = 0.9 * h
+    g.add(fbar(60, -145 - t / 2, base.body - 10, -145 + t / 2, left=True, right=True))
     return _reg(g)
 
 
