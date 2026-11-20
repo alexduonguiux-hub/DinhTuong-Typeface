@@ -955,7 +955,28 @@ def p_at():
     sx0 = ox + (a.body - round(0.93 * V)) * s   # a's stem, left edge (F2: v = 0.93 V)
     # foot: stem -> ring. It leaves the stem's RIGHT edge (QA 13:20: started at the left edge it closed the a's
     # bowl/stem notch into a pin-hole); it starts at the stem's middle so it swallows the stem's foot flare
-    g.add(rect(sx0 + round(0.93 * V) * s / 2, yj, W, yj + foot_t))
+    # W1-q (QA, Bold 145: a 2-9 u jog where the foot's top met the ring in Medium): the foot ends where the ring's outer
+    # edge stands at the foot's top, so the ring runs straight down into the foot's end (no step, no jaggy segment)
+    def _x_at(path, y):
+        xs, cur = [], None
+        for op in path:
+            if op[0] in ('M', 'L'):
+                nxt = (op[1], op[2]); seg = [cur, nxt] if cur else []
+            elif op[0] == 'C':
+                p0 = cur; (x1, y1, x2, y2, x3, y3) = op[1:7]
+                seg = [p0] + [((1 - t) ** 3 * p0[0] + 3 * (1 - t) ** 2 * t * x1 + 3 * (1 - t) * t * t * x2 + t ** 3 * x3,
+                               (1 - t) ** 3 * p0[1] + 3 * (1 - t) ** 2 * t * y1 + 3 * (1 - t) * t * t * y2 + t ** 3 * y3)
+                              for t in [i / 48 for i in range(1, 49)]]
+                nxt = (x3, y3)
+            else:
+                continue
+            for (ax, ay), (bx, by) in zip(seg, seg[1:]):
+                if (ay - y) * (by - y) <= 0 and ay != by:
+                    xs.append(ax + (y - ay) * (bx - ax) / (by - ay))
+            cur = nxt
+        return max(xs) if xs else W
+    x_end = min(W, _x_at(rrect(0, bot, W, top, FULL), yj + foot_t))
+    g.add(rect(sx0 + round(0.93 * V) * s / 2, yj, x_end, yj + foot_t))
     return _reg(g)
 
 

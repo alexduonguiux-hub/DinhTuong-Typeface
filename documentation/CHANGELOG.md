@@ -8,8 +8,9 @@
 - **W1, lighter, evenly spaced:** Regular was as heavy as other families' Medium-SemiBold (n stem 0.204 x-height against
   the references' 0.160-0.180; Inter, Liberation Sans, DejaVu Sans, Carlito, Poppins, FreeSans). The stroke tables are
   set so Regular / Medium / SemiBold / Bold sit at even steps on the 400 / 500 / 600 / 700 axis:
-  caps stem V 98 / 118 / (137) / 157 (was 116 / 142 / (155) / 168), every other stroke in the same ratios;
-  n stem / x-height 0.172 / 0.208 / 0.242 / 0.275 (Inter 0.161 / 0.197 / 0.233 / 0.268). Sidebearings open as the
+  caps stem V 98 / 114 / (129) / 145 (was 116 / 142 / (155) / 168), every other stroke in the same ratios;
+  n stem / x-height 0.172 / 0.199 / 0.226 / 0.252 (Inter 0.161 / 0.197 / 0.233 / 0.268). W1-q ('phần bold nên cho mỏng
+  hơn'): Bold 145, not the first 157; Medium a third of the way. Sidebearings open as the
   stems thin (existing rule, now on the new stems). Medium used to sit halfway to Bold, so SemiBold was almost Bold.
 - Rules written in 1.007 Regular units now take the new Regular as their base: the round capitals' growth (R2c) is
   measured from V 98; the tails' Regular reach is a floor taken on each weight's own counter (W1-b), so the Bold S, c,
@@ -32,6 +33,9 @@
     closed C (gap 76). They keep 0.695 of the arm's growth over Regular (Bold's share as in 1.007) and take no reach
     floor; Regular unchanged. Gaps C 270 / 234 / 166, c 202 / 168 / 102, G 138 / 104 / 67 (1.007: 300 / 228 / 150,
     220 / 154 / 90, 131 / 78 / 73). No aperture rule and no cut-back.
+  - **d g q b p (D7-c):** the bowl's ring never stands past the stem's outer edge ('g lỗi', 'g regular vẫn lòi'): with
+    the lighter stem the Regular ring's extreme showed as a nub on the stem's far side.
+  - **@ (QA):** the foot ends where the ring's outer edge stands at the foot's top (a 2-9 u jog in Medium).
   - **1 (R15e):** the flag follows the stem (V / 116 of the sample): Regular depth 109 -> 92, Bold 147.
   - **₫ (R15f):** the rule under it is the đ bar's thickness (0.9 h: 67 / 79 / 104), not 110 in every weight.
 

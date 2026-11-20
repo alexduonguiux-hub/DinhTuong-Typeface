@@ -371,7 +371,10 @@ class LF(A.LC):
             return ops, W, cx, cy
         stem = self.stem(xr - v if side == 'r' else xl, y0, y1, top=top, bot=bot)
         counter = self.bowl_counter(side, cx, cy, Rx, R, x_in)
-        ops = [('group', [ring[0], stem, counter])]
+        # D7-c (20/11 'g lỗi'): the bowl's ring never stands past the stem's outer edge (with the lighter 1.008 stem the
+        # Regular ring's extreme showed as a nub on the stem's far side of d g q / b p)
+        clip = rect(xr, -3000, 6000, 6000) if side == 'r' else rect(-3000, -3000, xl, 6000)
+        ops = [('group', [('group', [ring[0], ('sub', clip)]), stem, counter])]
         return ops, W, cx, cy
 
     def bowl_outer(self, side, cx, cy, Rx, R, x_in):
@@ -580,7 +583,7 @@ class LF(A.LC):
             ops = [('group', [self.bowl_outer('r', Rx, cy, Rx, R, xr - v), st, counter])] + hk
         else:
             st = self.stem(xr - v, yj - 1, XH, top=False, bot=False)
-            ops = [('group', [ring[0], st, counter])] + hk
+            ops = [('group', [('group', [ring[0], ('sub', rect(xr, -3000, 6000, 6000))]), st, counter])] + hk   # D7-c: as d q
         return self.G('g', xr, 36, 52, ops, locals().get('G', []))
 
     def g_j(self):

@@ -4,6 +4,7 @@
   <unicode hex="1EC3"/>
   <outline>
     <contour>
+      <point x="397" y="706" type="line"/>
       <point x="439" y="706" type="line"/>
       <point x="448" y="706"/>
       <point x="456" y="698"/>
@@ -21,7 +22,6 @@
       <point x="477" y="758"/>
       <point x="439" y="758" type="curve"/>
       <point x="397" y="758" type="line"/>
-      <point x="397" y="706" type="line"/>
     </contour>
     <contour>
       <point x="382" y="562" type="line"/>
@@ -32,6 +32,7 @@
       <point x="262" y="613" type="line"/>
     </contour>
     <contour>
+      <point x="454" y="153" type="line"/>
       <point x="399" y="111"/>
       <point x="290" y="29"/>
       <point x="197" y="84" type="curve"/>
@@ -39,11 +40,11 @@
       <point x="110" y="182"/>
       <point x="109" y="262" type="curve"/>
       <point x="506" y="262" type="line"/>
-      <point x="506.0" y="264.6274386477999"/>
-      <point x="505.9701341589657" y="267.2449220152551"/>
-      <point x="505.91077036562194" y="269.8520546219865" type="curve"/>
-      <point x="502.4003155616144" y="424.0238261424665"/>
-      <point x="395.7384072398684" y="542.0"/>
+      <point x="506.0" y="265.539999814023"/>
+      <point x="505.9457854246998" y="269.061928102946"/>
+      <point x="505.83825603774903" y="272.56481762084553" type="curve"/>
+      <point x="501.1464509527275" y="425.4055927652161"/>
+      <point x="394.95291155248646" y="542.0"/>
       <point x="262" y="542" type="curve"/>
       <point x="125" y="542"/>
       <point x="18" y="420"/>
@@ -54,16 +55,15 @@
       <point x="253" y="-37"/>
       <point x="369" y="-13"/>
       <point x="454" y="51" type="curve"/>
-      <point x="454" y="153" type="line"/>
     </contour>
     <contour>
+      <point x="118" y="332" type="line"/>
       <point x="138" y="410"/>
       <point x="194" y="464"/>
       <point x="262" y="464" type="curve"/>
       <point x="329" y="464"/>
       <point x="385" y="410"/>
       <point x="406" y="332" type="curve"/>
-      <point x="118" y="332" type="line"/>
     </contour>
   </outline>
 </glyph>

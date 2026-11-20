@@ -1330,8 +1330,8 @@ WEIGHT = _os.environ.get('A2_WEIGHT', 'bold')
 # stem table per weight (Bold = the approved master). Regular/Medium keep the same
 # contrast ratio (h/v ~0.83) and diagonal-lightening rules; sidebearings open up as
 # stems get thinner so the colour stays even.
-_WT = {'bold':    dict(V=157, H=131, HM=116, v=140, h=116, SB=(44, 31, 15), F=(9, 8)),
-       'medium':  dict(V=118, H=100, HM=89,  v=105, h=88,  SB=(50, 36, 18), F=(8, 7)),
+_WT = {'bold':    dict(V=145, H=121, HM=107, v=129, h=107, SB=(46, 32, 16), F=(9, 8)),   # W1-q (Bold 145; SB on the existing stem rule)
+       'medium':  dict(V=114, H=96,  HM=86,  v=102, h=85,  SB=(51, 36, 18), F=(8, 7)),
        'regular': dict(V=98,  H=84,  HM=76,  v=88,  h=74,  SB=(53, 38, 19), F=(7, 6))}[WEIGHT]
 V, H, HM = _WT['V'], _WT['H'], _WT['HM']      # caps: stem, horizontal, middle bar
 v, h = _WT['v'], _WT['h']                     # lowercase

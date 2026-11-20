@@ -29,9 +29,9 @@ import math, os, json, sys
 D7_REG_V = 116.0   # D7-b: 1.007's Regular caps stem
 # D7-b: the share of the arm's growth C G c e keep: Bold's as 1.007's (its growth over 1.007's Regular 116 against over
 # 1.008's Regular 98), the same share in every weight so Regular is untouched and the weights step evenly
-D7_F = (1 - D7_REG_V / 157.0) / (1 - 98.0 / 157.0)
-W8 = {'bold':    dict(V=157, H=131, HM=116, v=140, h=116, FL=9, fl=8),
-      'medium':  dict(V=118, H=100, HM=89,  v=105, h=88,  FL=8, fl=7),
+D7_F = None   # set after W8 (needs Bold's V)
+W8 = {'bold':    dict(V=145, H=121, HM=107, v=129, h=107, FL=9, fl=8),   # W1-q (20/11 'phần bold nên cho mỏng hơn', Bold 145): was V 157
+      'medium':  dict(V=114, H=96,  HM=86,  v=102, h=85,  FL=8, fl=7),   # W1-q: Regular + 1/3 of the way to Bold (was V 118)
       'regular': dict(V=98,  H=84,  HM=76,  v=88,  h=74,  FL=7, fl=6)}
 
 CAP, XH, ASC, DESC = 700, 530, 760, -200
@@ -50,6 +50,7 @@ S_EXT_CAP = (13.0, 8.0)   # F7d-b: S (caps) Bold terminals reach this much furth
 G2_PRE = float(os.environ.get('G2_PRE', '25'))   # R5g: the arm leaves the round this many degrees before its extreme point
 SPINE = float(os.environ.get('SPINE', 1.10))   # R11: the S spine is the heaviest part (TypeDrawers: "esses need to be thickest in the spine")
 SWIDE = float(os.environ.get('SWIDE', 0.5))    # S/s widen with the stroke so their counters stay the same in every weight
+D7_F = (1 - D7_REG_V / W8['bold']['V']) / (1 - W8['regular']['V'] / W8['bold']['V'])
 JOINT = {'regular': 0.88, 'medium': 0.84, 'bold': 0.80}   # R9b joint thickness / stroke (heavier -> thinner)
 DENSE = 0.96          # R10 dense letters (a e g s) carry a touch less weight
 JSTYLE = os.environ.get('JSTYLE', 'outer')   # 'inner' = R9b notch in the counter corner; 'outer' = R9c notch on the outer edge
