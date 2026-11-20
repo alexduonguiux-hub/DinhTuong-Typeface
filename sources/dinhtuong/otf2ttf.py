@@ -38,6 +38,6 @@ def convert(src, dst):
     f.save(dst)
 
 if __name__ == '__main__':
-    for w in ('Regular', 'Medium', 'Bold'):
+    for w in ('Regular', 'Medium', 'Bold', 'ExtraBold'):
         convert(f'out/DINHTUONG60s-{w}.otf', f'out/ttf/DINHTUONG60s-{w}.ttf')
         print(w, 'ok')

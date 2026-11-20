@@ -21,7 +21,7 @@ import build_otf as BO
 from geo import Glyph
 
 W8 = LF.W8
-STYLE = {'regular': 'Regular', 'medium': 'Medium', 'bold': 'Bold'}[W8]
+STYLE = {'regular': 'Regular', 'medium': 'Medium', 'bold': 'Bold', 'extrabold': 'ExtraBold'}[W8]
 OUTD = os.environ.get('OUTD') or os.path.join(BO.OUT, 'v096')
 os.makedirs(OUTD, exist_ok=True)
 PAIR_MIN = 26
@@ -243,7 +243,7 @@ if os.environ.get('K3', '1') == '1' and os.path.exists(K3F):
 # ... = 1.49 / 1.30 / 1.42 x HH white, R / M / B) against the seven references' median 1.11-1.17 (Inter, Liberation,
 # Carlito, DejaVu, Poppins, Work Sans, FreeSans): C (and its accented forms, by class) before B D E F H K L M N P R kerns
 # to that median (CI already holds it). Only ever tightens a pair.
-K4_C = {'regular': -35, 'medium': -30, 'bold': -25}[W8]   # absolute values (Medium already held -15 from K3)
+K4_C = {'regular': -35, 'medium': -30, 'bold': -25, 'extrabold': -20}[W8]   # absolute values (Medium already held -15 from K3)
 for b in 'BDEFHKLMNPR':
     key = cls_of('classesL', 'C') + cls_of('classesR', b)
     if K['pairs'].get(key, 0) > K4_C:
@@ -280,12 +280,12 @@ for n in NEWK:
             added += 1
 # R16b (31/10 'kerning số cặp 6 và 7 cần chỉnh lại cho gần hơn' -> 'nên làm tương đương 6 và 9'): the white of 67 equals
 # that of 69, and 76 equals 96 (S1c white, profiles clamped 0.12 cap), nearest 5; ink gap kept >= 26
-K['exceptions'].update({'67': {'regular': -50, 'medium': -45, 'bold': -40}[W8], '76': {'regular': -40, 'medium': -35, 'bold': -35}[W8]})
+K['exceptions'].update({'67': {'regular': -50, 'medium': -45, 'bold': -40, 'extrabold': -35}[W8], '76': {'regular': -40, 'medium': -35, 'bold': -35, 'extrabold': -30}[W8]})
 # R16c (31/10 'kerning chữ K và A nên gần lại' -> 'Regular 40, Bold 44'): capitals whose diagonals meet at one point
 # (K A, X A, A X, A A, R A, R X, K V..Y, V W X Y with each other) were held open by the 26 floor (kern +5..+25) though the
 # white opens into a V right above the contact. For these the feet / arm tips OVERLAP by R16C_OV (Regular 40, Medium 42,
 # Bold 44) inside the body band; marks of accented forms still keep >= 26 from the other letter. Only ever tightens.
-R16C_OV = {'regular': 40, 'medium': 42, 'bold': 44}[W8]
+R16C_OV = {'regular': 40, 'medium': 42, 'bold': 44, 'extrabold': 46}[W8]
 R16C_OV = -3 if W8 == 'regular' else R16C_OV   # R16c-c (20/11 'các cặp bị dính thì regular vừa đủ tách ra một chút
 # xíu thôi, các weight kế tiếp chấp nhận bị dính'): Regular 3 apart, Medium / Bold overlap as in 1.007 (42 / 44)
 # K1 (19/11 'tăng kerning của các cặp KA, WY, XA, XY, XX, WX lên một chút'): these six open by 15 from the R16c overlap
@@ -323,7 +323,7 @@ for a in letters:
         pb = base_of(a) + base_of(b)
         if pb not in R16E or not (a.isupper() and b.isupper()) or (toned(a) and toned(b)):
             continue
-        kn = R16E[pb][{'regular': 0, 'medium': 1, 'bold': 2}[W8]]
+        kn = R16E[pb][{'regular': 0, 'medium': 1, 'bold': 2, 'extrabold': 2}[W8]]   # X1: Extra Bold as Bold
         for y0, y1 in ((kern.CAP + 1, 1240), (-400, -1)):
             mg = kern.raw_gap(G[a], G[b], y0, y1, kn)
             if mg < PAIR_MIN:

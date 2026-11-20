@@ -1,4 +1,4 @@
-"""Variable font between the masters: every character at wght 400..700 (step 25) must grow steadily.
+"""Variable font between the masters: every character at wght 400..800 (step 25) must grow steadily.
 Fails on an ink area that shrinks anywhere, an area step far off the mean step (a collapse or a jump: a master pair
 whose points do not correspond), or a bbox edge that does not move linearly between two masters (a step more than
 JUMP units off that interval's mean step).
@@ -13,9 +13,9 @@ from fontTools.ttLib import TTFont
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 VF = sys.argv[1] if len(sys.argv) > 1 else os.path.join(ROOT, 'fonts', 'variable', 'DinhTuong[wght].ttf')
-W = list(range(400, 701, 25))
+W = list(range(400, 801, 25))
 JUMP = 3
-MASTERS = (400, 500, 700)
+MASTERS = (400, 500, 700, 800)
 
 
 class P:

@@ -1,7 +1,7 @@
-# Google Fonts build (gftools builder): the variable font DinhTuong[wght].ttf, wght 400-700.
+# Google Fonts build (gftools builder): the variable font DinhTuong[wght].ttf, wght 400-800.
 # Sources: sources/vf, the three UFO masters made point-compatible (scripts/make_vf_sources.py: exact splits, the
-# outlines are those of sources/ufo) and their designspace. At 400 / 500 / 700 the variable font draws exactly like the
-# static Regular / Medium / Bold (scripts/vf_vs_static.py); the static fonts are built by sources/config-static.yaml.
+# outlines are those of sources/ufo) and their designspace. At 400 / 500 / 700 / 800 the variable font draws exactly like the
+# static Regular / Medium / Bold / ExtraBold (scripts/vf_vs_static.py); the static fonts are built by sources/config-static.yaml.
 sources:
   - vf/DinhTuong.designspace
 familyName: "Dinh Tuong"

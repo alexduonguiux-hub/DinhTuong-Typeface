@@ -243,7 +243,7 @@ def cdist(S0, S):
 def misaligned(A, lim=0.25):
     for ci in range(len(A[0])):
         S0 = A[0][ci]
-        for m in (1, 2):
+        for m in range(1, len(A)):
             S = A[m][ci]
             if math.dist(centre(S0)[0], centre(S)[0]) > 0.25 * max(centre(S0)[1]):
                 return True
@@ -262,15 +262,39 @@ def fix_glyph(gl):
         return A, 'a'
     # contour order: match to master 0 by centre
     ref = A[0]
-    for m in (1, 2):
+    # X1 (1.009): a contour that is the same chain of segments only started elsewhere (Extra Bold's dots began on the
+    # top node, the others one segment later) is ROTATED to master 0's start - exact, no re-splitting
+    if all(len(a) == len(ref) for a in A[1:]):
+        R_ = [list(A[0])]
+        for a in A[1:]:
+            na = []
+            for ci, S in enumerate(a):
+                S0 = ref[ci] if ci < len(ref) else S
+                if sig(S) != sig(S0) and len(S) == len(S0):
+                    best = None
+                    for k in range(len(S)):
+                        T = S[k:] + S[:k]
+                        if sig(T) != sig(S0):
+                            continue
+                        d = math.dist(rel(T[0][0], T), rel(S0[0][0], S0))
+                        if best is None or d < best[0]:
+                            best = (d, T)
+                    if best:
+                        S = best[1]
+                na.append(S)
+            R_.append(na)
+        if all([sig(x) for x in R_[0]] == [sig(x) for x in r] for r in R_[1:]) and not misaligned(R_):
+            return R_, 'a'
+    for m in range(1, len(A)):
         used = set(); order = []
         for s in ref:
             j = min((j for j in range(len(A[m])) if j not in used), key=lambda j: cdist(s, A[m][j]))
             used.add(j); order.append(A[m][j])
         A[m] = order
-    out = [[], [], []]
+    N = len(A)                                       # X1 (1.009): any number of masters (Extra Bold is the 4th)
+    out = [[] for _ in range(N)]
     for ci in range(len(ref)):
-        Ss = [A[m][ci] for m in range(3)]
+        Ss = [A[m][ci] for m in range(N)]
         cs = [corners(S) for S in Ss]
         if len({len(c) for c in cs}) != 1:
             return None, 'corners %s' % [len(c) for c in cs]
@@ -280,26 +304,26 @@ def fix_glyph(gl):
             rs = [[S] for S in Ss]
         else:
             Ss[0] = rotate(Ss[0], cs[0][0]); c0 = corners(Ss[0])
-            for m in (1, 2):
+            for m in range(1, N):
                 Ss[m], _ = align(Ss[0], Ss[m], c0, cs[m])
             cs = [corners(S) for S in Ss]
             rs = [runs(S, c) for S, c in zip(Ss, cs)]
-        new = [[], [], []]
+        new = [[] for _ in range(N)]
         for ri in range(len(rs[0])):
-            R = [rs[m][ri] for m in range(3)]
+            R = [rs[m][ri] for m in range(N)]
             fr = [run_fracs(r)[0] for r in R]
-            top = max(range(3), key=lambda m: len(fr[m]))
-            for m in range(3):
+            top = max(range(N), key=lambda m: len(fr[m]))
+            for m in range(N):
                 R[m] = refine(R[m], fr[top]) if len(fr[m]) < len(fr[top]) else R[m]
             if len({len(r) for r in R}) != 1:
                 return None, 'run split'
             for k in range(len(R[0])):
-                if any(R[m][k][1] for m in range(3)):
-                    for m in range(3):
+                if any(R[m][k][1] for m in range(N)):
+                    for m in range(N):
                         R[m][k] = as_cubic(R[m][k])
-            for m in range(3):
+            for m in range(N):
                 new[m] += R[m]
-        for m in range(3):
+        for m in range(N):
             out[m].append(new[m])
     if all([sig(s) for s in out[0]] == [sig(s) for s in o] for o in out[1:]):
         return out, 'c'
@@ -309,7 +333,7 @@ def fix_glyph(gl):
 def compatible(gl):
     def s(g):
         return [tuple(p.type for p in c.points) for c in g.contours]
-    return s(gl[0]) == s(gl[1]) == s(gl[2])
+    return all(s(g) == s(gl[0]) for g in gl[1:])
 
 
 def main(paths, dry=False):

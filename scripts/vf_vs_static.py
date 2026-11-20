@@ -1,4 +1,4 @@
-"""Check that the variable font at wght 400 / 500 / 700 draws exactly like the static Regular / Medium / Bold:
+"""Check that the variable font at wght 400 / 500 / 700 / 800 draws exactly like the static Regular / Medium / Bold / ExtraBold:
 every character (HarfBuzz, shaped): advance, outline area (<= 0.5 %) and bbox (<= 2 u); kerning on ~11 800 pairs."""
 import uharfbuzz as hb, unicodedata, itertools, sys
 from fontTools.ttLib import TTFont
@@ -28,7 +28,7 @@ chars=[chr(u) for u in sorted(cm) if unicodedata.category(chr(u))[0] in 'LNPSM']
 letters=[c for c in chars if unicodedata.category(c)[0]=='L']
 vn='aăâbcdđeêghiklmnoôơpqrstuưvxyAĂÂBCDĐEÊGHIKLMNOÔƠPQRSTUƯVXY'
 pairs=[a+b for a in vn for b in vn]+[a+b for a in letters for b in 'AVTYoaenvy.,']+[a+b for a in 'AVTYoaenvyLFP' for b in letters]
-for name,wv in [('Regular',400),('Medium',500),('Bold',700)]:
+for name,wv in [('Regular',400),('Medium',500),('Bold',700),('ExtraBold',800)]:
     st=mk(ST%name); vf=mk(VF,{'wght':wv})
     adv=geo=0; worst_a=worst_b=0; wa=wb=''; bad=[]
     for c in chars:

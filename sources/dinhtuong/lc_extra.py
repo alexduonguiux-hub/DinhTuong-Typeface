@@ -156,7 +156,7 @@ if __name__ == '__main__':
     from geo import to_svg_d
     os.makedirs('out/lc_extra', exist_ok=True)
     rows = []
-    for w in ('regular', 'medium', 'bold'):
+    for w in ('regular', 'medium', 'bold', 'extrabold'):
         B = L.LF(w)
         base = {g['name']: g for g in B.proposal()}
         new = {'þ': g_thorn(B), 'ð': g_eth(B), 'ß': g_germandbls(B)}

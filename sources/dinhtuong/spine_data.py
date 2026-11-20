@@ -19,10 +19,10 @@ if len(sys.argv) > 1 and sys.argv[1] == '--one':
     print(json.dumps({'S': rec[0], 's': rec[1]}))
 else:
     out = {}
-    for w in ('regular', 'medium', 'bold'):
+    for w in ('regular', 'medium', 'bold', 'extrabold'):
         env = dict(os.environ, LC_OPT='f', A2_WEIGHT=w)
         r = subprocess.run([sys.executable, os.path.abspath(__file__), '--one'], env=env, capture_output=True, text=True,
                            cwd=os.path.dirname(os.path.abspath(__file__)), check=True)
-        out[w.capitalize()] = json.loads(r.stdout.strip().splitlines()[-1])
+        out[{'extrabold': 'ExtraBold'}.get(w, w.capitalize())] = json.loads(r.stdout.strip().splitlines()[-1])
     json.dump(out, open(sys.argv[1] if len(sys.argv) > 1 else 'spine_data.json', 'w'), indent=1)
     print('spine data:', ', '.join(out))
