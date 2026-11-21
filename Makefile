@@ -51,7 +51,7 @@ venv-qa/touchfile: requirements-qa.txt
 
 qa: venv-qa/touchfile
 	. venv-qa/bin/activate; python3 scripts/qa_fontbakery.py
-	. venv-qa/bin/activate; python3 scripts/qa_alignment.py sources/ufo/DinhTuong-Regular.ufo sources/ufo/DinhTuong-Medium.ufo sources/ufo/DinhTuong-Bold.ufo
+	. venv-qa/bin/activate; python3 scripts/qa_alignment.py sources/ufo/DinhTuong-Regular.ufo sources/ufo/DinhTuong-Medium.ufo sources/ufo/DinhTuong-Bold.ufo sources/ufo/DinhTuong-ExtraBold.ufo
 
 proof: venv build.stamp
 	which diff3proof || (echo "diff3proof not found. Please install it with 'cargo binstall diffenator3'." && exit 1)

@@ -1,4 +1,4 @@
-"""Dinh Tuong variable font (wght 400-700) sources from the three static masters, so the VF renders EXACTLY like the
+"""Dinh Tuong variable font (wght 400-800) sources from the four static masters, so the VF renders EXACTLY like the
 static fonts at wght 400 / 500 / 700 (designer 31/10: 'đồng bộ để hiển thị tĩnh và variables phải giống nhau').
 
 * Masters = the static UFOs (sources/ufo) at wght 400 / 500 / 700, made point-compatible on copies here by VF3
@@ -19,9 +19,9 @@ from fontTools.designspaceLib import DesignSpaceDocument, AxisDescriptor, Source
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, 'sources', 'ufo')
 OUT = os.path.join(ROOT, 'sources', 'vf')
-W = [('Regular', 400), ('Medium', 500), ('Bold', 700)]
-ALT = [('wM', 500), ('wB', 700)]
-STEP = {'wM': (450, 599.99), 'wB': (600, 700)}
+W = [('Regular', 400), ('Medium', 500), ('Bold', 700), ('ExtraBold', 800)]   # X1 (1.009): Extra Bold master at 800
+ALT = [('wM', 500), ('wB', 700), ('wX', 800)]
+STEP = {'wM': (450, 599.99), 'wB': (600, 749.99), 'wX': (750, 800)}
 
 
 def sig(g):
@@ -47,12 +47,12 @@ def main():
     SRC_ = OUT
     F = {s: ufoLib2.Font.open(os.path.join(SRC_, f'DinhTuong-{s}.ufo')) for s, _ in W}
     names = list(F['Regular'].keys())
-    bad = [n for n in names if not (sig(F['Regular'][n]) == sig(F['Medium'][n]) == sig(F['Bold'][n]))]
+    bad = [n for n in names if len({str(sig(F[s][n])) for s, _ in W}) > 1]
     src = {s: ufoLib2.Font.open(os.path.join(SRC_, f'DinhTuong-{s}.ufo')) for s, _ in W}   # copies to read from
     for s, _ in W:
         f = F[s]
         for n in bad:
-            for tag, wsrc in [('', 'Regular'), ('wM', 'Medium'), ('wB', 'Bold')]:
+            for tag, wsrc in [('', 'Regular'), ('wM', 'Medium'), ('wB', 'Bold'), ('wX', 'ExtraBold')]:
                 gsrc = src[wsrc][n]
                 name = n if not tag else f'{n}.{tag}'
                 g = f[name] if name in f else f.newGlyph(name)
@@ -90,13 +90,13 @@ def main():
         f.save(os.path.join(OUT, f'DinhTuong-{s}.ufo'), overwrite=True)
 
     ds = DesignSpaceDocument()
-    ax = AxisDescriptor(); ax.name, ax.tag, ax.minimum, ax.default, ax.maximum = 'Weight', 'wght', 400, 400, 700
+    ax = AxisDescriptor(); ax.name, ax.tag, ax.minimum, ax.default, ax.maximum = 'Weight', 'wght', 400, 400, 800
     ds.addAxis(ax)
     for s, v in W:
         sd = SourceDescriptor(); sd.filename = f'DinhTuong-{s}.ufo'; sd.path = os.path.join(OUT, sd.filename); sd.styleName = s; sd.familyName = 'Dinh Tuong'
         sd.location = {'Weight': v}
         ds.addSource(sd)
-    for s, v in [('Regular', 400), ('Medium', 500), ('SemiBold', 600), ('Bold', 700)]:
+    for s, v in [('Regular', 400), ('Medium', 500), ('SemiBold', 600), ('Bold', 700), ('ExtraBold', 800)]:
         i = InstanceDescriptor(); i.familyName = 'Dinh Tuong'; i.styleName = s; i.location = {'Weight': v}
         ds.addInstance(i)
     for a, (lo, hi) in (STEP.items() if bad else ()):     # no empty rules: they leave a dangling FeatureVariations lookup

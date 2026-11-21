@@ -33,7 +33,7 @@ from concept_v1 import rect, fstem, fbar, ell
 # trái'): the a stands upright when its upper half's ink centre is right of the lower half's by the same share of the
 # advance as in Regular (0.027); Medium / Bold reach that with a shorter move (measured: 0.5 left them at 0.016-0.017)
 C_APER, E_APER = 0.20 * 530, 0.0   # W1-n (20/11 'gì mà đuôi e thụt vào làm gì vậy'): e keeps its full reach (no aperture cut-back)   # W1-j / W1-m: c's aperture between the tips, e's between tail and bar (x-height shares)
-A_HEAD_K = {'regular': 0.5, 'medium': 0.0, 'bold': -0.4}
+A_HEAD_K = {'regular': 0.5, 'medium': 0.0, 'bold': -0.4, 'extrabold': -0.6}
 A_CUT = os.environ.get('A_CUT', 'vertical')   # D7: 1.007's vertical cut by default   # A2 (20/11 'Riêng chữ a thì thay vì cắt dọc đuôi thì cắt theo tâm như chữ e và c mới')
 
 
@@ -80,7 +80,7 @@ SPUR_D = 46                # F5b: where a bowl meets its stem: 46 u (0.5 h of th
 SPUR = 0.12                # bowl stem stands this much (x v) outside the ring
 CUT = 0.45                 # F7
 CUT_S = 0.72               # P2: s terminals a touch nearer the centre than c (0.45), so its apertures stay open
-M_JT2 = {'regular': 0.82, 'medium': 0.86, 'bold': 0.90}   # F10m: the m's second arch keeps this share of the F10c thinning
+M_JT2 = {'regular': 0.82, 'medium': 0.86, 'bold': 0.90, 'extrabold': 0.94}   # F10m: the m's second arch keeps this share of the F10c thinning
 JT = 0.25                  # F10 (02:51 'điểm giao'): at every joint the counter runs JT x v further into the
                            # stem, so the round stroke THINS into the joint instead of piling ink there
 CUT_A = 0.80               # a: the hood's free end reaches well round (a terminal on the left shoulder)
@@ -103,7 +103,8 @@ DIAG_W = ({'v': 551, 'y': 551, 'x': 541, 'w': 452, 'k': 505, 'z': 462} if os.env
 # widened to ~0.90 x the stem in every weight (factors from the measured outlines; outer edges unchanged)
 DIAG_BOOST_LC = {'regular': {'v': 1.065, 'w': 1.058, 'x': 1.031, 'y': 1.01},
                  'medium':  {'v': 1.064, 'w': 1.058, 'x': 1.034, 'y': 1.0},
-                 'bold':    {'v': 1.056, 'w': 1.053, 'x': 1.026, 'y': 1.0}}
+                 'bold':    {'v': 1.056, 'w': 1.053, 'x': 1.026, 'y': 1.0},
+                 'extrabold': {'v': 1.052, 'w': 1.050, 'x': 1.022, 'y': 1.0}}
 dboost = lambda w, ch: DIAG_BOOST_LC[w].get(ch, 1.0) if os.environ.get('D2', '1') == '1' else 1.0
 CUT_C = 0.80               # c: wider than the 0.45 rule (02:50 'c quá hẹp') but the cut still stands on the shoulder
 CUT_E = 0.95               # e: the lower tail runs nearly to the right edge (02:50 'đuôi e ngắn')

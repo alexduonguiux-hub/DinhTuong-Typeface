@@ -1,5 +1,28 @@
 # Changelog
 
+## 1.009 (2026-11-20)
+Extra Bold: a fourth master at wght 800, static and in the variable font (now wght 400-800). The other weights are
+1.008's.
+
+### Weights
+- **X1, Extra Bold:** one more even step past Bold. Caps stem V 161 (Regular / Medium / (SemiBold) / Bold / Extra Bold =
+  98 / 114 / (129) / 145 / 161), every other stroke in the same ratios (H 134, lowercase v 143). Sidebearings follow
+  the stem rule (46 / 32 / 16 -> 43 / 30 / 15). Per-weight rules continue one step past Bold (joints, flares, the a's
+  hood, the diagonals); kerning starts from Bold's tables and runs every pass (guard, R16c-f).
+- **Variable font:** masters at 400 / 500 / 700 / 800; instances Regular, Medium, SemiBold, Bold, ExtraBold. Every
+  glyph is point-compatible across the four masters (no glyph steps).
+
+### Build and QA
+- `vf_compat.py` (VF3) and `scripts/vf_compat_generic.py` (VF5) work on any number of masters. VF3 first tries the
+  exact fix for a contour that only starts elsewhere (Extra Bold's dots, ~, ¹, ˛): it is rotated to the first
+  master's start on the raw segments; nothing is redrawn.
+- TrueType curves within 0.4 u of the cubic outlines (`-e 0.0004`, static and variable).
+- `scripts/vf_vs_static.py` counts an area difference past 0.5 % and 400 u2, as `scripts/compare_build.py` does (the
+  variable font's integer points move small glyphs such as ¹ by ~0.2 u a point).
+- QA: Font Bakery PASS (no new results); the variable font matches the static fonts at all four masters; no area
+  shrink or uneven step from 400 to 800; build = reference in all four weights. Ỏ / Ở Extra Bold: hook 22 / 25 u
+  from the O (Bold 24 / 26 as in 1.007).
+
 ## 1.008 (2026-11-20)
 1.007's letters on lighter, evenly spaced weights, and a full QA pass. Every glyph changes (the strokes changed), so
 1.008 is a full build from the generators, not a patch on 1.007.

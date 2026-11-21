@@ -30,7 +30,8 @@ D7_REG_V = 116.0   # D7-b: 1.007's Regular caps stem
 # D7-b: the share of the arm's growth C G c e keep: Bold's as 1.007's (its growth over 1.007's Regular 116 against over
 # 1.008's Regular 98), the same share in every weight so Regular is untouched and the weights step evenly
 D7_F = None   # set after W8 (needs Bold's V)
-W8 = {'bold':    dict(V=145, H=121, HM=107, v=129, h=107, FL=9, fl=8),   # W1-q (20/11 'phần bold nên cho mỏng hơn', Bold 145): was V 157
+W8 = {'extrabold': dict(V=161, H=134, HM=119, v=143, h=119, FL=10, fl=9),   # X1 (20/11 'build thêm Extra Bold'): wght 800, one more even step (16) past Bold
+      'bold':    dict(V=145, H=121, HM=107, v=129, h=107, FL=9, fl=8),   # W1-q (20/11 'phần bold nên cho mỏng hơn', Bold 145): was V 157
       'medium':  dict(V=114, H=96,  HM=86,  v=102, h=85,  FL=8, fl=7),   # W1-q: Regular + 1/3 of the way to Bold (was V 118)
       'regular': dict(V=98,  H=84,  HM=76,  v=88,  h=74,  FL=7, fl=6)}
 
@@ -51,10 +52,10 @@ G2_PRE = float(os.environ.get('G2_PRE', '25'))   # R5g: the arm leaves the round
 SPINE = float(os.environ.get('SPINE', 1.10))   # R11: the S spine is the heaviest part (TypeDrawers: "esses need to be thickest in the spine")
 SWIDE = float(os.environ.get('SWIDE', 0.5))    # S/s widen with the stroke so their counters stay the same in every weight
 D7_F = (1 - D7_REG_V / W8['bold']['V']) / (1 - W8['regular']['V'] / W8['bold']['V'])
-JOINT = {'regular': 0.88, 'medium': 0.84, 'bold': 0.80}   # R9b joint thickness / stroke (heavier -> thinner)
+JOINT = {'regular': 0.88, 'medium': 0.84, 'bold': 0.80, 'extrabold': 0.76}   # R9b joint thickness / stroke (heavier -> thinner)
 DENSE = 0.96          # R10 dense letters (a e g s) carry a touch less weight
 JSTYLE = os.environ.get('JSTYLE', 'outer')   # 'inner' = R9b notch in the counter corner; 'outer' = R9c notch on the outer edge
-JOUT = {'regular': 1 - 67 / 88, 'medium': 1 - 71 / 106, 'bold': 1 - 77 / 124}   # 26/10: +20% over 56/59/64   # R9c joint left after the outer notch / stroke
+JOUT = {'regular': 1 - 67 / 88, 'medium': 1 - 71 / 106, 'bold': 1 - 77 / 124, 'extrabold': 1 - 83 / 142}   # 26/10: +20% over 56/59/64   # R9c joint left after the outer notch / stroke
 # (notch depth 67/71/77 units = 0.76/0.67/0.62 of h (26/10 'tăng khoét 20%'): the notch is an OPENING, so it
 #  must read the same at every weight -> lighter weights cut relatively deeper; absolute depth
 #  and absolute joint still grow monotonically R->M->B)
@@ -1196,7 +1197,7 @@ def render(builds, path, S=0.42, guides=True, text=None):
 if __name__ == '__main__':
     od = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'out', 'concept_v1')
     os.makedirs(od, exist_ok=True)
-    for w in sys.argv[1:] or ['bold', 'medium', 'regular']:
+    for w in sys.argv[1:] or ['extrabold', 'bold', 'medium', 'regular']:
         B = Build(w)
         gl = B.all()
         sfx = '' if JSTYLE == 'outer' else '_optA'

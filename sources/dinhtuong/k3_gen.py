@@ -17,7 +17,7 @@ from PIL import Image, ImageDraw, ImageFont
 from fontTools.ttLib import TTFont
 
 W8 = os.environ.get('A2_WEIGHT', 'regular')
-STY = {'regular': 'Regular', 'medium': 'Medium', 'bold': 'Bold'}[W8]
+STY = {'regular': 'Regular', 'medium': 'Medium', 'bold': 'Bold', 'extrabold': 'ExtraBold'}[W8]
 FD = sys.argv[1] if len(sys.argv) > 1 else 'out/v096'
 TOL, FLOOR = 0.02, 26
 REFS = [('/usr/share/fonts/opentype/inter/Inter-Regular.otf', '/usr/share/fonts/opentype/inter/Inter-Bold.otf'),
