@@ -20103,3 +20103,10 @@ feature case {
   sub colon by colon.case;
   sub semicolon by semicolon.case;
 } case;
+
+@CASE_BEFORE = [A AE Aacute Abreve Acircumflex Adieresis Agrave Amacron Aogonek Aring Atilde B C Cacute Ccaron Ccedilla Ccircumflex Cdotaccent D Dcaron Dcroat E Eacute Ebreve Ecaron Ecircumflex Edieresis Edotaccent Egrave Emacron Eogonek Eth F G Gbreve Gcircumflex Gdotaccent H Hbar Hcircumflex I Iacute Ibreve Icircumflex Idieresis Idotaccent Igrave Imacron Iogonek Itilde J Jcircumflex K L Lacute Lcaron Lslash M N Nacute Ncaron Ntilde O OE Oacute Obreve Ocircumflex Odieresis Ograve Ohorn Ohungarumlaut Oslash Otilde P Q R Racute Rcaron S Sacute Scaron Scedilla Scircumflex T Tcaron Thorn U Uacute Ubreve Ucircumflex Udieresis Ugrave Uhorn Uhungarumlaut Umacron Uogonek Uring Utilde V W Wacute Wcircumflex Wdieresis Wgrave X Y Yacute Ycircumflex Ydieresis Ygrave Z Zacute Zcaron Zdotaccent eight five four nine one seven six three two uni0122 uni0136 uni013B uni0145 uni0218 uni021A uni1E9E uni1EA0 uni1EA2 uni1EA4 uni1EA6 uni1EA8 uni1EAA uni1EAC uni1EAE uni1EB0 uni1EB2 uni1EB4 uni1EB6 uni1EB8 uni1EBA uni1EBC uni1EBE uni1EC0 uni1EC2 uni1EC4 uni1EC6 uni1EC8 uni1ECA uni1ECC uni1ECE uni1ED0 uni1ED2 uni1ED4 uni1ED6 uni1ED8 uni1EDA uni1EDC uni1EDE uni1EE0 uni1EE2 uni1EE4 uni1EE6 uni1EE8 uni1EEA uni1EEC uni1EEE uni1EF0 uni1EF4 uni1EF6 uni1EF8 zero eight.tf five.tf four.tf nine.tf one.tf seven.tf six.tf three.tf two.tf zero.tf];
+
+feature calt {
+  sub @CASE_BEFORE colon' by colon.case;
+  sub @CASE_BEFORE semicolon' by semicolon.case;
+} calt;

@@ -8,6 +8,7 @@ the colon's. Advance widths are unchanged.
 Each master gets
   * the two glyphs (outlines copied and moved, no components), appended to public.glyphOrder;
   * feature case: sub colon by colon.case; sub semicolon by semicolon.case;
+  * feature calt (on by default): the same, by context, right after a capital or a figure (C1-c);
   * kerning: an alternate kerns exactly as its base glyph (it joins every class its base is in, and every single-glyph
     'pos' pair of its base is copied for it).
 
@@ -60,6 +61,8 @@ CLS = re.compile(r'^(\s*@\S+\s*=\s*\[)(.*)(\];.*)$')
 def features(font):
     fea = font.features.text
     fea = re.sub(r'\nfeature case \{.*?\} case;\n', '\n', fea, flags=re.S)
+    fea = re.sub(r'\nfeature calt \{.*?\} calt;\n', '\n', fea, flags=re.S)
+    fea = re.sub(r'\n@CASE_BEFORE = \[.*?\];\n', '\n', fea, flags=re.S)
     alt = dict(CASE)
     out, copied = [], 0
     for line in fea.split('\n'):
@@ -86,6 +89,15 @@ def features(font):
     fea = '\n'.join(out).rstrip('\n') + '\n'
     subs = '\n'.join(f'  sub {b} by {n};' for b, n in CASE)
     fea += f'\nfeature case {{\n{subs}\n}} case;\n'
+    # C1-c (1.009, 'bản cài vẫn chưa fix được'): most apps never switch 'case' on for text typed in capitals, so the same
+    # forms also come in by context in 'calt' (on by default): a colon / semicolon right after a capital or a figure
+    # (the figures stand at cap height) takes its case form - 'GIỜ: 10:30' is raised, 'giờ: 10' is not
+    import unicodedata
+    before = sorted(g.name for g in font if g.unicodes and any(unicodedata.category(chr(u)) == 'Lu' or chr(u).isdigit() and u < 128 for u in g.unicodes))
+    before += sorted(n for n in font.keys() if n.endswith('.tf') and n[:-3] in before)
+    fea += f'\n@CASE_BEFORE = [{" ".join(before)}];\n'
+    ctx = '\n'.join(f"  sub @CASE_BEFORE {b}' by {n};" for b, n in CASE)
+    fea += f'\nfeature calt {{\n{ctx}\n}} calt;\n'
     font.features.text = fea
     print(f'  case: {len(CASE)} forms (+{DY:g} u), {copied} kerning pairs copied')
 
