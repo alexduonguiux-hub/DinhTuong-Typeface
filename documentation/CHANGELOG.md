@@ -17,6 +17,10 @@ The other weights are 1.008's.
   moved up (CAP - XH) / 2 = 85 u, so the colon's dots stand centred on the capitals instead of the lowercase (the
   lower dot no longer sits on the baseline in all-caps text). Same advances; kerned as their base glyphs. Applied by
   `font-feature-settings: "case"` (and by apps that switch it on for all-caps).
+- **C1-c, automatic** ('bản cài vẫn chưa fix được': most apps never switch `case` on for text typed in capitals): the
+  same forms come in by context in `calt`, which is on by default - a colon or semicolon right after a capital or a
+  figure (the figures stand at cap height) takes its case form: 'GIỜ: 10:30', 'HÀ NỘI: SÀI GÒN' raised; 'giờ:' and
+  'Ghi chú:' (after a lowercase letter) as before.
 
 ### Build and QA
 - `vf_compat.py` (VF3) and `scripts/vf_compat_generic.py` (VF5) work on any number of masters. VF3 first tries the
