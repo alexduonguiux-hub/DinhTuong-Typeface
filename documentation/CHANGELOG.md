@@ -1,8 +1,8 @@
 # Changelog
 
 ## 1.009 (2026-11-20)
-Extra Bold: a fourth master at wght 800, static and in the variable font (now wght 400-800). The other weights are
-1.008's.
+Extra Bold: a fourth master at wght 800, static and in the variable font (now wght 400-800); case-sensitive : ;.
+The other weights are 1.008's.
 
 ### Weights
 - **X1, Extra Bold:** one more even step past Bold. Caps stem V 161 (Regular / Medium / (SemiBold) / Bold / Extra Bold =
@@ -11,6 +11,12 @@ Extra Bold: a fourth master at wght 800, static and in the variable font (now wg
   hood, the diagonals); kerning starts from Bold's tables and runs every pass (guard, R16c-f).
 - **Variable font:** masters at 400 / 500 / 700 / 800; instances Regular, Medium, SemiBold, Bold, ExtraBold. Every
   glyph is point-compatible across the four masters (no glyph steps).
+
+### Features
+- **C1, `case`** ('thêm tính năng case để các dấu : ; không chạm đáy khi cap'): colon.case and semicolon.case are : ;
+  moved up (CAP - XH) / 2 = 85 u, so the colon's dots stand centred on the capitals instead of the lowercase (the
+  lower dot no longer sits on the baseline in all-caps text). Same advances; kerned as their base glyphs. Applied by
+  `font-feature-settings: "case"` (and by apps that switch it on for all-caps).
 
 ### Build and QA
 - `vf_compat.py` (VF3) and `scripts/vf_compat_generic.py` (VF5) work on any number of masters. VF3 first tries the

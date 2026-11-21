@@ -2743,7 +2743,9 @@ feature kern {
     pos r seven 10;
     pos r eight 15;
     pos r colon 15;
+    pos r colon.case 15;
     pos r semicolon 5;
+    pos r semicolon.case 5;
     pos r at 20;
     pos r B 35;
     pos r C 25;
@@ -5553,6 +5555,7 @@ feature kern {
     pos Aogonek comma 85;
     pos Aogonek slash 115;
     pos Aogonek semicolon 85;
+    pos Aogonek semicolon.case 85;
     pos Aogonek A -62;
     pos Aogonek C -50;
     pos Aogonek G -50;
@@ -5927,6 +5930,7 @@ feature kern {
     pos Eogonek comma 70;
     pos Eogonek slash 100;
     pos Eogonek semicolon 70;
+    pos Eogonek semicolon.case 70;
     pos Eogonek bracketleft 50;
     pos Eogonek bracketright 90;
     pos Eogonek g 30;
@@ -6477,6 +6481,7 @@ feature kern {
     pos Iogonek comma 30;
     pos Iogonek slash 60;
     pos Iogonek semicolon 30;
+    pos Iogonek semicolon.case 30;
     pos Iogonek S -40;
     pos Iogonek Z -30;
     pos Iogonek bracketleft 10;
@@ -7209,7 +7214,9 @@ feature kern {
     pos racute seven 30;
     pos racute eight 15;
     pos racute colon 15;
+    pos racute colon.case 15;
     pos racute semicolon 5;
+    pos racute semicolon.case 5;
     pos racute at 20;
     pos racute B 35;
     pos racute C 25;
@@ -7441,7 +7448,9 @@ feature kern {
     pos rcaron seven 10;
     pos rcaron eight 15;
     pos rcaron colon 15;
+    pos rcaron colon.case 15;
     pos rcaron semicolon 5;
+    pos rcaron semicolon.case 5;
     pos rcaron at 20;
     pos rcaron B 35;
     pos rcaron C 25;
@@ -12412,7 +12421,9 @@ feature kern {
     pos five slash -20;
     pos five three 15;
     pos five colon -20;
+    pos five colon.case -20;
     pos five semicolon -20;
+    pos five semicolon.case -20;
     pos five question -5;
     pos [five] @kR_J -20;
     pos [five] @kR_S -10;
@@ -12442,7 +12453,9 @@ feature kern {
     pos six eight -15;
     pos six nine -35;
     pos six colon -20;
+    pos six colon.case -20;
     pos six semicolon -20;
+    pos six semicolon.case -20;
     pos six question -35;
     pos [six] @kR_A -35;
     pos [six] @kR_B -25;
@@ -12478,7 +12491,9 @@ feature kern {
     pos seven three 15;
     pos seven five 15;
     pos seven colon -50;
+    pos seven colon.case -50;
     pos seven semicolon -35;
+    pos seven semicolon.case -35;
     pos seven question -15;
     pos [seven] @kR_J -25;
     pos [seven] @kR_W -10;
@@ -12513,6 +12528,7 @@ feature kern {
     pos nine eight -5;
     pos nine nine -20;
     pos nine colon 10;
+    pos nine colon.case 10;
     pos nine question -10;
     pos [nine] @kR_A -20;
     pos [nine] @kR_C -15;
@@ -12552,7 +12568,9 @@ feature kern {
     pos nine braceright -25;
     pos nine ellipsis -25;
     pos [colon] @kR_J -15;
+    pos colon.case @kR_J -15;
     pos semicolon three 15;
+    pos semicolon.case three 15;
     pos [question] @kR_J -15;
     pos @kL_A [exclam] -25;
     pos @kL_A [quotedbl] -10;
@@ -12621,6 +12639,7 @@ feature kern {
     pos @kL_B [four] -15;
     pos @kL_B [six] -20;
     pos @kL_B [colon] -20;
+    pos @kL_B colon.case -20;
     pos @kL_B [question] -25;
     pos @kL_B @kR_A -55;
     pos @kL_B @kR_B -20;
@@ -12659,7 +12678,9 @@ feature kern {
     pos @kL_C [period] -20;
     pos @kL_C [slash] -40;
     pos @kL_C [colon] -30;
+    pos @kL_C colon.case -30;
     pos @kL_C [semicolon] -30;
+    pos @kL_C semicolon.case -30;
     pos @kL_C [question] -25;
     pos @kL_C @kR_A -30;
     pos @kL_C @kR_B -30;
@@ -12782,7 +12803,9 @@ feature kern {
     pos F period -60;
     pos F slash -60;
     pos F colon -60;
+    pos F colon.case -60;
     pos F semicolon -60;
+    pos F semicolon.case -60;
     pos [F] @kR_A -90;
     pos [F] @kR_B -10;
     pos [F] @kR_C -30;
@@ -12886,7 +12909,9 @@ feature kern {
     pos @kL_J [slash] -20;
     pos @kL_J [six] -15;
     pos @kL_J [colon] -20;
+    pos @kL_J colon.case -20;
     pos @kL_J [semicolon] -20;
+    pos @kL_J semicolon.case -20;
     pos @kL_J [question] -35;
     pos @kL_J @kR_A -55;
     pos @kL_J @kR_C -30;
@@ -12911,6 +12936,7 @@ feature kern {
     pos @kL_K [seven] -5;
     pos @kL_K [nine] -30;
     pos @kL_K [semicolon] -20;
+    pos @kL_K semicolon.case -20;
     pos @kL_K [question] -35;
     pos @kL_K @kR_A 10;
     pos @kL_K @kR_C -65;
@@ -13166,7 +13192,9 @@ feature kern {
     pos @kL_S [eight] -15;
     pos @kL_S [nine] -10;
     pos @kL_S [colon] -35;
+    pos @kL_S colon.case -35;
     pos @kL_S [semicolon] -35;
+    pos @kL_S semicolon.case -35;
     pos @kL_S [question] -35;
     pos @kL_S @kR_A -55;
     pos @kL_S @kR_B -20;
@@ -13236,7 +13264,9 @@ feature kern {
     pos @kL_T [seven] -10;
     pos @kL_T [nine] -15;
     pos @kL_T [colon] -75;
+    pos @kL_T colon.case -75;
     pos @kL_T [semicolon] -70;
+    pos @kL_T semicolon.case -70;
     pos @kL_T [question] -35;
     pos @kL_T @kR_A -100;
     pos @kL_T @kR_B -30;
@@ -13296,6 +13326,7 @@ feature kern {
     pos @kL_U [two] -10;
     pos @kL_U [four] -10;
     pos @kL_U [colon] -20;
+    pos @kL_U colon.case -20;
     pos @kL_U [question] -15;
     pos @kL_U @kR_A -55;
     pos @kL_U @kR_C -30;
@@ -13321,7 +13352,9 @@ feature kern {
     pos V seven -5;
     pos V nine -15;
     pos V colon -60;
+    pos V colon.case -60;
     pos V semicolon -55;
+    pos V semicolon.case -55;
     pos V question -20;
     pos [V] @kR_A -85;
     pos [V] @kR_B -20;
@@ -13389,7 +13422,9 @@ feature kern {
     pos @kL_W [six] -25;
     pos @kL_W [seven] -5;
     pos @kL_W [colon] -45;
+    pos @kL_W colon.case -45;
     pos @kL_W [semicolon] -50;
+    pos @kL_W semicolon.case -50;
     pos @kL_W [question] -20;
     pos @kL_W @kR_A -75;
     pos @kL_W @kR_B -20;
@@ -13494,7 +13529,9 @@ feature kern {
     pos @kL_Y [seven] -5;
     pos @kL_Y [nine] -25;
     pos @kL_Y [colon] -70;
+    pos @kL_Y colon.case -70;
     pos @kL_Y [semicolon] -70;
+    pos @kL_Y semicolon.case -70;
     pos @kL_Y [question] -35;
     pos @kL_Y @kR_A -95;
     pos @kL_Y @kR_B -20;
@@ -13679,8 +13716,11 @@ feature kern {
     pos t_f period -30;
     pos f_f period -30;
     pos f semicolon 25;
+    pos f semicolon.case 25;
     pos t_f semicolon 25;
+    pos t_f semicolon.case 25;
     pos f_f semicolon 25;
+    pos f_f semicolon.case 25;
     pos f question 15;
     pos t_f question 15;
     pos f_f question 15;
@@ -13861,8 +13901,11 @@ feature kern {
     pos t_t comma 40;
     pos f_t comma 40;
     pos t semicolon 25;
+    pos t semicolon.case 25;
     pos t_t semicolon 25;
+    pos t_t semicolon.case 25;
     pos f_t semicolon 25;
+    pos f_t semicolon.case 25;
     pos t question 15;
     pos t_t question 15;
     pos f_t question 15;
@@ -14154,6 +14197,7 @@ feature kern {
     pos @kL_Uhorn [parenright] 35;
     pos @kL_Uhorn [period] -20;
     pos @kL_Uhorn [colon] -20;
+    pos @kL_Uhorn colon.case -20;
     pos @kL_Uhorn @kR_A -50;
     pos @kL_Uhorn @kR_C -25;
     pos @kL_Uhorn @kR_G -30;
@@ -14244,3 +14288,8 @@ table GDEF {
   LigatureCaretByPos t_f 304;
   LigatureCaretByPos f_f 294;
 } GDEF;
+
+feature case {
+  sub colon by colon.case;
+  sub semicolon by semicolon.case;
+} case;
