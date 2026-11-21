@@ -28,6 +28,9 @@ python3 s_spine_fix.py spine_data.json "$ROOT/sources/ufo/DinhTuong-Regular.ufo"
 # L1 (1.007): standard ligatures t_t f_t t_f f_f, crossbars run on (liga), kerned as their outer letters
 python3 ligatures.py "$ROOT/sources/ufo/DinhTuong-Regular.ufo" "$ROOT/sources/ufo/DinhTuong-Medium.ufo" \
   "$ROOT/sources/ufo/DinhTuong-Bold.ufo" "$ROOT/sources/ufo/DinhTuong-ExtraBold.ufo"
+# C1 (1.009): case-sensitive forms colon.case semicolon.case (feature case), kerned as their base glyphs
+python3 case_forms.py "$ROOT/sources/ufo/DinhTuong-Regular.ufo" "$ROOT/sources/ufo/DinhTuong-Medium.ufo" \
+  "$ROOT/sources/ufo/DinhTuong-Bold.ufo" "$ROOT/sources/ufo/DinhTuong-ExtraBold.ufo"
 # VF3 (vf-concept-v1): point-compatible masters for the variable font; exact, outlines unchanged
 python3 vf_compat.py "$ROOT/sources/ufo/DinhTuong-Regular.ufo" "$ROOT/sources/ufo/DinhTuong-Medium.ufo" \
   "$ROOT/sources/ufo/DinhTuong-Bold.ufo" "$ROOT/sources/ufo/DinhTuong-ExtraBold.ufo"
