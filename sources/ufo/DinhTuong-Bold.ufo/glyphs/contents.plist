@@ -314,6 +314,8 @@
     <string>circumflex.glif</string>
     <key>colon</key>
     <string>colon.glif</string>
+    <key>colon.case</key>
+    <string>colon.case.glif</string>
     <key>comma</key>
     <string>comma.glif</string>
     <key>copyright</key>
@@ -602,6 +604,8 @@
     <string>section.glif</string>
     <key>semicolon</key>
     <string>semicolon.glif</string>
+    <key>semicolon.case</key>
+    <string>semicolon.case.glif</string>
     <key>seven</key>
     <string>seven.glif</string>
     <key>seven.tf</key>

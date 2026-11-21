@@ -7,32 +7,35 @@ set -e
 VERSION=${VERSION:-1.003}
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 cd "$ROOT/sources/dinhtuong"
-for w in regular medium bold; do LC_OPT=f A2_WEIGHT=$w python3 lcsym.py; done
-for w in regular medium bold; do
+for w in regular medium bold extrabold; do LC_OPT=f A2_WEIGHT=$w python3 lcsym.py; done
+for w in regular medium bold extrabold; do
   LC_OPT=f A2_WEIGHT=$w REL=$VERSION OUTD="$ROOT/sources/out" sh -c "python3 lcfont.py && python3 build96.py" &
 done
 wait
 python3 gf_release.py "$ROOT/sources/out" "$ROOT/sources/reference" "$VERSION"     # reference binaries (generator output)
-for s in Regular Medium Bold; do
+for s in Regular Medium Bold ExtraBold; do
   w=$(echo $s | tr 'A-Z' 'a-z')
   python3 export_ufo.py "$ROOT/sources/reference/fonts/otf/DinhTuong-$s.otf" "$ROOT/sources/out/kern_v096_$w.json" \
     "$ROOT/sources/out/DINHTUONG60s-$s.fea" "$ROOT/sources/ufo/DinhTuong-$s.ufo"
 done
 # SD1 (1.004): dotless į / ị and the ccmp rule that drops the dot of i j į ị under a mark above
 python3 soft_dotted.py "$ROOT/sources/ufo/DinhTuong-Regular.ufo" "$ROOT/sources/ufo/DinhTuong-Medium.ufo" \
-  "$ROOT/sources/ufo/DinhTuong-Bold.ufo"
+  "$ROOT/sources/ufo/DinhTuong-Bold.ufo" "$ROOT/sources/ufo/DinhTuong-ExtraBold.ufo"
 # VF4-S (vf-concept-v1): the S / s spine put back as the exact R11b curves, tangent to the rings (no boolean kinks)
 python3 spine_data.py spine_data.json
 python3 s_spine_fix.py spine_data.json "$ROOT/sources/ufo/DinhTuong-Regular.ufo" "$ROOT/sources/ufo/DinhTuong-Medium.ufo" \
-  "$ROOT/sources/ufo/DinhTuong-Bold.ufo"
+  "$ROOT/sources/ufo/DinhTuong-Bold.ufo" "$ROOT/sources/ufo/DinhTuong-ExtraBold.ufo"
 # L1 (1.007): standard ligatures t_t f_t t_f f_f, crossbars run on (liga), kerned as their outer letters
 python3 ligatures.py "$ROOT/sources/ufo/DinhTuong-Regular.ufo" "$ROOT/sources/ufo/DinhTuong-Medium.ufo" \
-  "$ROOT/sources/ufo/DinhTuong-Bold.ufo"
+  "$ROOT/sources/ufo/DinhTuong-Bold.ufo" "$ROOT/sources/ufo/DinhTuong-ExtraBold.ufo"
+# C1 (1.009): case-sensitive forms colon.case semicolon.case (feature case), kerned as their base glyphs
+python3 case_forms.py "$ROOT/sources/ufo/DinhTuong-Regular.ufo" "$ROOT/sources/ufo/DinhTuong-Medium.ufo" \
+  "$ROOT/sources/ufo/DinhTuong-Bold.ufo" "$ROOT/sources/ufo/DinhTuong-ExtraBold.ufo"
 # VF3 (vf-concept-v1): point-compatible masters for the variable font; exact, outlines unchanged
 python3 vf_compat.py "$ROOT/sources/ufo/DinhTuong-Regular.ufo" "$ROOT/sources/ufo/DinhTuong-Medium.ufo" \
-  "$ROOT/sources/ufo/DinhTuong-Bold.ufo"
+  "$ROOT/sources/ufo/DinhTuong-Bold.ufo" "$ROOT/sources/ufo/DinhTuong-ExtraBold.ufo"
 # Outline rules on the finished masters (1.004): R-axis, R-colinear, R-absorb, and the review-audit rules R-micro2 / R-g1
 # (micro segments left by unions, joints that turn 0.6-10 deg on the integer grid); only the points they target move
 python3 "$ROOT/scripts/apply_outline_rules.py" "$ROOT/sources/out/outline_rules_changed.json" "$ROOT/sources/ufo/DinhTuong-Regular.ufo" \
-  "$ROOT/sources/ufo/DinhTuong-Medium.ufo" "$ROOT/sources/ufo/DinhTuong-Bold.ufo"
+  "$ROOT/sources/ufo/DinhTuong-Medium.ufo" "$ROOT/sources/ufo/DinhTuong-Bold.ufo" "$ROOT/sources/ufo/DinhTuong-ExtraBold.ufo"
 echo "UFO sources: $ROOT/sources/ufo  (reference binaries: $ROOT/sources/reference/fonts)"

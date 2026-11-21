@@ -184,20 +184,26 @@ def pair_up(SA, SB):
 
 
 def compat_contours(SS):
-    """SS: one contour per master (cubic lists, same start / direction) -> node-compatible lists"""
-    R, M, B = SS
-    R1, M1, _ = pair_up(R, M)
-    R2, B2, addR = pair_up(R1, B)
-    if addR:
-        # the nodes added to R in the second pass go into M at the same segment-local arc fraction (R1 and M1 are
-        # node-for-node)
-        LR1, LM1 = cum(R1), cum(M1); pos = []
-        for p in addR:
-            k = max(i for i in range(len(R1)) if LR1[i] <= p)
-            f = (p - LR1[k]) / ((LR1[k + 1] - LR1[k]) or 1.0)
-            pos.append(LM1[k] + f * (LM1[k + 1] - LM1[k]))
-        M1 = split_at(M1, pos)
-    return [R2, M1, B2]
+    """SS: one contour per master (cubic lists, same start / direction) -> node-compatible lists.
+    X1 (1.009): any number of masters. Each further master is paired with the first; the nodes that pairing adds to
+    the first go into every master already paired, at the same segment-local arc fraction (they are node-for-node)."""
+    R = SS[0]
+    done = []                                        # masters already node-for-node with R
+    for X in SS[1:]:
+        R2, X2, addR = pair_up(R, X)
+        if addR:
+            LR = cum(R); pos_frac = []
+            for p in addR:
+                k = max(i for i in range(len(R)) if LR[i] <= p)
+                pos_frac.append((k, (p - LR[k]) / ((LR[k + 1] - LR[k]) or 1.0)))
+            new_done = []
+            for D in done:
+                LD = cum(D)
+                new_done.append(split_at(D, [LD[k] + f * (LD[k + 1] - LD[k]) for k, f in pos_frac]))
+            done = new_done
+        R = R2
+        done.append(X2)
+    return [R] + done
 
 
 def to_contour(S):
@@ -232,11 +238,11 @@ def main(paths, force=()):
     F = [ufoLib2.Font.open(p) for p in paths]
     # also the glyphs VF3 reported as left as is (VF4): their point types may line up while the points do not
     # (another start / rotation), which interpolates into a collapsed shape
-    bad = [n for n in F[0].keys() if not (sig(F[0][n]) == sig(F[1][n]) == sig(F[2][n])) or n in force]
+    bad = [n for n in F[0].keys() if any(sig(f[n]) != sig(F[0][n]) for f in F[1:]) or n in force]
     fixed, left = [], []
     for n in bad:
         gs = [f[n] for f in F]
-        if fix_glyph(gs) and sig(gs[0]) == sig(gs[1]) == sig(gs[2]):
+        if fix_glyph(gs) and all(sig(g) == sig(gs[0]) for g in gs[1:]):
             fixed.append(n)
         else:
             left.append(n)
@@ -246,4 +252,5 @@ def main(paths, force=()):
 
 
 if __name__ == '__main__':
-    main(sys.argv[1:4], set(sys.argv[4:]))
+    ufos = [a for a in sys.argv[1:] if a.rstrip('/').endswith('.ufo')]   # X1 (1.009): any number of masters
+    main(ufos, set(a for a in sys.argv[1:] if a not in ufos))

@@ -74,7 +74,7 @@ def glyph_stats(font, name):
 
 
 bad = 0
-for style in ('Regular', 'Medium', 'Bold'):
+for style in ('Regular', 'Medium', 'Bold', 'ExtraBold'):
     pr, pn = find(REF, style), find(NEW, style)
     if not pr or not pn:
         print(style, 'missing', pr, pn); bad += 1; continue

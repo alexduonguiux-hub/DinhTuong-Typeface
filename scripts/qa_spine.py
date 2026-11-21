@@ -6,7 +6,7 @@ from PIL import Image, ImageDraw, ImageFont
 from scipy import ndimage
 from skimage.morphology import skeletonize
 D=sys.argv[1]; bad=0
-for w in ('Regular','Medium','Bold'):
+for w in ('Regular','Medium','Bold','ExtraBold'):
     for ch in 'SsŠš$':
         f=ImageFont.truetype(f'{D}/DINHTUONG60s-{w}.otf',1000); im=Image.new('L',(1400,1600),0); ImageDraw.Draw(im).text((200,1250),ch,font=f,fill=255,anchor='ls')
         A=np.array(im)>127; dt=ndimage.distance_transform_edt(A); sk=skeletonize(A); ys,xs=np.where(sk); wd=2*dt[ys,xs]

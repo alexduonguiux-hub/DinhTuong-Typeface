@@ -16,8 +16,8 @@ ITALIC = os.environ.get('A2_ITALIC', '0') == '1'
 ANGLE = 10.0
 T = math.tan(math.radians(ANGLE))
 YC = GL.XH / 2
-WCLASS = {'regular': 400, 'medium': 500, 'bold': 700}[WEIGHT]
-STYLE = {'regular': 'Regular', 'medium': 'Medium', 'bold': 'Bold'}[WEIGHT]
+WCLASS = {'regular': 400, 'medium': 500, 'bold': 700, 'extrabold': 800}[WEIGHT]
+STYLE = {'regular': 'Regular', 'medium': 'Medium', 'bold': 'Bold', 'extrabold': 'ExtraBold'}[WEIGHT]
 if ITALIC:
     STYLE = 'Italic' if WEIGHT == 'regular' else STYLE + ' Italic'
 

@@ -230,7 +230,7 @@ def cap_P():
 
 
 Q_ANG = 35.0       # Q2d: the tail's lean off vertical, degrees
-Q_THIN = {'regular': 0.945, 'medium': 0.947, 'bold': 0.949}
+Q_THIN = {'regular': 0.945, 'medium': 0.947, 'bold': 0.949, 'extrabold': 0.951}
 
 
 def cap_Q():
@@ -1330,7 +1330,8 @@ WEIGHT = _os.environ.get('A2_WEIGHT', 'bold')
 # stem table per weight (Bold = the approved master). Regular/Medium keep the same
 # contrast ratio (h/v ~0.83) and diagonal-lightening rules; sidebearings open up as
 # stems get thinner so the colour stays even.
-_WT = {'bold':    dict(V=145, H=121, HM=107, v=129, h=107, SB=(46, 32, 16), F=(9, 8)),   # W1-q (Bold 145; SB on the existing stem rule)
+_WT = {'extrabold': dict(V=161, H=134, HM=119, v=143, h=119, SB=(43, 30, 15), F=(10, 9)),   # X1: Extra Bold
+       'bold':    dict(V=145, H=121, HM=107, v=129, h=107, SB=(46, 32, 16), F=(9, 8)),   # W1-q (Bold 145; SB on the existing stem rule)
        'medium':  dict(V=114, H=96,  HM=86,  v=102, h=85,  SB=(51, 36, 18), F=(8, 7)),
        'regular': dict(V=98,  H=84,  HM=76,  v=88,  h=74,  SB=(53, 38, 19), F=(7, 6))}[WEIGHT]
 V, H, HM = _WT['V'], _WT['H'], _WT['HM']      # caps: stem, horizontal, middle bar
@@ -1931,7 +1932,8 @@ def cap_U():
 # reaches DIAG_TARGET x the stem in every weight (factors from the measured outlines, outer edges unchanged).
 DIAG_BOOST = {'regular': {'V': 1.056, 'W': 1.050, 'X': 1.087, 'Y': 1.091, 'A': 1.078, 'K': 1.070},
               'medium':  {'V': 1.050, 'W': 1.048, 'X': 1.065, 'Y': 1.070, 'A': 1.061, 'K': 1.066},
-              'bold':    {'V': 1.050, 'W': 1.048, 'X': 1.043, 'Y': 1.053, 'A': 1.073, 'K': 1.071}}   # A K: 19/11 'nâng A K luôn'
+              'bold':    {'V': 1.050, 'W': 1.048, 'X': 1.043, 'Y': 1.053, 'A': 1.073, 'K': 1.071},
+              'extrabold': {'V': 1.050, 'W': 1.048, 'X': 1.035, 'Y': 1.045, 'A': 1.073, 'K': 1.071}}   # A K: 19/11 'nâng A K luôn'
 
 
 # D3 rule (19/11 'nét xéo của M, N, và nét xéo trên của K sẽ mỏng hơn các nét còn lại một chút', 'nghiên cứu các font

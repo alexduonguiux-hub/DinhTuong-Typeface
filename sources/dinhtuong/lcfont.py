@@ -287,7 +287,7 @@ def tune_spacing(rounds=3, k=0.85):
         # right side differently as the terminals thicken: c|n came out 17 looser than e|n in Regular but 23 in Medium
         # and 45 in Bold (rsb 30 / 39 / 61). Matching Regular exactly (Bold 33) read too tight ('kerning c lại hẹp quá');
         # the designer chose the middle: Bold rsb 47 (-14), Medium as before (39).
-        BASE['c'].rsb += {'bold': -14.0}.get(GL.WEIGHT, 0.0)
+        BASE['c'].rsb += {'bold': -14.0, 'extrabold': -18.0}.get(GL.WEIGHT, 0.0)
     for c in names:
         log[c] = (round(BASE[c].lsb), round(BASE[c].rsb))
     _TUNED.append(log)

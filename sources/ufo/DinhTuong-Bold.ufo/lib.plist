@@ -478,6 +478,8 @@
       <string>f_t</string>
       <string>t_f</string>
       <string>t_t</string>
+      <string>colon.case</string>
+      <string>semicolon.case</string>
     </array>
   </dict>
 </plist>

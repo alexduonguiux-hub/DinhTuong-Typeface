@@ -6,7 +6,7 @@ F follows the weight like every stroke (R2); L is one length in every weight. Be
 m 5/6/7, stems L = 0.26 x stem length (78-150), bars L = 0.3 x bar length (<= 110)."""
 import os
 
-F = {'regular': 7, 'medium': 8, 'bold': 9}[os.environ.get('A2_WEIGHT', 'regular')]
+F = {'regular': 7, 'medium': 8, 'bold': 9, 'extrabold': 10}[os.environ.get('A2_WEIGHT', 'regular')]
 L = 120.0
 
 

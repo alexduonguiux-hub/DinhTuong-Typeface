@@ -243,9 +243,9 @@ def cdist(S0, S):
 def misaligned(A, lim=0.25):
     for ci in range(len(A[0])):
         S0 = A[0][ci]
-        for m in (1, 2):
+        for m in range(1, len(A)):
             S = A[m][ci]
-            if math.dist(centre(S0)[0], centre(S)[0]) > 0.25 * max(centre(S0)[1]):
+            if math.dist(centre(S0)[0], centre(S)[0]) > 0.25 * max(max(centre(S0)[1]), max(centre(S)[1])):   # X1: either contour's size (Extra Bold's dots grow 38 u off Regular's centre)
                 return True
             if math.dist(rel(S0[0][0], S0), rel(S[0][0], S)) > lim:
                 return True
@@ -254,6 +254,38 @@ def misaligned(A, lim=0.25):
 
 def fix_glyph(gl):
     """gl: [Glyph R, M, B]. Returns list of new contour-segment lists per master, or None (VF4)."""
+    # X1 (1.009): the same chains of segments only started elsewhere (Extra Bold's dots / tilde / ogonek began one or two
+    # segments later than the other weights) are ROTATED to master 0's start on the RAW segments - exact, nothing redrawn
+    RAW = [[segments(c) for c in g.contours] for g in gl]
+    if len({len(x) for x in RAW}) == 1:
+        R_ = [RAW[0]]
+        for a in RAW[1:]:
+            na = []
+            for ci, S in enumerate(a):
+                S0 = RAW[0][ci]
+                best = None
+                if len(S) == len(S0):
+                    for k in range(len(S)):
+                        T = S[k:] + S[:k]
+                        if sig(T) != sig(S0):
+                            continue
+                        d = math.dist(rel(T[0][0], T), rel(S0[0][0], S0))
+                        if best is None or d < best[0]:
+                            best = (d, T)
+                na.append(best[1] if best else S)
+            R_.append(na)
+        def _norm_c(r):                              # contour centres relative to the whole glyph's box
+            pts = [s[0] for S in r for s in S]
+            x0, x1 = min(p[0] for p in pts), max(p[0] for p in pts); y0, y1 = min(p[1] for p in pts), max(p[1] for p in pts)
+            return [((centre(S)[0][0] - x0) / ((x1 - x0) or 1), (centre(S)[0][1] - y0) / ((y1 - y0) or 1)) for S in r]
+        def _order_ok(r):                            # each contour is nearest (relative position) to the same-index one
+            c0, c1 = _norm_c(R_[0]), _norm_c(r)
+            return all(min(range(len(r)), key=lambda j: math.dist(c0[ci], c1[j]) + (0 if (signed_area(R_[0][ci]) > 0) == (signed_area(r[j]) > 0) else 9)) == ci
+                       for ci in range(len(r)))
+        def _start_ok(r):
+            return all(math.dist(rel(a[0][0], a), rel(b[0][0], b)) <= 0.25 for a, b in zip(R_[0], r))
+        if all([sig(x) for x in R_[0]] == [sig(x) for x in r] and _order_ok(r) and _start_ok(r) for r in R_[1:]):
+            return R_, 'r'
     A = [[simplify(segments(c)) for c in g.contours] for g in gl]
     if len({len(x) for x in A}) != 1:
         return None, 'contour count'
@@ -262,15 +294,16 @@ def fix_glyph(gl):
         return A, 'a'
     # contour order: match to master 0 by centre
     ref = A[0]
-    for m in (1, 2):
+    for m in range(1, len(A)):
         used = set(); order = []
         for s in ref:
             j = min((j for j in range(len(A[m])) if j not in used), key=lambda j: cdist(s, A[m][j]))
             used.add(j); order.append(A[m][j])
         A[m] = order
-    out = [[], [], []]
+    N = len(A)                                       # X1 (1.009): any number of masters (Extra Bold is the 4th)
+    out = [[] for _ in range(N)]
     for ci in range(len(ref)):
-        Ss = [A[m][ci] for m in range(3)]
+        Ss = [A[m][ci] for m in range(N)]
         cs = [corners(S) for S in Ss]
         if len({len(c) for c in cs}) != 1:
             return None, 'corners %s' % [len(c) for c in cs]
@@ -280,26 +313,26 @@ def fix_glyph(gl):
             rs = [[S] for S in Ss]
         else:
             Ss[0] = rotate(Ss[0], cs[0][0]); c0 = corners(Ss[0])
-            for m in (1, 2):
+            for m in range(1, N):
                 Ss[m], _ = align(Ss[0], Ss[m], c0, cs[m])
             cs = [corners(S) for S in Ss]
             rs = [runs(S, c) for S, c in zip(Ss, cs)]
-        new = [[], [], []]
+        new = [[] for _ in range(N)]
         for ri in range(len(rs[0])):
-            R = [rs[m][ri] for m in range(3)]
+            R = [rs[m][ri] for m in range(N)]
             fr = [run_fracs(r)[0] for r in R]
-            top = max(range(3), key=lambda m: len(fr[m]))
-            for m in range(3):
+            top = max(range(N), key=lambda m: len(fr[m]))
+            for m in range(N):
                 R[m] = refine(R[m], fr[top]) if len(fr[m]) < len(fr[top]) else R[m]
             if len({len(r) for r in R}) != 1:
                 return None, 'run split'
             for k in range(len(R[0])):
-                if any(R[m][k][1] for m in range(3)):
-                    for m in range(3):
+                if any(R[m][k][1] for m in range(N)):
+                    for m in range(N):
                         R[m][k] = as_cubic(R[m][k])
-            for m in range(3):
+            for m in range(N):
                 new[m] += R[m]
-        for m in range(3):
+        for m in range(N):
             out[m].append(new[m])
     if all([sig(s) for s in out[0]] == [sig(s) for s in o] for o in out[1:]):
         return out, 'c'
@@ -309,7 +342,7 @@ def fix_glyph(gl):
 def compatible(gl):
     def s(g):
         return [tuple(p.type for p in c.points) for c in g.contours]
-    return s(gl[0]) == s(gl[1]) == s(gl[2])
+    return all(s(g) == s(gl[0]) for g in gl[1:])
 
 
 def main(paths, dry=False):

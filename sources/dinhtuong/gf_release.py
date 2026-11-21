@@ -22,7 +22,7 @@ LIC = ('This Font Software is licensed under the SIL Open Font License, Version 
        'This license is available with a FAQ at: https://openfontlicense.org')
 LIC_URL = 'https://openfontlicense.org'
 DESC = 'Dinh Tuong: cast-steel stencil lettering from the shop and gate signs of 1960s Saigon, with full Vietnamese.'
-STYLES = {'Regular': 400, 'Medium': 500, 'Bold': 700}
+STYLES = {'Regular': 400, 'Medium': 500, 'Bold': 700, 'ExtraBold': 800}
 
 
 def setname(f, nid, s):

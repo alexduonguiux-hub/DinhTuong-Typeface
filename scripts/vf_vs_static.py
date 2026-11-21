@@ -1,4 +1,4 @@
-"""Check that the variable font at wght 400 / 500 / 700 draws exactly like the static Regular / Medium / Bold:
+"""Check that the variable font at wght 400 / 500 / 700 / 800 draws exactly like the static Regular / Medium / Bold / ExtraBold:
 every character (HarfBuzz, shaped): advance, outline area (<= 0.5 %) and bbox (<= 2 u); kerning on ~11 800 pairs."""
 import uharfbuzz as hb, unicodedata, itertools, sys
 from fontTools.ttLib import TTFont
@@ -28,7 +28,7 @@ chars=[chr(u) for u in sorted(cm) if unicodedata.category(chr(u))[0] in 'LNPSM']
 letters=[c for c in chars if unicodedata.category(c)[0]=='L']
 vn='aăâbcdđeêghiklmnoôơpqrstuưvxyAĂÂBCDĐEÊGHIKLMNOÔƠPQRSTUƯVXY'
 pairs=[a+b for a in vn for b in vn]+[a+b for a in letters for b in 'AVTYoaenvy.,']+[a+b for a in 'AVTYoaenvyLFP' for b in letters]
-for name,wv in [('Regular',400),('Medium',500),('Bold',700)]:
+for name,wv in [('Regular',400),('Medium',500),('Bold',700),('ExtraBold',800)]:
     st=mk(ST%name); vf=mk(VF,{'wght':wv})
     adv=geo=0; worst_a=worst_b=0; wa=wb=''; bad=[]
     for c in chars:
@@ -41,7 +41,9 @@ for name,wv in [('Regular',400),('Medium',500),('Bold',700)]:
             da=abs(A1-A2)/max(A1,1)*100; db=max(abs(x-y) for x,y in zip(B1,B2))
             if da>worst_a: worst_a,wa=da,c
             if db>worst_b: worst_b,wb=db,c
-            if da>0.5 or db>2: geo+=1; bad.append(c)
+            # X1 (1.009): as compare_build - an area only counts past 0.5 % AND 400 u2 (the variable font's integer
+            # points / IUP deltas move small glyphs such as ¹ ~ · by ~0.2 u a point: 0.5-0.8 % of a tiny area)
+            if (da>0.5 and abs(A1-A2)>400) or db>2: geo+=1; bad.append(c)
     kd=0; kx=[]
     for t in pairs:
         (gi_s,gp_s),(gi_v,gp_v)=shape(st,t),shape(vf,t)
