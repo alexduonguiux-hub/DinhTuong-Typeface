@@ -1357,7 +1357,7 @@ CAPW = __import__('os').environ.get('CAPW', '1') == '1'
 
 def gw(kind):
     """R2c: extra body width of a capital / figure of this class in this weight (0 in Regular)."""
-    return _r2c.grow(kind, DV_C)
+    return _r2c.grow_caps(kind, DV_C)   # W2: capitals / figures take CAP_K of the class growth
 
 
 # ---- CONSTRUCTION SYSTEM (26/10, duyệt) ------------------------------------------------------

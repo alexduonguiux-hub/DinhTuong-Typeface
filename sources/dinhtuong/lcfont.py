@@ -326,6 +326,9 @@ def lig_lc():
             yb_c, yh_c = _a_levels(first)
             fops.append(('add', GL.rect(first.body - v, yb_c, first.body - 0.5 * v, yh_c + 1)))
             sh = first.body - v * float(os.environ.get('AE_SH', '1.0')) + 3
+        # W3-c (QA): with the lowercase's half growth (W3) the first letter grows less than the shared stem, so the e
+        # part moves right with the stroke growth (æ 850 -> 819, œ 917 -> 880 without it)
+        sh += {'æ': 0.6, 'œ': 0.7}[ch] * (B.v - B.v_reg)
         g = Glyph('lc_uni%04X' % cp, sh + e.body, first.lsb, e.rsb, cp)
         g.ops = [('group', fops), ('group', GL.shift_ops(e.ops, sh, 0))]
         out[ch] = g

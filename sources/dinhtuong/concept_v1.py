@@ -424,7 +424,7 @@ class Build:
             setattr(self, k, val)
         import r2c as _r2c
         self.dV = self.V - W8['regular']['V']        # R2c: caps stroke growth over Regular
-        self.R_O, self.R_o = (RING_O + _r2c.grow('round', self.dV)) / 2, (RING_o + _r2c.grow('round', self.v - W8['regular']['v'])) / 2   # R2c: rings widen (round class)
+        self.R_O, self.R_o = (RING_O + _r2c.grow_caps('round', self.dV)) / 2, (RING_o + _r2c.grow('round', self.v - W8['regular']['v'])) / 2   # R2c: rings widen (round class)
         self.r_O, self.r_o = self.R_O - self.V, self.R_o - self.v
         self.r1 = self.r_o / 2
         # R2b weight progression: anything measured in "strokes" that sets an OPENING (tail inset,
@@ -762,7 +762,7 @@ class Build:
         return dict(name='n', body=W, lsb=46, rsb=46, ops=ops, guides=G)
 
     def g_H(self):
-        W, V, HM = 520 + __import__('r2c').grow('straight', self.dV), self.V, self.HM
+        W, V, HM = 520 + __import__('r2c').grow_caps('straight', self.dV), self.V, self.HM
         yb = BAR_AT * CAP - HM / 2                 # R12
         ops = [('add', fstem(0, 0, V, CAP, self.FL)), ('add', fstem(W - V, 0, W, CAP, self.FL)),
                ('add', rect(V - 1, yb, W - V + 1, yb + HM))]
@@ -924,7 +924,9 @@ class Build:
         return dict(name='r', body=W, lsb=46, rsb=2, ops=ops, guides=G)
 
     def g_C(self):
-        G, W, V, H = [], 2 * self.R_O, self.V, self.H
+        # W2-b (QA): C keeps the full R2c growth of its ring - its cut follows the counter, so with W2's half growth C
+        # got narrower with weight (613 / 608 / 597 / 591); at the full growth it widens only 0.7 % to Extra Bold
+        G, W, V, H = [], RING_O + __import__('r2c').grow('round', self.dV), self.V, self.H
         R = W / 2
         tu = self.tail(G, W / 2, CAP + OV_C - H, W - V, V, 'r', 'up', ring=(CAP + OV_C - R, R, R), floor=False)
         tl = self.tail(G, W / 2, -OV_C + H, W - V, V, 'r', 'down', ring=(-OV_C + R, R, R), floor=False)
@@ -992,7 +994,7 @@ class Build:
         return dict(name='s', body=W, lsb=30, rsb=30, ops=ops, guides=G)
 
     def g_S(self):
-        G, W = [], 516 + (__import__('r2c').grow('s', self.dV) if __import__('r2c').ON else 2 * self.dV * SWIDE)
+        G, W = [], 516 + (__import__('r2c').grow_caps('s', self.dV) if __import__('r2c').ON else 2 * self.dV * SWIDE)
         ops, tu, tl = self.s_shape(G, W, CAP, OV_C, self.V - 10, self.H, SPINE * self.H, 22)
         return dict(name='S', body=W, lsb=34, rsb=34, ops=ops, guides=G)
 
@@ -1016,7 +1018,7 @@ class Build:
         its right side runs on TANGENTIALLY into one straight diagonal (R7, 0.9 of the figure stem,
         measured square to the stroke) that lands on a flat base bar flaring at its free end (R4).
         Figure strokes = 0.95 x caps."""
-        G, W = [], 510 + __import__('r2c').grow('round', self.dV)
+        G, W = [], 510 + __import__('r2c').grow_caps('round', self.dV)
         V, H = FIG * self.V, FIG * self.H
         if os.environ.get('FIG2', 'r15e') == 'r15e':
             # R15e (28/10 18:07 designer's sample '2' + 'đồng bộ độ dày với các số khác'): same construction, the
@@ -1028,7 +1030,7 @@ class Build:
                 # R16 (28/10): Regular is the master -- the 2 keeps Regular's 0.915 x 9 and widens like the 8 (R2c round);
                 # it narrowed to 0.89 of the 8 in Bold (refs >= 0.93)
                 Vr, Hr = FIG * W8['regular']['V'], FIG * W8['regular']['H']
-                W = 0.915 * ((0.67 * CAP - 2 * Hr) + 2 * Vr) + __import__('r2c').grow('round', self.dV)
+                W = 0.915 * ((0.67 * CAP - 2 * Hr) + 2 * Vr) + __import__('r2c').grow_caps('round', self.dV)
         top, yb = CAP + OV_C, 236
         cx, cy = W / 2, (yb + top) / 2
         rxo, ryo = W / 2, (top - yb) / 2
@@ -1067,7 +1069,7 @@ class Build:
         like S), sharing ONE middle stroke whose centre sits at 52% of the cap (R12); the middle
         stroke runs left as a flat bar cut vertically at 0.3 W. Both free ends = R5 tails."""
         # R16 (28/10): the 3 was the narrowest figure (ink 0.87 of the 8; refs 0.94-1.01) -> ink 0.95 of the 8
-        G, W = [], (float(os.environ.get('THREE_W', 524)) if os.environ.get('CAPW', '1') == '1' else 492) + __import__('r2c').grow('round', self.dV)
+        G, W = [], (float(os.environ.get('THREE_W', 524)) if os.environ.get('CAPW', '1') == '1' else 492) + __import__('r2c').grow_caps('round', self.dV)
         V, H, HM = FIG * self.V, FIG * self.H, FIG * self.HM
         top, bot = CAP + OV_C, -OV_C
         ym = BAR_AT * CAP - HM / 2
@@ -1099,7 +1101,7 @@ class Build:
     def g_question(self):
         """?: three quarters of a ring (R5 tail on the left), the right side swings into a
         short stem over the dot."""
-        G, W, V, H = [], 470 + __import__('r2c').grow('round', self.dV), self.V, self.H
+        G, W, V, H = [], 470 + __import__('r2c').grow_caps('round', self.dV), self.V, self.H
         y0, top = 310, CAP + OV_C               # ring: counter ~ the 2's (stadium on the O rule)
         ri = (W - 2 * V) / 2
         cy_low = y0 + H + ri

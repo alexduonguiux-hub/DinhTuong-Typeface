@@ -206,11 +206,13 @@ def L_ae():
 
 def L_OE():
     o, e = G['O'], G['E']
-    sh = o.body - V
+    sh = o.body - V + 0.55 * GL.DV_C             # W2-c (QA): the E part moves right with the stroke growth (O grows less than the stem now)
     ops = [('group', list(o.ops))] + [('group', shift_ops(e.ops, sh, 0))]
     # v0.969 (R2c: advance monotonic R -> M -> B): the shared stem swallows one stroke of growth while both outer
     # sides tighten (R13), so the ligature lost 1u in Bold; it gives back a quarter of the caps' stroke growth on the right
-    return make('Œ', ops, o.lsb, e.rsb + 0.25 * GL.DV_C)
+    # W2-c (QA): with the capitals' half growth (W2) O + E grow less than the shared stem, so the right side gives back
+    # 0.7 of the stroke growth (Œ 939 / 933 / 920 / 913 at a quarter)
+    return make('Œ', ops, o.lsb, e.rsb + 0.15 * GL.DV_C)
 
 
 def L_oe():
@@ -288,7 +290,10 @@ def L_florin():
     tail = shift_ops(j.ops[:2], xs + lv - xr_j, 0)   # j = hook ring, hook bar, stem, dot
     # the stem runs exactly between the two hooks' centre lines (F6: each hook's side IS the stem there)
     lh = 0.93 * GL.H
-    r = (round(440 + 1.2 * (lv - round(0.93 * 116))) - 2 * lv) / 2 * 0.55      # lc96f: HK x the n's counter radius
+    # lc96f: HK x the n's counter radius - the SAME formula as lc96f.LF (W3-d, QA: it still used the full growth and
+    # 1.007's Regular stem, so with W3 the stem stopped short of the j hook in Bold / Extra Bold: three contours)
+    _vr = round(0.93 * __import__('concept_v1').W8['regular']['V'])
+    r = (round(440 + __import__('r2c').LC_K * 1.2 * (lv - _vr)) - 2 * lv) / 2 * 0.55
     cy_j, cy_f = LDESC + r / 0.88 + lh, LASC - r / 0.88 - lh
     ops = top + tail + [('add', rect(xs, cy_j - 1, xs + lv, cy_f + 1))]
     return make('ƒ', ops, 30, f.rsb)

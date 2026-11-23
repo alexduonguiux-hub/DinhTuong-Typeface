@@ -10,11 +10,11 @@
       <point x="403" y="80" type="curve"/>
       <point x="202" y="80" type="line"/>
       <point x="443" y="292" type="line"/>
-      <point x="455" y="302"/>
-      <point x="466" y="314"/>
-      <point x="476" y="326" type="curve"/>
-      <point x="509" y="366"/>
-      <point x="523" y="422"/>
+      <point x="457" y="304"/>
+      <point x="470" y="317"/>
+      <point x="480" y="332" type="curve"/>
+      <point x="508" y="373"/>
+      <point x="523" y="424"/>
       <point x="523" y="473" type="curve"/>
       <point x="523" y="568"/>
       <point x="470" y="650"/>

@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <glyph name="Lacute" format="2">
-  <advance width="498"/>
+  <advance width="485"/>
   <unicode hex="0139"/>
   <outline>
     <contour>
@@ -10,11 +10,11 @@
       <point x="41" y="764" type="line"/>
     </contour>
     <contour>
-      <point x="476" y="0" type="line"/>
-      <point x="476" y="130" type="line"/>
-      <point x="434" y="122"/>
-      <point x="392" y="121"/>
-      <point x="356" y="121" type="curve"/>
+      <point x="463" y="0" type="line"/>
+      <point x="463" y="130" type="line"/>
+      <point x="421" y="122"/>
+      <point x="379" y="121"/>
+      <point x="343" y="121" type="curve"/>
       <point x="191" y="121" type="line"/>
       <point x="191" y="580" type="line"/>
       <point x="191" y="616"/>

@@ -164,6 +164,9 @@ class LF(A.LC):
         self.ts, self.tt = TS * self.v, self.h   # ring sides / ring + arch tops
         Wn = self.wd(440)
         self.r = (Wn - self.v - self.t) / 2        # the n's counter radius
+        # W3-b (QA): r's arm and c's tips follow their counters, so at W3's half growth they got narrower with weight;
+        # they keep the full growth (1.009's widths)
+        self.r_full = (round(440 + 1.2 * (self.v - self.v_reg)) - self.v - self.t) / 2
         self.Wn = Wn
         # F10b (03:13 'mối nối tạo cảm giác dày'; principle: joints thin out, heavier weights thin MORE):
         # joint thinning 0.30 v (Regular) -> 0.45 v (Bold), linear in the stem
@@ -177,12 +180,13 @@ class LF(A.LC):
         self.kd = 1.0 - 0.15 * f
         self.Rr = (XH + 2 * OV) / 2                 # ring radius
 
-    def rx_round(self):
+    def rx_round(self, full=False):
         """R2c: the lowercase round class (o c e) widens 0.7 x the stem growth over Regular, half on each side."""
-        return CX * self.Rr + __import__('r2c').grow('round', self.v - self.v_reg) / 2
+        k = 1.0 if full else __import__('r2c').LC_K   # W3: LC_K of the growth (W3-b: c keeps the full growth)
+        return CX * self.Rr + k * __import__('r2c').grow('round', self.v - self.v_reg) / 2
 
     def wd(self, W_reg):
-        return round(W_reg + 1.2 * (self.v - self.v_reg))
+        return round(W_reg + __import__('r2c').LC_K * 1.2 * (self.v - self.v_reg))   # W3: LC_K of the growth
 
     def G(self, name, body, lsb, rsb, ops, guides=()):
         return dict(name=name, body=body, lsb=lsb, rsb=rsb, ops=ops, guides=list(guides))
@@ -262,7 +266,7 @@ class LF(A.LC):
 
     def g_r(self):
         v = self.v
-        ops, cx, cy, G = self.arch(v, self.r, self.t)
+        ops, cx, cy, G = self.arch(v, self.r_full, self.t)
         # F7b: the arm ends on the ray at TERM_R from the arch's centre (cut square to the stroke)
         ring = ops[0]
         if os.environ.get('R_CUT', 'd') in ('a', 'd'):
@@ -271,8 +275,8 @@ class LF(A.LC):
             #  'a' = cut earlier on the counter's own arc (where it runs ARM_ANG off vertical; shorter arm)
             #  'd' = keep the reach, the counter's top-right quarter is STRETCHED (R5d, like c) until it meets the
             #        cut at ARM_ANG; the outer quarter stretched x R_LO so the arm keeps its face.
-            r_, ry_ = self.r, self.r / CX
-            jt, tl, tt = self.arch_jt(self.r, self.t, self.h), self.t, self.h
+            r_, ry_ = self.r_full, self.r_full / CX
+            jt, tl, tt = self.arch_jt(self.r_full, self.t, self.h), self.t, self.h
             ang = float(os.environ.get('R_ANG', CV.ARM_ANG))
             def qd(x0, y0, a, b, k=CV.KC):       # upper-right quarter of ell(): (x0+a, y0) -> (x0, y0+b)
                 return [('M', x0, y0), ('L', x0 + a, y0), ('C', x0 + a, y0 + k * b, x0 + k * a, y0 + b, x0, y0 + b), ('Z',)]
@@ -325,14 +329,14 @@ class LF(A.LC):
             # right extreme in Bold (401 > 394) and left a sliver under the arm. R5 instead: the cut stands where the
             # counter's own arc runs TAIL_PHI (35°) off vertical, so it always crosses the counter and meets it the
             # same way as every house tail (a c e C S); R_W only caps the reach.
-            r_, ry_ = self.r, self.r / CX
+            r_, ry_ = self.r_full, self.r_full / CX
             t_ = math.atan(ry_ / r_ * math.tan(math.radians(35)))
             x_cut = min(R_W * self.Wn, cx + r_ * math.cos(t_))
             arm = ('group', [ring, ('sub', rect(x_cut, -3000, 6000, 6000))])
             G = G + [('vline', x_cut, 'cut')]
             return self.G('r', x_cut, 52, 8, [self.stem(0, 0, XH, tr=False), arm], G)
         arm = ('group', [ring, wedge(cx, cy, -90, TERM_R)])
-        body = ray_x(cx, self.r + self.t, self.r / CX + self.h, TERM_R)
+        body = ray_x(cx, self.r_full + self.t, self.r_full / CX + self.h, TERM_R)
         return self.G('r', body, 52, 8, [self.stem(0, 0, XH, tr=False), arm], G)
 
     # F4 / F5 -------------------------------------------------------------------------------------
@@ -616,7 +620,7 @@ class LF(A.LC):
 
     # F7 -------------------------------------------------------------------------------------------
     def g_c(self):
-        Rx = self.rx_round()
+        Rx = self.rx_round(full=True)
         ring, cy = self.ring(Rx, rx=Rx)
         if os.environ.get('AE_CUT', 'R5') == 'R5':     # F7e: both ends = the caps C (R5d) on the lowercase ring
             G, R = [], self.Rr
@@ -694,7 +698,7 @@ class LF(A.LC):
         # to the cut (Bold 108 against 128); a longer face instead flattened the arm. The floor eases with the weight
         # (Regular 0.3 h, unclipped anyway -> Bold 0): the line under-reads the gap, the spine falls away from the tip.
         ap_k = P['ap'] + (P['apb'] - P['ap']) * fw
-        W = P['wk'] * 2 * CX * self.Rr + __import__('r2c').grow('s', self.v - self.v_reg)   # R2c
+        W = P['wk'] * 2 * CX * self.Rr + __import__('r2c').LC_K * __import__('r2c').grow('s', self.v - self.v_reg)   # R2c (W3: LC_K)
         # Aperture: F7c / QA 1.6 (openings in REGULAR units): each tip stays >= AP_E (0.5 h Regular = 46) off the
         # spine; when the R5 arc would come closer (Medium, Bold) the reach is kept and the arc steepens (R2b).
         T, ov, sx, sy, sm, ti = XH, OV, P['sxk'] * self.v, P['syk'] * self.h, P['smk'] * self.h, P['ti']

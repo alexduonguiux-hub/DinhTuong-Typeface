@@ -18,6 +18,13 @@ Single-stem glyphs (I l i 1) need no factor: their stroke is their width.
 """
 import os
 
+# W2 (1.010, designer: 'Khi bold lên các chữ hoa bị rộng ra quá nhiều làm hư form chữ'): capitals and figures take
+# CAP_K of their class growth (Bold caps were +4.8 % wide, Extra Bold +6.3 %, the diagonals and T up to +9-10 %); the
+# rest of the stroke goes inside, so the heavier capitals keep Regular's proportions. Lowercase unchanged.
+CAP_K = float(os.environ.get('CAP_K', '0.5'))
+# W3 (1.010, designer: 'các chữ thường bold cũng hơi rộng'): lowercase takes LC_K of its width growth too (Bold
+# lowercase was +7.5 % wide, Extra Bold +10 %; v x y z 14-16 %, n h m u s 9-10 %)
+LC_K = float(os.environ.get('LC_K', '0.5'))
 K = dict(straight=1.0, bowl=0.9, round=0.7, s=0.75, one=0.55, diag=1.0, multi=1.3, fig=0.8)
 ON = os.environ.get('R2C', '1') == '1'
 
@@ -25,3 +32,8 @@ ON = os.environ.get('R2C', '1') == '1'
 def grow(kind, d):
     """extra body width for a glyph of class `kind` whose case's stroke grew by d over Regular."""
     return K[kind] * d if ON else 0.0
+
+
+def grow_caps(kind, d):
+    """R2c for capitals and figures (W2): CAP_K of the class growth."""
+    return CAP_K * grow(kind, d)
