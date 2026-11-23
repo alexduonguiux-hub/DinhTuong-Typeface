@@ -38,4 +38,7 @@ python3 vf_compat.py "$ROOT/sources/ufo/DinhTuong-Regular.ufo" "$ROOT/sources/uf
 # (micro segments left by unions, joints that turn 0.6-10 deg on the integer grid); only the points they target move
 python3 "$ROOT/scripts/apply_outline_rules.py" "$ROOT/sources/out/outline_rules_changed.json" "$ROOT/sources/ufo/DinhTuong-Regular.ufo" \
   "$ROOT/sources/ufo/DinhTuong-Medium.ufo" "$ROOT/sources/ufo/DinhTuong-Bold.ufo" "$ROOT/sources/ufo/DinhTuong-ExtraBold.ufo"
+# A1 (1.010): a level edge within 1.5 u of the baseline / x-height / cap height sits on it (M Bold had its top at 699)
+python3 snap_levels.py "$ROOT/sources/ufo/DinhTuong-Regular.ufo" "$ROOT/sources/ufo/DinhTuong-Medium.ufo" \
+  "$ROOT/sources/ufo/DinhTuong-Bold.ufo" "$ROOT/sources/ufo/DinhTuong-ExtraBold.ufo"
 echo "UFO sources: $ROOT/sources/ufo  (reference binaries: $ROOT/sources/reference/fonts)"
