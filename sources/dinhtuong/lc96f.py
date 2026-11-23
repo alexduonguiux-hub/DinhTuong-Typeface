@@ -185,8 +185,9 @@ class LF(A.LC):
         k = 1.0 if full else __import__('r2c').LC_K   # W3: LC_K of the growth (W3-b: c keeps the full growth)
         return CX * self.Rr + k * __import__('r2c').grow('round', self.v - self.v_reg) / 2
 
-    def wd(self, W_reg):
-        return round(W_reg + __import__('r2c').LC_K * 1.2 * (self.v - self.v_reg))   # W3: LC_K of the growth
+    def wd(self, W_reg, k=None):
+        k = __import__('r2c').LC_K if k is None else k   # W3: LC_K of the growth (W4-c: w keeps 0.5, its ink narrowed)
+        return round(W_reg + k * 1.2 * (self.v - self.v_reg))
 
     def G(self, name, body, lsb, rsb, ops, guides=()):
         return dict(name=name, body=body, lsb=lsb, rsb=rsb, ops=ops, guides=list(guides))
@@ -775,7 +776,7 @@ class LF(A.LC):
 
     def g_w(self):
         import glyphs_c as GL
-        W1 = self.wd(round(DIAG_W['w'] * CX))
+        W1 = self.wd(round(DIAG_W['w'] * CX), k=0.5)   # W4-c (QA): at a quarter its ink narrowed with weight (724 -> 710)
         # D1 (1.004, designer 03/11 'B'): w carries v's diagonal weight 0.9 v (was 0.85 v, ~6 % lighter than v)
         dw = 0.9 * self.v / math.cos(math.atan2(W1 / 2 - 40, XH))
         W = 2 * W1 - dw

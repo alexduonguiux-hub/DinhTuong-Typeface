@@ -206,7 +206,7 @@ def L_ae():
 
 def L_OE():
     o, e = G['O'], G['E']
-    sh = o.body - V + 0.55 * GL.DV_C             # W2-c (QA): the E part moves right with the stroke growth (O grows less than the stem now)
+    sh = o.body - V + 0.8 * GL.DV_C             # W2-c (QA): the E part moves right with the stroke growth (O grows less than the stem now)
     ops = [('group', list(o.ops))] + [('group', shift_ops(e.ops, sh, 0))]
     # v0.969 (R2c: advance monotonic R -> M -> B): the shared stem swallows one stroke of growth while both outer
     # sides tighten (R13), so the ligature lost 1u in Bold; it gives back a quarter of the caps' stroke growth on the right

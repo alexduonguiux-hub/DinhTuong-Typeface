@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <glyph name="L" format="2">
-  <advance width="486"/>
+  <advance width="484"/>
   <unicode hex="004C"/>
   <outline>
     <contour>
-      <point x="459" y="0" type="line"/>
-      <point x="459" y="104" type="line"/>
-      <point x="417" y="97"/>
-      <point x="375" y="96"/>
-      <point x="339" y="96" type="curve"/>
+      <point x="457" y="0" type="line"/>
+      <point x="457" y="104" type="line"/>
+      <point x="415" y="97"/>
+      <point x="373" y="96"/>
+      <point x="337" y="96" type="curve"/>
       <point x="165" y="96" type="line"/>
       <point x="165" y="580" type="line"/>
       <point x="165" y="616"/>

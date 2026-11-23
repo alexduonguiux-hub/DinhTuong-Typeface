@@ -21,10 +21,10 @@ import os
 # W2 (1.010, designer: 'Khi bold lên các chữ hoa bị rộng ra quá nhiều làm hư form chữ'): capitals and figures take
 # CAP_K of their class growth (Bold caps were +4.8 % wide, Extra Bold +6.3 %, the diagonals and T up to +9-10 %); the
 # rest of the stroke goes inside, so the heavier capitals keep Regular's proportions. Lowercase unchanged.
-CAP_K = float(os.environ.get('CAP_K', '0.5'))
+CAP_K = float(os.environ.get('CAP_K', '0.25'))   # W4 (1.011, 'các chữ bold lên vẫn rộng hơn chữ regular nhiều quá'): a quarter (1.010: half)
 # W3 (1.010, designer: 'các chữ thường bold cũng hơi rộng'): lowercase takes LC_K of its width growth too (Bold
 # lowercase was +7.5 % wide, Extra Bold +10 %; v x y z 14-16 %, n h m u s 9-10 %)
-LC_K = float(os.environ.get('LC_K', '0.5'))
+LC_K = float(os.environ.get('LC_K', '0.25'))   # W4 (1.011): a quarter (1.010: half)
 K = dict(straight=1.0, bowl=0.9, round=0.7, s=0.75, one=0.55, diag=1.0, multi=1.3, fig=0.8)
 ON = os.environ.get('R2C', '1') == '1'
 

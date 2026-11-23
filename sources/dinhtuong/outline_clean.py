@@ -290,6 +290,11 @@ def _merge_collinear(segs):
 AXIS_SNAP = 2.0      # units; a straight run this close to level / vertical is meant to be level / vertical (R-axis)
 AXIS_MIN = 12.0      # ... only for runs at least this long (shorter ones are steps, handled by _collapse_micro)
 COLIN_DEV = 1.0      # units; a corner that bends the outline by less than this is grid noise (R-colinear)
+# R-colinear-b (1.011, QA: Medium ½ had 474,47 -> 592,153 -> 606,168, a 5.1 deg bend 1.6 u off the chord, flagged by Font
+# Bakery outline_colinear_vectors, which takes two straight runs turning < 0.1 rad as one): such a corner is merged when
+# it stays within COLIN_DEV_B of the chord
+COLIN_TURN_B = 5.7   # deg (0.1 rad, Font Bakery's COLINEAR_EPSILON)
+COLIN_DEV_B = 2.0    # units
 STATS = {'axis': 0, 'colinear': 0}
 
 
@@ -351,7 +356,8 @@ def _merge_near_colinear(segs):
             if L > 0:
                 dev = abs((q[0] - p[0]) * d[1] - (q[1] - p[1]) * d[0]) / L
                 semi = any(0 < abs(d[k]) <= AXIS_SNAP and abs(d[1 - k]) >= AXIS_MIN for k in (0, 1))
-                if dev <= COLIN_DEV and not semi and _dot(_sub(q, p), d) > 0 and _dot(_sub(r, q), d) > 0 \
+                turn = _turn(_sub(q, p), _sub(r, q))
+                if (dev <= COLIN_DEV or turn < COLIN_TURN_B and dev <= COLIN_DEV_B) and not semi and _dot(_sub(q, p), d) > 0 and _dot(_sub(r, q), d) > 0 \
                         and _turn(_sub(q, p), _sub(r, q)) < 15:     # R-axis wins: never merge into a tilted run
                     a[2] = r; del segs[(i + 1) % n]; STATS['colinear'] += 1
                     if (i + 1) % n < i: i -= 1

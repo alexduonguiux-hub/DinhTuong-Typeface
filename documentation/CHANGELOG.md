@@ -1,5 +1,33 @@
 # Changelog
 
+## 1.011 (2026-11-23)
+Bold and Extra Bold narrower again; the ẞ folds deeper.
+
+### Widths
+- **W4** ('các chữ bold lên vẫn rộng hơn chữ regular nhiều quá'): capitals, figures and lowercase take a quarter of
+  their R2c width growth (`r2c.CAP_K`, `r2c.LC_K` 0.25; 1.010: 0.5); the sidebearings still close with the weight.
+  The 26 capitals' total width over Regular: Medium / Bold / Extra Bold +0.1 / +0.2 / +0.1 % (1.010: +0.6 / +1.7 /
+  +2.2 %); the 26 lowercase: +0.8 / +2.6 / +3.6 % (1.010: +1.3 / +4.1 / +5.5 %). Many advances now shrink by a few
+  units with the weight (tighter sidebearings); the ink still widens in every letter.
+- **w (W4-c):** keeps half growth (at a quarter its ink narrowed with weight, 724 -> 710); ink 724 / 730 / 738 / 744.
+- **Œ (W4-c):** the E part moves right by 0.8 of the stroke growth (was 0.55); advance 939 / 939 / 938 / 938, ink
+  866 -> 873.
+
+### Letters
+- **ẞ (L-ẞ-b**, 'Bụng gấp của ký tự tiếng đức phải sâu thêm mới đúng'): the fold reaches deeper; its diagonal lands
+  0.30 of the way from the stem (was 0.45), so it runs longer and the upper counter opens. All weights, Regular too.
+
+### Outline rules
+- **R-colinear-b (QA):** two straight runs in a row that turn less than 0.1 rad (Font Bakery's colinear tolerance) are
+  one run when their shared point is within 2 u of the chord (Medium ½: 474,47 -> 592,153 -> 606,168 bent 5.1°,
+  1.6 u off). In Regular, 2 ¾ £ move < 1 u where curves merge to keep the masters compatible; otherwise Regular only
+  changes in ẞ.
+
+### QA
+Font Bakery PASS (no new results); variable font = static fonts at all four masters; no area shrink or uneven step from
+400 to 800; no level points off the guidelines; build = reference in all four weights. As in 1.010, ink narrows only
+where a mark moves with the weight (ą ę ų Ą Ę ogonek, Ĵ Ĺ, Ư at Medium).
+
 ## 1.010 (2026-11-23)
 Heavier capitals and lowercase keep Regular's proportions.
 
