@@ -924,7 +924,9 @@ class Build:
         return dict(name='r', body=W, lsb=46, rsb=2, ops=ops, guides=G)
 
     def g_C(self):
-        G, W, V, H = [], 2 * self.R_O, self.V, self.H
+        # W2-b (QA): C keeps the full R2c growth of its ring - its cut follows the counter, so with W2's half growth C
+        # got narrower with weight (613 / 608 / 597 / 591); at the full growth it widens only 0.7 % to Extra Bold
+        G, W, V, H = [], RING_O + __import__('r2c').grow('round', self.dV), self.V, self.H
         R = W / 2
         tu = self.tail(G, W / 2, CAP + OV_C - H, W - V, V, 'r', 'up', ring=(CAP + OV_C - R, R, R), floor=False)
         tl = self.tail(G, W / 2, -OV_C + H, W - V, V, 'r', 'down', ring=(-OV_C + R, R, R), floor=False)
