@@ -20,6 +20,9 @@ Heavier capitals and lowercase keep Regular's proportions.
   the stroke growth; **ƒ (W3-d):** its stem meets the j hook with lc96f's own counter formula (it fell short in Bold /
   Extra Bold).
 
+- **A1 (QA alignment):** a level edge within 1.5 u of the baseline, x-height or cap height sits on it, both ends of
+  the run (`snap_levels.py`, last step of `generate.sh`): M's top stood at 699 in Bold / Extra Bold.
+
 ### QA
 Font Bakery PASS (no new results); variable font = static fonts at all four masters; no area shrink or uneven step from
 400 to 800; build = reference in all four weights. ą's advance and Ę's ink narrow 9-11 u (its ogonek moves left with the weight; the E

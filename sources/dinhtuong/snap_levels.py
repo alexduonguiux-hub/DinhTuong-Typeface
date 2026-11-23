@@ -17,21 +17,21 @@ SNAP = 1.5
 
 
 def snap_glyph(g):
+    """moves each level run (consecutive on-curve points at one y) within SNAP of a guideline onto it - BOTH ends,
+    so the run stays level"""
     moved = 0
     for c in g.contours:
         pts = c.points
         n = len(pts)
         for i, p in enumerate(pts):
-            if p.type is None:
+            q = pts[(i + 1) % n]
+            if p.type is None or q.type is None or abs(p.y - q.y) > 0.01:
                 continue
             for line in LINES:
                 if 0 < abs(p.y - line) <= SNAP:
-                    for j in (i - 1, (i + 1) % n):
-                        q = pts[j]
-                        if q.type is not None and abs(q.y - p.y) < 0.01:
-                            p.y = line
-                            moved += 1
-                            break
+                    p.y = q.y = line
+                    moved += 2
+                    break
     return moved
 
 
@@ -43,10 +43,5 @@ if __name__ == '__main__':
             m = snap_glyph(g)
             if m:
                 hits[g.name] = m
-        # a second pass picks up the neighbours of the points moved first (their run is level again)
-        for g in f:
-            m = snap_glyph(g)
-            if m:
-                hits[g.name] = hits.get(g.name, 0) + m
         f.save()
         print(path.rsplit('/', 1)[-1], 'A1 level points onto guidelines:', sum(hits.values()), ' '.join(sorted(hits)))

@@ -24,11 +24,11 @@
       <point x="720" y="580" type="line" smooth="yes"/>
       <point x="720" y="616"/>
       <point x="721" y="657"/>
-      <point x="730" y="699" type="curve"/>
-      <point x="557" y="699" type="line"/>
+      <point x="730" y="700" type="curve"/>
+      <point x="557" y="700" type="line"/>
       <point x="379" y="339" type="line"/>
-      <point x="202" y="699" type="line"/>
-      <point x="29" y="699" type="line"/>
+      <point x="202" y="700" type="line"/>
+      <point x="29" y="700" type="line"/>
       <point x="37" y="657"/>
       <point x="39" y="616"/>
       <point x="39" y="580" type="curve" smooth="yes"/>
