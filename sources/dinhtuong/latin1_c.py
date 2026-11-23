@@ -290,7 +290,10 @@ def L_florin():
     tail = shift_ops(j.ops[:2], xs + lv - xr_j, 0)   # j = hook ring, hook bar, stem, dot
     # the stem runs exactly between the two hooks' centre lines (F6: each hook's side IS the stem there)
     lh = 0.93 * GL.H
-    r = (round(440 + 1.2 * (lv - round(0.93 * 116))) - 2 * lv) / 2 * 0.55      # lc96f: HK x the n's counter radius
+    # lc96f: HK x the n's counter radius - the SAME formula as lc96f.LF (W3-d, QA: it still used the full growth and
+    # 1.007's Regular stem, so with W3 the stem stopped short of the j hook in Bold / Extra Bold: three contours)
+    _vr = round(0.93 * __import__('concept_v1').W8['regular']['V'])
+    r = (round(440 + __import__('r2c').LC_K * 1.2 * (lv - _vr)) - 2 * lv) / 2 * 0.55
     cy_j, cy_f = LDESC + r / 0.88 + lh, LASC - r / 0.88 - lh
     ops = top + tail + [('add', rect(xs, cy_j - 1, xs + lv, cy_f + 1))]
     return make('ƒ', ops, 30, f.rsb)
