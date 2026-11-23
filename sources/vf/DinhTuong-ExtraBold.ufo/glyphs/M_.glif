@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <glyph name="M" format="2">
-  <advance width="800"/>
+  <advance width="759"/>
   <unicode hex="004D"/>
   <outline>
     <contour>
@@ -9,27 +9,27 @@
       <point x="193" y="42"/>
       <point x="192" y="84"/>
       <point x="192" y="120" type="curve" smooth="yes"/>
-      <point x="192" y="434" type="line"/>
-      <point x="333" y="190" type="line"/>
-      <point x="467" y="190" type="line"/>
-      <point x="608" y="434" type="line"/>
-      <point x="608" y="120" type="line" smooth="yes"/>
-      <point x="608" y="84"/>
-      <point x="606" y="42"/>
-      <point x="598" y="0" type="curve"/>
-      <point x="771" y="0" type="line"/>
-      <point x="762" y="42"/>
-      <point x="761" y="84"/>
-      <point x="761" y="120" type="curve" smooth="yes"/>
-      <point x="761" y="580" type="line" smooth="yes"/>
-      <point x="761" y="616"/>
-      <point x="762" y="658"/>
-      <point x="771" y="700" type="curve"/>
-      <point x="596" y="700" type="line"/>
-      <point x="400" y="331" type="line"/>
-      <point x="204" y="700" type="line"/>
-      <point x="29" y="700" type="line"/>
-      <point x="37" y="658"/>
+      <point x="192" y="415" type="line"/>
+      <point x="312" y="190" type="line"/>
+      <point x="447" y="190" type="line"/>
+      <point x="567" y="415" type="line"/>
+      <point x="567" y="120" type="line" smooth="yes"/>
+      <point x="567" y="84"/>
+      <point x="565" y="42"/>
+      <point x="557" y="0" type="curve"/>
+      <point x="730" y="0" type="line"/>
+      <point x="721" y="42"/>
+      <point x="720" y="84"/>
+      <point x="720" y="120" type="curve" smooth="yes"/>
+      <point x="720" y="580" type="line" smooth="yes"/>
+      <point x="720" y="616"/>
+      <point x="721" y="657"/>
+      <point x="730" y="699" type="curve"/>
+      <point x="557" y="699" type="line"/>
+      <point x="379" y="339" type="line"/>
+      <point x="202" y="699" type="line"/>
+      <point x="29" y="699" type="line"/>
+      <point x="37" y="657"/>
       <point x="39" y="616"/>
       <point x="39" y="580" type="curve" smooth="yes"/>
       <point x="39" y="120" type="line" smooth="yes"/>

@@ -1,49 +1,49 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <glyph name="Emacron" format="2">
-  <advance width="507"/>
+  <advance width="489"/>
   <unicode hex="0112"/>
   <outline>
     <contour>
-      <point x="201" y="748"/>
-      <point x="229" y="750"/>
-      <point x="253" y="750" type="curve"/>
-      <point x="271" y="750" type="line"/>
-      <point x="296" y="750"/>
-      <point x="324" y="748"/>
-      <point x="352" y="740" type="curve"/>
-      <point x="352" y="829" type="line"/>
-      <point x="324" y="821"/>
-      <point x="296" y="819"/>
-      <point x="271" y="819" type="curve"/>
-      <point x="253" y="819" type="line"/>
-      <point x="229" y="819"/>
-      <point x="201" y="821"/>
-      <point x="172" y="829" type="curve"/>
-      <point x="172" y="740" type="line"/>
+      <point x="192" y="748"/>
+      <point x="220" y="750"/>
+      <point x="245" y="750" type="curve"/>
+      <point x="263" y="750" type="line"/>
+      <point x="287" y="750"/>
+      <point x="315" y="748"/>
+      <point x="344" y="740" type="curve"/>
+      <point x="344" y="829" type="line"/>
+      <point x="315" y="821"/>
+      <point x="287" y="819"/>
+      <point x="263" y="819" type="curve"/>
+      <point x="245" y="819" type="line"/>
+      <point x="220" y="819"/>
+      <point x="192" y="821"/>
+      <point x="164" y="829" type="curve"/>
+      <point x="164" y="740" type="line"/>
     </contour>
     <contour>
-      <point x="482" y="0" type="line"/>
-      <point x="482" y="144" type="line"/>
-      <point x="440" y="136"/>
-      <point x="398" y="134"/>
-      <point x="362" y="134" type="curve"/>
+      <point x="464" y="0" type="line"/>
+      <point x="464" y="144" type="line"/>
+      <point x="422" y="136"/>
+      <point x="380" y="134"/>
+      <point x="344" y="134" type="curve"/>
       <point x="204" y="134" type="line"/>
       <point x="204" y="299" type="line"/>
-      <point x="316" y="299" type="line"/>
-      <point x="352" y="299"/>
-      <point x="394" y="298"/>
-      <point x="436" y="289" type="curve"/>
-      <point x="436" y="428" type="line"/>
-      <point x="394" y="420"/>
-      <point x="352" y="418"/>
-      <point x="316" y="418" type="curve"/>
+      <point x="298" y="299" type="line"/>
+      <point x="334" y="299"/>
+      <point x="376" y="298"/>
+      <point x="418" y="289" type="curve"/>
+      <point x="418" y="428" type="line"/>
+      <point x="376" y="420"/>
+      <point x="334" y="418"/>
+      <point x="298" y="418" type="curve"/>
       <point x="204" y="418" type="line"/>
       <point x="204" y="566" type="line"/>
-      <point x="362" y="566" type="line"/>
-      <point x="398" y="566"/>
-      <point x="440" y="564"/>
-      <point x="482" y="556" type="curve"/>
-      <point x="482" y="700" type="line"/>
+      <point x="344" y="566" type="line"/>
+      <point x="380" y="566"/>
+      <point x="422" y="564"/>
+      <point x="464" y="556" type="curve"/>
+      <point x="464" y="700" type="line"/>
       <point x="33" y="700" type="line"/>
       <point x="41" y="658"/>
       <point x="43" y="616"/>
