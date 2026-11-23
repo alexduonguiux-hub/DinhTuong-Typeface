@@ -1,7 +1,7 @@
 # Changelog
 
 ## 1.010 (2026-11-23)
-Heavier capitals keep Regular's proportions.
+Heavier capitals and lowercase keep Regular's proportions.
 
 ### Widths
 - **W2** ('Khi bold lên các chữ hoa bị rộng ra quá nhiều làm hư form chữ'): capitals and figures take half their R2c
@@ -13,9 +13,16 @@ Heavier capitals keep Regular's proportions.
 - **Œ (W2-c):** the E part moves right by 0.55 of the stroke growth (O now grows less than the shared stem), so the
   advance and the ink widen steadily (939 -> 941, ink 866 -> 877).
 
+- **W3** ('các chữ thường bold cũng hơi rộng'): lowercase takes half its width growth too (`r2c.LC_K` 0.5). The 26
+  lowercase letters' total width over Regular: Medium / Bold / Extra Bold +1.3 / +4.1 / +5.5 % (1.009: +2.5 / +7.5 /
+  +10.0 %; v x y z had grown 14-16 %, n h m u s 9-10 %).
+- **c, r (W3-b):** keep their full growth (their cut follows the counter); **æ œ (W3-c):** the e part moves right with
+  the stroke growth; **ƒ (W3-d):** its stem meets the j hook with lc96f's own counter formula (it fell short in Bold /
+  Extra Bold).
+
 ### QA
 Font Bakery PASS (no new results); variable font = static fonts at all four masters; no area shrink or uneven step from
-400 to 800; build = reference in all four weights. Ę's ink narrows 9 u (its ogonek moves left with the weight; the E
+400 to 800; build = reference in all four weights. ą's advance and Ę's ink narrow 9-11 u (its ogonek moves left with the weight; the E
 widens).
 
 ## 1.009 (2026-11-20)
