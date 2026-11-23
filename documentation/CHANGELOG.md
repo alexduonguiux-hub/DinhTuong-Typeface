@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.010 (2026-11-23)
+Heavier capitals keep Regular's proportions.
+
+### Widths
+- **W2** ('Khi bold lên các chữ hoa bị rộng ra quá nhiều làm hư form chữ'): capitals and figures take half their R2c
+  width growth (`r2c.CAP_K` 0.5); the rest of the stroke goes inside. The 26 capitals' total width over Regular:
+  Medium / Bold / Extra Bold +0.6 / +1.7 / +2.2 % (1.009: +1.7 / +4.8 / +6.3 %; the diagonals and T had grown 9-10 %).
+  Lowercase unchanged.
+- **C (W2-b):** keeps its ring's full growth (its cut follows the counter, so at half growth it got narrower with
+  weight); C Ç € widen 0.7 % to Extra Bold as in 1.009.
+- **Œ (W2-c):** the E part moves right by 0.55 of the stroke growth (O now grows less than the shared stem), so the
+  advance and the ink widen steadily (939 -> 941, ink 866 -> 877).
+
+### QA
+Font Bakery PASS (no new results); variable font = static fonts at all four masters; no area shrink or uneven step from
+400 to 800; build = reference in all four weights. Ę's ink narrows 9 u (its ogonek moves left with the weight; the E
+widens).
+
 ## 1.009 (2026-11-20)
 Extra Bold: a fourth master at wght 800, static and in the variable font (now wght 400-800); case-sensitive : ;.
 The other weights are 1.008's.

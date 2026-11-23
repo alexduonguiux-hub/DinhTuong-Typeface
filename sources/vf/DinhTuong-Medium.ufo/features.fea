@@ -7131,10 +7131,11 @@ feature kern {
     pos Ohungarumlaut uni1EF4 -65;
     pos Ohungarumlaut uni1EF6 -65;
     pos Ohungarumlaut uni1EF8 -65;
+    pos OE x 5;
     pos OE igrave 30;
     pos OE iacute 30;
     pos OE icircumflex 0;
-    pos OE idieresis 0;
+    pos OE idieresis 5;
     pos OE oslash -20;
     pos OE Hbar -10;
     pos OE itilde 0;
@@ -12677,8 +12678,8 @@ feature kern {
     pos @kL_C [slash] -40;
     pos @kL_C [colon] -30;
     pos @kL_C colon.case -30;
-    pos @kL_C [semicolon] -35;
-    pos @kL_C semicolon.case -35;
+    pos @kL_C [semicolon] -30;
+    pos @kL_C semicolon.case -30;
     pos @kL_C [question] -25;
     pos @kL_C @kR_A -30;
     pos @kL_C @kR_B -30;
@@ -12689,7 +12690,7 @@ feature kern {
     pos @kL_C @kR_G -40;
     pos @kL_C @kR_H -30;
     pos @kL_C @kR_I -25;
-    pos @kL_C @kR_J -60;
+    pos @kL_C @kR_J -55;
     pos @kL_C @kR_K -30;
     pos @kL_C @kR_L -30;
     pos @kL_C [M] -30;
@@ -12715,9 +12716,6 @@ feature kern {
     pos @kL_C @kR_o -20;
     pos @kL_C [q] -20;
     pos @kL_C @kR_s -10;
-    pos @kL_C [t] -20;
-    pos @kL_C t_t -20;
-    pos @kL_C t_f -20;
     pos @kL_C [braceright] -50;
     pos @kL_C [guillemotright] -20;
     pos @kL_C [quoteright] -25;
@@ -13644,7 +13642,7 @@ feature kern {
     pos bracketleft five 40;
     pos bracketleft nine -30;
     pos [bracketleft] @kR_A -65;
-    pos [bracketleft] @kR_C -40;
+    pos [bracketleft] @kR_C -45;
     pos [bracketleft] @kR_G -45;
     pos [bracketleft] @kR_J -80;
     pos [bracketleft] @kR_O -40;
@@ -14165,7 +14163,7 @@ feature kern {
     pos questiondown x 35;
     pos [questiondown] @kR_y -30;
     pos @kL_Ohorn @kR_A -50;
-    pos @kL_Ohorn @kR_C -25;
+    pos @kL_Ohorn @kR_C -30;
     pos @kL_Ohorn @kR_G -30;
     pos @kL_Ohorn @kR_I -20;
     pos @kL_Ohorn @kR_J -65;
