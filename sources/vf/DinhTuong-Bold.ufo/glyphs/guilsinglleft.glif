@@ -1,28 +1,28 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <glyph name="guilsinglleft" format="2">
-  <advance width="314"/>
+  <advance width="302"/>
   <unicode hex="2039"/>
   <outline>
     <contour>
-      <point x="274" y="273" type="line"/>
-      <point x="243" y="279"/>
-      <point x="213" y="290"/>
-      <point x="185" y="302" type="curve"/>
+      <point x="262" y="273" type="line"/>
+      <point x="234" y="280"/>
+      <point x="205" y="290"/>
+      <point x="180" y="302" type="curve"/>
       <point x="121" y="330" type="line"/>
-      <point x="185" y="358" type="line"/>
-      <point x="213" y="370"/>
-      <point x="243" y="381"/>
-      <point x="274" y="387" type="curve"/>
-      <point x="274" y="489" type="line"/>
-      <point x="242" y="466"/>
-      <point x="209" y="448"/>
-      <point x="181" y="435" type="curve"/>
+      <point x="180" y="358" type="line"/>
+      <point x="205" y="370"/>
+      <point x="234" y="380"/>
+      <point x="262" y="387" type="curve"/>
+      <point x="262" y="489" type="line"/>
+      <point x="229" y="465"/>
+      <point x="196" y="446"/>
+      <point x="168" y="432" type="curve"/>
       <point x="40" y="369" type="line"/>
       <point x="40" y="291" type="line"/>
-      <point x="181" y="225" type="line"/>
-      <point x="209" y="212"/>
-      <point x="242" y="194"/>
-      <point x="274" y="171" type="curve"/>
+      <point x="168" y="228" type="line"/>
+      <point x="196" y="214"/>
+      <point x="229" y="195"/>
+      <point x="262" y="171" type="curve"/>
     </contour>
   </outline>
 </glyph>

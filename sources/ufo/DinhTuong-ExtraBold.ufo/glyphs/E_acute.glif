@@ -1,37 +1,37 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <glyph name="Eacute" format="2">
-  <advance width="489"/>
+  <advance width="481"/>
   <unicode hex="00C9"/>
   <outline>
     <contour>
-      <point x="404" y="764" type="line"/>
-      <point x="404" y="848" type="line"/>
-      <point x="104" y="793" type="line"/>
-      <point x="104" y="764" type="line"/>
+      <point x="399" y="764" type="line"/>
+      <point x="399" y="848" type="line"/>
+      <point x="99" y="793" type="line"/>
+      <point x="99" y="764" type="line"/>
     </contour>
     <contour>
-      <point x="464" y="0" type="line"/>
-      <point x="464" y="144" type="line"/>
-      <point x="422" y="136"/>
-      <point x="380" y="134"/>
-      <point x="344" y="134" type="curve"/>
+      <point x="456" y="0" type="line"/>
+      <point x="456" y="144" type="line"/>
+      <point x="414" y="136"/>
+      <point x="372" y="134"/>
+      <point x="336" y="134" type="curve"/>
       <point x="204" y="134" type="line"/>
       <point x="204" y="299" type="line"/>
-      <point x="298" y="299" type="line"/>
-      <point x="334" y="299"/>
-      <point x="376" y="298"/>
-      <point x="418" y="289" type="curve"/>
-      <point x="418" y="428" type="line"/>
-      <point x="376" y="420"/>
-      <point x="334" y="418"/>
-      <point x="298" y="418" type="curve"/>
+      <point x="290" y="299" type="line"/>
+      <point x="326" y="299"/>
+      <point x="368" y="298"/>
+      <point x="410" y="289" type="curve"/>
+      <point x="410" y="428" type="line"/>
+      <point x="368" y="420"/>
+      <point x="326" y="418"/>
+      <point x="290" y="418" type="curve"/>
       <point x="204" y="418" type="line"/>
       <point x="204" y="566" type="line"/>
-      <point x="344" y="566" type="line"/>
-      <point x="380" y="566"/>
-      <point x="422" y="564"/>
-      <point x="464" y="556" type="curve"/>
-      <point x="464" y="700" type="line"/>
+      <point x="336" y="566" type="line"/>
+      <point x="372" y="566"/>
+      <point x="414" y="564"/>
+      <point x="456" y="556" type="curve"/>
+      <point x="456" y="700" type="line"/>
       <point x="33" y="700" type="line"/>
       <point x="41" y="658"/>
       <point x="43" y="616"/>

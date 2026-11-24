@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <glyph name="Lslash" format="2">
-  <advance width="529"/>
+  <advance width="522"/>
   <unicode hex="0141"/>
   <outline>
     <contour>
-      <point x="507" y="0" type="line"/>
-      <point x="507" y="130" type="line"/>
-      <point x="465" y="122"/>
-      <point x="423" y="121"/>
-      <point x="387" y="121" type="curve"/>
+      <point x="500" y="0" type="line"/>
+      <point x="500" y="130" type="line"/>
+      <point x="458" y="122"/>
+      <point x="416" y="121"/>
+      <point x="380" y="121" type="curve"/>
       <point x="235" y="121" type="line"/>
       <point x="235" y="244" type="line"/>
       <point x="306" y="294" type="line"/>

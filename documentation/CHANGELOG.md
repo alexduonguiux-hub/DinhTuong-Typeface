@@ -1,32 +1,44 @@
 # Changelog
 
-## 1.010 (2026-11-23)
-Heavier capitals and lowercase keep Regular's proportions.
+## 1.010 (2026-11-24)
+Heavier weights keep Regular's proportions; the ẞ folds deeper. (Revised 2026-11-24: the first 1.010 build of
+2026-11-23 took half the width growth; this one takes a quarter, and adds the ẞ fold and R-colinear-b.)
 
 ### Widths
-- **W2** ('Khi bold lên các chữ hoa bị rộng ra quá nhiều làm hư form chữ'): capitals and figures take half their R2c
-  width growth (`r2c.CAP_K` 0.5); the rest of the stroke goes inside. The 26 capitals' total width over Regular:
-  Medium / Bold / Extra Bold +0.6 / +1.7 / +2.2 % (1.009: +1.7 / +4.8 / +6.3 %; the diagonals and T had grown 9-10 %).
-  Lowercase unchanged.
-- **C (W2-b):** keeps its ring's full growth (its cut follows the counter, so at half growth it got narrower with
-  weight); C Ç € widen 0.7 % to Extra Bold as in 1.009.
-- **Œ (W2-c):** the E part moves right by 0.55 of the stroke growth (O now grows less than the shared stem), so the
-  advance and the ink widen steadily (939 -> 941, ink 866 -> 877).
+- **W2 / W3 / W4** ('Khi bold lên các chữ hoa bị rộng ra quá nhiều làm hư form chữ', 'các chữ thường bold cũng hơi
+  rộng', 'các chữ bold lên vẫn rộng hơn chữ regular nhiều quá'): capitals, figures and lowercase take a quarter of
+  their R2c width growth (`r2c.CAP_K`, `r2c.LC_K` 0.25; 1.009: all of it); the rest of the stroke goes inside, and the
+  sidebearings still close with the weight. Total width of the 26 letters over Regular, Medium / Bold / Extra Bold:
+  capitals +0.1 / +0.2 / +0.1 % (1.009: +1.7 / +4.8 / +6.3 %); lowercase +0.8 / +2.6 / +3.6 % (1.009: +2.5 / +7.5 /
+  +10.0 %). Many advances shrink by a few units with the weight (tighter sidebearings); the ink still widens in every
+  letter.
+- **C, c, r (W2-b, W3-b):** keep their full growth (their cut follows the counter, so with less growth they got
+  narrower with weight).
+- **w (W4-c):** keeps half growth (at a quarter its ink narrowed with weight); ink 724 / 730 / 738 / 744.
+- **Œ (W2-c / W4-c):** the E part moves right by 0.8 of the stroke growth; advance 939 / 939 / 938 / 938, ink
+  866 -> 873. **æ œ (W3-c):** the e part moves right with the stroke growth.
+- **ƒ (W3-d):** its stem meets the j hook with lc96f's own counter formula (it fell short in Bold / Extra Bold).
 
-- **W3** ('các chữ thường bold cũng hơi rộng'): lowercase takes half its width growth too (`r2c.LC_K` 0.5). The 26
-  lowercase letters' total width over Regular: Medium / Bold / Extra Bold +1.3 / +4.1 / +5.5 % (1.009: +2.5 / +7.5 /
-  +10.0 %; v x y z had grown 14-16 %, n h m u s 9-10 %).
-- **c, r (W3-b):** keep their full growth (their cut follows the counter); **æ œ (W3-c):** the e part moves right with
-  the stroke growth; **ƒ (W3-d):** its stem meets the j hook with lc96f's own counter formula (it fell short in Bold /
-  Extra Bold).
+### Letters
+- **ẞ (L-ẞ-b**, 'Bụng gấp của ký tự tiếng đức phải sâu thêm mới đúng'): the fold reaches deeper; its diagonal lands
+  0.30 of the way from the stem (was 0.45), so it runs longer and the upper counter opens. All weights, Regular too.
 
+### Outline rules
 - **A1 (QA alignment):** a level edge within 1.5 u of the baseline, x-height or cap height sits on it, both ends of
   the run (`snap_levels.py`, last step of `generate.sh`): M's top stood at 699 in Bold / Extra Bold.
+- **R-colinear-b (QA):** two straight runs in a row that turn less than 0.1 rad (Font Bakery's colinear tolerance) are
+  one run when their shared point is within 2 u of the chord (Medium ½: 474,47 -> 592,153 -> 606,168 bent 5.1°,
+  1.6 u off). In Regular, 2 ¾ £ move < 1 u where curves merge to keep the masters compatible; otherwise Regular only
+  changes in ẞ.
+
+### Documentation
+- README and the Google Fonts article list the four weights and the 400–800 axis (they still said three weights and
+  400–700); README names the `case` colon and semicolon.
 
 ### QA
 Font Bakery PASS (no new results); variable font = static fonts at all four masters; no area shrink or uneven step from
-400 to 800; build = reference in all four weights. ą's advance and Ę's ink narrow 9-11 u (its ogonek moves left with the weight; the E
-widens).
+400 to 800; no level points off the guidelines; build = reference in all four weights. Ink narrows only where a mark
+moves with the weight (ą ę ų Ą Ę ogonek, Ĵ Ĺ, Ư at Medium).
 
 ## 1.009 (2026-11-20)
 Extra Bold: a fourth master at wght 800, static and in the variable font (now wght 400-800); case-sensitive : ;.
