@@ -4,23 +4,23 @@
 
 Dinh Tuong is a display typeface drawn from the cast-steel stencil lettering of the shop signs and gate signs of 1960s Saigon. Every glyph is built from rules, with ruler and compass only. The Vietnamese marks are cut from the same strip as the letters rather than added on top.
 
-- 3 weights: Regular, Medium, Bold
+- 4 weights: Regular, Medium, Bold, Extra Bold, and a variable font (wght 400–800)
 - Character set: GF Latin Core + GF Latin Vietnamese (Vietnamese, English, French, Spanish, Polish, Czech, Slovak, Hungarian, Romanian, Turkish, Latvian, Lithuanian, Maltese, German and more)
-- Tabular figures (`tnum`)
+- Tabular figures (`tnum`), case-sensitive colon and semicolon (`case`, and automatically after capitals and figures)
 
 ## Tiếng Việt
 
 Dinh Tuong là kiểu chữ trưng bày dựng theo chữ khuôn thép đúc trên biển hiệu, biển cổng Sài Gòn thập niên 1960. Mỗi glyph dựng theo luật, chỉ bằng thước và compa. Dấu tiếng Việt cắt từ cùng một tấm thép với chữ, không gắn thêm.
 
-- 3 độ đậm: Regular, Medium, Bold
+- 4 độ đậm: Regular, Medium, Bold, Extra Bold, và font biến thiên (wght 400–800)
 - Bảng chữ: GF Latin Core + GF Latin Vietnamese (tiếng Việt, Anh, Pháp, Tây Ban Nha, Ba Lan, Séc, Slovak, Hungary, Romania, Thổ Nhĩ Kỳ, Latvia, Litva, Malta, Đức…)
-- Số đều bề ngang (`tnum`)
+- Số đều bề ngang (`tnum`), dấu : ; nâng theo chữ hoa (`case`, tự bật sau chữ hoa và chữ số)
 - Dựng font: `make build` (mã nguồn là các bộ sinh chữ Python trong `sources/`)
 - Giấy phép: SIL Open Font License 1.1
 
 ## Fonts
 
-Ready-to-use binaries are in `fonts/ttf` and `fonts/otf` (static Regular, Medium, Bold) and `fonts/variable/DinhTuong[wght].ttf` (variable, weight 400–700), also attached to every [release](https://github.com/alexduonguiux-hub/DinhTuong-Typeface/releases). Install either the variable font or the static fonts, not both. They are rebuilt by `make build`; CI checks that the fontmake build is identical to the generators' reference binaries in `sources/reference/fonts`, and that the variable font draws exactly like the static fonts at 400 / 500 / 700.
+Ready-to-use binaries are in `fonts/ttf` and `fonts/otf` (static Regular, Medium, Bold, Extra Bold) and `fonts/variable/DinhTuong[wght].ttf` (variable, weight 400–800), also attached to every [release](https://github.com/alexduonguiux-hub/DinhTuong-Typeface/releases). Install either the variable font or the static fonts, not both. They are rebuilt by `make build`; CI checks that the fontmake build is identical to the generators' reference binaries in `sources/reference/fonts`, and that the variable font draws exactly like the static fonts at 400 / 500 / 700 / 800.
 
 ## Building
 

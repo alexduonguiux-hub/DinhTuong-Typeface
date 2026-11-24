@@ -31,6 +31,10 @@ Heavier weights keep Regular's proportions; the ẞ folds deeper. (Revised 2026-
   1.6 u off). In Regular, 2 ¾ £ move < 1 u where curves merge to keep the masters compatible; otherwise Regular only
   changes in ẞ.
 
+### Documentation
+- README and the Google Fonts article list the four weights and the 400–800 axis (they still said three weights and
+  400–700); README names the `case` colon and semicolon.
+
 ### QA
 Font Bakery PASS (no new results); variable font = static fonts at all four masters; no area shrink or uneven step from
 400 to 800; no level points off the guidelines; build = reference in all four weights. Ink narrows only where a mark
