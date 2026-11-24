@@ -290,7 +290,7 @@ def _merge_collinear(segs):
 AXIS_SNAP = 2.0      # units; a straight run this close to level / vertical is meant to be level / vertical (R-axis)
 AXIS_MIN = 12.0      # ... only for runs at least this long (shorter ones are steps, handled by _collapse_micro)
 COLIN_DEV = 1.0      # units; a corner that bends the outline by less than this is grid noise (R-colinear)
-# R-colinear-b (1.011, QA: Medium ½ had 474,47 -> 592,153 -> 606,168, a 5.1 deg bend 1.6 u off the chord, flagged by Font
+# R-colinear-b (1.010, QA: Medium ½ had 474,47 -> 592,153 -> 606,168, a 5.1 deg bend 1.6 u off the chord, flagged by Font
 # Bakery outline_colinear_vectors, which takes two straight runs turning < 0.1 rad as one): such a corner is merged when
 # it stays within COLIN_DEV_B of the chord
 COLIN_TURN_B = 5.7   # deg (0.1 rad, Font Bakery's COLINEAR_EPSILON)

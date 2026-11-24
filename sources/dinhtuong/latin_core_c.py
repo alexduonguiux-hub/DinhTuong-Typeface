@@ -231,7 +231,7 @@ def L_Germandbls():
     yj = round(0.58 * CAP)                          # top of the lower bowl
     ym = yj - HM
     xt = W - 40                                     # the top bar's right end = the diagonal's top right
-    # L-ẞ-b (1.011, designer: 'Bụng gấp của ký tự tiếng đức phải sâu thêm mới đúng'): the fold reaches deeper in - the
+    # L-ẞ-b (1.010, designer: 'Bụng gấp của ký tự tiếng đức phải sâu thêm mới đúng'): the fold reaches deeper in - the
     # diagonal lands 0.30 of the way from the stem (was 0.45), so it runs longer and the upper counter opens
     xj = V + 0.30 * (W - V)                         # the diagonal lands on the bowl's top bar here
     dw = diag_dx(DIAG, xt - xj, top - yj)
