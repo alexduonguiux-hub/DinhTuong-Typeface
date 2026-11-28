@@ -79,6 +79,11 @@ if __name__ == '__main__':
         g = B.g_a()
         out[f'a@{sc}'] = [g['body'], g['lsb'], g['rsb'], g['ops']]
         print(f'small a x{sc}: hood ray {T} deg, aperture {gap(T) * sc:.0f} u at size')
+    # R0b-3 (1.010, designer: 'ký tự @ không nên dùng chữ a có râu móc'): the a inside @ is the single-storey a - no
+    # hood - built as d and q are (F5 bowl + stem on the right), its stem running from the baseline to the x-height
+    ops, Wa, _, _ = B.bowl('r', 0, F.XH, top=False)
+    g = B.G('a', Wa, 36, 52, ops)
+    out['a@single'] = [g['body'], g['lsb'], g['rsb'], g['ops']]
     p = os.path.join(HERE, 'out', f'lcsym_{LF.W8}.json')
     json.dump(out, open(p, 'w'))
     print(p, len(out), 'v', LF.B.v, 'h', LF.B.h)

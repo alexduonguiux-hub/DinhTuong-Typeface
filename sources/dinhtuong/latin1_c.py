@@ -397,7 +397,8 @@ def S_yen():
 
 
 def S_brokenbar():
-    ops = [('add', rect(0, -200, V - 30, 330)), ('add', rect(0, 470, V - 30, CAP + 120))]
+    t = round(0.70 * V)                              # P2 (1.010 stroke QA): the | weight (V - 30 grew 16 % faster than the letters)
+    ops = [('add', rect(0, -200, t, 330)), ('add', rect(0, 470, t, CAP + 120))]
     make('¦', ops, 60, 60)
 
 
@@ -548,7 +549,8 @@ def S_bullet():
 def S_perthousand():
     p = G['%']
     W = p.body
-    ops = list(p.ops) + [('group', ring(W + 50, 0, W + 50 + 250 + 0.8 * gw('round'), 330, 92 * F.K_, 84 * F.K_, FULL, FULL))]
+    # P1: the third ring is the % ring; P3: it stands 50 u + the stroke's growth over Regular from the second
+    ops = list(p.ops) + [('group', F.pct_ring(W + 50 + 0.8 * 0.90 * GL.DV_C, 0)[0])]
     make('‰', ops, p.lsb, p.rsb)
 
 

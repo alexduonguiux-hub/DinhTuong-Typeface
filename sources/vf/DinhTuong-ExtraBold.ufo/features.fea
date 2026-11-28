@@ -7403,7 +7403,7 @@ feature kern {
     pos edieresis uni1EE3 20;
     pos edieresis emdash 5;
     pos igrave exclam 5;
-    pos igrave percent 20;
+    pos igrave percent 10;
     pos igrave one 15;
     pos igrave seven 25;
     pos igrave B 10;
@@ -7511,7 +7511,7 @@ feature kern {
     pos igrave quoteleft 10;
     pos igrave quotedblleft 10;
     pos iacute exclam 15;
-    pos iacute percent 20;
+    pos iacute percent 10;
     pos iacute one 15;
     pos iacute seven 25;
     pos iacute B 15;
@@ -14944,7 +14944,6 @@ feature kern {
     pos uni1EA8 Wdieresis -85;
     pos uni1EA9 exclam 60;
     pos uni1EA9 quotedbl 40;
-    pos uni1EA9 percent 10;
     pos uni1EA9 quotesingle 40;
     pos uni1EA9 parenright 40;
     pos uni1EA9 one 5;

@@ -23,6 +23,26 @@ Heavier weights keep Regular's proportions; the ẞ folds deeper. (Revised 2026-
 - **ẞ (L-ẞ-b**, 'Bụng gấp của ký tự tiếng đức phải sâu thêm mới đúng'): the fold reaches deeper; its diagonal lands
   0.30 of the way from the stem (was 0.45), so it runs longer and the upper counter opens. All weights, Regular too.
 
+### Symbols
+- **@ (R0b-3**, 'ký tự @ không nên dùng chữ a có râu móc'): the a inside is the single-storey a (bowl + stem, built as
+  d and q), not the hooded a. **R17d** ('đuôi @ nên dài sát mép phải'): the ring's tail runs round the bottom and up
+  the right side, and ends in a level cut one foot stroke under the foot (was a vertical cut at 0.60 of the width).
+- **% ‰ (P1**, 'độ dày của các số 0 của ký tự % hơi chưa ổn'): the rings weigh what the diagonal weighs (0.8 DIAG;
+  their sides were 0.55 V, a quarter lighter than the diagonal); top and bottom 0.83 of the side, as in 0. The ring's
+  box grows by the stroke's growth in width and half the top's growth in height (Extra Bold counter 92 x 166).
+  **P3** ('bold lên các glyph của symbol phần trăm và ngàn hơn bị dính lại'): the diagonal's ends stand in by the
+  ring's growth, and % widens until each ring stands 60 u clear of the diagonal (Bold had 12 u, Extra Bold touched);
+  Regular, at 85 u, keeps its width. ‰'s third ring stands 50 u + the stroke's growth from the second.
+  % advance 752 / 757 / 819 / 862.
+- **| ¦ × (P2**, stroke-weight QA): | and ¦ weigh 0.70 V (V - 30 grew 16 % faster than the letters); ×'s arms are
+  0.834 of the math stroke (MT - 12 grew 10 % faster). They now grow with the letters.
+
+### QA tools
+- **Stroke-weight QA** (new, run on every symbol): the stroke widths along each glyph's medial axis, per weight,
+  against the letters; it found the light % rings and the | ¦ × that grew faster than the letters.
+- **V2, `vf_vs_static`:** a glyph whose every point is within 0.5 u of the static font's is the integer rounding of the
+  gvar deltas, not a difference (Bold V 145 is 0.33 u off the line through Medium and Extra Bold; Bold × moved 0.33 u).
+
 ### Outline rules
 - **A1 (QA alignment):** a level edge within 1.5 u of the baseline, x-height or cap height sits on it, both ends of
   the run (`snap_levels.py`, last step of `generate.sh`): M's top stood at 699 in Bold / Extra Bold.

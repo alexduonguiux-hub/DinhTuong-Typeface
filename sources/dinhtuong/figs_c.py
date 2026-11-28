@@ -751,7 +751,9 @@ def p_backslash():
 
 
 def p_bar():
-    g = _g('|', V - 30, 60, 60); g.add(rect(0, -200, V - 30, CAP + 120)); return _reg(g)
+    # P2 (1.010 stroke QA): the bar weighs 0.70 V in every weight (V - 30 grew 16 % faster than the letters)
+    t = round(0.70 * V)
+    g = _g('|', t, 60, 60); g.add(rect(0, -200, t, CAP + 120)); return _reg(g)
 
 
 def _hbar(ch, W, y=262, t=None, sb=40):
@@ -804,7 +806,8 @@ def p_multiply():
     W = 400
     g = _g('×', W, _math_sb(W), _math_sb(W))          # M1: was 50 / 50 (advance 500)
     L = W * 0.70
-    arm = [('add', rect(W / 2 - L, MATH_Y - MT_ / 2 + 6, W / 2 + L, MATH_Y + MT_ / 2 - 6))]
+    tm = 0.834 * MT_                                 # P2 (1.010 stroke QA): MT_ - 12 grew 10 % faster than the letters
+    arm = [('add', rect(W / 2 - L, MATH_Y - tm / 2, W / 2 + L, MATH_Y + tm / 2))]
     g.ops += rot_ops(arm, _m.pi / 4, W / 2, MATH_Y) + rot_ops(arm, -_m.pi / 4, W / 2, MATH_Y)
     return _reg(g)
 
@@ -855,14 +858,86 @@ def p_guillemotright():
     return _reg(g)
 
 
-def p_percent():
+PCT_RW, PCT_RH = 270, 340                       # P1: the % ring's outer box in Regular
+
+
+def pct_ring(x0, y0):
+    """P1 (1.010, designer: 'độ dày của các số 0 của ký tự % hơi chưa ổn'): the rings of % and ‰ weigh what the %
+    diagonal weighs (0.8 DIAG: their sides were 92 K = 0.55 V, a quarter lighter than the diagonal beside them); top and
+    bottom are 0.83 of the side, the H / V ratio of 0. The box grows by the stroke's growth over Regular in width and by
+    half of the top's growth in height, so the counter closes by one growth, not two (Extra Bold counter 92 x 166)."""
+    t = 0.8 * DIAG
+    d = 0.8 * 0.90 * GL.DV_C                        # the ring's stroke growth over Regular (DV_C: caps stem growth)
+    rw, rh = PCT_RW + 0.8 * gw('round') + d, PCT_RH + 0.83 * 0.5 * d   # P3: low enough that the two rings barely overlap in height
+    return ring(x0, y0, x0 + rw, y0 + rh, t, 0.83 * t, FULL, FULL), rw, rh
+
+
+PCT_GAP = 60      # P3: least white between a % ring and the diagonal (Regular has 85)
+
+
+def _path_pts(path, n=24):
+    """points along a path of M / L / C ops (outline sampling for clearance rules)."""
+    pts, cur = [], None
+    for op in path:
+        if op[0] in ('M', 'L'):
+            cur = (op[1], op[2]); pts.append(cur)
+        elif op[0] == 'C':
+            p0 = cur; (x1, y1, x2, y2, x3, y3) = op[1:7]
+            for i in range(1, n + 1):
+                t = i / n
+                pts.append(((1 - t) ** 3 * p0[0] + 3 * (1 - t) ** 2 * t * x1 + 3 * (1 - t) * t * t * x2 + t ** 3 * x3,
+                            (1 - t) ** 3 * p0[1] + 3 * (1 - t) ** 2 * t * y1 + 3 * (1 - t) * t * t * y2 + t ** 3 * y3))
+            cur = (x3, y3)
+    return pts
+
+
+def _pct_parts(W):
+    """the rings' outer boxes and the diagonal's quad of a % of advance-body W. P3: the diagonal's ends stand in from
+    the sides by 100 + the ring's growth over Regular, so it rises steeper as the rings grow (it keeps its slope's
+    distance from the rings without widening the glyph)."""
+    _, rw, rh = pct_ring(0, 0)
+    m = 100 + (rw - PCT_RW)
+    dw = diag_dx(DIAG * 0.8, W - 2 * m, CAP)
+    quad = [(m, 0), (m + dw, 0), (W - m, CAP), (W - m - dw, CAP)]
+    return (0, CAP - rh, rw, CAP), (W - rw, 0, W, rh), quad, dw
+
+
+def _pct_gap(W):
+    up, lo, quad, _ = _pct_parts(W)
+    def d_seg(p, a, b):
+        ax, ay = b[0] - a[0], b[1] - a[1]; L = ax * ax + ay * ay
+        t = max(0.0, min(1.0, ((p[0] - a[0]) * ax + (p[1] - a[1]) * ay) / L))
+        return _m.hypot(p[0] - a[0] - t * ax, p[1] - a[1] - t * ay)
+    def inside(p):
+        s = [(b[0] - a[0]) * (p[1] - a[1]) - (b[1] - a[1]) * (p[0] - a[0]) for a, b in zip(quad, quad[1:] + quad[:1])]
+        return all(v >= 0 for v in s) or all(v <= 0 for v in s)
+    best = 1e9
+    for box in (up, lo):
+        for p in _path_pts(rrect(*box, FULL)):
+            d = min(d_seg(p, a, b) for a, b in zip(quad, quad[1:] + quad[:1]))
+            best = min(best, -d if inside(p) else d)
+    return best
+
+
+def pct_width():
+    """P3 (1.010, designer: 'bold lên các glyph của symbol phần trăm và ngàn hơn bị dính lại'): % widens until each
+    ring stands PCT_GAP clear of the diagonal (in Bold the rings came within 12 u of it, in Extra Bold they ran into
+    it); Regular, at 85 u, keeps its width."""
     W = 700 + gw('multi')                           # R2c
+    while _pct_gap(W) < PCT_GAP:                    # only if the steeper diagonal is not enough
+        W += 2
+    return W
+
+
+def p_percent():
+    W = pct_width()
     g = _g('%', W, 26, 26)
-    rw, rh = 250 + 0.8 * gw('round'), 330
-    g.group(ring(0, CAP - rh, rw, CAP, 92 * K_, 84 * K_, FULL, FULL))
-    g.group(ring(W - rw, 0, W, rh, 92 * K_, 84 * K_, FULL, FULL))
-    dw = diag_dx(DIAG * 0.8, W - 200, CAP)
-    g.add(poly([(100, 0), (100 + dw, 0), (W - 100, CAP), (W - 100 - dw, CAP)]))
+    up, rw, rh = pct_ring(0, 0)
+    g.group([(op, transform(c, lambda x, y: (x, y + CAP - rh))) for op, c in up])
+    lo, rw, rh = pct_ring(W - rw, 0)
+    g.group(lo)
+    _, _, quad, dw = _pct_parts(W)
+    g.add(poly(quad))
     return _reg(g)
 
 
@@ -938,7 +1013,6 @@ def p_ampersand():
     return _reg(g)
 
 
-AT_OPEN = 0.60
 
 
 def p_at():
@@ -948,16 +1022,14 @@ def p_at():
     g = _g('@', W, 30, 30)
     top, bot = CAP + 40, -170
     from lcsym import lcg
-    a = lcg('a@0.72')                           # R0b: the current a (small a: aperture kept, lcsym)
+    a = lcg('a@single')                         # R0b-3: the single-storey a (bowl + stem, as d / q; lcsym)
     s = 0.72
     ox, oy = W / 2 - a.body * 0.72 / 2 - 8, 96
     tf = lambda x, y: (ox + x * s, oy + y * s)
-    ainner = [(op, transform(c, tf)) if op != 'group' else (op, [(o2, transform(c2, tf)) for o2, c2 in c])
-              for op, c in a.ops]
+    _tr = lambda ops: [(op, _tr(c)) if op == 'group' else (op, transform(c, tf)) for op, c in ops]   # nested groups (bowl)
+    ainner = _tr(a.ops)
     yj = oy                                     # the foot sits on the a's baseline
     foot_t = 104 * K_
-    g.group(ring(0, bot, W, top, 132 * K_, 118 * K_, FULL, FULL) +
-            [('sub', rect(W * AT_OPEN, bot - 1, W + 1, yj))])             # open the lower right (R17c, 20/11 'đuôi @ nên vòng qua thêm xíu nữa': 0.52 -> AT_OPEN)
     g.group(ainner)
     sx0 = ox + (a.body - round(0.93 * V)) * s   # a's stem, left edge (F2: v = 0.93 V)
     # foot: stem -> ring. It leaves the stem's RIGHT edge (QA 13:20: started at the left edge it closed the a's
@@ -983,6 +1055,12 @@ def p_at():
             cur = nxt
         return max(xs) if xs else W
     x_end = min(W, _x_at(rrect(0, bot, W, top, FULL), yj + foot_t))
+    # R17d (1.010, designer: 'đuôi @ nên dài sát mép phải'): the ring's tail runs round the bottom and up the right
+    # side, and ends in a level cut one foot stroke under the foot - the opening between the tail and the foot is a
+    # stroke high in every weight (was a vertical cut at AT_OPEN = 0.60 of the width; a vertical cut further right
+    # crossed the ring where it already stood level with the foot and closed the opening)
+    g.ops.insert(0, ('group', ring(0, bot, W, top, 132 * K_, 118 * K_, FULL, FULL) +
+                     [('sub', rect(W / 2, yj - foot_t, W + 1, yj))]))
     g.add(rect(sx0 + round(0.93 * V) * s / 2, yj, x_end, yj + foot_t))
     return _reg(g)
 

@@ -5270,7 +5270,6 @@ feature kern {
     pos icircumflex ygrave -5;
     pos icircumflex uni1EF5 -10;
     pos icircumflex uni1EF7 -10;
-    pos idieresis percent 5;
     pos idieresis one 10;
     pos idieresis seven 10;
     pos idieresis T 15;

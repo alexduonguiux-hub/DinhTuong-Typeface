@@ -7124,7 +7124,6 @@ feature kern {
     pos Ibreve Zcaron -40;
     pos Ibreve uni1EC9 -5;
     pos ibreve exclam 15;
-    pos ibreve percent 5;
     pos ibreve one 5;
     pos ibreve three 5;
     pos ibreve five 5;
